@@ -30,7 +30,6 @@
 		C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB642A157B22005398F9 /* RegisterView.swift */; };
 		C2BEDB672A157B72005398F9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB662A157B72005398F9 /* User.swift */; };
 		C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */; };
-		C2EFBDE52A1842310085AEA4 /* PatientCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EFBDE42A1842310085AEA4 /* PatientCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,7 +52,6 @@
 		C2BEDB642A157B22005398F9 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		C2BEDB662A157B72005398F9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
-		C2EFBDE42A1842310085AEA4 /* PatientCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +131,7 @@
 		C2BEDB5E2A157A84005398F9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C235FDB22A1810EB005412A7 /* Patient.swift */,
 				C2BEDB662A157B72005398F9 /* User.swift */,
 			);
 			path = Model;
@@ -144,7 +143,6 @@
 				C2BEDB612A157AF5005398F9 /* Authentication */,
 				C235FDAC2A18106E005412A7 /* AdminView.swift */,
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
-				C2EFBDE42A1842310085AEA4 /* PatientCardView.swift */,
 				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
 			);
 			path = View;
@@ -155,7 +153,6 @@
 			children = (
 				C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */,
 				C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */,
-				C235FDB22A1810EB005412A7 /* Patient.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -254,7 +251,6 @@
 			files = (
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
-				C2EFBDE52A1842310085AEA4 /* PatientCardView.swift in Sources */,
 				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
