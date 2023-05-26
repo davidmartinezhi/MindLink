@@ -13,6 +13,8 @@ struct AdminView: View {
     
     //Pacientes
     @StateObject var patients = PatientsViewModel()
+    @StateObject var notes = NotesViewModel()
+    
     
     
     //Agregar paciente
@@ -95,17 +97,20 @@ struct AdminView: View {
                      .padding(.horizontal, 50)
                      
                      
-                     // Botones de Filtrado
+                     // Botones
                      HStack{
                          
-                         
+                         // Botones de Filtrado
                          Spacer()
                          
                          //Add patient
                          Button(action: {
                              showAddPatient.toggle()
                          }) {
-                             Text("Agregar niño")
+                             HStack {
+                                 Image(systemName: "plus.circle.fill")
+                                 Text("Agregar Niño")
+                             }
                             
                          }
                          .padding(.horizontal)
@@ -117,9 +122,21 @@ struct AdminView: View {
                      .padding(.horizontal, 50)
                      .padding(.bottom)
                      
-
+/*
+                     List(patientsListDisplayed, id:\.id){ patient in
+                         NavigationLink {
+                             PatientView(patient: patient)
+                         } label: {
+                             PatientCard(patient: patient)
+                         }
+  
+                         
+                     }
+ */
                      List(patientsListDisplayed, id:\.id){ patient in
                          PatientCard(patient: patient)
+                             .padding()
+                             .background(NavigationLink("", destination: PatientView(patient:patient, notes: notes)).opacity(0))
                      }
                      .sheet(isPresented: $showAddPatient) {
                          AddPatientView(patients:patients)
@@ -150,17 +167,21 @@ struct AdminView: View {
                             .font(.title2)
                             .bold()
                         
-                        HStack{
-                            Text("Grupo: " + patient.group)
+                        HStack(alignment: .center){
+                            Text("Grupo " + patient.group)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
+                            Text("Nivel Cognitivo " + patient.cognitiveLevel)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text(patient.communicationStyle)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
+                            Text("Comunicación " + patient.communicationStyle)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
                         }
+                        .padding(.top)
                     }
                     
                     Spacer()

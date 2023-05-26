@@ -33,7 +33,7 @@ struct AddPatientView: View {
     
     var body: some View {
         VStack {
-            Text("Agregar Paciente")
+            Text("Agregar Niño")
                 .font(.largeTitle)
                 .padding()
             
@@ -64,10 +64,10 @@ struct AddPatientView: View {
                 Section {
                     
                     //botón de crear usuario
-                    Button("Agregar Paciente"){
+                    Button("Agregar Niño"){
                         //Checar que datos son validos
                         if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                            let patient = Patient(id: "" ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png")
+                            let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
                                 patients.addData(patient: patient){ error in
                                 if error != "OK" {
                                     print(error)
@@ -93,11 +93,11 @@ struct AddPatientView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .alert("Error", isPresented: $showAlert){
+                    .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
                         Button("Ok") {}
                     }
                     message: {
-                        Text("Todos los campos deben ser llenados")
+                        Text("Asegurate de haber llenado todos los campos requeridos")
                     }
                     
                     //botón de cancelar

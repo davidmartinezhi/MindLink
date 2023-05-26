@@ -27,7 +27,7 @@ class PatientsViewModel: ObservableObject{
     //Creación de paciente
     func addData(patient : Patient, completion: @escaping (String) -> Void){
         
-        db.collection("Patient").addDocument(data: ["firstName": patient.firstName, "lastName": patient.lastName, "birthDate": patient.birthDate, "group": patient.group, "communicationStyle": patient.communicationStyle, "cognitiveLevel": patient.cognitiveLevel, "image": patient.image]){ err in
+        db.collection("Patient").addDocument(data: ["id": patient.id ,"firstName": patient.firstName, "lastName": patient.lastName, "birthDate": patient.birthDate, "group": patient.group, "communicationStyle": patient.communicationStyle, "cognitiveLevel": patient.cognitiveLevel, "image": patient.image, "notes": [String]()]){ err in
             
             if let err = err {
                 completion(err.localizedDescription)
@@ -57,9 +57,11 @@ class PatientsViewModel: ObservableObject{
                 let communicationStyle = data["communicationStyle"] as? String ?? "No asignado"
                 let cognitiveLevel = data["cognitiveLevel"] as? String ?? "No asignado"
                 let image = data["image"] as? String ?? ""
+                let notes = data["notes"] as? [String] ?? []
+                //let id = data["id"] as? String ?? UUID().uuidString
                 let id = document.documentID
                 
-                let patient = Patient(id: id, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image)
+                let patient = Patient(id: id, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes)
                 
                 patients.append(patient)
             }
@@ -73,4 +75,6 @@ class PatientsViewModel: ObservableObject{
         
         return nil
     }
+    
+    
 }
