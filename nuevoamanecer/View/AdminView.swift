@@ -145,7 +145,7 @@ struct AdminView: View {
                              .cornerRadius(10)
                              //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
                              .padding([.leading, .trailing, .bottom], 10)
-                             .background(NavigationLink("", destination: PatientView(patient:patient, notes: notes, patients: patients)).opacity(0))
+                             .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
                      }
                      .listStyle(.automatic)
                      .sheet(isPresented: $showAddPatient) {

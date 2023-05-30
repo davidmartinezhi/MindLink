@@ -1,38 +1,42 @@
 //
-//  AddNoteView.swift
+//  EditNoteView.swift
 //  nuevoamanecer
 //
-//  Created by Gerardo Martínez on 25/05/23.
+//  Created by Gerardo Martínez on 30/05/23.
 //
 
 import SwiftUI
 
-struct AddNoteView: View {
+struct EditNoteView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var notes: NotesViewModel
-    var patient: Patient
+    var note: Note
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
-    @State private var showingAlert = false
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
+
+    
+    
+    func initializeData(note: Note) -> Void{
+        noteTitle = note.title
+        noteContent = note.text
+    }
     
     var body: some View {
         VStack {
-            Text("Agregar nota")
+            Text("Editar nota")
                 .font(.largeTitle)
                 .padding(.bottom)
             
             Form {
                 Section(header: Text("Título")) {
-                    TextField("Introduce el título de la nota", text: $noteTitle)
+                    TextField("Título de la nota", text: $noteTitle)
                 }
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
                 }
             }
-            
+            /*
             Button(action: {
                 if noteTitle.isEmpty || noteContent.isEmpty {
                     self.alertTitle = "Faltan campos"
@@ -75,13 +79,14 @@ struct AddNoteView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
+             */
         }
         .padding()
+        .onAppear{initializeData(note: note)}
     }
 }
-
-struct AddNoteView_Previews: PreviewProvider {
+struct EditNoteView_Previews: PreviewProvider {
     static var previews: some View {
-        AddNoteView(notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
+        EditNoteView(notes: NotesViewModel(), note: Note(id: "", patientId: "", order: 0, title: "", text: ""))
     }
 }

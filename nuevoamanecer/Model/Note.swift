@@ -11,7 +11,7 @@ struct Note: Hashable {
     //var id: ObjectIdentifier
     let id: String
     let patientId: String
-    let order: Int
+    var order: Int
     let title: String
     let text: String
 }

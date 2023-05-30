@@ -51,7 +51,8 @@ class NotesViewModel: ObservableObject{
         
         let docRef = db.collection("Note").document()
         
-        docRef.setData(["id": note.id, "patientId": note.patientId, "order": patient.notes.count+1, "title": note.title, "text": note.text]) { err in
+        
+        docRef.setData(["id": note.id, "patientId": note.patientId, "order": notesList.count + 1, "title": note.title, "text": note.text]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
@@ -131,6 +132,40 @@ class NotesViewModel: ObservableObject{
 
         return nil
     }
+    
+    
+    // Actualización de nota
+    func updateData(note: Note, completion: @escaping (String) -> Void) {
+        
+        let noteRef = db.collection("Note").document(note.id)
+
+        noteRef.updateData([
+            "patientId": note.patientId,
+            "order": note.order,
+            "title": note.title,
+            "text": note.text
+        ]) { err in
+            if let err = err {
+                completion(err.localizedDescription)
+            } else {
+                completion("OK")
+            }
+        }
+    }
+    
+    // Eliminación de nota
+    func deleteData(noteId: String, completion: @escaping (String) -> Void) {
+        let noteRef = db.collection("Note").document(noteId)
+        
+        noteRef.delete() { err in
+            if let err = err {
+                completion(err.localizedDescription)
+            } else {
+                completion("OK")
+            }
+        }
+    }
+
     
     // Actualización de documento de paciente
         private func updatePatientDocument(patient: Patient, note: Note, completion: @escaping (String) -> Void) {
