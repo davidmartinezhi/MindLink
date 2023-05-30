@@ -11,11 +11,9 @@ import Kingfisher
 
 struct AdminView: View {
     
-    //Pacientes
+    //Modelo pacientes y notas
     @StateObject var patients = PatientsViewModel()
     @StateObject var notes = NotesViewModel()
-    
-    
     
     //Agregar paciente
     @State private var showAddPatient = false
@@ -39,12 +37,13 @@ struct AdminView: View {
     //Selección de filtrados
     @State private var showSelectedCommunicationStyle = false
     @State private var showSelectedCognitiveLevel = false
+    
 
-    
-    
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
+        
         filteredPatients = patients.patientsList.filter{ patient in
+            //let firstNameString = str.components(separatedBy: ", ")
             patient.firstName.lowercased().hasPrefix(keyword.lowercased()) ||
             patient.lastName.lowercased().hasPrefix(keyword.lowercased())
         }
@@ -89,12 +88,18 @@ struct AdminView: View {
                      // Barra de busqueda
                      HStack {
                          TextField("Buscar niño", text: $search)
-                             .textFieldStyle(.roundedBorder)
-                             .onChange(of: search, perform: performSearchByName)
                              .padding()
-
+                             .background(Color.white)
+                             .cornerRadius(10)
+                             .overlay(
+                                 RoundedRectangle(cornerRadius: 10)
+                                     .stroke(Color.gray, lineWidth: 1)
+                             )
+                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                             .padding()
+                             .onChange(of: search, perform: performSearchByName)
                      }
-                     .padding(.horizontal, 50)
+                     .padding(.horizontal, 30)
                      
                      
                      // Botones
@@ -136,8 +141,13 @@ struct AdminView: View {
                      List(patientsListDisplayed, id:\.id){ patient in
                          PatientCard(patient: patient)
                              .padding()
-                             .background(NavigationLink("", destination: PatientView(patient:patient, notes: notes)).opacity(0))
+                             .background(Color.white)
+                             .cornerRadius(10)
+                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                             .padding([.leading, .trailing, .bottom], 10)
+                             .background(NavigationLink("", destination: PatientView(patient:patient, notes: notes, patients: patients)).opacity(0))
                      }
+                     .listStyle(.automatic)
                      .sheet(isPresented: $showAddPatient) {
                          AddPatientView(patients:patients)
                      }
@@ -164,8 +174,8 @@ struct AdminView: View {
                     
                     VStack(alignment: .leading) {
                         Text(patient.firstName + " " + patient.lastName)
-                            .font(.title2)
-                            .bold()
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(Color.black)
                         
                         HStack(alignment: .center){
                             Text("Grupo " + patient.group)
@@ -190,6 +200,7 @@ struct AdminView: View {
                         print("Comunicador")
                     }) {
                         Text("Comunicador")
+                            .font(.system(size: 16, weight: .bold))
                             .padding(.horizontal)
                             .padding(.vertical, 10)
                             .background(Color.blue)
@@ -199,9 +210,6 @@ struct AdminView: View {
                 }
                 .padding(.horizontal)
             }
-            //.background(Color(.systemGray6))
-            //.cornerRadius(10)
-            //.shadow(radius: 5)
             .padding(.vertical, 5)
         }
     }

@@ -12,6 +12,8 @@
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
 		C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */; };
 		C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F032A206B4900F31578 /* AddNoteView.swift */; };
+		C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F052A2162E600F31578 /* EditPatientView.swift */; };
+		C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F072A252D2800F31578 /* DeletePatientView.swift */; };
 		C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAC2A18106E005412A7 /* AdminView.swift */; };
 		C235FDAF2A181080005412A7 /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAE2A181080005412A7 /* PatientView.swift */; };
 		C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */; };
@@ -40,6 +42,8 @@
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		C2207F032A206B4900F31578 /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
+		C2207F052A2162E600F31578 /* EditPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPatientView.swift; sourceTree = "<group>"; };
+		C2207F072A252D2800F31578 /* DeletePatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePatientView.swift; sourceTree = "<group>"; };
 		C235FDAC2A18106E005412A7 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		C235FDAE2A181080005412A7 /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsViewModel.swift; sourceTree = "<group>"; };
@@ -152,6 +156,8 @@
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
 				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
 				C2207F032A206B4900F31578 /* AddNoteView.swift */,
+				C2207F052A2162E600F31578 /* EditPatientView.swift */,
+				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -268,6 +274,7 @@
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
+				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				C250AFC72A174B60008F5699 /* AuthView.swift in Sources */,
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
@@ -276,6 +283,7 @@
 				C235FDB32A1810EB005412A7 /* Patient.swift in Sources */,
 				C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
+				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
