@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Note: Hashable {
+struct Note: Hashable, Codable, Identifiable  {
     //var id: ObjectIdentifier
     let id: String
     let patientId: String
     var order: Int
-    let title: String
-    let text: String
+    var title: String
+    var text: String
 }

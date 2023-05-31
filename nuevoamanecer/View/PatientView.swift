@@ -28,7 +28,8 @@ struct PatientView: View {
     
     //Note Selection
     @State private var selectedNoteIndex: Int?
-    @State var selectedNote: Note?
+    @State var selectedNoteToEdit: Note?
+    //= Note(id: "", patientId: "", order: 0, title: "", text: "")
 
     
     
@@ -43,12 +44,6 @@ struct PatientView: View {
         }
     }
     
-    
-    //Delete note
-    func deleteNote(at offsets: IndexSet){
-        self.selectedNoteIndex = offsets.first
-        showDeleteNoteAlert = true
-    }
     
     //Move notes and save order in database
     func moveNote(from source: IndexSet, to destination: Int) {
@@ -100,9 +95,6 @@ struct PatientView: View {
                     Text(note.title)
                         .font(.system(size: 18, weight: .light))
                         .foregroundColor(Color.black)
-                        .onTapGesture {
-                           selectedNote = note
-                        }
                         .frame(minHeight: 50)
                 }
                 .listStyle(.sidebar)
@@ -213,9 +205,9 @@ struct PatientView: View {
                         .padding([.top, .bottom], 5)
                         .swipeActions(edge: .trailing) {
                             Button {
-                                selectedNote = note
-                                showDeleteNoteAlert = true
+                                //selectedNote = note
                                 selectedNoteIndex = index
+                                showDeleteNoteAlert = true
                                 
                             } label: {
                                 Label("Eliminar", systemImage: "trash")
@@ -225,8 +217,9 @@ struct PatientView: View {
                             
                             Button {
                                 // Aquí va la lógica para actualizar la nota
-                                selectedNote = note
+                                selectedNoteToEdit = note
                                 showEditNoteView = true
+                                
                             } label: {
                                 Label("Editar", systemImage: "pencil")
                             }
@@ -253,10 +246,12 @@ struct PatientView: View {
                                       }
                                   }
                                   self.selectedNoteIndex = nil
+                                  //self.selectedNote = nil
                               },
                               secondaryButton: .cancel {
                                   // Cancelar eliminación
                                   self.selectedNoteIndex = nil
+                                  //self.selectedNote = nil
                               })
                     }
                 }
@@ -266,9 +261,8 @@ struct PatientView: View {
         .sheet(isPresented: $showAddNoteView) {
             AddNoteView(notes: notes, patient: patient)
         }
-        .sheet(isPresented: $showEditNoteView){
-            EditNoteView(notes: notes, note: selectedNote!)
-            
+        .sheet(item: $selectedNoteToEdit){ note in
+            EditNoteView(notes: notes, note: note)
         }
         .sheet(isPresented: $showEditPatientView){
             EditPatientView(patients: patients, patient: patient)
