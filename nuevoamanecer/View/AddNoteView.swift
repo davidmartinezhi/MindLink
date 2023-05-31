@@ -30,6 +30,7 @@ struct AddNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
+                        .frame(minHeight: 400)
                 }
             }
             

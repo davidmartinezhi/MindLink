@@ -10,9 +10,12 @@ import SwiftUI
 struct EditNoteView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var notes: NotesViewModel
-    var note: Note
+    @State var note: Note
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
+    @State private var showingAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
 
     
     
@@ -34,36 +37,34 @@ struct EditNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
+                        .frame(minHeight: 400)
                 }
             }
-            /*
+            
             Button(action: {
                 if noteTitle.isEmpty || noteContent.isEmpty {
                     self.alertTitle = "Faltan campos"
                     self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                     self.showingAlert = true
                 } else {
-                    let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent)
                     
-                    notes.addData(patient: patient, note: newNote) { response in
-                        if response == "OK" {
-                            self.alertTitle = "Nota guardada"
-                            self.alertMessage = "La nota ha sido guardada con éxito."
-                            self.showingAlert = false
-                            
+                    //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
+                    self.note.title = noteTitle
+                    self.note.text = noteContent
+                    
+                    notes.updateData(note: note){ error in
+                        if error != "OK" {
+                            print(error)
+                        }
+                        else{
                             Task{
-                                if let notesList = await notes.getDataById(patientId: patient.id){
+                                if let notesList = await notes.getDataById(patientId: note.patientId){
                                     DispatchQueue.main.async{
                                         self.notes.notesList = notesList.sorted { $0.order < $1.order }
                                         dismiss()
                                     }
                                 }
                             }
-                            
-                        } else {
-                            self.alertTitle = "Error"
-                            self.alertMessage = response
-                            self.showingAlert = true
                         }
                     }
                 }
@@ -79,7 +80,7 @@ struct EditNoteView: View {
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
-             */
+             
         }
         .padding()
         .onAppear{initializeData(note: note)}
