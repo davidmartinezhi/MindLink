@@ -11,9 +11,9 @@ import Kingfisher
 
 struct AdminView: View {
     
-    //Pacientes
+    //Modelo pacientes y notas
     @StateObject var patients = PatientsViewModel()
-    
+    @StateObject var notes = NotesViewModel()
     
     //Agregar paciente
     @State private var showAddPatient = false
@@ -37,12 +37,13 @@ struct AdminView: View {
     //Selección de filtrados
     @State private var showSelectedCommunicationStyle = false
     @State private var showSelectedCognitiveLevel = false
+    
 
-    
-    
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
+        
         filteredPatients = patients.patientsList.filter{ patient in
+            //let firstNameString = str.components(separatedBy: ", ")
             patient.firstName.lowercased().hasPrefix(keyword.lowercased()) ||
             patient.lastName.lowercased().hasPrefix(keyword.lowercased())
         }
@@ -87,25 +88,34 @@ struct AdminView: View {
                      // Barra de busqueda
                      HStack {
                          TextField("Buscar niño", text: $search)
-                             .textFieldStyle(.roundedBorder)
-                             .onChange(of: search, perform: performSearchByName)
                              .padding()
-
+                             .background(Color.white)
+                             .cornerRadius(10)
+                             .overlay(
+                                 RoundedRectangle(cornerRadius: 10)
+                                     .stroke(Color.gray, lineWidth: 1)
+                             )
+                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                             .padding()
+                             .onChange(of: search, perform: performSearchByName)
                      }
-                     .padding(.horizontal, 50)
+                     .padding(.horizontal, 30)
                      
                      
-                     // Botones de Filtrado
+                     // Botones
                      HStack{
                          
-                         
+                         // Botones de Filtrado
                          Spacer()
                          
                          //Add patient
                          Button(action: {
                              showAddPatient.toggle()
                          }) {
-                             Text("Agregar niño")
+                             HStack {
+                                 Image(systemName: "plus.circle.fill")
+                                 Text("Agregar Niño")
+                             }
                             
                          }
                          .padding(.horizontal)
@@ -117,10 +127,27 @@ struct AdminView: View {
                      .padding(.horizontal, 50)
                      .padding(.bottom)
                      
-
+/*
+                     List(patientsListDisplayed, id:\.id){ patient in
+                         NavigationLink {
+                             PatientView(patient: patient)
+                         } label: {
+                             PatientCard(patient: patient)
+                         }
+  
+                         
+                     }
+ */
                      List(patientsListDisplayed, id:\.id){ patient in
                          PatientCard(patient: patient)
+                             .padding()
+                             .background(Color.white)
+                             .cornerRadius(10)
+                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                             .padding([.leading, .trailing, .bottom], 10)
+                             .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
                      }
+                     .listStyle(.automatic)
                      .sheet(isPresented: $showAddPatient) {
                          AddPatientView(patients:patients)
                      }
@@ -147,20 +174,24 @@ struct AdminView: View {
                     
                     VStack(alignment: .leading) {
                         Text(patient.firstName + " " + patient.lastName)
-                            .font(.title2)
-                            .bold()
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(Color.black)
                         
-                        HStack{
-                            Text("Grupo: " + patient.group)
+                        HStack(alignment: .center){
+                            Text("Grupo " + patient.group)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
+                            Text("Nivel Cognitivo " + patient.cognitiveLevel)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
-                            Text(patient.communicationStyle)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
+                            Text("Comunicación " + patient.communicationStyle)
                                 .font(.subheadline)
-                                .foregroundColor(.gray)
+                                .padding(.trailing)
+                                .padding(.vertical,5)
                         }
+                        .padding(.top)
                     }
                     
                     Spacer()
@@ -169,6 +200,7 @@ struct AdminView: View {
                         print("Comunicador")
                     }) {
                         Text("Comunicador")
+                            .font(.system(size: 16, weight: .bold))
                             .padding(.horizontal)
                             .padding(.vertical, 10)
                             .background(Color.blue)
@@ -178,9 +210,6 @@ struct AdminView: View {
                 }
                 .padding(.horizontal)
             }
-            //.background(Color(.systemGray6))
-            //.cornerRadius(10)
-            //.shadow(radius: 5)
             .padding(.vertical, 5)
         }
     }

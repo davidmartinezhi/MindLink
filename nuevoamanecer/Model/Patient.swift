@@ -8,8 +8,7 @@
 import Foundation
 
 struct Patient: Hashable{
-    //var id: ObjectIdentifier
-    let id: String!
+    var id: String
     let firstName: String
     let lastName: String
     let birthDate: Date
@@ -17,7 +16,5 @@ struct Patient: Hashable{
     let communicationStyle: String
     let cognitiveLevel: String
     let image: String
-    //let notes: [Note]
-    
-
+    let notes: [String]
 }

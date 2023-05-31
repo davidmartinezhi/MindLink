@@ -1,44 +1,63 @@
 //
-//  AddPatientView.swift
+//  EditPatientView.swift
 //  nuevoamanecer
 //
-//  Created by Gerardo Martínez on 22/05/23.
+//  Created by Gerardo Martínez on 26/05/23.
 //
 
 import SwiftUI
-struct AddPatientView: View {
-    
-    @Environment(\.dismiss) var dismiss
-    @ObservedObject var patients : PatientsViewModel
-    
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter
-    }()
 
+struct EditPatientView: View {
+    @ObservedObject var patients: PatientsViewModel
+    @State var patient: Patient
+    @Environment(\.dismiss) var dismiss
+
+    
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     
     var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
     @State private var communicationStyleSelector = ""
     
+    @State var showAlert : Bool = false
     @State private var firstName : String = ""
     @State private var lastName : String = ""
     @State private var birthDate : Date = Date.now
     @State private var group : String = ""
     @State private var image : String = ""
     
-    @State private var showAlert = false
+    
+    
+    func initializeData(patient: Patient) -> Void{
+        firstName = patient.firstName
+        lastName = patient.lastName
+        birthDate = patient.birthDate
+        group = patient.group
+        image = patient.image
+        communicationStyleSelector = patient.communicationStyle
+        congnitiveLevelSelector = patient.cognitiveLevel
+    }
+    
     
     var body: some View {
         VStack {
-            Text("Agregar Niño")
-                .font(.largeTitle)
-                .padding()
+            HStack{
+               
+                
+                Text("Editar Información")
+                    .font(.largeTitle)
+                    .padding()
+                Spacer()
+               
+                
+                //Delete patient
+                DeletePatientView(patients:patients, patient:patient)
+            }
+            .padding()
+
             
             Form {
-                Section(header: Text("Información del Paciente")) {
+                Section(header: Text("Información")) {
                     TextField("Primer Nombre", text: $firstName)
                     TextField("Apellidos", text: $lastName)
                     TextField("Grupo", text: $group)
@@ -63,12 +82,15 @@ struct AddPatientView: View {
                 
                 Section {
                     
-                    //botón de crear usuario
-                    Button("Agregar Niño"){
+                    //botón de guardar usuario editadp
+                    Button("Guardar"){
+                        
                         //Checar que datos son validos
                         if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                            let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
-                                patients.addData(patient: patient){ error in
+                            let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
+                            
+                            //call method for update
+                            patients.updateData(patient: patient){ error in
                                 if error != "OK" {
                                     print(error)
                                 }else{
@@ -96,9 +118,9 @@ struct AddPatientView: View {
                     .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
                         Button("Ok") {}
                     }
-                    message: {
-                        Text("Asegurate de haber llenado todos los campos requeridos")
-                    }
+                message: {
+                    Text("Asegurate de haber llenado todos los campos requeridos")
+                }
                     
                     //botón de cancelar
                     Button("Cancelar"){
@@ -113,14 +135,24 @@ struct AddPatientView: View {
                 }
             }
             .padding()
+            .onAppear{
+                initializeData(patient: patient)
+            }
+            
         }
-        .navigationTitle("Agregar Paciente")
-        .navigationBarTitleDisplayMode(.inline)
+
+
+
+        //.navigationTitle("Agregar Paciente")
+        //.navigationBarTitleDisplayMode(.inline)
     }
+    
 }
 
-struct AddPatientView_Previews: PreviewProvider {
+
+
+struct EditPatientView_Previews: PreviewProvider {
     static var previews: some View {
-        AddPatientView(patients: PatientsViewModel())
+        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
     }
 }
