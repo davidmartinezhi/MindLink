@@ -146,11 +146,11 @@ class PatientsViewModel: ObservableObject{
             let patientRef = db.collection("Patient").document(patient.id)
             
             // First delete all notes associated with the patient
-            let notesRef = patientRef.collection("Notes")
+            let notesRef = db.collection("Note").whereField("patientId", isEqualTo: patient.id)
             let notesSnapshot = try await notesRef.getDocuments()
 
             for document in notesSnapshot.documents {
-                try await notesRef.document(document.documentID).delete()
+                try await db.collection("Note").document(document.documentID).delete()
             }
 
             // Then delete the patient
@@ -161,5 +161,6 @@ class PatientsViewModel: ObservableObject{
             completion("Failed")
         }
     }
+
 
 }
