@@ -252,7 +252,8 @@ struct PatientView: View {
                                   // Cancelar eliminación
                                   self.selectedNoteIndex = nil
                                   //self.selectedNote = nil
-                              })
+                              }
+                        )
                     }
                 }
                 .listStyle(.inset)

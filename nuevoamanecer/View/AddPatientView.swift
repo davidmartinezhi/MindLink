@@ -38,6 +38,9 @@ struct AddPatientView: View {
                 .padding()
             
             Form {
+                //section for photo
+                
+                
                 Section(header: Text("Información del Paciente")) {
                     TextField("Primer Nombre", text: $firstName)
                     TextField("Apellidos", text: $lastName)

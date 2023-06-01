@@ -21,6 +21,15 @@ struct AdminView: View {
     //Filtrado de Pacientes
     @State var search: String = ""
     @State private var filteredPatients: [Patient] = []
+    @State private var resetFilters = false // Botón de reseteo
+    
+    // Variables para rastrear si los botones de filtro han sido presionados
+    @State private var communicationStyleFilterTapped = false
+    @State private var cognitiveLevelFilterTapped = false
+    
+    // Variable para rastrear si se ha seleccionado un filtro
+    @State private var communicationStyleFilterSelected = false
+    @State private var cognitiveLevelFilterSelected = false
     
     //opciones de comunicación y nivel cognitivo
     var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
@@ -39,40 +48,60 @@ struct AdminView: View {
     @State private var showSelectedCognitiveLevel = false
     
 
+    // Filtrado
+    private func resetSearchFilters() {
+        filteredPatients = []
+        selectedCommunicationStyle = ""
+        selectedCognitiveLevel = ""
+        search = ""
+        resetFilters = false
+        communicationStyleFilterTapped = false
+        cognitiveLevelFilterTapped = false
+        communicationStyleFilterSelected = false
+        cognitiveLevelFilterSelected = false
+    }
+    
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
-        
-        filteredPatients = patients.patientsList.filter{ patient in
-            //let firstNameString = str.components(separatedBy: ", ")
-            patient.firstName.lowercased().hasPrefix(keyword.lowercased()) ||
-            patient.lastName.lowercased().hasPrefix(keyword.lowercased())
+        filteredPatients = patientsListDisplayed.filter{ patient in
+            let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+            let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+            
+            var firstNameMatch = false
+            var lastNameMatch = false
+
+            // Busca en cada componente de firstName
+            for component in firstNameComponents {
+                if component.hasPrefix(keyword.lowercased()) {
+                    firstNameMatch = true
+                    break
+                }
+            }
+
+            // Busca en cada componente de lastName
+            for component in lastNameComponents {
+                if component.hasPrefix(keyword.lowercased()) {
+                    lastNameMatch = true
+                    break
+                }
+            }
+
+            return firstNameMatch || lastNameMatch
         }
     }
+
     
     //Busqueda por estilo de comunicación
-    private func performSearchByCommunicationStyle(keyword: String){
-        if(filteredPatients.isEmpty){
-            filteredPatients = patients.patientsList.filter{ patient in
-                patient.communicationStyle == keyword
-            }
-        }else{
-            filteredPatients = filteredPatients.filter{ patient in
-                patient.communicationStyle == keyword
+    private func performSearchByCommunicationStyle(){
+            filteredPatients = patientsListDisplayed.filter{ patient in
+                patient.communicationStyle == selectedCommunicationStyle
             }
         }
-    }
     
     //Busqueda por nivel cognitivo
-    private func performSearchByCognitiveLevel(keyword: String){
-
-        if(filteredPatients.isEmpty){
-            filteredPatients = patients.patientsList.filter{ patient in
-                patient.cognitiveLevel == keyword
-            }
-        }else{
-            filteredPatients = filteredPatients.filter{ patient in
-                patient.cognitiveLevel == keyword
-            }
+    private func performSearchByCognitiveLevel(){
+        filteredPatients = patientsListDisplayed.filter{ patient in
+            patient.cognitiveLevel == selectedCognitiveLevel
         }
     }
     
@@ -85,59 +114,131 @@ struct AdminView: View {
         NavigationStack{
                  VStack{
                      
-                     // Barra de busqueda
-                     HStack {
-                         TextField("Buscar niño", text: $search)
+                         // Barra de busqueda y agregar niño
+                         HStack {
+                             TextField("Buscar niño", text: $search)
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 .overlay(
+                                     RoundedRectangle(cornerRadius: 10)
+                                         .stroke(Color.gray, lineWidth: 1)
+                                 )
+                                 //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                                 .frame(width: UIScreen.main.bounds.width / 4)
+                                 .padding()
+                                 .onChange(of: search, perform: performSearchByName)
+                             
+                             // Botones de Filtrado
+                             Spacer()
+                             
+                             //Boton para añadir paciente
+                             Button(action: {
+                                 showAddPatient.toggle()
+                             }) {
+                                 HStack {
+                                     Image(systemName: "plus.circle.fill")
+                                     Text("Agregar Niño")
+                                 }
+                                
+                             }
+                             .padding(.horizontal)
+                             .padding(.vertical, 10)
+                             .background(Color.blue)
+                             .foregroundColor(.white)
+                             .cornerRadius(10)
+                         }
+                         .padding(.horizontal, 50)
+                         .padding(.bottom)
+                     
+                     // Botones de filtrado
+                     HStack{
+                         // Estilo de comunicación
+                         if communicationStyleFilterTapped {
+                             Picker("Comunicación", selection: $selectedCommunicationStyle) {
+                                 ForEach(communicationStyles, id: \.self) {
+                                     Text($0)
+                                 }
+                             }
+                             .disabled(communicationStyleFilterSelected)
+                             .onChange(of: selectedCommunicationStyle, perform: { value in
+                                 performSearchByCommunicationStyle()
+                                 if selectedCommunicationStyle != "" {
+                                     communicationStyleFilterSelected = true
+                                 }
+                             })
+                             .pickerStyle(MenuPickerStyle())
                              .padding()
                              .background(Color.white)
                              .cornerRadius(10)
-                             .overlay(
-                                 RoundedRectangle(cornerRadius: 10)
-                                     .stroke(Color.gray, lineWidth: 1)
-                             )
-                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                             .padding()
-                             .onChange(of: search, perform: performSearchByName)
-                     }
-                     .padding(.horizontal, 30)
-                     
-                     
-                     // Botones
-                     HStack{
-                         
-                         // Botones de Filtrado
-                         Spacer()
-                         
-                         //Add patient
-                         Button(action: {
-                             showAddPatient.toggle()
-                         }) {
-                             HStack {
-                                 Image(systemName: "plus.circle.fill")
-                                 Text("Agregar Niño")
-                             }
-                            
+                             //.shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 5)
+                         } else {
+                             Text("Communication Style")
+                                 .font(.system(size: 16, weight: .regular))
+                                 .foregroundColor(Color.blue)
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 .onTapGesture {
+                                     communicationStyleFilterTapped = true
+                                 }
                          }
-                         .padding(.horizontal)
-                         .padding(.vertical, 10)
-                         .background(Color.blue)
-                         .foregroundColor(.white)
-                         .cornerRadius(10)
+
+                         // Nivel cognitivo
+                         if cognitiveLevelFilterTapped {
+                             Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                                 ForEach(cognitiveLevels, id: \.self) {
+                                     Text($0)
+                                 }
+                             }
+                             .disabled(cognitiveLevelFilterSelected)
+                             .onChange(of: selectedCognitiveLevel, perform: { value in
+                                 performSearchByCognitiveLevel()
+                                 if selectedCognitiveLevel != "" {
+                                     cognitiveLevelFilterSelected = true
+                                 }
+                             })
+                             .pickerStyle(MenuPickerStyle())
+                             .padding()
+                             .background(Color.white)
+                             .cornerRadius(10)
+                             //.shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 5)
+                         } else {
+                             Text("Cognitive Level")
+                                 .font(.system(size: 16, weight: .regular))
+                                 .foregroundColor(Color.blue)
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 .onTapGesture {
+                                     cognitiveLevelFilterTapped = true
+                                 }
+                         }
+
+                         Button(action: {
+                             resetFilters = true
+                         }) {
+                             Text("Resetear Filtros")
+                                 .font(.system(size: 16, weight: .regular))
+                                 .foregroundColor(Color.white)
+                                 .padding()
+                                 .background(Color.blue)
+                                 .cornerRadius(10)
+                         }
+                         .onChange(of: resetFilters, perform: { value in
+                             if value {
+                                 resetSearchFilters()
+                             }
+                         })
+                         
+                         Spacer()
                      }
                      .padding(.horizontal, 50)
                      .padding(.bottom)
-                     
-/*
-                     List(patientsListDisplayed, id:\.id){ patient in
-                         NavigationLink {
-                             PatientView(patient: patient)
-                         } label: {
-                             PatientCard(patient: patient)
-                         }
-  
+
                          
-                     }
- */
+                     
+                     //lista de pacientes
                      List(patientsListDisplayed, id:\.id){ patient in
                          PatientCard(patient: patient)
                              .padding()
