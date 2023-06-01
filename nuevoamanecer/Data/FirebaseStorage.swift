@@ -10,11 +10,11 @@ import FirebaseStorage
 import UIKit
 
 class FirebaseAlmacenamiento {
-    func uploadImage(image:UIImage) {
+    func uploadImage(image:UIImage, name:String) {
         if let imageData = image.jpegData(compressionQuality: 0.5) {
             let storage = Storage.storage()
             //Donde dice "temp" es el nombre con el que se guardara la imagen en Firestore
-            storage.reference().child("fhfh.jpg").putData(imageData, metadata: nil) {
+            storage.reference().child(name + ".jpg").putData(imageData, metadata: nil) {
                 (data, err) in
                 if let err = err {
                     print("Error al subir imagen - \(err.localizedDescription)")
@@ -24,6 +24,18 @@ class FirebaseAlmacenamiento {
             }
         } else {
             print("No se pudo subir la imagen")
+        }
+    }
+    
+    func loadImageFromFirebase(name:String) {
+        let storageRef = Storage.storage().reference(withPath: name)
+        
+        storageRef.downloadURL { (url, error) in
+            if error != nil {
+                print((error?.localizedDescription)!)
+                return
+            }
+            //self.imageURL = url!
         }
     }
 }

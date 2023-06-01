@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseStorage
 
 struct EditPatientView: View {
     @ObservedObject var patients: PatientsViewModel
@@ -24,7 +25,13 @@ struct EditPatientView: View {
     @State private var lastName : String = ""
     @State private var birthDate : Date = Date.now
     @State private var group : String = ""
-    @State private var image : String = ""
+    @State private var upload_image: UIImage?
+
+    @State private var storage = FirebaseAlmacenamiento()
+    
+    @State private var shouldShowImagePicker = false
+    
+    @State private var imageURL = URL(string: "")
     
     
     
@@ -33,121 +40,138 @@ struct EditPatientView: View {
         lastName = patient.lastName
         birthDate = patient.birthDate
         group = patient.group
-        image = patient.image
+        //image = patient.image
         communicationStyleSelector = patient.communicationStyle
         congnitiveLevelSelector = patient.cognitiveLevel
     }
     
+    func loadImageFromFirebase(name:String) {
+        let storageRef = Storage.storage().reference(withPath: name)
+        
+        storageRef.downloadURL { (url, error) in
+            if error != nil {
+                print((error?.localizedDescription)!)
+                return
+            }
+            self.imageURL = url!
+        }
+    }
+    
+    
     
     var body: some View {
-        VStack {
-            HStack{
-               
+        NavigationView {
+            VStack {
                 
-                Text("Editar Información")
-                    .font(.largeTitle)
-                    .padding()
-                Spacer()
-               
-                
-                //Delete patient
-                DeletePatientView(patients:patients, patient:patient)
-            }
-            .padding()
-
-            
-            Form {
-                Section(header: Text("Información")) {
-                    TextField("Primer Nombre", text: $firstName)
-                    TextField("Apellidos", text: $lastName)
-                    TextField("Grupo", text: $group)
-                    DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
-                }
-                
-                Section(header: Text("Nivel Cognitivo")) {
-                    Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
-                        ForEach(cognitiveLevels, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                }
-                
-                Section(header: Text("Estilo de Comunicación")) {
-                    Picker("Tipo de comunicación", selection: $communicationStyleSelector) {
-                        ForEach(communicationStyles, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                }
-                
-                Section {
+                /*HStack{
                     
-                    //botón de guardar usuario editadp
-                    Button("Guardar"){
+                    
+                    Text("Editar Información")
+                        .font(.largeTitle)
+                        .padding()
+                    Spacer()
+                }
+                .padding()
+                */
+                
+                Text("\(imageURL?.absoluteString ?? "placeholder")")
+                
+                
+                Form {
+                    Section(header: Text("Información")) {
+                        TextField("Primer Nombre", text: $firstName)
+                        TextField("Apellidos", text: $lastName)
+                        TextField("Grupo", text: $group)
+                        DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                    }
+                    
+                    Section(header: Text("Nivel Cognitivo")) {
+                        Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
+                            ForEach(cognitiveLevels, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Estilo de Comunicación")) {
+                        Picker("Tipo de comunicación", selection: $communicationStyleSelector) {
+                            ForEach(communicationStyles, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                    
+                    Section {
                         
-                        //Checar que datos son validos
-                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                            let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
+                        //botón de guardar usuario editadp
+                        Button("Guardar"){
                             
-                            //call method for update
-                            patients.updateData(patient: patient){ error in
-                                if error != "OK" {
-                                    print(error)
-                                }else{
-                                    
-                                    Task {
-                                        if let patientsList = await patients.getData(){
-                                            DispatchQueue.main.async {
-                                                self.patients.patientsList = patientsList
-                                                dismiss()
+                            //Checar que datos son validos
+                            if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                                let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
+                                
+                                //call method for update
+                                patients.updateData(patient: patient){ error in
+                                    if error != "OK" {
+                                        print(error)
+                                    }else{
+                                        
+                                        Task {
+                                            if let patientsList = await patients.getData(){
+                                                DispatchQueue.main.async {
+                                                    self.patients.patientsList = patientsList
+                                                    dismiss()
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            else{
+                                showAlert = true
+                            }
                         }
-                        else{
-                            showAlert = true
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                            Button("Ok") {}
                         }
+                    message: {
+                        Text("Asegurate de haber llenado todos los campos requeridos")
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
-                        Button("Ok") {}
+                        
+                        //botón de cancelar
+                        Button("Cancelar"){
+                            dismiss()
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        
+                        DeletePatientView(patients:patients, patient:patient)
+                            .padding()
+                            .frame(maxWidth: .infinity, maxHeight: 55, alignment: .center)
+                            .background(Color.red)
+                            .cornerRadius(10)
                     }
-                message: {
-                    Text("Asegurate de haber llenado todos los campos requeridos")
                 }
-                    
-                    //botón de cancelar
-                    Button("Cancelar"){
-                        dismiss()
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    
+                .padding()
+                .onAppear{
+                    initializeData(patient: patient)
                 }
+                
             }
-            .padding()
-            .onAppear{
-                initializeData(patient: patient)
-            }
-            
+            .background(Color(.init(white: 0, alpha: 0.05))
+                .ignoresSafeArea())
         }
-
-
-
-        //.navigationTitle("Agregar Paciente")
-        //.navigationBarTitleDisplayMode(.inline)
     }
-    
 }
+
 
 
 

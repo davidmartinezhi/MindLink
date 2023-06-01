@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */; };
 		A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */; };
+		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -84,6 +85,7 @@
 				C2BEDB0F2A141262005398F9 /* FirebaseAuth in Frameworks */,
 				C2BEDB002A0DA53B005398F9 /* FirebaseAnalytics in Frameworks */,
 				C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */,
+				A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +221,7 @@
 				C2BEDB0E2A141262005398F9 /* FirebaseAuth */,
 				C29428012A15A8F000E814C9 /* FirebaseFirestore */,
 				C2207EFB2A184E3000F31578 /* Kingfisher */,
+				A9594A122A28438B0063C0D7 /* FirebaseStorage */,
 			);
 			productName = nuevoamanecer;
 			productReference = C2A8CAB22A0D9F540026DB96 /* nuevoamanecer.app */;
@@ -440,6 +443,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -469,6 +473,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -525,6 +530,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A9594A122A28438B0063C0D7 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2BEDAFE2A0DA53B005398F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
 		C2207EFB2A184E3000F31578 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */;
