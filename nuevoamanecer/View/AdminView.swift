@@ -63,7 +63,22 @@ struct AdminView: View {
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
-        filteredPatients = patientsListDisplayed.filter{ patient in
+        
+        var searchingWithFilters = patients.patientsList
+        
+        if(communicationStyleFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
+                }
+        }
+        
+        if(cognitiveLevelFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
+            }
+        }
+        
+        filteredPatients = searchingWithFilters.filter{ patient in
             let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
             let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
             
@@ -90,13 +105,16 @@ struct AdminView: View {
         }
     }
 
+    /*
+     Checar bandera para saber cual filtro aplicar
+     */
     
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
-            filteredPatients = patientsListDisplayed.filter{ patient in
+        filteredPatients = patientsListDisplayed.filter{ patient in
                 patient.communicationStyle == selectedCommunicationStyle
-            }
         }
+    }
     
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
