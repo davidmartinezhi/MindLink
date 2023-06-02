@@ -96,7 +96,7 @@ struct AdminView: View {
                 }
             }
 
-            return firstNameMatch || lastNameMatch
+            return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased())
         }
     }
     
@@ -137,7 +137,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased())
             }
         }
         
@@ -190,7 +190,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased())
             }
         }
         
@@ -213,7 +213,7 @@ struct AdminView: View {
      */
     
     private var patientsListDisplayed: [Patient]? {
-        if communicationStyleFilterSelected || cognitiveLevelFilterSelected {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
             return filteredPatients.isEmpty ? nil : filteredPatients
         }
         return patients.patientsList
@@ -326,17 +326,27 @@ struct AdminView: View {
                      
                      // Barra de busqueda
                      HStack {
-                         TextField("Buscar niño", text: $search)
-                             .padding()
-                              .background(Color(.systemGray6))
-                              .cornerRadius(10)
-                             .onChange(of: search, perform: performSearchByName)
-                              
+                         HStack{
+                             Image(systemName: "magnifyingglass")
+                                 .resizable()
+                                 .frame(width: 20, height: 20)
+                                 .foregroundColor(Color.gray)
+                                 .padding()
+                             TextField("Buscar niño o grupo", text: $search)
+                                 .padding()
+                                 .onChange(of: search, perform: performSearchByName)
+                                  
+                         }
+                         .cornerRadius(10) // Asegúrate de que este está aquí
+                         .background(Color(.systemGray6))
+                         .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
+
                          Spacer()
                               
                      }
                      .padding(.horizontal, 50)
                      .padding([.bottom, .top], 20)
+                     
 
                          
                      //mostramos que no hay pacientes con los filtros seleccionados
