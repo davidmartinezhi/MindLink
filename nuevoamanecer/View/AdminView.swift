@@ -21,14 +21,15 @@ struct AdminView: View {
     //Filtrado de Pacientes
     @State var search: String = ""
     @State private var filteredPatients: [Patient] = []
+    @State private var resetFilters = false
     
     // Variable para rastrear si se ha seleccionado un filtro
     @State private var communicationStyleFilterSelected = false
     @State private var cognitiveLevelFilterSelected = false
     
     //opciones de comunicación y nivel cognitivo para filtros
-    var communicationStyles = ["Filtro estilo de Comunicación", "Verbal", "No-verbal", "Mixto"]
-    var cognitiveLevels = ["Filtro nivel cognitivo", "Alto", "Medio", "Bajo"]
+    var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
+    var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     
     //mostrar opciones de filtrado
     @State private var showCognitiveLevelFilterOptions = false
@@ -43,6 +44,17 @@ struct AdminView: View {
     @State private var showSelectedCognitiveLevel = false
     
 
+    //Reseteo de filtrado
+    // Filtrado
+    private func resetSearchFilters() {
+        filteredPatients = []
+        selectedCommunicationStyle = ""
+        selectedCognitiveLevel = ""
+        search = ""
+        resetFilters = false
+        communicationStyleFilterSelected = false
+        cognitiveLevelFilterSelected = false
+    }
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
@@ -244,7 +256,9 @@ struct AdminView: View {
                          
                          //Comunicación
                          Picker("Comunicación", selection: $selectedCommunicationStyle) {
-
+                             if(!communicationStyleFilterSelected){
+                                 Text("Filtro estilo de Comunicación")
+                             }
                              ForEach(communicationStyles, id: \.self) {
                                  Text($0)
                              }
@@ -266,6 +280,9 @@ struct AdminView: View {
                          
                          //Nivel cognitivo
                          Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                             if(!cognitiveLevelFilterSelected){
+                                 Text("Filtro nivel cognitivo")
+                             }
                              ForEach(cognitiveLevels, id: \.self) {
                                  Text($0)
                              }
@@ -283,6 +300,18 @@ struct AdminView: View {
                          .padding()
                          .background(Color.white)
                          .cornerRadius(10)
+                         
+                         //reset filters
+                         Button(action: {
+                             resetFilters = true
+                         }) {
+                             Text("Resetear Filtros")
+                         }
+                         .onChange(of: resetFilters, perform: { value in
+                             if value {
+                                 resetSearchFilters()
+                             }
+                         })
                          
                          
                          Spacer()
