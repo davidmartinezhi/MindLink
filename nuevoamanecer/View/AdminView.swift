@@ -21,8 +21,13 @@ struct AdminView: View {
     //Filtrado de Pacientes
     @State var search: String = ""
     @State private var filteredPatients: [Patient] = []
+    @State private var resetFilters = false
     
-    //opciones de comunicación y nivel cognitivo
+    // Variable para rastrear si se ha seleccionado un filtro
+    @State private var communicationStyleFilterSelected = false
+    @State private var cognitiveLevelFilterSelected = false
+    
+    //opciones de comunicación y nivel cognitivo para filtros
     var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     
@@ -39,76 +44,189 @@ struct AdminView: View {
     @State private var showSelectedCognitiveLevel = false
     
 
+    //Reseteo de filtrado
+    // Filtrado
+    private func resetSearchFilters() {
+        filteredPatients = []
+        selectedCommunicationStyle = ""
+        selectedCognitiveLevel = ""
+        search = ""
+        resetFilters = false
+        communicationStyleFilterSelected = false
+        cognitiveLevelFilterSelected = false
+    }
+    
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
         
-        filteredPatients = patients.patientsList.filter{ patient in
-            //let firstNameString = str.components(separatedBy: ", ")
-            patient.firstName.lowercased().hasPrefix(keyword.lowercased()) ||
-            patient.lastName.lowercased().hasPrefix(keyword.lowercased())
+        var searchingWithFilters = patients.patientsList
+        
+        if(communicationStyleFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
+                }
+        }
+        
+        if(cognitiveLevelFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
+            }
+        }
+        
+        filteredPatients = searchingWithFilters.filter{ patient in
+            let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+            let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+            
+            var firstNameMatch = false
+            var lastNameMatch = false
+
+            // Busca en cada componente de firstName
+            for component in firstNameComponents {
+                if component.hasPrefix(keyword.lowercased()) {
+                    firstNameMatch = true
+                    break
+                }
+            }
+
+            // Busca en cada componente de lastName
+            for component in lastNameComponents {
+                if component.hasPrefix(keyword.lowercased()) {
+                    lastNameMatch = true
+                    break
+                }
+            }
+
+            return firstNameMatch || lastNameMatch
         }
     }
     
     //Busqueda por estilo de comunicación
-    private func performSearchByCommunicationStyle(keyword: String){
-        if(filteredPatients.isEmpty){
-            filteredPatients = patients.patientsList.filter{ patient in
-                patient.communicationStyle == keyword
+    private func performSearchByCommunicationStyle(){
+        
+        var searchingWithFilters = patients.patientsList
+        
+        //filtramos nivel cognitivo
+        if(cognitiveLevelFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
             }
-        }else{
-            filteredPatients = filteredPatients.filter{ patient in
-                patient.communicationStyle == keyword
+        }
+        
+        //filtramos por busqueda en search bar
+        if(search != ""){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+                let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+                
+                var firstNameMatch = false
+                var lastNameMatch = false
+
+                // Busca en cada componente de firstName
+                for component in firstNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        firstNameMatch = true
+                        break
+                    }
+                }
+
+                // Busca en cada componente de lastName
+                for component in lastNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        lastNameMatch = true
+                        break
+                    }
+                }
+
+                return firstNameMatch || lastNameMatch
+            }
+        }
+        
+        //si no es valida la operación, no filramos
+        if(selectedCommunicationStyle == "" || selectedCommunicationStyle == "Filtro estilo de Comunicación"){
+            filteredPatients = searchingWithFilters
+        }
+        //si es valida la operación, filramos
+        else{
+            filteredPatients = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
             }
         }
     }
     
     //Busqueda por nivel cognitivo
-    private func performSearchByCognitiveLevel(keyword: String){
+    private func performSearchByCognitiveLevel(){
+        
+        var searchingWithFilters = patients.patientsList
 
-        if(filteredPatients.isEmpty){
-            filteredPatients = patients.patientsList.filter{ patient in
-                patient.cognitiveLevel == keyword
-            }
-        }else{
-            filteredPatients = filteredPatients.filter{ patient in
-                patient.cognitiveLevel == keyword
+        //filtramos estilo de comunicación
+        if(communicationStyleFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
+                }
+        }
+        
+        //filtramos por palabras en el searchbar
+        if(search != ""){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+                let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+                
+                var firstNameMatch = false
+                var lastNameMatch = false
+
+                // Busca en cada componente de firstName
+                for component in firstNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        firstNameMatch = true
+                        break
+                    }
+                }
+
+                // Busca en cada componente de lastName
+                for component in lastNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        lastNameMatch = true
+                        break
+                    }
+                }
+
+                return firstNameMatch || lastNameMatch
             }
         }
+        
+        //checamos si es valida la operación
+        if(selectedCognitiveLevel == "" || selectedCognitiveLevel == "Filtro nivel cognitivo"){
+            filteredPatients = searchingWithFilters
+        }else{
+            filteredPatients = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
+            }
+        }
+        
     }
     
-    //muestra de pacientes
+    //Lista de pacientes mostrada al usuario
+    /*
     private var patientsListDisplayed: [Patient] {
         filteredPatients.isEmpty ? patients.patientsList : filteredPatients
+    }
+     */
+    
+    private var patientsListDisplayed: [Patient]? {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected {
+            return filteredPatients.isEmpty ? nil : filteredPatients
+        }
+        return patients.patientsList
     }
     
     var body: some View {
         NavigationStack{
                  VStack{
                      
-                     // Barra de busqueda
-                     HStack {
-                         TextField("Buscar niño", text: $search)
-                             .padding()
-                             .background(Color.white)
-                             .cornerRadius(10)
-                             .overlay(
-                                 RoundedRectangle(cornerRadius: 10)
-                                     .stroke(Color.gray, lineWidth: 1)
-                             )
-                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                             .padding()
-                             .onChange(of: search, perform: performSearchByName)
-                     }
-                     .padding(.horizontal, 30)
-                     
-                     
-                     // Botones
+                     //Boton para agregar niños
                      HStack{
-                         
-                         // Botones de Filtrado
                          Spacer()
-                         
-                         //Add patient
+                         //Boton para añadir paciente
                          Button(action: {
                              showAddPatient.toggle()
                          }) {
@@ -124,32 +242,136 @@ struct AdminView: View {
                          .foregroundColor(.white)
                          .cornerRadius(10)
                      }
-                     .padding(.horizontal, 50)
-                     .padding(.bottom)
+                     .padding(.horizontal, 70)
+                     .padding(.vertical)
                      
-/*
-                     List(patientsListDisplayed, id:\.id){ patient in
-                         NavigationLink {
-                             PatientView(patient: patient)
-                         } label: {
-                             PatientCard(patient: patient)
-                         }
-  
+                    // Barra de busqueda y agregar niño
+                    HStack {
+                        TextField("Buscar niño", text: $search)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: search, perform: performSearchByName)
+                             
+                        // Botones de Filtrado
+                        Spacer()
+                             
+                    }
+                    .padding(.horizontal, 70)
+                    .padding(.bottom)
+
+                     
+                     // Filtrado
+                     HStack{
                          
+                         //Comunicación
+                         Picker("Comunicación", selection: $selectedCommunicationStyle) {
+                             if(!communicationStyleFilterSelected){
+                                 Text("Filtro estilo de Comunicación")
+                                     .foregroundColor(Color.white)
+                             }
+                             ForEach(communicationStyles, id: \.self) {
+                                 Text($0)
+                                     .foregroundColor(Color.white)
+                             }
+                         }
+                         .frame(width: 300, height: 30)
+                         .onChange(of: selectedCommunicationStyle, perform: { value in
+                             performSearchByCommunicationStyle()
+                             if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Filtro estilo de Comunicación" {
+                                 communicationStyleFilterSelected = true
+                             }else {
+                                 //reseteamos valores cognitive level
+                                 communicationStyleFilterSelected = false
+                             }
+                         })
+                         .pickerStyle(MenuPickerStyle())
+                         .padding()
+                         .background(Color.white)
+                         .cornerRadius(10)
+                         
+                         
+                         //Nivel cognitivo
+                         Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                             if(!cognitiveLevelFilterSelected){
+                                 Text("Filtro nivel cognitivo")
+                             }
+                             ForEach(cognitiveLevels, id: \.self) {
+                                 Text($0)
+                             }
+                         }
+                         .frame(width: 300, height: 30)
+                         .onChange(of: selectedCognitiveLevel, perform: { value in
+                             performSearchByCognitiveLevel()
+                             if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Filtro nivel cognitivo" {
+                                 cognitiveLevelFilterSelected = true
+                             }else {
+                                 //reseteamos valores cognitive level
+                                 cognitiveLevelFilterSelected = false
+                             }
+                         })
+                         .pickerStyle(MenuPickerStyle())
+                         .padding()
+                         .background(Color.white)
+                         .cornerRadius(10)
+                         
+                         
+                         if(communicationStyleFilterSelected || cognitiveLevelFilterSelected){
+                             //reset filters
+                             Button(action: {
+                                 resetFilters = true
+                             }) {
+                                 Text("Resetear Filtros")
+                             }
+                             .onChange(of: resetFilters, perform: { value in
+                                 if value {
+                                     resetSearchFilters()
+                                 }
+                             })
+                         }
+
+                         
+                         
+                         Spacer()
                      }
- */
-                     List(patientsListDisplayed, id:\.id){ patient in
-                         PatientCard(patient: patient)
-                             .padding()
-                             .background(Color.white)
-                             .cornerRadius(10)
-                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                             .padding([.leading, .trailing, .bottom], 10)
-                             .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                     .padding(.horizontal, 70)
+                     .padding(.bottom)
+
+                         
+                     //mostramos que no hay pacientes con los filtros seleccionados
+                     
+                     if(patientsListDisplayed == nil){
+                         
+                         
+                         if(patients.patientsList.count == 0){
+                             Text("Aún no hay niños")
+                             Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                         }
+                         else{
+                             Text("No se han encontrado niños con ese filtrado.")
+                         }
+                         
+                         Spacer()
                      }
-                     .listStyle(.automatic)
-                     .sheet(isPresented: $showAddPatient) {
-                         AddPatientView(patients:patients)
+                     else{
+                         //mostramos lista de pacientes
+                         List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
+                             PatientCard(patient: patient)
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                                 .padding([.leading, .trailing, .bottom], 10)
+                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                         }
+                         .listStyle(.automatic)
+                         .sheet(isPresented: $showAddPatient) {
+                             AddPatientView(patients:patients)
+                         }
                      }
                  }
              }
