@@ -70,10 +70,11 @@ struct PatientView: View {
             // 1/4 of the screen for the notes list
             VStack {
                 HStack{
+                    Spacer()
                     Text("Esquema")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(Color.gray)
-                        .padding()
+                        
                     
                     Spacer()
                 }.padding(.top)

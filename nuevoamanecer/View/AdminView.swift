@@ -142,7 +142,7 @@ struct AdminView: View {
         }
         
         //si no es valida la operación, no filramos
-        if(selectedCommunicationStyle == "" || selectedCommunicationStyle == "Filtro estilo de Comunicación"){
+        if(selectedCommunicationStyle == "" || selectedCommunicationStyle == "Comunicación"){
             filteredPatients = searchingWithFilters
         }
         //si es valida la operación, filramos
@@ -195,7 +195,7 @@ struct AdminView: View {
         }
         
         //checamos si es valida la operación
-        if(selectedCognitiveLevel == "" || selectedCognitiveLevel == "Filtro nivel cognitivo"){
+        if(selectedCognitiveLevel == "" || selectedCognitiveLevel == "Nivel Cognitivo"){
             filteredPatients = searchingWithFilters
         }else{
             filteredPatients = searchingWithFilters.filter{ patient in
@@ -232,100 +232,86 @@ struct AdminView: View {
                          }) {
                              HStack {
                                  Image(systemName: "plus.circle.fill")
+                                     .resizable()
+                                     .frame(width: 20, height: 20)
                                  Text("Agregar Niño")
+                                     .font(.headline)
                              }
-                            
+                             .padding([.horizontal, .vertical], 10)
+                             
                          }
-                         .padding(.horizontal)
-                         .padding(.vertical, 10)
+                         
                          .background(Color.blue)
-                         .foregroundColor(.white)
+                         .foregroundColor(Color.white)
                          .cornerRadius(10)
                      }
-                     .padding(.horizontal, 70)
-                     .padding(.vertical)
-                     
-                    // Barra de busqueda y agregar niño
-                    HStack {
-                        TextField("Buscar niño", text: $search)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1)
-                            )
-                            .onChange(of: search, perform: performSearchByName)
-                             
-                        // Botones de Filtrado
-                        Spacer()
-                             
-                    }
-                    .padding(.horizontal, 70)
-                    .padding(.bottom)
-
+                     .padding(.horizontal, 50)
+                     //.padding(.vertical)
                      
                      // Filtrado
                      HStack{
                          
-                         //Comunicación
-                         Picker("Comunicación", selection: $selectedCommunicationStyle) {
-                             if(!communicationStyleFilterSelected){
-                                 Text("Filtro estilo de Comunicación")
-                                     .foregroundColor(Color.white)
-                             }
-                             ForEach(communicationStyles, id: \.self) {
-                                 Text($0)
-                                     .foregroundColor(Color.white)
-                             }
-                         }
-                         .frame(width: 300, height: 30)
-                         .onChange(of: selectedCommunicationStyle, perform: { value in
-                             performSearchByCommunicationStyle()
-                             if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Filtro estilo de Comunicación" {
-                                 communicationStyleFilterSelected = true
-                             }else {
-                                 //reseteamos valores cognitive level
-                                 communicationStyleFilterSelected = false
-                             }
-                         })
-                         .pickerStyle(MenuPickerStyle())
-                         .padding()
-                         .background(Color.white)
-                         .cornerRadius(10)
+                         Text("Filtrado")
+                             .font(.system(size: 24, weight: .bold))
+                             .foregroundColor(Color.gray)
                          
                          
                          //Nivel cognitivo
                          Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
                              if(!cognitiveLevelFilterSelected){
-                                 Text("Filtro nivel cognitivo")
+                                 Text("Nivel Cognitivo")
+                                     .foregroundColor(Color.black)
                              }
                              ForEach(cognitiveLevels, id: \.self) {
                                  Text($0)
                              }
+                             
                          }
-                         .frame(width: 300, height: 30)
                          .onChange(of: selectedCognitiveLevel, perform: { value in
                              performSearchByCognitiveLevel()
-                             if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Filtro nivel cognitivo" {
+                             if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Nivel Cognitivo" {
                                  cognitiveLevelFilterSelected = true
                              }else {
                                  //reseteamos valores cognitive level
                                  cognitiveLevelFilterSelected = false
                              }
                          })
-                         .pickerStyle(MenuPickerStyle())
-                         .padding()
-                         .background(Color.white)
+                         .frame(width: 157, height: 40)
+                         .pickerStyle(.menu)
+                         .padding(.leading)
                          .cornerRadius(10)
                          
+                         //Comunicación
+                         Picker("Comunicación", selection: $selectedCommunicationStyle) {
+                             if(!communicationStyleFilterSelected){
+                                 Text("Comunicación")
+
+                             }
+                             ForEach(communicationStyles, id: \.self) {
+                                 Text($0)
+                             }
+                         }
+                         .onChange(of: selectedCommunicationStyle, perform: { value in
+                             performSearchByCommunicationStyle()
+                             if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Comunicación" {
+                                 communicationStyleFilterSelected = true
+                             }else {
+                                 //reseteamos valores cognitive level
+                                 communicationStyleFilterSelected = false
+                             }
+                         })
+                         .frame(width: 150, height: 40)
+                         .pickerStyle(.menu)
+                         .padding(.trailing)
+                         .cornerRadius(10)
+           
                          
                          if(communicationStyleFilterSelected || cognitiveLevelFilterSelected){
                              //reset filters
                              Button(action: {
                                  resetFilters = true
                              }) {
-                                 Text("Resetear Filtros")
+                                 Text("Resetear")
                              }
                              .onChange(of: resetFilters, perform: { value in
                                  if value {
@@ -333,28 +319,70 @@ struct AdminView: View {
                                  }
                              })
                          }
-
-                         
-                         
                          Spacer()
                      }
-                     .padding(.horizontal, 70)
-                     .padding(.bottom)
+                     .padding(.horizontal, 50)
+                     .padding(.top, 10)
+                     
+                     // Barra de busqueda
+                     HStack {
+                         TextField("Buscar niño", text: $search)
+                             .padding()
+                              .background(Color(.systemGray6))
+                              .cornerRadius(10)
+                             .onChange(of: search, perform: performSearchByName)
+                              
+                         Spacer()
+                              
+                     }
+                     .padding(.horizontal, 50)
+                     .padding([.bottom, .top], 20)
 
                          
                      //mostramos que no hay pacientes con los filtros seleccionados
                      
                      if(patientsListDisplayed == nil){
                          
-                         
                          if(patients.patientsList.count == 0){
-                             Text("Aún no hay niños")
-                             Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                             List{
+                                 HStack{
+                                     Spacer()
+                                     VStack {
+                                         Text("Aún no hay niños")
+                                             .font(.title2)
+                                             .foregroundColor(Color.gray)
+                                         Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                                             .font(.headline)
+                                             .foregroundColor(Color.gray)
+                                     }
+                                     //.padding(.top, 150)
+                                     Spacer()
+                                 }
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 .padding([.leading, .trailing, .bottom, .top], 10)
+                             }
+                             .listStyle(.automatic)
                          }
                          else{
-                             Text("No se han encontrado niños con ese filtrado.")
+                             List{
+                                 HStack{
+                                     Spacer() // Espacio superior
+                                     Text("No se han encontrado niños con ese filtrado.")
+                                         .font(.title2)
+                                         .foregroundColor(Color.gray)
+                                     Spacer() // Espacio inferior
+                                 }
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 .padding([.leading, .trailing, .bottom, .top], 10)
+                             }
+                             //.background(Color.gray.opacity(0.1))
+                             .listStyle(.automatic)
+                             
                          }
-                         
                          Spacer()
                      }
                      else{
@@ -399,22 +427,26 @@ struct AdminView: View {
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(Color.black)
                         
-                        HStack(alignment: .center){
-                            Text("Grupo " + patient.group)
-                                .font(.subheadline)
+                        VStack(alignment: .leading){
+                            Text("Grupo: " + patient.group)
+                                .font(.headline)
+                                .foregroundColor(Color.gray)
                                 .padding(.trailing)
                                 .padding(.vertical,5)
-                            Text("Nivel Cognitivo " + patient.cognitiveLevel)
-                                .font(.subheadline)
+                            Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                                .font(.headline)
+                                .foregroundColor(Color.gray)
                                 .padding(.trailing)
                                 .padding(.vertical,5)
-                            Text("Comunicación " + patient.communicationStyle)
-                                .font(.subheadline)
+                            Text("Comunicación: " + patient.communicationStyle)
+                                .font(.headline)
+                                .foregroundColor(Color.gray)
                                 .padding(.trailing)
                                 .padding(.vertical,5)
                         }
-                        .padding(.top)
+                        
                     }
+                    .padding(.leading)
                     
                     Spacer()
                     
