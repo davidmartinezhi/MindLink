@@ -21,19 +21,14 @@ struct AdminView: View {
     //Filtrado de Pacientes
     @State var search: String = ""
     @State private var filteredPatients: [Patient] = []
-    @State private var resetFilters = false // Botón de reseteo
-    
-    // Variables para rastrear si los botones de filtro han sido presionados
-    @State private var communicationStyleFilterTapped = false
-    @State private var cognitiveLevelFilterTapped = false
     
     // Variable para rastrear si se ha seleccionado un filtro
     @State private var communicationStyleFilterSelected = false
     @State private var cognitiveLevelFilterSelected = false
     
-    //opciones de comunicación y nivel cognitivo
-    var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
-    var cognitiveLevels = ["Alto", "Medio", "Bajo"]
+    //opciones de comunicación y nivel cognitivo para filtros
+    var communicationStyles = ["Filtro estilo de Comunicación", "Verbal", "No-verbal", "Mixto"]
+    var cognitiveLevels = ["Filtro nivel cognitivo", "Alto", "Medio", "Bajo"]
     
     //mostrar opciones de filtrado
     @State private var showCognitiveLevelFilterOptions = false
@@ -48,18 +43,6 @@ struct AdminView: View {
     @State private var showSelectedCognitiveLevel = false
     
 
-    // Filtrado
-    private func resetSearchFilters() {
-        filteredPatients = []
-        selectedCommunicationStyle = ""
-        selectedCognitiveLevel = ""
-        search = ""
-        resetFilters = false
-        communicationStyleFilterTapped = false
-        cognitiveLevelFilterTapped = false
-        communicationStyleFilterSelected = false
-        cognitiveLevelFilterSelected = false
-    }
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
@@ -104,26 +87,113 @@ struct AdminView: View {
             return firstNameMatch || lastNameMatch
         }
     }
-
-    /*
-     Checar bandera para saber cual filtro aplicar
-     */
     
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
-        filteredPatients = patientsListDisplayed.filter{ patient in
-                patient.communicationStyle == selectedCommunicationStyle
+        
+        var searchingWithFilters = patients.patientsList
+        
+        //filtramos nivel cognitivo
+        if(cognitiveLevelFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
+            }
+        }
+        
+        //filtramos por busqueda en search bar
+        if(search != ""){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+                let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+                
+                var firstNameMatch = false
+                var lastNameMatch = false
+
+                // Busca en cada componente de firstName
+                for component in firstNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        firstNameMatch = true
+                        break
+                    }
+                }
+
+                // Busca en cada componente de lastName
+                for component in lastNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        lastNameMatch = true
+                        break
+                    }
+                }
+
+                return firstNameMatch || lastNameMatch
+            }
+        }
+        
+        //si no es valida la operación, no filramos
+        if(selectedCommunicationStyle == "" || selectedCommunicationStyle == "Filtro estilo de Comunicación"){
+            filteredPatients = searchingWithFilters
+        }
+        //si es valida la operación, filramos
+        else{
+            filteredPatients = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
+            }
         }
     }
     
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
-        filteredPatients = patientsListDisplayed.filter{ patient in
-            patient.cognitiveLevel == selectedCognitiveLevel
+        
+        var searchingWithFilters = patients.patientsList
+
+        //filtramos estilo de comunicación
+        if(communicationStyleFilterSelected){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                    patient.communicationStyle == selectedCommunicationStyle
+                }
         }
+        
+        //filtramos por palabras en el searchbar
+        if(search != ""){
+            searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
+                let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+                
+                var firstNameMatch = false
+                var lastNameMatch = false
+
+                // Busca en cada componente de firstName
+                for component in firstNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        firstNameMatch = true
+                        break
+                    }
+                }
+
+                // Busca en cada componente de lastName
+                for component in lastNameComponents {
+                    if component.hasPrefix(search.lowercased()) {
+                        lastNameMatch = true
+                        break
+                    }
+                }
+
+                return firstNameMatch || lastNameMatch
+            }
+        }
+        
+        //checamos si es valida la operación
+        if(selectedCognitiveLevel == "" || selectedCognitiveLevel == "Filtro nivel cognitivo"){
+            filteredPatients = searchingWithFilters
+        }else{
+            filteredPatients = searchingWithFilters.filter{ patient in
+                patient.cognitiveLevel == selectedCognitiveLevel
+            }
+        }
+        
     }
     
-    //muestra de pacientes
+    //Lista de pacientes mostrada al usuario
     private var patientsListDisplayed: [Patient] {
         filteredPatients.isEmpty ? patients.patientsList : filteredPatients
     }
@@ -142,7 +212,6 @@ struct AdminView: View {
                                      RoundedRectangle(cornerRadius: 10)
                                          .stroke(Color.gray, lineWidth: 1)
                                  )
-                                 //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
                                  .frame(width: UIScreen.main.bounds.width / 4)
                                  .padding()
                                  .onChange(of: search, perform: performSearchByName)
@@ -168,86 +237,53 @@ struct AdminView: View {
                          }
                          .padding(.horizontal, 50)
                          .padding(.bottom)
+
                      
-                     // Botones de filtrado
+                     // Filtrado
                      HStack{
-                         // Estilo de comunicación
-                         if communicationStyleFilterTapped {
-                             Picker("Comunicación", selection: $selectedCommunicationStyle) {
-                                 ForEach(communicationStyles, id: \.self) {
-                                     Text($0)
-                                 }
-                             }
-                             .disabled(communicationStyleFilterSelected)
-                             .onChange(of: selectedCommunicationStyle, perform: { value in
-                                 performSearchByCommunicationStyle()
-                                 if selectedCommunicationStyle != "" {
-                                     communicationStyleFilterSelected = true
-                                 }
-                             })
-                             .pickerStyle(MenuPickerStyle())
-                             .padding()
-                             .background(Color.white)
-                             .cornerRadius(10)
-                             //.shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 5)
-                         } else {
-                             Text("Communication Style")
-                                 .font(.system(size: 16, weight: .regular))
-                                 .foregroundColor(Color.blue)
-                                 .padding()
-                                 .background(Color.white)
-                                 .cornerRadius(10)
-                                 .onTapGesture {
-                                     communicationStyleFilterTapped = true
-                                 }
-                         }
+                         
+                         //Comunicación
+                         Picker("Comunicación", selection: $selectedCommunicationStyle) {
 
-                         // Nivel cognitivo
-                         if cognitiveLevelFilterTapped {
-                             Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
-                                 ForEach(cognitiveLevels, id: \.self) {
-                                     Text($0)
-                                 }
+                             ForEach(communicationStyles, id: \.self) {
+                                 Text($0)
                              }
-                             .disabled(cognitiveLevelFilterSelected)
-                             .onChange(of: selectedCognitiveLevel, perform: { value in
-                                 performSearchByCognitiveLevel()
-                                 if selectedCognitiveLevel != "" {
-                                     cognitiveLevelFilterSelected = true
-                                 }
-                             })
-                             .pickerStyle(MenuPickerStyle())
-                             .padding()
-                             .background(Color.white)
-                             .cornerRadius(10)
-                             //.shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 5)
-                         } else {
-                             Text("Cognitive Level")
-                                 .font(.system(size: 16, weight: .regular))
-                                 .foregroundColor(Color.blue)
-                                 .padding()
-                                 .background(Color.white)
-                                 .cornerRadius(10)
-                                 .onTapGesture {
-                                     cognitiveLevelFilterTapped = true
-                                 }
                          }
-
-                         Button(action: {
-                             resetFilters = true
-                         }) {
-                             Text("Resetear Filtros")
-                                 .font(.system(size: 16, weight: .regular))
-                                 .foregroundColor(Color.white)
-                                 .padding()
-                                 .background(Color.blue)
-                                 .cornerRadius(10)
-                         }
-                         .onChange(of: resetFilters, perform: { value in
-                             if value {
-                                 resetSearchFilters()
+                         .onChange(of: selectedCommunicationStyle, perform: { value in
+                             performSearchByCommunicationStyle()
+                             if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Filtro estilo de Comunicación" {
+                                 communicationStyleFilterSelected = true
+                             }else {
+                                 //reseteamos valores cognitive level
+                                 communicationStyleFilterSelected = false
                              }
                          })
+                         .pickerStyle(MenuPickerStyle())
+                         .padding()
+                         .background(Color.white)
+                         .cornerRadius(10)
+                         
+                         
+                         //Nivel cognitivo
+                         Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                             ForEach(cognitiveLevels, id: \.self) {
+                                 Text($0)
+                             }
+                         }
+                         .onChange(of: selectedCognitiveLevel, perform: { value in
+                             performSearchByCognitiveLevel()
+                             if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Filtro nivel cognitivo" {
+                                 cognitiveLevelFilterSelected = true
+                             }else {
+                                 //reseteamos valores cognitive level
+                                 cognitiveLevelFilterSelected = false
+                             }
+                         })
+                         .pickerStyle(MenuPickerStyle())
+                         .padding()
+                         .background(Color.white)
+                         .cornerRadius(10)
+                         
                          
                          Spacer()
                      }
@@ -255,8 +291,10 @@ struct AdminView: View {
                      .padding(.bottom)
 
                          
+                     //mostramos que no hay pacientes con los filtros seleccionados
                      
-                     //lista de pacientes
+                     
+                     //mostramos lista de pacientes
                      List(patientsListDisplayed, id:\.id){ patient in
                          PatientCard(patient: patient)
                              .padding()
