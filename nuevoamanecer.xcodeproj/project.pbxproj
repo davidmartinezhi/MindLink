@@ -10,6 +10,7 @@
 		A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */; };
 		A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */; };
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
+		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -80,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */,
 				C2BEDB022A0DA53B005398F9 /* FirebaseAnalyticsSwift in Frameworks */,
 				C29428022A15A8F000E814C9 /* FirebaseFirestore in Frameworks */,
 				C2BEDB0F2A141262005398F9 /* FirebaseAuth in Frameworks */,
@@ -222,6 +224,7 @@
 				C29428012A15A8F000E814C9 /* FirebaseFirestore */,
 				C2207EFB2A184E3000F31578 /* Kingfisher */,
 				A9594A122A28438B0063C0D7 /* FirebaseStorage */,
+				A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */,
 			);
 			productName = nuevoamanecer;
 			productReference = C2A8CAB22A0D9F540026DB96 /* nuevoamanecer.app */;
@@ -254,6 +257,7 @@
 			packageReferences = (
 				C2BEDAFE2A0DA53B005398F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = C2A8CAB32A0D9F540026DB96 /* Products */;
 			projectDirPath = "";
@@ -511,6 +515,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -534,6 +546,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C2BEDAFE2A0DA53B005398F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
 		};
 		C2207EFB2A184E3000F31578 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

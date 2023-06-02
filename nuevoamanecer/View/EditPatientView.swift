@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseStorage
+import SDWebImageSwiftUI
 
 struct EditPatientView: View {
     @ObservedObject var patients: PatientsViewModel
@@ -32,7 +33,6 @@ struct EditPatientView: View {
     @State private var shouldShowImagePicker = false
     
     @State private var imageURL = URL(string: "")
-    
     
     
     func initializeData(patient: Patient) -> Void{
@@ -74,7 +74,30 @@ struct EditPatientView: View {
                 .padding()
                 */
                 
-                Text("\(imageURL?.absoluteString ?? "placeholder")")
+                
+                
+                //Imagen del niño
+                VStack {
+                    if let displayImage = self.upload_image {
+                        Image(uiImage: displayImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 128, height: 128)
+                            .cornerRadius(128)
+                    } else {
+                        WebImage(url: imageURL)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 128, height: 128)
+                            .cornerRadius(128)
+                    }
+                }
+                .overlay(RoundedRectangle(cornerRadius: 64)
+                    .stroke(Color.black, lineWidth: 3))
+                
+
+
+                
                 
                 
                 Form {
@@ -98,6 +121,14 @@ struct EditPatientView: View {
                             ForEach(communicationStyles, id: \.self) {
                                 Text($0)
                             }
+                        }
+                    }
+                    
+                    Section(header: Text("Foto de perfil")) {
+                        Button() {
+                            shouldShowImagePicker.toggle()
+                        } label: {
+                            Text("Seleccionar imagen")
                         }
                     }
                     
@@ -130,6 +161,12 @@ struct EditPatientView: View {
                             else{
                                 showAlert = true
                             }
+                            //Subir imagen a firestore
+                            if let thisImage = self.upload_image {
+                                storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
+                            } else {
+                                print("No se pudo subir imagen, no se selecciono ninguna")
+                            }
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .center)
@@ -161,13 +198,16 @@ struct EditPatientView: View {
                     }
                 }
                 .padding()
-                .onAppear{
-                    initializeData(patient: patient)
-                }
-                
             }
             .background(Color(.init(white: 0, alpha: 0.05))
                 .ignoresSafeArea())
+            .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+                ImagePicker(image: $upload_image)
+            }
+        }
+        .onAppear {
+            initializeData(patient: patient)
+            loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
         }
     }
 }
