@@ -206,49 +206,63 @@ struct AdminView: View {
     }
     
     //Lista de pacientes mostrada al usuario
+    /*
     private var patientsListDisplayed: [Patient] {
         filteredPatients.isEmpty ? patients.patientsList : filteredPatients
+    }
+     */
+    
+    private var patientsListDisplayed: [Patient]? {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected {
+            return filteredPatients.isEmpty ? nil : filteredPatients
+        }
+        return patients.patientsList
     }
     
     var body: some View {
         NavigationStack{
                  VStack{
                      
-                         // Barra de busqueda y agregar niño
-                         HStack {
-                             TextField("Buscar niño", text: $search)
-                                 .padding()
-                                 .background(Color.white)
-                                 .cornerRadius(10)
-                                 .overlay(
-                                     RoundedRectangle(cornerRadius: 10)
-                                         .stroke(Color.gray, lineWidth: 1)
-                                 )
-                                 .frame(width: UIScreen.main.bounds.width / 4)
-                                 .padding()
-                                 .onChange(of: search, perform: performSearchByName)
-                             
-                             // Botones de Filtrado
-                             Spacer()
-                             
-                             //Boton para añadir paciente
-                             Button(action: {
-                                 showAddPatient.toggle()
-                             }) {
-                                 HStack {
-                                     Image(systemName: "plus.circle.fill")
-                                     Text("Agregar Niño")
-                                 }
-                                
+                     //Boton para agregar niños
+                     HStack{
+                         Spacer()
+                         //Boton para añadir paciente
+                         Button(action: {
+                             showAddPatient.toggle()
+                         }) {
+                             HStack {
+                                 Image(systemName: "plus.circle.fill")
+                                 Text("Agregar Niño")
                              }
-                             .padding(.horizontal)
-                             .padding(.vertical, 10)
-                             .background(Color.blue)
-                             .foregroundColor(.white)
-                             .cornerRadius(10)
+                            
                          }
-                         .padding(.horizontal, 50)
-                         .padding(.bottom)
+                         .padding(.horizontal)
+                         .padding(.vertical, 10)
+                         .background(Color.blue)
+                         .foregroundColor(.white)
+                         .cornerRadius(10)
+                     }
+                     .padding(.horizontal, 70)
+                     .padding(.vertical)
+                     
+                    // Barra de busqueda y agregar niño
+                    HStack {
+                        TextField("Buscar niño", text: $search)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .onChange(of: search, perform: performSearchByName)
+                             
+                        // Botones de Filtrado
+                        Spacer()
+                             
+                    }
+                    .padding(.horizontal, 70)
+                    .padding(.bottom)
 
                      
                      // Filtrado
@@ -258,11 +272,14 @@ struct AdminView: View {
                          Picker("Comunicación", selection: $selectedCommunicationStyle) {
                              if(!communicationStyleFilterSelected){
                                  Text("Filtro estilo de Comunicación")
+                                     .foregroundColor(Color.white)
                              }
                              ForEach(communicationStyles, id: \.self) {
                                  Text($0)
+                                     .foregroundColor(Color.white)
                              }
                          }
+                         .frame(width: 300, height: 30)
                          .onChange(of: selectedCommunicationStyle, perform: { value in
                              performSearchByCommunicationStyle()
                              if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Filtro estilo de Comunicación" {
@@ -287,6 +304,7 @@ struct AdminView: View {
                                  Text($0)
                              }
                          }
+                         .frame(width: 300, height: 30)
                          .onChange(of: selectedCognitiveLevel, perform: { value in
                              performSearchByCognitiveLevel()
                              if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Filtro nivel cognitivo" {
@@ -301,41 +319,59 @@ struct AdminView: View {
                          .background(Color.white)
                          .cornerRadius(10)
                          
-                         //reset filters
-                         Button(action: {
-                             resetFilters = true
-                         }) {
-                             Text("Resetear Filtros")
-                         }
-                         .onChange(of: resetFilters, perform: { value in
-                             if value {
-                                 resetSearchFilters()
+                         
+                         if(communicationStyleFilterSelected || cognitiveLevelFilterSelected){
+                             //reset filters
+                             Button(action: {
+                                 resetFilters = true
+                             }) {
+                                 Text("Resetear Filtros")
                              }
-                         })
+                             .onChange(of: resetFilters, perform: { value in
+                                 if value {
+                                     resetSearchFilters()
+                                 }
+                             })
+                         }
+
                          
                          
                          Spacer()
                      }
-                     .padding(.horizontal, 50)
+                     .padding(.horizontal, 70)
                      .padding(.bottom)
 
                          
                      //mostramos que no hay pacientes con los filtros seleccionados
                      
-                     
-                     //mostramos lista de pacientes
-                     List(patientsListDisplayed, id:\.id){ patient in
-                         PatientCard(patient: patient)
-                             .padding()
-                             .background(Color.white)
-                             .cornerRadius(10)
-                             //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                             .padding([.leading, .trailing, .bottom], 10)
-                             .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                     if(patientsListDisplayed == nil){
+                         
+                         
+                         if(patients.patientsList.count == 0){
+                             Text("Aún no hay niños")
+                             Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                         }
+                         else{
+                             Text("No se han encontrado niños con ese filtrado.")
+                         }
+                         
+                         Spacer()
                      }
-                     .listStyle(.automatic)
-                     .sheet(isPresented: $showAddPatient) {
-                         AddPatientView(patients:patients)
+                     else{
+                         //mostramos lista de pacientes
+                         List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
+                             PatientCard(patient: patient)
+                                 .padding()
+                                 .background(Color.white)
+                                 .cornerRadius(10)
+                                 //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                                 .padding([.leading, .trailing, .bottom], 10)
+                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                         }
+                         .listStyle(.automatic)
+                         .sheet(isPresented: $showAddPatient) {
+                             AddPatientView(patients:patients)
+                         }
                      }
                  }
              }
