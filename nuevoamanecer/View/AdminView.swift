@@ -313,6 +313,12 @@ struct AdminView: View {
                              }) {
                                  Text("Resetear")
                              }
+                             .font(.system(size: 16, weight: .bold))
+                             .padding(.horizontal)
+                             .padding(.vertical, 10)
+                             .background(Color.blue)
+                             .foregroundColor(.white)
+                             .cornerRadius(10)
                              .onChange(of: resetFilters, perform: { value in
                                  if value {
                                      resetSearchFilters()
