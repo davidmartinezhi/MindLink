@@ -14,4 +14,5 @@ struct Note: Hashable, Codable, Identifiable  {
     var order: Int
     var title: String
     var text: String
+    var date: Date
 }

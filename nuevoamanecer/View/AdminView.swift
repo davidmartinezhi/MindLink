@@ -449,17 +449,17 @@ struct AdminView: View {
                                 .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.trailing)
-                                .padding(.vertical,5)
+                                .padding(.vertical,2)
                             Text("Nivel Cognitivo: " + patient.cognitiveLevel)
                                 .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.trailing)
-                                .padding(.vertical,5)
+                                .padding(.vertical,2)
                             Text("Comunicación: " + patient.communicationStyle)
                                 .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.trailing)
-                                .padding(.vertical,5)
+                                .padding(.vertical,2)
                         }
                         
                     }
