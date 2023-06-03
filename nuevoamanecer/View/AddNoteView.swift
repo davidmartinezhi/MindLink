@@ -40,7 +40,7 @@ struct AddNoteView: View {
                     self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                     self.showingAlert = true
                 } else {
-                    let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent)
+                    let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
                     
                     notes.addData(patient: patient, note: newNote) { response in
                         if response == "OK" {

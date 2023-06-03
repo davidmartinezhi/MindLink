@@ -18,7 +18,8 @@ struct PatientView: View {
     
     
     //patient
-    var patient: Patient
+    let patient: Patient
+    var age: Int?
     
     //showViews
     @State var showAddNoteView = false
@@ -32,6 +33,14 @@ struct PatientView: View {
     //= Note(id: "", patientId: "", order: 0, title: "", text: "")
 
     
+    private func formatDate(date: Date) -> String{
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long // change this according to your needs
+        formatter.timeStyle = .none // change this according to your needs
+        let dateString = formatter.string(from: date)
+        return dateString
+    }
+
     
     //Retrieve Notes of patient
     private func getPatientNotes(patientId: String){
@@ -100,6 +109,7 @@ struct PatientView: View {
                             Spacer() // Espacio superior
                             Text("Aquí podrás ver el orden de tus notas")
                                 .foregroundColor(Color.gray)
+                                .fixedSize(horizontal: false, vertical: true)
                             Spacer() // Espacio inferior
                              
                         }
@@ -112,6 +122,7 @@ struct PatientView: View {
                             .font(.system(size: 18, weight: .light))
                             .foregroundColor(Color.black)
                             .frame(minHeight: 50)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .listStyle(.sidebar)
                     .padding(.top)
@@ -134,27 +145,31 @@ struct PatientView: View {
                             .padding(.trailing)
                     }
                     VStack(alignment: .leading) {
+                        
+
+                        
                         Text(patient.firstName + " " + patient.lastName)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(Color.black)
                         
                         
-                        Text("Grupo: " + patient.group)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 5)
+                            Text("Grupo: " + patient.group)
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundColor(Color.black)
+                                .padding(.vertical, 2)
+
                         
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
                             .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 5)
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 2)
                         
                         // Add other patient details here
-                        Text("Estilo de comunicación: " + patient.communicationStyle)
+                        Text("Comunicación: " + patient.communicationStyle)
                             .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 5)
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 2)
                     }
                     Spacer()
                     
@@ -201,7 +216,8 @@ struct PatientView: View {
                                 Spacer()
                                 Text("Agrega notas sobre tus niños, ordenalas y editalas")
                                     .font(.title2)
-                                    .foregroundColor(Color.gray)
+                                    .foregroundColor(Color.black)
+                                    .multilineTextAlignment(.center)
                                     .padding()
                                     .fixedSize(horizontal: false, vertical: true)
                                 Text("Deja presionada una nota para mover su order y deslizala hacía la izquierda para editarla o eliminarla")
@@ -209,12 +225,13 @@ struct PatientView: View {
                                     .foregroundColor(Color.gray)
                                     .multilineTextAlignment(.center)
                                     .fixedSize(horizontal: false, vertical: true)
+                                    .padding()
                                 Spacer()
                             }
-                            //.padding(.top, 150)
+                            
                             Spacer()
                         }
-                        .padding()
+                        .padding(.top, 100)
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding([.leading, .trailing, .bottom, .top], 10)
@@ -228,6 +245,14 @@ struct PatientView: View {
                             //Tarjeta paciente
                             VStack{
                                 HStack{
+                                    Spacer()
+                                    Text(formatDate(date: note.date))
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundColor(Color.gray)
+                                        .padding(.trailing)
+                                }
+
+                                HStack{
                                     VStack(alignment: .leading){
                                         Text(note.title)
                                             .font(.system(size: 22, weight: .bold))
@@ -236,14 +261,14 @@ struct PatientView: View {
                                             .fixedSize(horizontal: false, vertical: true)
                                         Text(note.text)
                                             .font(.system(size: 18, weight: .regular))
-                                            .foregroundColor(Color.gray)
+                                            .foregroundColor(Color.black)
                                             .padding([.bottom, .top, .trailing])
                                             .fixedSize(horizontal: false, vertical: true)
                                             
                                     }
                                     Spacer()
                                 }
-                                .padding([.top, .bottom], 10)
+                                .padding([.bottom], 10)
                                 .padding([.leading, .trailing], 15)
                                 .background(Color.white.opacity(0.1))
                                 .cornerRadius(10)
@@ -319,7 +344,10 @@ struct PatientView: View {
         .sheet(isPresented: $showEditPatientView){
             EditPatientView(patients: patients, patient: patient)
         }
-        .onAppear{self.getPatientNotes(patientId: patient.id)}
+        .onAppear{
+            self.getPatientNotes(patientId: patient.id)
+            
+        }
         
         Spacer()
     }

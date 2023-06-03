@@ -16,43 +16,17 @@ class NotesViewModel: ObservableObject{
     
     let db = Firestore.firestore()
     
-    //Al inicializar jala la info de las notas
-    //Recibe notas en base al usuario
     init(){
-        /*
-        Task{
-            if let notes = await getData(){
-                DispatchQueue.main.async {
-                    self.notesList = notes
-                }
-            }
-        }
-         */
+
     }
     
-    
-    /*
-    //Creación de nota para paciente
-    func addData(patient: Patient, note : Note, completion: @escaping (String) -> Void){
-        
-        db.collection("Note").addDocument(data: ["patientId": patient.id ?? note.patientId, "order": patient.notes.count+1, "title": note.title, "text": note.text]){ err in
-            
-            if let err = err {
-                completion(err.localizedDescription)
-            }
-            else{
-                completion("OK")
-            }
-        }
-    }
-     */
     
     func addData(patient: Patient, note: Note, completion: @escaping (String) -> Void) {
         
         let docRef = db.collection("Note").document()
         
         
-        docRef.setData(["id": note.id, "patientId": note.patientId, "order": notesList.count + 1, "title": note.title, "text": note.text]) { err in
+        docRef.setData(["id": note.id, "patientId": note.patientId, "order": notesList.count + 1, "title": note.title, "text": note.text, "date": note.date]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
@@ -85,10 +59,11 @@ class NotesViewModel: ObservableObject{
                 let order = data["order"] as? Int ?? 0
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
+                let date = data["date"] as? Date ?? Date()
                 //let id = data["id"] as? String ?? UUID().uuidString
                 let id = document.documentID
                 
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text)
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date)
                 notes.append(note)
             }
             
@@ -120,8 +95,9 @@ class NotesViewModel: ObservableObject{
                 let order = data["order"] as? Int ?? 0
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
-
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text)
+                let date = data["date"] as? Date ?? Date()
+                
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date)
                 notes.append(note)
             }
 
