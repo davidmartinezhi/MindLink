@@ -361,6 +361,7 @@ struct AdminView: View {
                                          Text("Aún no hay niños")
                                              .font(.title2)
                                              .foregroundColor(Color.gray)
+                                             .padding()
                                          Text("Los niños que agregues se mostrarán en esta pantalla :)")
                                              .font(.headline)
                                              .foregroundColor(Color.gray)

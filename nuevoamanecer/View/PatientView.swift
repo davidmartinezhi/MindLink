@@ -91,15 +91,31 @@ struct PatientView: View {
                     .padding()
                 }
                 
-
-                List(notes.notesList, id: \.id) { note in
-                    Text(note.title)
-                        .font(.system(size: 18, weight: .light))
-                        .foregroundColor(Color.black)
-                        .frame(minHeight: 50)
+                //checamos si hay notas
+                if(notes.notesList.count == 0){
+                    
+                    List{
+                        HStack{
+                            
+                            Spacer() // Espacio superior
+                            Text("Aquí podrás ver el orden de tus notas")
+                                .foregroundColor(Color.gray)
+                            Spacer() // Espacio inferior
+                             
+                        }
+                    }
+                    .listStyle(.sidebar)
+                    
+                }else{
+                    List(notes.notesList, id: \.id) { note in
+                        Text(note.title)
+                            .font(.system(size: 18, weight: .light))
+                            .foregroundColor(Color.black)
+                            .frame(minHeight: 50)
+                    }
+                    .listStyle(.sidebar)
+                    .padding(.top)
                 }
-                .listStyle(.sidebar)
-                .padding(.top)
             }
             .frame(width: UIScreen.main.bounds.width / 4)
             .background(Color.white.opacity(0.1))
@@ -176,88 +192,122 @@ struct PatientView: View {
                 
                 //Divider()
                 
-                //Lista de pacientes
-                List {
-                    ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
-                        
-                        //Tarjeta paciente
-                        VStack{
-                            HStack{
-                                VStack(alignment: .leading){
-                                    Text(note.title)
-                                        .font(.system(size: 22, weight: .bold))
-                                        .foregroundColor(Color.black)
-                                        .padding(.bottom, 2)
-                                    Text(note.text)
-                                        .font(.system(size: 18, weight: .regular))
-                                        .foregroundColor(Color.gray)
-                                        .padding([.bottom, .top, .trailing])
-                                        
-                                }
+                //Checamos que existan pacientes
+                if(notes.notesList.count == 0){
+                    List{
+                        HStack{
+                            Spacer()
+                            VStack {
+                                Spacer()
+                                Text("Agrega notas sobre tus niños, ordenalas y editalas")
+                                    .font(.title2)
+                                    .foregroundColor(Color.gray)
+                                    .padding()
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text("Deja presionada una nota para mover su order y deslizala hacía la izquierda para editarla o eliminarla")
+                                    .font(.headline)
+                                    .foregroundColor(Color.gray)
+                                    .multilineTextAlignment(.center)
+                                    .fixedSize(horizontal: false, vertical: true)
                                 Spacer()
                             }
-                            .padding([.top, .bottom], 10)
-                            .padding([.leading, .trailing], 15)
-                            .background(Color.white.opacity(0.1))
-                            .cornerRadius(10)
-                            //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+                            //.padding(.top, 150)
+                            Spacer()
                         }
-                        .frame(minHeight: 150)
-                        .padding([.top, .bottom], 5)
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                //selectedNote = note
-                                selectedNoteIndex = index
-                                showDeleteNoteAlert = true
-                                
-                            } label: {
-                                Label("Eliminar", systemImage: "trash")
-                            }
-                            .tint(.red)
-                            .padding()
-                            
-                            Button {
-                                // Aquí va la lógica para actualizar la nota
-                                selectedNoteToEdit = note
-                                showEditNoteView = true
-                                
-                            } label: {
-                                Label("Editar", systemImage: "pencil")
-                            }
-                            .tint(.blue)
-                            .padding()
-                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .padding([.leading, .trailing, .bottom, .top], 10)
                     }
-                    .onMove(perform: moveNote)
-                    .padding(.top)
-                    .alert(isPresented: $showDeleteNoteAlert) {
-                        Alert(title: Text("Eliminar Nota"),
-                              message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
-                              primaryButton: .destructive(Text("Eliminar")) {
-                                  // Confirmar eliminación
-                                  if let index = self.selectedNoteIndex {
-                                      let noteId = notes.notesList[index].id
-                                      notes.deleteData(noteId: noteId) { response in
-                                          if response == "OK" {
-                                              notes.notesList.remove(atOffsets: IndexSet(integer: index))
-                                          } else {
-                                              // Aquí puedes manejar el error si lo deseas
-                                              print("Error al eliminar la nota: \(response)")
+                    .listStyle(.inset)
+                }else{
+                    //Lista de pacientes
+                    List {
+                        ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                            
+                            //Tarjeta paciente
+                            VStack{
+                                HStack{
+                                    VStack(alignment: .leading){
+                                        Text(note.title)
+                                            .font(.system(size: 22, weight: .bold))
+                                            .foregroundColor(Color.black)
+                                            .padding(.bottom, 2)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                        Text(note.text)
+                                            .font(.system(size: 18, weight: .regular))
+                                            .foregroundColor(Color.gray)
+                                            .padding([.bottom, .top, .trailing])
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            
+                                    }
+                                    Spacer()
+                                }
+                                .padding([.top, .bottom], 10)
+                                .padding([.leading, .trailing], 15)
+                                .background(Color.white.opacity(0.1))
+                                .cornerRadius(10)
+                                //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+                            }
+                            .frame(minHeight: 150)
+                            .padding([.top, .bottom], 5)
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    //selectedNote = note
+                                    selectedNoteIndex = index
+                                    showDeleteNoteAlert = true
+                                    
+                                } label: {
+                                    Label("Eliminar", systemImage: "trash")
+                                }
+                                .tint(.red)
+                                .padding()
+                                
+                                Button {
+                                    // Aquí va la lógica para actualizar la nota
+                                    selectedNoteToEdit = note
+                                    showEditNoteView = true
+                                    
+                                } label: {
+                                    Label("Editar", systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                                .padding()
+                            }
+                        }
+                        .onMove(perform: moveNote)
+                        .padding(.top)
+                        .alert(isPresented: $showDeleteNoteAlert) {
+                            Alert(title: Text("Eliminar Nota"),
+                                  message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
+                                  primaryButton: .destructive(Text("Eliminar")) {
+                                      // Confirmar eliminación
+                                      if let index = self.selectedNoteIndex {
+                                          let noteId = notes.notesList[index].id
+                                          notes.deleteData(noteId: noteId) { response in
+                                              if response == "OK" {
+                                                  notes.notesList.remove(atOffsets: IndexSet(integer: index))
+                                              } else {
+                                                  // Aquí puedes manejar el error si lo deseas
+                                                  print("Error al eliminar la nota: \(response)")
+                                              }
                                           }
                                       }
+                                      self.selectedNoteIndex = nil
+                                      //self.selectedNote = nil
+                                  },
+                                  secondaryButton: .cancel {
+                                      // Cancelar eliminación
+                                      self.selectedNoteIndex = nil
+                                      //self.selectedNote = nil
                                   }
-                                  self.selectedNoteIndex = nil
-                                  //self.selectedNote = nil
-                              },
-                              secondaryButton: .cancel {
-                                  // Cancelar eliminación
-                                  self.selectedNoteIndex = nil
-                                  //self.selectedNote = nil
-                              }
-                        )
+                            )
+                        }
                     }
+                    .listStyle(.inset)
                 }
-                .listStyle(.inset)
+                
+
             }
         }
         .sheet(isPresented: $showAddNoteView) {
