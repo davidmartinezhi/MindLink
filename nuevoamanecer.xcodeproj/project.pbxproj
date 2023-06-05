@@ -7,6 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC587C702A2E8C0A00FEDAE1 /* PictogramViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C562A2E8C0A00FEDAE1 /* PictogramViewModel.swift */; };
+		BC587C712A2E8C0A00FEDAE1 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C572A2E8C0A00FEDAE1 /* CategoryViewModel.swift */; };
+		BC587C722A2E8C0A00FEDAE1 /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C582A2E8C0A00FEDAE1 /* PageViewModel.swift */; };
+		BC587C732A2E8C0A00FEDAE1 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C5A2A2E8C0A00FEDAE1 /* CategoryModel.swift */; };
+		BC587C742A2E8C0A00FEDAE1 /* PageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C5B2A2E8C0A00FEDAE1 /* PageModel.swift */; };
+		BC587C752A2E8C0A00FEDAE1 /* PictogramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C5C2A2E8C0A00FEDAE1 /* PictogramModel.swift */; };
+		BC587C762A2E8C0A00FEDAE1 /* PictogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C5E2A2E8C0A00FEDAE1 /* PictogramView.swift */; };
+		BC587C772A2E8C0A00FEDAE1 /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C5F2A2E8C0A00FEDAE1 /* CategoryPickerView.swift */; };
+		BC587C782A2E8C0A00FEDAE1 /* DropDownCategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C602A2E8C0A00FEDAE1 /* DropDownCategoryPicker.swift */; };
+		BC587C792A2E8C0A00FEDAE1 /* PictogramGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C612A2E8C0A00FEDAE1 /* PictogramGridView.swift */; };
+		BC587C7A2A2E8C0A00FEDAE1 /* PictogramEditorWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C622A2E8C0A00FEDAE1 /* PictogramEditorWindowView.swift */; };
+		BC587C7B2A2E8C0A00FEDAE1 /* CategoryEditorWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C632A2E8C0A00FEDAE1 /* CategoryEditorWindowView.swift */; };
+		BC587C7C2A2E8C0A00FEDAE1 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C652A2E8C0A00FEDAE1 /* CustomAlert.swift */; };
+		BC587C7D2A2E8C0A00FEDAE1 /* PictogramEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C672A2E8C0A00FEDAE1 /* PictogramEditor.swift */; };
+		BC587C7E2A2E8C0A00FEDAE1 /* MiscTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C692A2E8C0A00FEDAE1 /* MiscTextFieldView.swift */; };
+		BC587C7F2A2E8C0A00FEDAE1 /* MiscSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C6A2A2E8C0A00FEDAE1 /* MiscSearchBarView.swift */; };
+		BC587C802A2E8C0A00FEDAE1 /* MiscColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C6B2A2E8C0A00FEDAE1 /* MiscColorPickerView.swift */; };
+		BC587C812A2E8C0A00FEDAE1 /* MiscSystemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C6C2A2E8C0A00FEDAE1 /* MiscSystemImageView.swift */; };
+		BC587C822A2E8C0A00FEDAE1 /* MiscButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C6D2A2E8C0A00FEDAE1 /* MiscButtonView.swift */; };
+		BC587C832A2E8C0A00FEDAE1 /* SortedPictoArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC587C6F2A2E8C0A00FEDAE1 /* SortedPictoArray.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -39,6 +59,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC587C562A2E8C0A00FEDAE1 /* PictogramViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramViewModel.swift; sourceTree = "<group>"; };
+		BC587C572A2E8C0A00FEDAE1 /* CategoryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		BC587C582A2E8C0A00FEDAE1 /* PageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
+		BC587C5A2A2E8C0A00FEDAE1 /* CategoryModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
+		BC587C5B2A2E8C0A00FEDAE1 /* PageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageModel.swift; sourceTree = "<group>"; };
+		BC587C5C2A2E8C0A00FEDAE1 /* PictogramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramModel.swift; sourceTree = "<group>"; };
+		BC587C5E2A2E8C0A00FEDAE1 /* PictogramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramView.swift; sourceTree = "<group>"; };
+		BC587C5F2A2E8C0A00FEDAE1 /* CategoryPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
+		BC587C602A2E8C0A00FEDAE1 /* DropDownCategoryPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownCategoryPicker.swift; sourceTree = "<group>"; };
+		BC587C612A2E8C0A00FEDAE1 /* PictogramGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramGridView.swift; sourceTree = "<group>"; };
+		BC587C622A2E8C0A00FEDAE1 /* PictogramEditorWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramEditorWindowView.swift; sourceTree = "<group>"; };
+		BC587C632A2E8C0A00FEDAE1 /* CategoryEditorWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryEditorWindowView.swift; sourceTree = "<group>"; };
+		BC587C652A2E8C0A00FEDAE1 /* CustomAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
+		BC587C672A2E8C0A00FEDAE1 /* PictogramEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramEditor.swift; sourceTree = "<group>"; };
+		BC587C692A2E8C0A00FEDAE1 /* MiscTextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscTextFieldView.swift; sourceTree = "<group>"; };
+		BC587C6A2A2E8C0A00FEDAE1 /* MiscSearchBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscSearchBarView.swift; sourceTree = "<group>"; };
+		BC587C6B2A2E8C0A00FEDAE1 /* MiscColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscColorPickerView.swift; sourceTree = "<group>"; };
+		BC587C6C2A2E8C0A00FEDAE1 /* MiscSystemImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscSystemImageView.swift; sourceTree = "<group>"; };
+		BC587C6D2A2E8C0A00FEDAE1 /* MiscButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscButtonView.swift; sourceTree = "<group>"; };
+		BC587C6F2A2E8C0A00FEDAE1 /* SortedPictoArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortedPictoArray.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -82,6 +122,89 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC587C542A2E8BD800FEDAE1 /* PictogramEditor */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C662A2E8C0A00FEDAE1 /* MainViews */,
+				BC587C642A2E8C0A00FEDAE1 /* MiscModifiers */,
+				BC587C6E2A2E8C0A00FEDAE1 /* MiscStructures */,
+				BC587C682A2E8C0A00FEDAE1 /* MiscViews */,
+				BC587C592A2E8C0A00FEDAE1 /* Models */,
+				BC587C552A2E8C0A00FEDAE1 /* ViewModels */,
+				BC587C5D2A2E8C0A00FEDAE1 /* Views */,
+			);
+			path = PictogramEditor;
+			sourceTree = "<group>";
+		};
+		BC587C552A2E8C0A00FEDAE1 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C562A2E8C0A00FEDAE1 /* PictogramViewModel.swift */,
+				BC587C572A2E8C0A00FEDAE1 /* CategoryViewModel.swift */,
+				BC587C582A2E8C0A00FEDAE1 /* PageViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BC587C592A2E8C0A00FEDAE1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C5A2A2E8C0A00FEDAE1 /* CategoryModel.swift */,
+				BC587C5B2A2E8C0A00FEDAE1 /* PageModel.swift */,
+				BC587C5C2A2E8C0A00FEDAE1 /* PictogramModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BC587C5D2A2E8C0A00FEDAE1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C5E2A2E8C0A00FEDAE1 /* PictogramView.swift */,
+				BC587C5F2A2E8C0A00FEDAE1 /* CategoryPickerView.swift */,
+				BC587C602A2E8C0A00FEDAE1 /* DropDownCategoryPicker.swift */,
+				BC587C612A2E8C0A00FEDAE1 /* PictogramGridView.swift */,
+				BC587C622A2E8C0A00FEDAE1 /* PictogramEditorWindowView.swift */,
+				BC587C632A2E8C0A00FEDAE1 /* CategoryEditorWindowView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BC587C642A2E8C0A00FEDAE1 /* MiscModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C652A2E8C0A00FEDAE1 /* CustomAlert.swift */,
+			);
+			path = MiscModifiers;
+			sourceTree = "<group>";
+		};
+		BC587C662A2E8C0A00FEDAE1 /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C672A2E8C0A00FEDAE1 /* PictogramEditor.swift */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
+		BC587C682A2E8C0A00FEDAE1 /* MiscViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C692A2E8C0A00FEDAE1 /* MiscTextFieldView.swift */,
+				BC587C6A2A2E8C0A00FEDAE1 /* MiscSearchBarView.swift */,
+				BC587C6B2A2E8C0A00FEDAE1 /* MiscColorPickerView.swift */,
+				BC587C6C2A2E8C0A00FEDAE1 /* MiscSystemImageView.swift */,
+				BC587C6D2A2E8C0A00FEDAE1 /* MiscButtonView.swift */,
+			);
+			path = MiscViews;
+			sourceTree = "<group>";
+		};
+		BC587C6E2A2E8C0A00FEDAE1 /* MiscStructures */ = {
+			isa = PBXGroup;
+			children = (
+				BC587C6F2A2E8C0A00FEDAE1 /* SortedPictoArray.swift */,
+			);
+			path = MiscStructures;
+			sourceTree = "<group>";
+		};
 		C29428042A15B3B100E814C9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +233,7 @@
 		C2A8CAB42A0D9F540026DB96 /* nuevoamanecer */ = {
 			isa = PBXGroup;
 			children = (
+				BC587C542A2E8BD800FEDAE1 /* PictogramEditor */,
 				C29428072A15B85500E814C9 /* ContentView.swift */,
 				C29428042A15B3B100E814C9 /* Data */,
 				C2BEDB602A157A93005398F9 /* ViewModel */,
@@ -267,23 +391,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC587C812A2E8C0A00FEDAE1 /* MiscSystemImageView.swift in Sources */,
+				BC587C772A2E8C0A00FEDAE1 /* CategoryPickerView.swift in Sources */,
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
+				BC587C712A2E8C0A00FEDAE1 /* CategoryViewModel.swift in Sources */,
+				BC587C7B2A2E8C0A00FEDAE1 /* CategoryEditorWindowView.swift in Sources */,
+				BC587C782A2E8C0A00FEDAE1 /* DropDownCategoryPicker.swift in Sources */,
+				BC587C722A2E8C0A00FEDAE1 /* PageViewModel.swift in Sources */,
+				BC587C742A2E8C0A00FEDAE1 /* PageModel.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
+				BC587C752A2E8C0A00FEDAE1 /* PictogramModel.swift in Sources */,
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
+				BC587C7D2A2E8C0A00FEDAE1 /* PictogramEditor.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
+				BC587C792A2E8C0A00FEDAE1 /* PictogramGridView.swift in Sources */,
+				BC587C7C2A2E8C0A00FEDAE1 /* CustomAlert.swift in Sources */,
+				BC587C762A2E8C0A00FEDAE1 /* PictogramView.swift in Sources */,
+				BC587C7E2A2E8C0A00FEDAE1 /* MiscTextFieldView.swift in Sources */,
+				BC587C7F2A2E8C0A00FEDAE1 /* MiscSearchBarView.swift in Sources */,
+				BC587C732A2E8C0A00FEDAE1 /* CategoryModel.swift in Sources */,
+				BC587C822A2E8C0A00FEDAE1 /* MiscButtonView.swift in Sources */,
+				BC587C702A2E8C0A00FEDAE1 /* PictogramViewModel.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				C250AFC72A174B60008F5699 /* AuthView.swift in Sources */,
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
 				C2207F002A1F1AF400F31578 /* Note.swift in Sources */,
 				C2BEDB672A157B72005398F9 /* User.swift in Sources */,
+				BC587C7A2A2E8C0A00FEDAE1 /* PictogramEditorWindowView.swift in Sources */,
+				BC587C802A2E8C0A00FEDAE1 /* MiscColorPickerView.swift in Sources */,
 				C235FDB32A1810EB005412A7 /* Patient.swift in Sources */,
+				BC587C832A2E8C0A00FEDAE1 /* SortedPictoArray.swift in Sources */,
 				C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
