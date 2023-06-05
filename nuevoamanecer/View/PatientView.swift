@@ -110,7 +110,7 @@ struct PatientView: View {
                     VStack{
                         KFImage(URL(string: patient.image))
                             .resizable()
-                            .scaledToFit()
+                            .scaledToFill()
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
                         //.shadow(radius: 10)

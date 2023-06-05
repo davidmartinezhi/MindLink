@@ -165,7 +165,7 @@ struct AdminView: View {
                 HStack {
                     KFImage(URL(string: patient.image))
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
                     //.overlay(Circle().stroke(Color.gray, lineWidth: 2))
