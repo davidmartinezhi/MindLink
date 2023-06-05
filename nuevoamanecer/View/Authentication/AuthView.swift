@@ -4,7 +4,7 @@
 //
 //  Created by Gerardo Martínez on 19/05/23.
 //
-/*
+
 import SwiftUI
 
 struct AuthView: View {
@@ -39,9 +39,11 @@ struct AuthView: View {
                         .background(Color.green)
                         .cornerRadius(10)
                 }
+                 
             }
             .padding()
             .navigationTitle("Inicio")
+            
         }
         .navigationViewStyle(.stack)
     }
@@ -53,4 +55,4 @@ struct AuthView_Previews: PreviewProvider {
         AuthView(authViewModel: AuthViewModel())
     }
 }
-*/
+

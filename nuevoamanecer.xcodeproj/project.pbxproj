@@ -36,6 +36,7 @@
 		C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB642A157B22005398F9 /* RegisterView.swift */; };
 		C2BEDB672A157B72005398F9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB662A157B72005398F9 /* User.swift */; };
 		C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */; };
+		C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CF66862A2E8AAE005A7338 /* AdminNav.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		C2BEDB642A157B22005398F9 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		C2BEDB662A157B72005398F9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		C2CF66862A2E8AAE005A7338 /* AdminNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminNav.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 		C2BEDB5F2A157A8D005398F9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C2CF66852A2E8A7F005A7338 /* Layout */,
 				C2BEDB612A157AF5005398F9 /* Authentication */,
 				C235FDAC2A18106E005412A7 /* AdminView.swift */,
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
@@ -183,6 +186,14 @@
 				C250AFC62A174B5F008F5699 /* AuthView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C2CF66852A2E8A7F005A7338 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				C2CF66862A2E8AAE005A7338 /* AdminNav.swift */,
+			);
+			path = Layout;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,6 +299,7 @@
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
+				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

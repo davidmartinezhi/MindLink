@@ -8,32 +8,58 @@
 import SwiftUI
 
 struct ContentView: View {
-    //@ObservedObject var authViewModel = AuthViewModel()
+
+    @ObservedObject var authViewModel = AuthViewModel()
+    @State var hiddenNavBar = false
+    @State private var showLogoutAlert = false
 
     var body: some View {
-        VStack {
-            
-            /*
-            if let user = authViewModel.user {
-                if user.isAdmin {
-                    HomeView(authViewModel: authViewModel)  // Si el usuario es un admin, muestra la vista de búsqueda
-                } else {
-                    //HomeView(authViewModel: authViewModel)   // Si el usuario no es un admin, muestra la vista de perfil del niño
-                }
-            } else {
-                AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión
-            }
-        }
-        .onAppear {
-            Task.init {
-                await authViewModel.getCurrentUser()
-            }
-             */
-            
-            AdminView()
-        }
-    }
-}
+         VStack {
+             if let _ = authViewModel.user {
+                 VStack {
+                     // Barra de navegación personalizada
+                     if(!hiddenNavBar){
+                         ZStack {
+                             Color.black.edgesIgnoringSafeArea(.top)
+                             HStack {
+                                 Image("logo")
+                                     .resizable()
+                                     .aspectRatio(contentMode: .fit)
+                                     .frame(height: 50)
+                                 Spacer()
+                                 Button(action: {
+                                     self.showLogoutAlert.toggle()
+                                 }) {
+                                     Image(systemName: "gearshape")
+                                 }
+                             }
+                             .padding()
+                         }
+                         .frame(height: 70) // Ajusta este valor para cambiar la altura de la barra de navegación
+                         .foregroundColor(.white)
+                         .padding(.bottom)
+                     }
+                    
+                     // Contenido principal de la vista
+                     AdminView()
+                 }
+                 .alert(isPresented: $showLogoutAlert) {
+                     Alert(
+                         title: Text("Logout"),
+                         message: Text("¿Estás seguro que quieres cerrar la sesión?"),
+                         primaryButton: .destructive(Text("Logout"), action: {
+                             authViewModel.logout()
+                         }),
+                         secondaryButton: .cancel()
+                     )
+                 }
+             } else {
+                 AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión
+             }
+         }
+     }
+ }
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

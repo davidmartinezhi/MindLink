@@ -4,7 +4,7 @@
 //
 //  Created by Gerardo Martínez on 17/05/23.
 //
-/*
+
 import SwiftUI
 
 struct LoginView: View {
@@ -32,7 +32,7 @@ struct LoginView: View {
             
             Button(action: {
                 Task {
-                    await authViewModel.signIn(email: email, password: password)
+                    authViewModel.loginUser(email: email, password: password)
                 }
             }) {
                 Text("Iniciar sesión")
@@ -61,4 +61,4 @@ struct LoginView_Previews: PreviewProvider {
         LoginView(authViewModel: AuthViewModel())
     }
 }
-*/
+

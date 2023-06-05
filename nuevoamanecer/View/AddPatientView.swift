@@ -11,11 +11,6 @@ struct AddPatientView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var patients : PatientsViewModel
     
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter
-    }()
 
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
@@ -25,7 +20,7 @@ struct AddPatientView: View {
     
     @State private var firstName : String = ""
     @State private var lastName : String = ""
-    @State private var birthDate : Date = Date.now
+    @State private var birthDate: Date = Date()
     @State private var group : String = ""
     @State private var image : String = ""
     
@@ -40,12 +35,12 @@ struct AddPatientView: View {
             Form {
                 //section for photo
                 
-                
                 Section(header: Text("Información del Paciente")) {
                     TextField("Primer Nombre", text: $firstName)
                     TextField("Apellidos", text: $lastName)
                     TextField("Grupo", text: $group)
-                    DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                    DatePicker("Fecha de nacimiento", selection: $birthDate, in: ...Date(), displayedComponents: .date)
+                        .datePickerStyle(.compact)
                 }
                 
                 Section(header: Text("Nivel Cognitivo")) {

@@ -19,7 +19,7 @@ struct PatientView: View {
     
     //patient
     let patient: Patient
-    var age: Int?
+    
     
     //showViews
     @State var showAddNoteView = false
@@ -32,7 +32,7 @@ struct PatientView: View {
     @State var selectedNoteToEdit: Note?
     //= Note(id: "", patientId: "", order: 0, title: "", text: "")
 
-    
+    //Formatea la fecha en nota de paciente
     private func formatDate(date: Date) -> String{
         let formatter = DateFormatter()
         formatter.dateStyle = .long // change this according to your needs
@@ -41,6 +41,17 @@ struct PatientView: View {
         return dateString
     }
 
+    
+    //obtiene edad del paciente
+    private func getAge(patient: Patient) -> Int {
+        let birthday: Date = patient.birthDate // tu fecha de nacimiento aquí
+        let calendar: Calendar = Calendar.current
+
+        let ageComponents = calendar.dateComponents([.year], from: birthday, to: Date())
+        let age = ageComponents.year!
+        
+        return age
+    }
     
     //Retrieve Notes of patient
     private func getPatientNotes(patientId: String){
@@ -146,19 +157,20 @@ struct PatientView: View {
                     }
                     VStack(alignment: .leading) {
                         
-
-                        
                         Text(patient.firstName + " " + patient.lastName)
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(Color.black)
                         
+                       // Text("Edad: " + String(getAge(patient: patient)))
+                        //  .font(.system(size: 18, weight: .regular))
+                        //  .foregroundColor(Color.black)
+                        //  .padding(.vertical, 2)
                         
-                            Text("Grupo: " + patient.group)
-                                .font(.system(size: 18, weight: .regular))
-                                .foregroundColor(Color.black)
-                                .padding(.vertical, 2)
+                        Text("Grupo: " + patient.group)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 2)
 
-                        
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
                             .font(.system(size: 18, weight: .regular))
@@ -231,7 +243,7 @@ struct PatientView: View {
                             
                             Spacer()
                         }
-                        .padding(.top, 100)
+                        .padding(.top, 20)
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding([.leading, .trailing, .bottom, .top], 10)
@@ -346,7 +358,6 @@ struct PatientView: View {
         }
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
-            
         }
         
         Spacer()
