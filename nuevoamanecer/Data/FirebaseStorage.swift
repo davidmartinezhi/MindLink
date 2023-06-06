@@ -13,7 +13,6 @@ class FirebaseAlmacenamiento {
     func uploadImage(image:UIImage, name:String) {
         if let imageData = image.jpegData(compressionQuality: 0.5) {
             let storage = Storage.storage()
-            //Donde dice "temp" es el nombre con el que se guardara la imagen en Firestore
             storage.reference().child(name + ".jpg").putData(imageData, metadata: nil) {
                 (data, err) in
                 if let err = err {

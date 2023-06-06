@@ -62,20 +62,6 @@ struct EditPatientView: View {
     var body: some View {
         NavigationView {
             VStack {
-                
-                /*HStack{
-                    
-                    
-                    Text("Editar Información")
-                        .font(.largeTitle)
-                        .padding()
-                    Spacer()
-                }
-                .padding()
-                */
-                
-                
-                
                 //Imagen del niño
                 VStack {
                     if let displayImage = self.upload_image {
@@ -95,13 +81,8 @@ struct EditPatientView: View {
                 .overlay(RoundedRectangle(cornerRadius: 64)
                     .stroke(Color.black, lineWidth: 3))
                 
-
-
-                
-                
-                
                 Form {
-                    Section(header: Text("Información")) {
+                    Section(header: Text("Información del Paciente")) {
                         TextField("Primer Nombre", text: $firstName)
                         TextField("Apellidos", text: $lastName)
                         TextField("Grupo", text: $group)

@@ -45,16 +45,14 @@ struct AddPatientView: View {
             self.imageURL = url!
         }
     }
-
+    
     
     
     var body: some View {
-
-      /*
         NavigationView {
             VStack {
+                //Imagen del niño
                 VStack {
-                    //Imagen del niño
                     if let displayImage = self.upload_image {
                         Image(uiImage: displayImage)
                             .resizable()
@@ -66,28 +64,6 @@ struct AddPatientView: View {
                             .font(.system(size: 83))
                             .padding()
                             .foregroundColor(Color(.label))
-      */
-        VStack {
-            Text("Agregar Niño")
-                .font(.largeTitle)
-                .padding()
-            
-            Form {
-                //section for photo
-                
-                Section(header: Text("Información del Paciente")) {
-                    TextField("Primer Nombre", text: $firstName)
-                    TextField("Apellidos", text: $lastName)
-                    TextField("Grupo", text: $group)
-                    DatePicker("Fecha de nacimiento", selection: $birthDate, in: ...Date(), displayedComponents: .date)
-                        .datePickerStyle(.compact)
-                }
-                
-                Section(header: Text("Nivel Cognitivo")) {
-                    Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
-                        ForEach(cognitiveLevels, id: \.self) {
-                            Text($0)
-                        }
                     }
                 }
                 .overlay(RoundedRectangle(cornerRadius: 64)
@@ -139,7 +115,7 @@ struct AddPatientView: View {
                             
                             //Generar URl para la imagen del niño
                             loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
-                             
+                            
                             //debug
                             print(imageURL?.absoluteString ?? "ERROR")
                             
@@ -148,7 +124,7 @@ struct AddPatientView: View {
                                 
                                 uploadPatient.toggle()
                                 dismiss()
-                                 
+                                
                             }
                             else{
                                 showAlert = true
@@ -189,7 +165,6 @@ struct AddPatientView: View {
             }
         }
         .onDisappear {
-            
             if(uploadPatient) {
                 let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
                patients.addData(patient: patient){ error in
