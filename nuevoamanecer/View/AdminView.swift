@@ -240,16 +240,16 @@ struct AdminView: View {
                                  Text("Agregar Niño")
                                      .font(.headline)
                              }
-                             .padding([.horizontal, .vertical], 10)
-                             
                          }
-                         
-                         .background(Color.blue)
-                         .foregroundColor(Color.white)
+                         .padding(10)
+                         .background(Color.blue.opacity(0.1))
+                         .foregroundColor(.blue)
                          .cornerRadius(10)
                      }
                      .padding(.horizontal, 50)
+                     .padding(.top, 20)
                      //.padding(.vertical)
+                     
                      
                      // Filtrado
                      HStack{
@@ -331,7 +331,7 @@ struct AdminView: View {
                          Spacer()
                      }
                      .padding(.horizontal, 50)
-                     .padding(.top, 10)
+                     .padding(.bottom, 10)
                      
                      // Barra de busqueda
                      HStack {
@@ -354,8 +354,10 @@ struct AdminView: View {
                               
                      }
                      .padding(.horizontal, 50)
-                     .padding([.bottom, .top], 20)
+                     .padding(.top, 20)
                      
+                     
+
 
                          
                      //mostramos que no hay pacientes con los filtros seleccionados

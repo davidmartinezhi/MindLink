@@ -16,7 +16,7 @@ class AuthViewModel: ObservableObject {
     }
 
     // Definición de la función fetchCurrentUser que se encargará de recuperar los datos del usuario autenticado desde Firestore.
-    private func fetchCurrentUser() {
+    func fetchCurrentUser() {
 
         // Comprueba si existe un id para el usuario actualmente autenticado. Si no existe, se establece un mensaje de error y se retorna de la función.
         guard let id = Auth.auth().currentUser?.uid else {

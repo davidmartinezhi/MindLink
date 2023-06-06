@@ -9,42 +9,44 @@ import SwiftUI
 
 struct AdminNav: View {
     
-    @ObservedObject var authViewModel: AuthViewModel
-    @Binding var showLogoutAlert: Bool
+    @Binding var showAdminMenu: Bool
+    var user: User
+
 
     var body: some View {
         ZStack {
-            Color(.sRGB, red: 50/255, green: 50/255, blue: 50/255, opacity: 1.0).edgesIgnoringSafeArea(.top)
             HStack {
                 Image("logo")
                     .resizable()
-                    .renderingMode(.template) // Para poder cambiar el color del logo
+                    .renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 40) // Ajuste a la altura deseada
+                    .frame(height: 40)
                 Spacer()
-                Button(action: {
-                    // Aquí puedes poner la funcionalidad para ir a la página de perfil del usuario
-                }) {
-                    Image("profile") // Asegúrate de que la imagen "profile" esté en tus activos
+                Button(action: { showAdminMenu = true }) {
+                    
+                    //if(user.image != ""){
+                      //  Image(systemName: "person.fill")
+                      //      .font(.system(size: 20))
+                      //      .padding()
+                      //      .foregroundColor(Color(.label))
+                    //}else{
+                    Image(systemName: "person.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 36, height: 36)
+                        .frame(width: 40, height: 40)
                         .clipShape(Circle())
-                }
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    Image(systemName: "gearshape")
+                        .foregroundColor(.blue)
+                    //}
                 }
             }
             .padding(.horizontal, 50)
         }
-        .frame(height: 70) // Ajusta este valor para cambiar la altura de la barra de navegación
-        .foregroundColor(.white) // Esto cambiará el color de los íconos y el texto
+        .frame(height: 70)
+        .foregroundColor(.white)
         .overlay(
             Rectangle()
                 .fill(Color.gray)
-                .frame(height: 0.5) // Hacemos el borde más sutil
+                .frame(height: 0.5)
                 .edgesIgnoringSafeArea(.horizontal), alignment: .bottom
         )
     }
@@ -52,8 +54,10 @@ struct AdminNav: View {
 
 
 
+
+
 struct AdminNav_Previews: PreviewProvider {
     static var previews: some View {
-        AdminNav(authViewModel: AuthViewModel(), showLogoutAlert: .constant(false))
+        AdminNav(showAdminMenu: .constant(false), user: User(id: "", name: "", email: "", isAdmin: false))
     }
 }

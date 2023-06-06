@@ -95,10 +95,6 @@ struct EditPatientView: View {
                 .overlay(RoundedRectangle(cornerRadius: 64)
                     .stroke(Color.black, lineWidth: 3))
                 
-
-
-                
-                
                 
                 Form {
                     Section(header: Text("Información")) {

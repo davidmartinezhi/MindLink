@@ -47,7 +47,6 @@ struct AddPatientView: View {
     }
 
     
-    
     var body: some View {
 
       

@@ -41,6 +41,7 @@
 		C2BEDB672A157B72005398F9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB662A157B72005398F9 /* User.swift */; };
 		C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */; };
 		C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CF66862A2E8AAE005A7338 /* AdminNav.swift */; };
+		C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CF668C2A2FE308005A7338 /* AdminMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		C2BEDB662A157B72005398F9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		C2CF66862A2E8AAE005A7338 /* AdminNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminNav.swift; sourceTree = "<group>"; };
+		C2CF668C2A2FE308005A7338 /* AdminMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 				C2207F052A2162E600F31578 /* EditPatientView.swift */,
 				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
 				C2207F0D2A268C5A00F31578 /* EditNoteView.swift */,
+				C2CF668C2A2FE308005A7338 /* AdminMenuView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
+				C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
