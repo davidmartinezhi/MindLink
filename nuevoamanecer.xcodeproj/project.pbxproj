@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */; };
+		A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */; };
+		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
+		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -40,6 +44,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -73,11 +79,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */,
 				C2BEDB022A0DA53B005398F9 /* FirebaseAnalyticsSwift in Frameworks */,
 				C29428022A15A8F000E814C9 /* FirebaseFirestore in Frameworks */,
 				C2BEDB0F2A141262005398F9 /* FirebaseAuth in Frameworks */,
 				C2BEDB002A0DA53B005398F9 /* FirebaseAnalytics in Frameworks */,
 				C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */,
+				A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				C29428052A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift */,
+				A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -160,6 +169,7 @@
 				C235FDAC2A18106E005412A7 /* AdminView.swift */,
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
 				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
+				A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */,
 				C2207F032A206B4900F31578 /* AddNoteView.swift */,
 				C2207F052A2162E600F31578 /* EditPatientView.swift */,
 				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
@@ -218,6 +228,8 @@
 				C2BEDB0E2A141262005398F9 /* FirebaseAuth */,
 				C29428012A15A8F000E814C9 /* FirebaseFirestore */,
 				C2207EFB2A184E3000F31578 /* Kingfisher */,
+				A9594A122A28438B0063C0D7 /* FirebaseStorage */,
+				A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */,
 			);
 			productName = nuevoamanecer;
 			productReference = C2A8CAB22A0D9F540026DB96 /* nuevoamanecer.app */;
@@ -250,6 +262,7 @@
 			packageReferences = (
 				C2BEDAFE2A0DA53B005398F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			productRefGroup = C2A8CAB32A0D9F540026DB96 /* Products */;
 			projectDirPath = "";
@@ -282,6 +295,7 @@
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
+				A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
@@ -297,6 +311,7 @@
 				C235FDB32A1810EB005412A7 /* Patient.swift in Sources */,
 				C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
+				A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
@@ -436,6 +451,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -465,6 +481,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -502,6 +519,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -521,6 +546,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A9594A122A28438B0063C0D7 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2BEDAFE2A0DA53B005398F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9CEFE782A2A9B1900BD6E58 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
 		C2207EFB2A184E3000F31578 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C2207EFA2A184E3000F31578 /* XCRemoteSwiftPackageReference "Kingfisher" */;
