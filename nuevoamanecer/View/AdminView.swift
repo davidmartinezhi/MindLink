@@ -43,6 +43,9 @@ struct AdminView: View {
     @State private var showSelectedCommunicationStyle = false
     @State private var showSelectedCognitiveLevel = false
     
+    //Hidden NavBar
+    @Binding var hiddenNavBar: Bool
+    
 
     //Reseteo de filtrado
     // Filtrado
@@ -410,14 +413,17 @@ struct AdminView: View {
                                  .background(Color.white)
                                  .cornerRadius(10)
                                  //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                                 .padding([.leading, .trailing, .bottom], 10)
-                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                 .padding([.leading, .trailing, .bottom], 10) 
+                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient, hiddenNavBar: $hiddenNavBar)).opacity(0))
                          }
                          .listStyle(.automatic)
                          .sheet(isPresented: $showAddPatient) {
                              AddPatientView(patients:patients)
                          }
                      }
+                 }
+                 .onAppear{
+                     hiddenNavBar = false
                  }
              }
         }
@@ -488,7 +494,7 @@ struct AdminView: View {
 
     struct AdminView_Previews: PreviewProvider {
         static var previews: some View {
-            AdminView()
+            AdminView(hiddenNavBar: .constant(false))
         }
     }
     

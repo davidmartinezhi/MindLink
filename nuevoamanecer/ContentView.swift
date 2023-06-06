@@ -23,7 +23,7 @@ struct ContentView: View {
                      }
                     
                      // Contenido principal de la vista
-                     AdminView()
+                     AdminView(hiddenNavBar: $hiddenNavBar)
                  }
                  .alert(isPresented: $showLogoutAlert) {
                      Alert(

@@ -50,7 +50,7 @@ struct AddPatientView: View {
     
     var body: some View {
 
-      /*
+      
         NavigationView {
             VStack {
                 VStack {
@@ -66,12 +66,12 @@ struct AddPatientView: View {
                             .font(.system(size: 83))
                             .padding()
                             .foregroundColor(Color(.label))
-      */
+      /*
         VStack {
             Text("Agregar Niño")
                 .font(.largeTitle)
                 .padding()
-            
+        
             Form {
                 //section for photo
                 
@@ -87,7 +87,9 @@ struct AddPatientView: View {
                     Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
                         ForEach(cognitiveLevels, id: \.self) {
                             Text($0)
+       
                         }
+       */
                     }
                 }
                 .overlay(RoundedRectangle(cornerRadius: 64)

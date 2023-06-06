@@ -31,6 +31,8 @@ struct PatientView: View {
     @State private var selectedNoteIndex: Int?
     @State var selectedNoteToEdit: Note?
     //= Note(id: "", patientId: "", order: 0, title: "", text: "")
+    
+    @Binding var hiddenNavBar: Bool
 
     //Formatea la fecha en nota de paciente
     private func formatDate(date: Date) -> String{
@@ -85,7 +87,7 @@ struct PatientView: View {
     }
     
     var body: some View {
-        
+                
         HStack{
             // 1/4 of the screen for the notes list
             VStack {
@@ -358,7 +360,9 @@ struct PatientView: View {
         }
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
+            hiddenNavBar = true
         }
+
         
         Spacer()
     }
@@ -366,6 +370,6 @@ struct PatientView: View {
 
 struct PatientView_Previews: PreviewProvider {
     static var previews: some View {
-        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
+        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()), hiddenNavBar: .constant(false))
     }
 }
