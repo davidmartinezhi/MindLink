@@ -4,7 +4,7 @@
 //
 //  Created by Gerardo Martínez on 17/05/23.
 //
-/*
+
 import SwiftUI
 
 struct RegisterView: View {
@@ -45,7 +45,7 @@ struct RegisterView: View {
 
             Button(action: {
                 Task {
-                    await authViewModel.register(email: email, password: password, name: name, isAdmin: isAdmin)
+                    authViewModel.createNewAccount(email: email, password: password, name: name, isAdmin: isAdmin)
                     
                 }
             }) {
@@ -74,4 +74,4 @@ struct RegisterView_Previews: PreviewProvider {
         RegisterView(authViewModel: AuthViewModel())
     }
 }
-*/
+

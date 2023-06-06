@@ -88,6 +88,6 @@ struct EditNoteView: View {
 }
 struct EditNoteView_Previews: PreviewProvider {
     static var previews: some View {
-        EditNoteView(notes: NotesViewModel(), note: Note(id: "", patientId: "", order: 0, title: "", text: ""))
+        EditNoteView(notes: NotesViewModel(), note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date()))
     }
 }

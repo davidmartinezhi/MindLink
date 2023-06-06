@@ -13,12 +13,6 @@ struct AddPatientView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var patients : PatientsViewModel
     
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter
-    }()
-    
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     
@@ -27,7 +21,7 @@ struct AddPatientView: View {
     
     @State private var firstName : String = ""
     @State private var lastName : String = ""
-    @State private var birthDate : Date = Date.now
+    @State private var birthDate: Date = Date()
     @State private var group : String = ""
     @State private var upload_image: UIImage?
     
@@ -55,6 +49,8 @@ struct AddPatientView: View {
     
     
     var body: some View {
+
+      /*
         NavigationView {
             VStack {
                 VStack {
@@ -70,6 +66,28 @@ struct AddPatientView: View {
                             .font(.system(size: 83))
                             .padding()
                             .foregroundColor(Color(.label))
+      */
+        VStack {
+            Text("Agregar Niño")
+                .font(.largeTitle)
+                .padding()
+            
+            Form {
+                //section for photo
+                
+                Section(header: Text("Información del Paciente")) {
+                    TextField("Primer Nombre", text: $firstName)
+                    TextField("Apellidos", text: $lastName)
+                    TextField("Grupo", text: $group)
+                    DatePicker("Fecha de nacimiento", selection: $birthDate, in: ...Date(), displayedComponents: .date)
+                        .datePickerStyle(.compact)
+                }
+                
+                Section(header: Text("Nivel Cognitivo")) {
+                    Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
+                        ForEach(cognitiveLevels, id: \.self) {
+                            Text($0)
+                        }
                     }
                 }
                 .overlay(RoundedRectangle(cornerRadius: 64)

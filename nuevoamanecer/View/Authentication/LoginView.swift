@@ -4,7 +4,7 @@
 //
 //  Created by Gerardo Martínez on 17/05/23.
 //
-/*
+
 import SwiftUI
 
 struct LoginView: View {
@@ -13,46 +13,55 @@ struct LoginView: View {
     @State var password = ""
 
     var body: some View {
-        VStack {
-            Text("Iniciar sesión")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            TextField("Correo electrónico", text: $email)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 20)
-            
-            SecureField("Contraseña", text: $password)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 20)
-            
-            Button(action: {
-                Task {
-                    await authViewModel.signIn(email: email, password: password)
-                }
-            }) {
+        GeometryReader { geometry in
+            VStack {
                 Text("Iniciar sesión")
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                
+                TextField("Correo electrónico", text: $email)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color(.systemGray6))
                     .cornerRadius(10)
+                    .padding(.bottom, 20)
+                
+                SecureField("Contraseña", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.bottom, 20)
+                
+                Button(action: {
+                    Task {
+                        authViewModel.loginUser(email: email, password: password)
+                    }
+                }) {
+                    Text("Iniciar sesión")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                
+                if let messageError = authViewModel.errorMessage {
+                    Text(messageError)
+                        .foregroundColor(.red)
+                        .padding(.top, 20)
+                }
             }
-            
-            if let messageError = authViewModel.errorMessage {
-                Text(messageError)
-                    .foregroundColor(.red)
-                    .padding(.top, 20)
-            }
+            .frame(maxWidth: min(500, geometry.size.width), alignment: .center)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .padding()
+            .navigationTitle("")
         }
-        .padding()
-        .navigationTitle("Iniciar sesión")
+        .navigationViewStyle(.stack)
+        .accentColor(.black) // Cambia el color del título y los enlaces de navegación a negro para un aspecto más profesional
     }
 }
+
 
 
 
@@ -61,4 +70,4 @@ struct LoginView_Previews: PreviewProvider {
         LoginView(authViewModel: AuthViewModel())
     }
 }
-*/
+

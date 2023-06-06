@@ -18,8 +18,6 @@
 		C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F032A206B4900F31578 /* AddNoteView.swift */; };
 		C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F052A2162E600F31578 /* EditPatientView.swift */; };
 		C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F072A252D2800F31578 /* DeletePatientView.swift */; };
-		C2207F0A2A265C0E00F31578 /* NoteCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F092A265C0E00F31578 /* NoteCardView.swift */; };
-		C2207F0C2A26623E00F31578 /* DeleteNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F0B2A26623E00F31578 /* DeleteNoteView.swift */; };
 		C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F0D2A268C5A00F31578 /* EditNoteView.swift */; };
 		C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAC2A18106E005412A7 /* AdminView.swift */; };
 		C235FDAF2A181080005412A7 /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAE2A181080005412A7 /* PatientView.swift */; };
@@ -42,6 +40,7 @@
 		C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB642A157B22005398F9 /* RegisterView.swift */; };
 		C2BEDB672A157B72005398F9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB662A157B72005398F9 /* User.swift */; };
 		C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */; };
+		C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CF66862A2E8AAE005A7338 /* AdminNav.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,8 +52,6 @@
 		C2207F032A206B4900F31578 /* AddNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteView.swift; sourceTree = "<group>"; };
 		C2207F052A2162E600F31578 /* EditPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPatientView.swift; sourceTree = "<group>"; };
 		C2207F072A252D2800F31578 /* DeletePatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePatientView.swift; sourceTree = "<group>"; };
-		C2207F092A265C0E00F31578 /* NoteCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCardView.swift; sourceTree = "<group>"; };
-		C2207F0B2A26623E00F31578 /* DeleteNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNoteView.swift; sourceTree = "<group>"; };
 		C2207F0D2A268C5A00F31578 /* EditNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteView.swift; sourceTree = "<group>"; };
 		C235FDAC2A18106E005412A7 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		C235FDAE2A181080005412A7 /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
@@ -74,6 +71,7 @@
 		C2BEDB642A157B22005398F9 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		C2BEDB662A157B72005398F9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		C2CF66862A2E8AAE005A7338 /* AdminNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminNav.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +164,7 @@
 		C2BEDB5F2A157A8D005398F9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C2CF66852A2E8A7F005A7338 /* Layout */,
 				C2BEDB612A157AF5005398F9 /* Authentication */,
 				C235FDAC2A18106E005412A7 /* AdminView.swift */,
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
@@ -174,8 +173,6 @@
 				C2207F032A206B4900F31578 /* AddNoteView.swift */,
 				C2207F052A2162E600F31578 /* EditPatientView.swift */,
 				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
-				C2207F092A265C0E00F31578 /* NoteCardView.swift */,
-				C2207F0B2A26623E00F31578 /* DeleteNoteView.swift */,
 				C2207F0D2A268C5A00F31578 /* EditNoteView.swift */,
 			);
 			path = View;
@@ -199,6 +196,14 @@
 				C250AFC62A174B5F008F5699 /* AuthView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		C2CF66852A2E8A7F005A7338 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				C2CF66862A2E8AAE005A7338 /* AdminNav.swift */,
+			);
+			path = Layout;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,7 +294,6 @@
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
-				C2207F0C2A26623E00F31578 /* DeleteNoteView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
@@ -298,7 +302,6 @@
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
-				C2207F0A2A265C0E00F31578 /* NoteCardView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				C250AFC72A174B60008F5699 /* AuthView.swift in Sources */,
@@ -311,6 +314,7 @@
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
+				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
