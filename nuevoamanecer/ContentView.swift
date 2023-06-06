@@ -19,25 +19,7 @@ struct ContentView: View {
                  VStack {
                      // Barra de navegación personalizada
                      if(!hiddenNavBar){
-                         ZStack {
-                             Color.black.edgesIgnoringSafeArea(.top)
-                             HStack {
-                                 Image("logo")
-                                     .resizable()
-                                     .aspectRatio(contentMode: .fit)
-                                     .frame(height: 50)
-                                 Spacer()
-                                 Button(action: {
-                                     self.showLogoutAlert.toggle()
-                                 }) {
-                                     Image(systemName: "gearshape")
-                                 }
-                             }
-                             .padding()
-                         }
-                         .frame(height: 70) // Ajusta este valor para cambiar la altura de la barra de navegación
-                         .foregroundColor(.white)
-                         .padding(.bottom)
+                         AdminNav(authViewModel: authViewModel, showLogoutAlert: $showLogoutAlert)
                      }
                     
                      // Contenido principal de la vista

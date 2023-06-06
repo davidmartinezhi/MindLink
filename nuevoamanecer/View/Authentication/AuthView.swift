@@ -13,39 +13,50 @@ struct AuthView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 50) {
-                Text("Bienvenido a nuestra aplicación")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("Una breve descripción de lo que hace tu aplicación.")
-                    .font(.title2)
-                    .multilineTextAlignment(.center)
-                
-                NavigationLink(destination: LoginView(authViewModel: authViewModel)) {
-                    Text("Iniciar sesión")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
+            GeometryReader { geometry in
+                VStack(spacing: 50) {
+                    Text("Inicia sesión para tener acceso a tus niños")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    
+                    Text("Administra a tus pacientes, guarda su información y accede al comunicador universal de cada uno de ellos.")
+                        .font(.title2)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    
+                    NavigationLink(destination: LoginView(authViewModel: authViewModel)) {
+                        Text("Iniciar sesión")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    
+                    NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
+                        Text("Registrarse")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                     
                 }
-                
-                NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
-                    Text("Registrarse")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.green)
-                        .cornerRadius(10)
-                }
-                 
+                .frame(maxWidth: min(500, geometry.size.width), alignment: .center)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .padding()
+                .navigationTitle("")
             }
-            .padding()
-            .navigationTitle("Inicio")
-            
         }
         .navigationViewStyle(.stack)
+        .accentColor(.black) // Cambia el color del título y los enlaces de navegación a negro para un aspecto más profesional
     }
 }
 
