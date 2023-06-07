@@ -11,6 +11,31 @@
 		A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */; };
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
+		BC2C87F42A312295009503DD /* PictogramViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87DA2A312295009503DD /* PictogramViewModel.swift */; };
+		BC2C87F52A312295009503DD /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87DB2A312295009503DD /* CategoryViewModel.swift */; };
+		BC2C87F62A312295009503DD /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87DD2A312295009503DD /* ColorPickerView.swift */; };
+		BC2C87F72A312295009503DD /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87DE2A312295009503DD /* TextFieldView.swift */; };
+		BC2C87F82A312295009503DD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87DF2A312295009503DD /* SearchBarView.swift */; };
+		BC2C87F92A312295009503DD /* MiscSystemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E02A312295009503DD /* MiscSystemImageView.swift */; };
+		BC2C87FA2A312295009503DD /* XOverCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E12A312295009503DD /* XOverCircleView.swift */; };
+		BC2C87FB2A312295009503DD /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E22A312295009503DD /* ButtonView.swift */; };
+		BC2C87FC2A312295009503DD /* PictogramEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E42A312295009503DD /* PictogramEditor.swift */; };
+		BC2C87FD2A312295009503DD /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E62A312295009503DD /* CategoryModel.swift */; };
+		BC2C87FE2A312295009503DD /* PictogramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E72A312295009503DD /* PictogramModel.swift */; };
+		BC2C87FF2A312295009503DD /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87E92A312295009503DD /* CustomAlert.swift */; };
+		BC2C88002A312295009503DD /* SortedPictoArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87EB2A312295009503DD /* SortedPictoArray.swift */; };
+		BC2C88012A312295009503DD /* ColorMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87EC2A312295009503DD /* ColorMaker.swift */; };
+		BC2C88022A312295009503DD /* PictogramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87EE2A312295009503DD /* PictogramView.swift */; };
+		BC2C88032A312295009503DD /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87EF2A312295009503DD /* CategoryPickerView.swift */; };
+		BC2C88042A312295009503DD /* DropDownCategoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87F02A312295009503DD /* DropDownCategoryPicker.swift */; };
+		BC2C88052A312295009503DD /* PictogramGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87F12A312295009503DD /* PictogramGridView.swift */; };
+		BC2C88062A312295009503DD /* PictogramEditorWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87F22A312295009503DD /* PictogramEditorWindowView.swift */; };
+		BC2C88072A312295009503DD /* CategoryEditorWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C87F32A312295009503DD /* CategoryEditorWindowView.swift */; };
+		BC2C88102A3122F4009503DD /* BaseCommunicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C880F2A3122F4009503DD /* BaseCommunicatorView.swift */; };
+		BC2C88122A312300009503DD /* VoiceConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88112A312300009503DD /* VoiceConfigurationView.swift */; };
+		BC2C88142A312322009503DD /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88132A312322009503DD /* Album.swift */; };
+		BC2C88162A312333009503DD /* PageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88152A312333009503DD /* PageModel.swift */; };
+		BC2C88182A31234B009503DD /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88172A31234B009503DD /* PageViewModel.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -49,6 +74,31 @@
 /* Begin PBXFileReference section */
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
+		BC2C87DA2A312295009503DD /* PictogramViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramViewModel.swift; sourceTree = "<group>"; };
+		BC2C87DB2A312295009503DD /* CategoryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		BC2C87DD2A312295009503DD /* ColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
+		BC2C87DE2A312295009503DD /* TextFieldView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
+		BC2C87DF2A312295009503DD /* SearchBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
+		BC2C87E02A312295009503DD /* MiscSystemImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiscSystemImageView.swift; sourceTree = "<group>"; };
+		BC2C87E12A312295009503DD /* XOverCircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XOverCircleView.swift; sourceTree = "<group>"; };
+		BC2C87E22A312295009503DD /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		BC2C87E42A312295009503DD /* PictogramEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramEditor.swift; sourceTree = "<group>"; };
+		BC2C87E62A312295009503DD /* CategoryModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
+		BC2C87E72A312295009503DD /* PictogramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramModel.swift; sourceTree = "<group>"; };
+		BC2C87E92A312295009503DD /* CustomAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
+		BC2C87EB2A312295009503DD /* SortedPictoArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortedPictoArray.swift; sourceTree = "<group>"; };
+		BC2C87EC2A312295009503DD /* ColorMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorMaker.swift; sourceTree = "<group>"; };
+		BC2C87EE2A312295009503DD /* PictogramView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramView.swift; sourceTree = "<group>"; };
+		BC2C87EF2A312295009503DD /* CategoryPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
+		BC2C87F02A312295009503DD /* DropDownCategoryPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownCategoryPicker.swift; sourceTree = "<group>"; };
+		BC2C87F12A312295009503DD /* PictogramGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramGridView.swift; sourceTree = "<group>"; };
+		BC2C87F22A312295009503DD /* PictogramEditorWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramEditorWindowView.swift; sourceTree = "<group>"; };
+		BC2C87F32A312295009503DD /* CategoryEditorWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryEditorWindowView.swift; sourceTree = "<group>"; };
+		BC2C880F2A3122F4009503DD /* BaseCommunicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCommunicatorView.swift; sourceTree = "<group>"; };
+		BC2C88112A312300009503DD /* VoiceConfigurationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceConfigurationView.swift; sourceTree = "<group>"; };
+		BC2C88132A312322009503DD /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		BC2C88152A312333009503DD /* PageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageModel.swift; sourceTree = "<group>"; };
+		BC2C88172A31234B009503DD /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -98,6 +148,151 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC2C87D72A312255009503DD /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				C29428042A15B3B100E814C9 /* Data */,
+				C2BEDB602A157A93005398F9 /* ViewModel */,
+				C2BEDB5F2A157A8D005398F9 /* View */,
+				C2BEDB5E2A157A84005398F9 /* Model */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		BC2C87D82A312295009503DD /* PictogramEditor */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87D92A312295009503DD /* ViewModels */,
+				BC2C87DC2A312295009503DD /* GenericViews */,
+				BC2C87E32A312295009503DD /* MainViews */,
+				BC2C87E52A312295009503DD /* Models */,
+				BC2C87E82A312295009503DD /* MiscModifiers */,
+				BC2C87EA2A312295009503DD /* MiscStructures */,
+				BC2C87ED2A312295009503DD /* Views */,
+			);
+			path = PictogramEditor;
+			sourceTree = "<group>";
+		};
+		BC2C87D92A312295009503DD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87DA2A312295009503DD /* PictogramViewModel.swift */,
+				BC2C87DB2A312295009503DD /* CategoryViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BC2C87DC2A312295009503DD /* GenericViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87DD2A312295009503DD /* ColorPickerView.swift */,
+				BC2C87DE2A312295009503DD /* TextFieldView.swift */,
+				BC2C87DF2A312295009503DD /* SearchBarView.swift */,
+				BC2C87E02A312295009503DD /* MiscSystemImageView.swift */,
+				BC2C87E12A312295009503DD /* XOverCircleView.swift */,
+				BC2C87E22A312295009503DD /* ButtonView.swift */,
+			);
+			path = GenericViews;
+			sourceTree = "<group>";
+		};
+		BC2C87E32A312295009503DD /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87E42A312295009503DD /* PictogramEditor.swift */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
+		BC2C87E52A312295009503DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87E62A312295009503DD /* CategoryModel.swift */,
+				BC2C87E72A312295009503DD /* PictogramModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BC2C87E82A312295009503DD /* MiscModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87E92A312295009503DD /* CustomAlert.swift */,
+			);
+			path = MiscModifiers;
+			sourceTree = "<group>";
+		};
+		BC2C87EA2A312295009503DD /* MiscStructures */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87EB2A312295009503DD /* SortedPictoArray.swift */,
+				BC2C87EC2A312295009503DD /* ColorMaker.swift */,
+			);
+			path = MiscStructures;
+			sourceTree = "<group>";
+		};
+		BC2C87ED2A312295009503DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C87EE2A312295009503DD /* PictogramView.swift */,
+				BC2C87EF2A312295009503DD /* CategoryPickerView.swift */,
+				BC2C87F02A312295009503DD /* DropDownCategoryPicker.swift */,
+				BC2C87F12A312295009503DD /* PictogramGridView.swift */,
+				BC2C87F22A312295009503DD /* PictogramEditorWindowView.swift */,
+				BC2C87F32A312295009503DD /* CategoryEditorWindowView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BC2C88082A3122A2009503DD /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C88092A3122A2009503DD /* ViewModels */,
+				BC2C880B2A3122A2009503DD /* Models */,
+				BC2C880C2A3122A2009503DD /* Views */,
+				BC2C880A2A3122A2009503DD /* MainViews */,
+			);
+			path = Album;
+			sourceTree = "<group>";
+		};
+		BC2C88092A3122A2009503DD /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C88172A31234B009503DD /* PageViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BC2C880A2A3122A2009503DD /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C88132A312322009503DD /* Album.swift */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
+		BC2C880B2A3122A2009503DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C88152A312333009503DD /* PageModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BC2C880C2A3122A2009503DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BC2C880D2A3122AB009503DD /* Communicator */ = {
+			isa = PBXGroup;
+			children = (
+				BC2C88112A312300009503DD /* VoiceConfigurationView.swift */,
+				BC2C880F2A3122F4009503DD /* BaseCommunicatorView.swift */,
+			);
+			path = Communicator;
+			sourceTree = "<group>";
+		};
 		C29428042A15B3B100E814C9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,11 +322,11 @@
 		C2A8CAB42A0D9F540026DB96 /* nuevoamanecer */ = {
 			isa = PBXGroup;
 			children = (
+				BC2C880D2A3122AB009503DD /* Communicator */,
+				BC2C88082A3122A2009503DD /* Album */,
+				BC2C87D82A312295009503DD /* PictogramEditor */,
+				BC2C87D72A312255009503DD /* Admin */,
 				C29428072A15B85500E814C9 /* ContentView.swift */,
-				C29428042A15B3B100E814C9 /* Data */,
-				C2BEDB602A157A93005398F9 /* ViewModel */,
-				C2BEDB5F2A157A8D005398F9 /* View */,
-				C2BEDB5E2A157A84005398F9 /* Model */,
 				C2BEDB192A14507C005398F9 /* HomeView.swift */,
 				C2BEDB0B2A1410AC005398F9 /* DismissView.swift */,
 				C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */,
@@ -300,33 +495,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC2C88002A312295009503DD /* SortedPictoArray.swift in Sources */,
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
+				BC2C87F42A312295009503DD /* PictogramViewModel.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
+				BC2C88142A312322009503DD /* Album.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
+				BC2C87F72A312295009503DD /* TextFieldView.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
+				BC2C88022A312295009503DD /* PictogramView.swift in Sources */,
+				BC2C88062A312295009503DD /* PictogramEditorWindowView.swift in Sources */,
+				BC2C88122A312300009503DD /* VoiceConfigurationView.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
+				BC2C88012A312295009503DD /* ColorMaker.swift in Sources */,
+				BC2C87F62A312295009503DD /* ColorPickerView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
+				BC2C87FC2A312295009503DD /* PictogramEditor.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				C250AFC72A174B60008F5699 /* AuthView.swift in Sources */,
+				BC2C87FA2A312295009503DD /* XOverCircleView.swift in Sources */,
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
+				BC2C88052A312295009503DD /* PictogramGridView.swift in Sources */,
+				BC2C87F82A312295009503DD /* SearchBarView.swift in Sources */,
+				BC2C87F52A312295009503DD /* CategoryViewModel.swift in Sources */,
+				BC2C88162A312333009503DD /* PageModel.swift in Sources */,
+				BC2C87FE2A312295009503DD /* PictogramModel.swift in Sources */,
 				C2CF668F2A302982005A7338 /* PatientCardView.swift in Sources */,
 				C2207F002A1F1AF400F31578 /* Note.swift in Sources */,
 				C2BEDB672A157B72005398F9 /* User.swift in Sources */,
 				C235FDB32A1810EB005412A7 /* Patient.swift in Sources */,
+				BC2C88042A312295009503DD /* DropDownCategoryPicker.swift in Sources */,
+				BC2C88072A312295009503DD /* CategoryEditorWindowView.swift in Sources */,
+				BC2C88182A31234B009503DD /* PageViewModel.swift in Sources */,
+				BC2C87FB2A312295009503DD /* ButtonView.swift in Sources */,
 				C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */,
+				BC2C87F92A312295009503DD /* MiscSystemImageView.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
+				BC2C87FD2A312295009503DD /* CategoryModel.swift in Sources */,
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
+				BC2C87FF2A312295009503DD /* CustomAlert.swift in Sources */,
+				BC2C88102A3122F4009503DD /* BaseCommunicatorView.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
+				BC2C88032A312295009503DD /* CategoryPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
