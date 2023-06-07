@@ -61,7 +61,7 @@ struct VoiceConfigurationView: View {
                 .cornerRadius(8)
                 .foregroundColor(.primary)
             }
-            MiscButtonView(text: "Regresar", color: .blue) {
+            ButtonView(text: "Regresar", color: .blue) {
                 dismiss()
             }
         }
