@@ -25,7 +25,7 @@ struct nuevoamanecerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PictogramEditor(userId: "hcx4EZbRyth07y5gVYOm")
         }
     }
 }

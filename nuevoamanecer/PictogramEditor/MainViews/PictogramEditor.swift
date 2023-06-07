@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct PictogramEditor: View {
-    // @StateObject var basePictoVM: PictogramViewModel = PictogramViewModel(collectionPath: "basePictograms")
-    // @StateObject var baseCatVM: CategoryViewModel = CategoryViewModel(collectionPath: "baseCategories")
-    // "users/user_id/pictograms"
-    // "users/user_id/categories"
-    @StateObject var userPictoVM: PictogramViewModel = PictogramViewModel(collectionPath: "basePictograms")
-    @StateObject var userCatVM: CategoryViewModel = CategoryViewModel(collectionPath: "baseCategories") 
+    @StateObject var userPictoVM: PictogramViewModel
+    @StateObject var userCatVM: CategoryViewModel
     
     @State var searchText: String = ""
     @State var pickedCategoryId: String = ""
@@ -26,6 +22,11 @@ struct PictogramEditor: View {
     @State var catBeingEdited: CategoryModel? = nil
     @State var isEditingPicto: Bool = false
     @State var isEditingCat: Bool = false
+    
+    init(userId: String){
+        _userPictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: "User/\(userId)/pictograms"))
+        _userCatVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: "User/\(userId)/categories"))
+    }
         
     var body: some View {
         let currCat: CategoryModel? = userCatVM.getCat(catId: pickedCategoryId)
