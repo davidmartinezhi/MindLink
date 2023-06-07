@@ -34,13 +34,13 @@ struct BaseCommunicatorView: View {
             ZStack {
                 VStack(spacing: 0) {
                     HStack {
-                        MiscButtonView(text: "Iniciar Sesión", color: .blue) {
+                        ButtonView(text: "Iniciar Sesión", color: .blue) {
                             //vista de autenticacion
                         }
                         
                         Spacer()
                         
-                        MiscButtonView(text: "Configuración Voz", color: .blue) {
+                        ButtonView(text: "Configuración Voz", color: .blue) {
                             //modal con opciones de velocidad de pronunciacion y genero de voz
                             isConfiguring = true
                         }
@@ -54,7 +54,7 @@ struct BaseCommunicatorView: View {
                     .background(Color(red: 0.9, green: 0.9, blue: 0.9))
                     
                     HStack(spacing: 25) {
-                        MiscSearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                        SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
                         CategoryPickerView(categoryModels: userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
                     }
@@ -95,7 +95,9 @@ struct BaseCommunicatorView: View {
                                   catModel: userCatVM.getCat(catId: pictoModel.categoryId)!,
                                   displayName: true,
                                   displayCatColor: false,
-                                  overlayImage: Image(systemName: "speaker.wave.3.fill"))
+                                  overlayImage: Image(systemName: "speaker.wave.3.fill"),
+                                  overlayImageColor: .gray,
+                                  overlyImageOpacity: 0.2)
                 })
             )
         }
