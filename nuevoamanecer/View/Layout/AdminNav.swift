@@ -33,7 +33,7 @@ struct AdminNav: View {
                     Image(systemName: "person.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 20, height: 20)
                         .clipShape(Circle())
                         .foregroundColor(.blue)
                     //}

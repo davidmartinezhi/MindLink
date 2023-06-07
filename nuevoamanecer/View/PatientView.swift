@@ -157,18 +157,18 @@ struct PatientView: View {
                         Text("Edad: " + String(getAge(patient: patient)))
                            .font(.system(size: 18, weight: .regular))
                            .foregroundColor(Color.black)
-                           .padding(.vertical, 2)
+                           .padding(.vertical, 1)
                         
                         Text("Grupo: " + patient.group)
                             .font(.system(size: 18, weight: .regular))
                             .foregroundColor(Color.black)
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 1)
 
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
                             .font(.system(size: 18, weight: .regular))
                             .foregroundColor(Color.black)
-                            .padding(.vertical, 2)
+                            .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Comunicación: " + patient.communicationStyle)
