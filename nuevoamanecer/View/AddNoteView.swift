@@ -19,10 +19,6 @@ struct AddNoteView: View {
     
     var body: some View {
         VStack {
-            Text("Agregar nota")
-                .font(.largeTitle)
-                .padding(.bottom)
-            
             Form {
                 Section(header: Text("Título")) {
                     TextField("Introduce el título de la nota", text: $noteTitle)
@@ -30,51 +26,75 @@ struct AddNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
-                        .frame(minHeight: 400)
+                        //.frame(minHeight: 400)
                 }
             }
             
-            Button(action: {
-                if noteTitle.isEmpty || noteContent.isEmpty {
-                    self.alertTitle = "Faltan campos"
-                    self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
-                    self.showingAlert = true
-                } else {
-                    let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
-                    
-                    notes.addData(patient: patient, note: newNote) { response in
-                        if response == "OK" {
-                            self.alertTitle = "Nota guardada"
-                            self.alertMessage = "La nota ha sido guardada con éxito."
-                            self.showingAlert = false
-                            
-                            Task{
-                                if let notesList = await notes.getDataById(patientId: patient.id){
-                                    DispatchQueue.main.async{
-                                        self.notes.notesList = notesList.sorted { $0.order < $1.order }
-                                        dismiss()
-                                    }
-                                }
-                            }
-                            
-                        } else {
-                            self.alertTitle = "Error"
-                            self.alertMessage = response
-                            self.showingAlert = true
-                        }
+            HStack{
+                //Cancel
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Text("Cancelar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
                     }
                 }
-            }) {
-                Text("Guardar nota")
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(40)
-            }
-            .padding(.horizontal)
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.red)
+                
+                //Save
+                Button(action: {
+                    if noteTitle.isEmpty || noteContent.isEmpty {
+                        self.alertTitle = "Faltan campos"
+                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                        self.showingAlert = true
+                    } else {
+                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
+                        
+                        notes.addData(patient: patient, note: newNote) { response in
+                            if response == "OK" {
+                                self.alertTitle = "Nota guardada"
+                                self.alertMessage = "La nota ha sido guardada con éxito."
+                                self.showingAlert = false
+                                
+                                Task{
+                                    if let notesList = await notes.getDataById(patientId: patient.id){
+                                        DispatchQueue.main.async{
+                                            self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                                            dismiss()
+                                        }
+                                    }
+                                }
+                                
+                            } else {
+                                self.alertTitle = "Error"
+                                self.alertMessage = response
+                                self.showingAlert = true
+                            }
+                        }
+                    }
+                }) {
+                    HStack {
+                        Text("Guardar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.blue)
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
             }
         }
         .padding()
