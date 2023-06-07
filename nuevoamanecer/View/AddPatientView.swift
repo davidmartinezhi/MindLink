@@ -133,9 +133,9 @@ struct AddPatientView: View {
                     }
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.gray)
                 .cornerRadius(10)
-                .foregroundColor(.red)
+                .foregroundColor(.white)
                 
                 
                 //botón de crear usuario
@@ -173,9 +173,9 @@ struct AddPatientView: View {
                     }
                 }
                 .padding()
-                .background(Color.blue.opacity(0.1))
+                .background(Color.blue)
                 .cornerRadius(10)
-                .foregroundColor(.blue)
+                .foregroundColor(.white)
             }
         }
         .padding()

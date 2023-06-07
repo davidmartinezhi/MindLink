@@ -69,17 +69,33 @@ struct EditPatientView: View {
             
             //Imagen del niño
             VStack{
+                
+                
                 Button() {
                     shouldShowImagePicker.toggle()
                 } label: {
+                    //Profile Picture EXISTS
                     if let displayImage = self.upload_image {
-                        Image(uiImage: displayImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 128, height: 128)
-                            .cornerRadius(128)
-                            .padding(.horizontal, 20)
-                    } else {
+                        ZStack {
+                            Image(uiImage: displayImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 128, height: 128)
+                                .cornerRadius(128)
+                                .padding(.horizontal, 20)
+                                
+
+                            Image(systemName: "pencil")
+                                .font(.system(size: 25))
+                                .offset(x: 35, y: 40)
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        
+                    }
+                    //Profile Picture DOES NOT EXIST
+                    else {
                         ZStack {
                             Image(systemName: "person.circle")
                                 .font(.system(size: 100))
@@ -98,7 +114,7 @@ struct EditPatientView: View {
                 }
                 //Spacer()
             }
-            .frame(maxHeight: 150)
+            .frame(maxHeight: 130)
             //.padding(.top, 50)
             
             
@@ -149,9 +165,9 @@ struct EditPatientView: View {
                     }
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
+                .background(Color.gray)
                 .cornerRadius(10)
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
                 
                 
                 //Save
@@ -196,9 +212,9 @@ struct EditPatientView: View {
                     }
                 }
                 .padding()
-                .background(Color.blue.opacity(0.1))
+                .background(Color.blue)
                 .cornerRadius(10)
-                .foregroundColor(.blue)
+                .foregroundColor(.white)
                 
             }
         }

@@ -44,9 +44,9 @@ struct AddNoteView: View {
                     }
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.gray)
                 .cornerRadius(10)
-                .foregroundColor(.red)
+                .foregroundColor(.white)
                 
                 //Save
                 Button(action: {
@@ -89,9 +89,9 @@ struct AddNoteView: View {
                     }
                 }
                 .padding()
-                .background(Color.blue.opacity(0.1))
+                .background(Color.blue)
+                .foregroundColor(.white)
                 .cornerRadius(10)
-                .foregroundColor(.blue)
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }

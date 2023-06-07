@@ -44,9 +44,9 @@ struct AdminMenuView: View {
                     }
                 }
                 .padding()
-                .background(Color.red.opacity(0.1))
+                .background(Color.red)
                 .cornerRadius(10)
-                .foregroundColor(.red)
+                .foregroundColor(.white)
                 .frame(maxWidth: 170)
                 
                 Spacer()
@@ -77,8 +77,9 @@ struct AdminMenuView: View {
                     }
                 }
             }
+            .frame(maxHeight: 300)
             
-            Spacer()
+            //Spacer()
             VStack(alignment: .leading, spacing: 10) {
                 
                 HStack{
@@ -95,9 +96,9 @@ struct AdminMenuView: View {
                         }
                     }
                     .padding()
-                    .background(Color.gray.opacity(0.1))
+                    .background(Color.gray)
                     .cornerRadius(10)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white)
                     
                     
                     //Guardar
@@ -113,9 +114,9 @@ struct AdminMenuView: View {
                         }
                     }
                     .padding()
-                    .background(Color.blue.opacity(0.1))
+                    .background(Color.blue)
                     .cornerRadius(10)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.white)
                 }
                 //.padding(.bottom)
 

@@ -29,9 +29,9 @@ struct DeletePatientView: View {
                 }
             }
             .padding()
-            .background(Color.red.opacity(0.1))
+            .background(Color.red)
             .cornerRadius(10)
-            .foregroundColor(.red)
+            .foregroundColor(.white)
             .frame(maxWidth: 170)
             .alert(isPresented: $showAlert) { () -> Alert in
                 Alert(title: Text("Confirmar Eliminación"),

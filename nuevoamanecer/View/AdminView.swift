@@ -242,8 +242,8 @@ struct AdminView: View {
                              }
                          }
                          .padding(10)
-                         .background(Color.blue.opacity(0.1))
-                         .foregroundColor(.blue)
+                         .background(Color.blue)
+                         .foregroundColor(.white)
                          .cornerRadius(10)
                      }
                      .padding(.horizontal, 50)

@@ -26,9 +26,6 @@ struct EditNoteView: View {
     
     var body: some View {
         VStack {
-            Text("Editar nota")
-                .font(.largeTitle)
-                .padding(.bottom)
             
             Form {
                 Section(header: Text("Título")) {
@@ -37,50 +34,75 @@ struct EditNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
-                        .frame(minHeight: 400)
+                        //.frame(minHeight: 200)
                 }
             }
             
-            Button(action: {
-                if noteTitle.isEmpty || noteContent.isEmpty {
-                    self.alertTitle = "Faltan campos"
-                    self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
-                    self.showingAlert = true
-                } else {
-                    
-                    //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
-                    self.note.title = noteTitle
-                    self.note.text = noteContent
-                    
-                    notes.updateData(note: note){ error in
-                        if error != "OK" {
-                            print(error)
-                        }
-                        else{
-                            Task{
-                                if let notesList = await notes.getDataById(patientId: note.patientId){
-                                    DispatchQueue.main.async{
-                                        self.notes.notesList = notesList.sorted { $0.order < $1.order }
-                                        dismiss()
+            HStack{
+                //Cancel
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Text("Cancelar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.gray)
+                .cornerRadius(10)
+                .foregroundColor(.white)
+                
+                
+                //Save
+                Button(action: {
+                    if noteTitle.isEmpty || noteContent.isEmpty {
+                        self.alertTitle = "Faltan campos"
+                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                        self.showingAlert = true
+                    } else {
+                        
+                        //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
+                        self.note.title = noteTitle
+                        self.note.text = noteContent
+                        
+                        notes.updateData(note: note){ error in
+                            if error != "OK" {
+                                print(error)
+                            }
+                            else{
+                                Task{
+                                    if let notesList = await notes.getDataById(patientId: note.patientId){
+                                        DispatchQueue.main.async{
+                                            self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                                            dismiss()
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                }) {
+                    HStack {
+                        Text("Guardar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                    }
                 }
-            }) {
-                Text("Guardar nota")
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(40)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
+                
             }
-            .padding(.horizontal)
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-            }
-             
         }
         .padding()
         .onAppear{initializeData(note: note)}
