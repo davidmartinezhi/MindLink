@@ -24,31 +24,42 @@ struct VoiceConfigurationView: View {
             HStack {
                 Text("Género de voz")
                     .font(.title2)
-                Picker("Género", selection: $voiceGender) {
-                    ForEach(voiceList, id: \.self) { voice in
-                        Text(voice)
-                            .foregroundColor(.primary)
+                Menu {
+                    Picker("Género", selection: $voiceGender) {
+                        ForEach(voiceList, id: \.self) { voice in
+                            Text(voice)
+                        }
                     }
+                } label: {
+                    Text(voiceGender)
+                        .font(.title2)
+                    Image(systemName: "chevron.down")
                 }
-                .pickerStyle(.menu)
                 .padding()
                 .background(Color.secondary.opacity(0.2))
                 .cornerRadius(8)
+                .foregroundColor(.primary)
             }
             Spacer()
                 .frame(height: 20)
             HStack {
                 Text("Velocidad de Pronunciación")
                     .font(.title2)
-                Picker("Velocidad", selection: $talkingSpeed) {
-                    ForEach(speedList, id: \.self) { speed in
-                        Text(speed)
+                Menu {
+                    Picker("Velocidad", selection: $talkingSpeed) {
+                        ForEach(speedList, id: \.self) { speed in
+                            Text(speed)
+                        }
                     }
+                } label: {
+                    Text(talkingSpeed)
+                        .font(.title2)
+                    Image(systemName: "chevron.down")
                 }
-                .pickerStyle(.menu)
                 .padding()
                 .background(Color.secondary.opacity(0.2))
                 .cornerRadius(8)
+                .foregroundColor(.primary)
             }
             MiscButtonView(text: "Regresar", color: .blue) {
                 dismiss()
