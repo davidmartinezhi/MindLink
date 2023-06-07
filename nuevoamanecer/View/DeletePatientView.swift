@@ -14,18 +14,25 @@ struct DeletePatientView: View {
     @State private var showAlert = false
 
     var body: some View {
-        VStack {
+        HStack {
             Button(action: {
                 showAlert = true
             }) {
-                Text("Eliminar Paciente")
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                HStack {
+                    Text("Eliminar")
+                        .font(.system(size: 16))
+                    
+                    Spacer()
+                    
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 12))
+                }
             }
+            .padding()
+            .background(Color.red.opacity(0.1))
+            .cornerRadius(10)
+            .foregroundColor(.red)
+            .frame(maxWidth: 170)
             .alert(isPresented: $showAlert) { () -> Alert in
                 Alert(title: Text("Confirmar Eliminación"),
                       message: Text("¿Estás seguro de que quieres eliminar a este paciente? Esta acción no se puede deshacer."),
@@ -53,8 +60,8 @@ struct DeletePatientView: View {
                       secondaryButton: .cancel())
                      
             }
+            Spacer()
         }
-        .padding()
     }
 }
 

@@ -60,6 +60,158 @@ struct EditPatientView: View {
     
     
     var body: some View {
+        
+        VStack{
+            
+            //Delete patient button
+            DeletePatientView(patients:patients, patient:patient)
+
+            
+            //Imagen del niño
+            VStack{
+                Button() {
+                    shouldShowImagePicker.toggle()
+                } label: {
+                    if let displayImage = self.upload_image {
+                        Image(uiImage: displayImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 128, height: 128)
+                            .cornerRadius(128)
+                            .padding(.horizontal, 20)
+                    } else {
+                        ZStack {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 100))
+                                //.foregroundColor(Color(.label))
+                                .foregroundColor(.gray)
+                                
+
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 25))
+                                .offset(x: 35, y: 40)
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.horizontal, 20)
+                        
+                    }
+                }
+                //Spacer()
+            }
+            .frame(maxHeight: 150)
+            //.padding(.top, 50)
+            
+            
+            //Form
+            VStack{
+                Form {
+                    Section(header: Text("Información del Paciente")) {
+                        TextField("Primer Nombre", text: $firstName)
+                        TextField("Apellidos", text: $lastName)
+                        TextField("Grupo", text: $group)
+                        DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                    }
+                    
+                    Section(header: Text("Nivel Cognitivo")) {
+                        Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
+                            Text("")
+                            ForEach(cognitiveLevels, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Estilo de Comunicación")) {
+                        Picker("Tipo de comunicación", selection: $communicationStyleSelector) {
+                            Text("")
+                            ForEach(communicationStyles, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+            //Buttons
+            
+            HStack{
+                //Cancel
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Text("Cancelar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.gray)
+                
+                
+                //Save
+                Button(action: {
+                    //Checar que datos son validos
+                    if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                        let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
+                        
+                        //call method for update
+                        patients.updateData(patient: patient){ error in
+                            if error != "OK" {
+                                print(error)
+                            }else{
+                                
+                                Task {
+                                    if let patientsList = await patients.getData(){
+                                        DispatchQueue.main.async {
+                                            self.patients.patientsList = patientsList
+                                            dismiss()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        showAlert = true
+                    }
+                    //Subir imagen a firestore
+                    if let thisImage = self.upload_image {
+                        storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
+                    } else {
+                        print("No se pudo subir imagen, no se selecciono ninguna")
+                    }
+                }){
+                    HStack {
+                        Text("Guardar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.blue)
+                
+            }
+        }
+        .padding()
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+            ImagePicker(image: $upload_image)
+        }
+        .onAppear{
+            initializeData(patient: patient)
+            loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
+        }
+        
+        /*
         NavigationView {
             VStack {
                 
@@ -205,6 +357,7 @@ struct EditPatientView: View {
             initializeData(patient: patient)
             loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
         }
+         */
     }
 }
 

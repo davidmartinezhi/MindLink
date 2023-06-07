@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AdminMenuView: View {
-    
+    @Environment(\.dismiss) var dismiss
     @ObservedObject var authViewModel: AuthViewModel
     
     var user: User
@@ -27,12 +27,36 @@ struct AdminMenuView: View {
     
     var body: some View {
         VStack {
+            
+            //Logout button
+            HStack{
+                Button(action: {
+                    self.showLogoutAlert.toggle()
+                }) {
+                    HStack {
+                        Text("Cerrar sesión")
+                            .font(.system(size: 16))
+                        
+                        Spacer()
+                        
+                        Image(systemName: "arrowshape.turn.up.left.fill")
+                            .font(.system(size: 12))
+                    }
+                }
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.red)
+                .frame(maxWidth: 170)
+                
+                Spacer()
+            }
+            
             VStack {
-                Image(systemName: "person.fill") // Replace with user profile picture
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
+                Image(systemName: "person.circle")
+                    .font(.system(size: 80))
+                    //.foregroundColor(Color(.label))
+                    .foregroundColor(.gray)
                 
                 Text(name)
                     .font(.title)
@@ -42,7 +66,8 @@ struct AdminMenuView: View {
                     .foregroundColor(.gray)
                 
             }
-            .padding(.top, 50)
+            .frame(maxHeight: 150)
+            //.padding(.top, 50)
             
             VStack{
                 Form {
@@ -55,22 +80,46 @@ struct AdminMenuView: View {
             
             Spacer()
             VStack(alignment: .leading, spacing: 10) {
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    HStack {
-                        Text("Guardar")
-                            .font(.headline)
-                        
-                        Spacer()
-                        Image(systemName: "arrow.right.circle.fill")
-                    }
-                }
-                .padding()
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(10)
-                .foregroundColor(.blue)
                 
+                HStack{
+                    //Cancelar
+                    Button(action: {
+                        dismiss()
+                    }){
+                        HStack {
+                            Text("Cancelar")
+                                .font(.headline)
+                            
+                            Spacer()
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(10)
+                    .foregroundColor(.gray)
+                    
+                    
+                    //Guardar
+                    Button(action: {
+                        self.showLogoutAlert.toggle()
+                    }) {
+                        HStack {
+                            Text("Guardar")
+                                .font(.headline)
+                            
+                            Spacer()
+                            Image(systemName: "arrow.right.circle.fill")
+                        }
+                    }
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(10)
+                    .foregroundColor(.blue)
+                }
+                //.padding(.bottom)
+
+                /**
                 Button(action: {
                     self.showLogoutAlert.toggle()
                 }) {
@@ -80,13 +129,14 @@ struct AdminMenuView: View {
                         
                         Spacer()
                         
-                        Image(systemName: "arrow.right.circle.fill")
+                        Image(systemName: "arrowshape.turn.up.left.fill")
                     }
                 }
                 .padding()
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(10)
                 .foregroundColor(.red)
+                 */
             }
             .padding()
             .alert(isPresented: $showLogoutAlert) {

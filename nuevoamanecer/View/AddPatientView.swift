@@ -48,52 +48,191 @@ struct AddPatientView: View {
 
     
     var body: some View {
-
-      
-        NavigationView {
-            VStack {
-                VStack {
-                    //Imagen del niño
+        
+        VStack{
+            
+            //Imagen del niño
+            VStack{
+                Button() {
+                    shouldShowImagePicker.toggle()
+                } label: {
                     if let displayImage = self.upload_image {
                         Image(uiImage: displayImage)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 128, height: 128)
                             .cornerRadius(128)
+                            .padding(.horizontal, 20)
                     } else {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 83))
-                            .padding()
-                            .foregroundColor(Color(.label))
-      /*
-        VStack {
-            Text("Agregar Niño")
-                .font(.largeTitle)
-                .padding()
-        
-            Form {
-                //section for photo
-                
-                Section(header: Text("Información del Paciente")) {
-                    TextField("Primer Nombre", text: $firstName)
-                    TextField("Apellidos", text: $lastName)
-                    TextField("Grupo", text: $group)
-                    DatePicker("Fecha de nacimiento", selection: $birthDate, in: ...Date(), displayedComponents: .date)
-                        .datePickerStyle(.compact)
-                }
-                
-                Section(header: Text("Nivel Cognitivo")) {
-                    Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
-                        ForEach(cognitiveLevels, id: \.self) {
-                            Text($0)
-       
+                        ZStack {
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 100))
+                                //.foregroundColor(Color(.label))
+                                .foregroundColor(.gray)
+                                
+
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 25))
+                                .offset(x: 35, y: 40)
+                                .foregroundColor(.blue)
                         }
-       */
+                        .padding(.horizontal, 20)
+                        
                     }
                 }
-                .overlay(RoundedRectangle(cornerRadius: 64)
-                    .stroke(Color.black, lineWidth: 3))
+                //Spacer()
+            }
+            .frame(maxHeight: 150)
+            //.padding(.top, 50)
+            
+            
+            //Form
+            VStack{
+                Form {
+                    Section(header: Text("Información del Paciente")) {
+                        TextField("Primer Nombre", text: $firstName)
+                        TextField("Apellidos", text: $lastName)
+                        TextField("Grupo", text: $group)
+                        DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                    }
+                    
+                    Section(header: Text("Nivel Cognitivo")) {
+                        Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
+                            Text("")
+                            ForEach(cognitiveLevels, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                    
+                    Section(header: Text("Estilo de Comunicación")) {
+                        Picker("Tipo de comunicación", selection: $communicationStyleSelector) {
+                            Text("")
+                            ForEach(communicationStyles, id: \.self) {
+                                Text($0)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            //Buttons
+            
+            //VStack(alignment: .leading, spacing: 10) {
+            HStack{
                 
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Text("Cancelar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.red)
+                
+                
+                //botón de crear usuario
+                Button(action: {
+                    //Subir imagen a firestore
+                    if let thisImage = self.upload_image {
+                        storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
+                    } else {
+                        print("No se pudo subir imagen, no se selecciono ninguna")
+                    }
+                    
+                    //Generar URl para la imagen del niño
+                    loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
+                     
+                    //debug
+                    print(imageURL?.absoluteString ?? "ERROR")
+                    
+                    //Checar que datos son validos
+                    if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                        
+                        uploadPatient.toggle()
+                        dismiss()
+                         
+                    }
+                    else{
+                        showAlert = true
+                    }
+                }){
+                    HStack {
+                        Text("Guardar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+                .foregroundColor(.blue)
+            }
+        }
+        .padding()
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+            ImagePicker(image: $upload_image)
+        }
+        .onDisappear {
+            if(uploadPatient) {
+                let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
+               patients.addData(patient: patient){ error in
+                   if error != "OK" {
+                       print(error)
+                   }else{
+                       Task {
+                           if let patientsList = await patients.getData(){
+                               DispatchQueue.main.async {
+                                   self.patients.patientsList = patientsList
+                               }
+                           }
+                       }
+                   }
+               }
+            }
+        }
+
+      /*
+        NavigationView {
+            VStack {
+                VStack {
+                    //Imagen del niño
+                    Button() {
+                        shouldShowImagePicker.toggle()
+                    } label: {
+                        if let displayImage = self.upload_image {
+                            Image(uiImage: displayImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 128, height: 128)
+                                .cornerRadius(128)
+                        } else {
+                            ZStack {
+                                Image(systemName: "person.circle")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(Color(.label))
+
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 20))
+                                    .offset(x: 35, y: 35)
+                                    .foregroundColor(.blue)
+                            }
+                            
+                        }
+                    }
+                    .padding(.top)
+                }
+                .overlay(RoundedRectangle(cornerRadius: 64)
+                            .stroke(Color.gray, lineWidth: 2))
                 Form {
                     Section(header: Text("Información del Paciente")) {
                         TextField("Primer Nombre", text: $firstName)
@@ -117,7 +256,7 @@ struct AddPatientView: View {
                             }
                         }
                     }
-                    
+                    /*
                     Section(header: Text("Foto de perfil")) {
                         Button() {
                             shouldShowImagePicker.toggle()
@@ -125,6 +264,7 @@ struct AddPatientView: View {
                             Text("Seleccionar imagen")
                         }
                     }
+                     */
                     
                     Section {
                         
@@ -189,26 +329,9 @@ struct AddPatientView: View {
                 ImagePicker(image: $upload_image)
             }
         }
-        .onDisappear {
-            
-            if(uploadPatient) {
-                let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
-               patients.addData(patient: patient){ error in
-                   if error != "OK" {
-                       print(error)
-                   }else{
-                       Task {
-                           if let patientsList = await patients.getData(){
-                               DispatchQueue.main.async {
-                                   self.patients.patientsList = patientsList
-                               }
-                           }
-                       }
-                   }
-               }
-            }
-        }
+       */
     }
+       
 }
 
 struct AddPatientView_Previews: PreviewProvider {
