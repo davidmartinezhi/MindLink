@@ -52,7 +52,7 @@ class PatientsViewModel: ObservableObject{
                 
                 let firstName = data["firstName"] as? String ?? ""
                 let lastName = data["lastName"] as? String ?? ""
-                let birthDate = data["birthDate"] as? Date ?? Date()
+                let birthDate = (data["birthDate"] as? Timestamp)?.dateValue() ?? Date()
                 let group = data["group"] as? String ?? "No asignado"
                 let communicationStyle = data["communicationStyle"] as? String ?? "No asignado"
                 let cognitiveLevel = data["cognitiveLevel"] as? String ?? "No asignado"

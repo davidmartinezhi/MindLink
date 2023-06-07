@@ -34,15 +34,6 @@ struct PatientView: View {
     
     @Binding var hiddenNavBar: Bool
 
-    //Formatea la fecha en nota de paciente
-    private func formatDate(date: Date) -> String{
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long // change this according to your needs
-        formatter.timeStyle = .none // change this according to your needs
-        let dateString = formatter.string(from: date)
-        return dateString
-    }
-
     
     //obtiene edad del paciente
     private func getAge(patient: Patient) -> Int {
@@ -163,10 +154,10 @@ struct PatientView: View {
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(Color.black)
                         
-                       // Text("Edad: " + String(getAge(patient: patient)))
-                        //  .font(.system(size: 18, weight: .regular))
-                        //  .foregroundColor(Color.black)
-                        //  .padding(.vertical, 2)
+                        Text("Edad: " + String(getAge(patient: patient)))
+                           .font(.system(size: 18, weight: .regular))
+                           .foregroundColor(Color.black)
+                           .padding(.vertical, 2)
                         
                         Text("Grupo: " + patient.group)
                             .font(.system(size: 18, weight: .regular))
@@ -257,37 +248,7 @@ struct PatientView: View {
                         ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
                             
                             //Tarjeta paciente
-                            VStack{
-                                HStack{
-                                    Spacer()
-                                    Text(formatDate(date: note.date))
-                                        .font(.system(size: 14, weight: .regular))
-                                        .foregroundColor(Color.gray)
-                                        .padding(.trailing)
-                                }
-
-                                HStack{
-                                    VStack(alignment: .leading){
-                                        Text(note.title)
-                                            .font(.system(size: 22, weight: .bold))
-                                            .foregroundColor(Color.black)
-                                            .padding(.bottom, 2)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                        Text(note.text)
-                                            .font(.system(size: 18, weight: .regular))
-                                            .foregroundColor(Color.black)
-                                            .padding([.bottom, .top, .trailing])
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            
-                                    }
-                                    Spacer()
-                                }
-                                .padding([.bottom], 10)
-                                .padding([.leading, .trailing], 15)
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(10)
-                                //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
-                            }
+                            NoteCardView(note: note)
                             .frame(minHeight: 150)
                             .padding([.top, .bottom], 5)
                             .swipeActions(edge: .trailing) {

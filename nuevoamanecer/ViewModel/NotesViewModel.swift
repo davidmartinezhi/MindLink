@@ -59,7 +59,7 @@ class NotesViewModel: ObservableObject{
                 let order = data["order"] as? Int ?? 0
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
-                let date = data["date"] as? Date ?? Date()
+                let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
                 //let id = data["id"] as? String ?? UUID().uuidString
                 let id = document.documentID
                 
@@ -95,7 +95,8 @@ class NotesViewModel: ObservableObject{
                 let order = data["order"] as? Int ?? 0
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
-                let date = data["date"] as? Date ?? Date()
+                let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
+                
                 
                 let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date)
                 notes.append(note)
