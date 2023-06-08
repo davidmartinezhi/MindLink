@@ -140,28 +140,36 @@ struct AddPatientView: View {
                 
                 //botón de crear usuario
                 Button(action: {
-                    //Subir imagen a firestore
+                    //Subir imagen a firebase
                     if let thisImage = self.upload_image {
-                        storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
+                        Task {
+                            await storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture") { url in
+                                
+                                imageURL = url
+                                
+                                //Checar que datos son validos
+                                if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
+                                    
+                                    uploadPatient.toggle()
+                                    dismiss()
+                                     
+                                }
+                                else{
+                                    showAlert = true
+                                }
+                            }
+                        }
                     } else {
-                        print("No se pudo subir imagen, no se selecciono ninguna")
-                    }
-                    
-                    //Generar URl para la imagen del niño
-                    loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
-                     
-                    //debug
-                    print(imageURL?.absoluteString ?? "ERROR")
-                    
-                    //Checar que datos son validos
-                    if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                        
-                        uploadPatient.toggle()
-                        dismiss()
-                         
-                    }
-                    else{
-                        showAlert = true
+                        //Checar que datos son validos
+                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                            
+                            uploadPatient.toggle()
+                            dismiss()
+                             
+                        }
+                        else{
+                            showAlert = true
+                        }
                     }
                 }){
                     HStack {
@@ -185,6 +193,7 @@ struct AddPatientView: View {
         .onDisappear {
             if(uploadPatient) {
                 let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
+                
                patients.addData(patient: patient){ error in
                    if error != "OK" {
                        print(error)

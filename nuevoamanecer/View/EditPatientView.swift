@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseStorage
 import SDWebImageSwiftUI
+import Kingfisher
 
 struct EditPatientView: View {
     @ObservedObject var patients: PatientsViewModel
@@ -33,6 +34,7 @@ struct EditPatientView: View {
     @State private var shouldShowImagePicker = false
     
     @State private var imageURL = URL(string: "")
+    @State private var uploadPatient: Bool = false
     
     
     func initializeData(patient: Patient) -> Void{
@@ -70,52 +72,65 @@ struct EditPatientView: View {
             //Imagen del niño
             VStack{
                 
-                
-                Button() {
-                    shouldShowImagePicker.toggle()
-                } label: {
-                    //Profile Picture EXISTS
-                    if let displayImage = self.upload_image {
-                        ZStack {
+                VStack{
+                    Button() {
+                        shouldShowImagePicker.toggle()
+                    } label: {
+                        
+                        //Imagen recien cargada
+                        if let displayImage = self.upload_image {
                             Image(uiImage: displayImage)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 128, height: 128)
                                 .cornerRadius(128)
                                 .padding(.horizontal, 20)
+                        } else {
+                            
+                            //No imagen
+                            if(patient.image == "placeholder") {
+                                ZStack{
+                                    Image(systemName: "person.circle")
+                                        .font(.system(size: 100))
+                                    //.foregroundColor(Color(.label))
+                                        .foregroundColor(.gray)
+                                    
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 25))
+                                        .offset(x: 35, y: 40)
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                            
+                            //Imagen previamente subida
+                            else{
                                 
-
-                            Image(systemName: "pencil")
-                                .font(.system(size: 25))
-                                .offset(x: 35, y: 40)
-                                .foregroundColor(.blue)
+                                ZStack{
+                                    KFImage(URL(string: patient.image))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 128, height: 128)
+                                        .cornerRadius(128)
+                                        .padding(.horizontal, 20)
+                                    
+                                    Image(systemName: "pencil")
+                                        .font(.system(size: 25))
+                                        .offset(x: 35, y: 40)
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                            
                         }
-                        .padding(.horizontal, 20)
-                        
-                        
                     }
-                    //Profile Picture DOES NOT EXIST
-                    else {
-                        ZStack {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 100))
-                                //.foregroundColor(Color(.label))
-                                .foregroundColor(.gray)
-                                
-
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 25))
-                                .offset(x: 35, y: 40)
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.horizontal, 20)
-                        
-                    }
+                    //Spacer()
                 }
-                //Spacer()
+                .frame(maxHeight: 130)
+                
             }
-            .frame(maxHeight: 130)
-            //.padding(.top, 50)
+                
+                
             
             
             //Form
@@ -172,35 +187,32 @@ struct EditPatientView: View {
                 
                 //Save
                 Button(action: {
-                    //Checar que datos son validos
-                    if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                        let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: "http://github.com/davidmartinezhi.png", notes: [String]())
-                        
-                        //call method for update
-                        patients.updateData(patient: patient){ error in
-                            if error != "OK" {
-                                print(error)
-                            }else{
+                    //Subir imagen a firebase
+                    if let thisImage = self.upload_image {
+                        Task {
+                            await storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture") { url in
                                 
-                                Task {
-                                    if let patientsList = await patients.getData(){
-                                        DispatchQueue.main.async {
-                                            self.patients.patientsList = patientsList
-                                            dismiss()
-                                        }
-                                    }
+                                imageURL = url
+                                
+                                //Checar que datos son validos
+                                if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
+                                    
+                                    uploadPatient.toggle()
+                                    dismiss()
+                                     
+                                }
+                                else{
+                                    showAlert = true
                                 }
                             }
                         }
-                    }
-                    else{
-                        showAlert = true
-                    }
-                    //Subir imagen a firestore
-                    if let thisImage = self.upload_image {
-                        storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
                     } else {
-                        print("No se pudo subir imagen, no se selecciono ninguna")
+                        //Checar que datos son validos
+                        if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == "" || upload_image == nil){
+                            
+                            showAlert = true
+                            
+                        }
                     }
                 }){
                     HStack {
@@ -225,6 +237,28 @@ struct EditPatientView: View {
         .onAppear{
             initializeData(patient: patient)
             loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
+        }
+        .onDisappear{
+            if(uploadPatient){
+                let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
+                
+                //call method for update
+                patients.updateData(patient: patient){ error in
+                    if error != "OK" {
+                        print(error)
+                    }else{
+                        
+                        Task {
+                            if let patientsList = await patients.getData(){
+                                DispatchQueue.main.async {
+                                    self.patients.patientsList = patientsList
+                                    dismiss()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         
         /*
