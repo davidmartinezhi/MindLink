@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AdminNav: View {
     
@@ -30,12 +31,22 @@ struct AdminNav: View {
                       //      .padding()
                       //      .foregroundColor(Color(.label))
                     //}else{
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 20, height: 20)
-                        .clipShape(Circle())
-                        .foregroundColor(.blue)
+                    if(user.image == "") {
+                        Image(systemName: "person.circle")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(.trailing)
+                            .foregroundColor(.gray)
+                    } else {
+                        KFImage(URL(string: user.image))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                            .padding(.trailing)
+                    }
                     //}
                 }
             }
@@ -58,6 +69,6 @@ struct AdminNav: View {
 
 struct AdminNav_Previews: PreviewProvider {
     static var previews: some View {
-        AdminNav(showAdminMenu: .constant(false), user: User(id: "", name: "", email: "", isAdmin: false))
+        AdminNav(showAdminMenu: .constant(false), user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
     }
 }

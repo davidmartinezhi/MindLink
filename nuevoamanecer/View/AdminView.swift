@@ -247,7 +247,7 @@ struct AdminView: View {
                          .cornerRadius(10)
                      }
                      .padding(.horizontal, 50)
-                     .padding(.top, 20)
+                     .padding(.vertical, 20)
                      //.padding(.vertical)
                      
                      

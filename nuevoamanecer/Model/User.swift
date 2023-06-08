@@ -12,4 +12,5 @@ struct User : Codable, Identifiable  {
     let name: String
     let email: String
     let isAdmin: Bool
+    let image: String
 }

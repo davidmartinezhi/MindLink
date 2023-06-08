@@ -13,16 +13,17 @@ struct AdminMenuView: View {
     
     var user: User
     @State private var name: String
-    @State private var email: String
-    @State private var isEditing = false
 
+    @State private var showingAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    
     @State private var showLogoutAlert = false
 
     init(authViewModel: AuthViewModel, user: User) {
         self.authViewModel = authViewModel
         self.user = user
         _name = State(initialValue: user.name)
-        _email = State(initialValue: user.email)
     }
     
     var body: some View {
@@ -61,7 +62,7 @@ struct AdminMenuView: View {
                 Text(name)
                     .font(.title)
                     .bold()
-                Text(email)
+                Text(user.email)
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
@@ -73,7 +74,6 @@ struct AdminMenuView: View {
                 Form {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
-                        TextField("email", text: $email)
                     }
                 }
             }
@@ -103,7 +103,19 @@ struct AdminMenuView: View {
                     
                     //Guardar
                     Button(action: {
-                        self.showLogoutAlert.toggle()
+                        
+                        //checamos que no estén vacios los campos
+                        if (name == "") {
+                            self.alertTitle = "Faltan campos"
+                            self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                            self.showingAlert = true
+                            
+                        } else {
+                            self.name = name
+                            
+                            authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: user.image)
+                        }
+                        dismiss()
                     }) {
                         HStack {
                             Text("Guardar")
@@ -159,6 +171,6 @@ struct AdminMenuView: View {
 
 struct AdminMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        AdminMenuView(authViewModel: AuthViewModel() ,user: User(id: "", name: "", email: "", isAdmin: false))
+        AdminMenuView(authViewModel: AuthViewModel() ,user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
     }
 }

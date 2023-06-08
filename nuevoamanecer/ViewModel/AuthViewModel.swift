@@ -46,9 +46,10 @@ class AuthViewModel: ObservableObject {
             let email = data["email"] as? String ?? ""
             let name = data["name"] as? String ?? ""
             let isAdmin = data["isAdmin"] as? Bool ?? false
+            let image = data["image"] as? String ?? ""
 
             // Crea un nuevo objeto User con los datos recuperados y lo asigna a la variable de usuario publicada. Esto desencadenará una actualización en cualquier vista que esté observando esta variable.
-            self.user = User(id: id, name: name, email: email, isAdmin: isAdmin)
+            self.user = User(id: id, name: name, email: email, isAdmin: isAdmin, image: image)
         }
     }
     
@@ -76,12 +77,12 @@ class AuthViewModel: ObservableObject {
             }
             guard let uid = result?.user.uid else { return }
             print("Successfully created user: \(uid.self)")
-            self.storeUserInformation(id: uid, name: name, email: email, isAdmin: isAdmin)
+            self.storeUserInformation(id: uid, name: name, email: email, isAdmin: isAdmin, image: "")
         }
     }
     
-    private func storeUserInformation(id: String, name: String, email: String, isAdmin: Bool) {
-        let userData = ["name": name, "email": email, "isAdmin": isAdmin, "id": id] as [String : Any]
+    private func storeUserInformation(id: String, name: String, email: String, isAdmin: Bool, image: String) {
+        let userData = ["name": name, "email": email, "isAdmin": isAdmin, "id": id, "image": image] as [String : Any]
         Firestore.firestore().collection("User").document(id).setData(userData) { err in
             if let err = err {
                 print(err)
@@ -92,6 +93,34 @@ class AuthViewModel: ObservableObject {
             self.fetchCurrentUser()
         }
     }
+    
+    func updateUser(name: String?, isAdmin: Bool?, image: String?) {
+        // Verificar si hay un usuario autenticado actualmente
+        guard let id = Auth.auth().currentUser?.uid else {
+            self.errorMessage = "No se encontró el id del usuario autenticado"
+            return
+        }
+
+        // Crear un objeto con la información actualizada
+        var updateData: [String: Any] = [:]
+
+        // Verificar si cada parámetro no es nil antes de agregarlo al objeto de actualización
+        if let name = name { updateData["name"] = name }
+        if let isAdmin = isAdmin { updateData["isAdmin"] = isAdmin }
+        if let image = image { updateData["image"] = image }
+
+        // Llamar a la función de actualización de Firestore para el usuario con la identificación actual
+        Firestore.firestore().collection("User").document(id).updateData(updateData) { err in
+            if let err = err {
+                print(err)
+                self.errorMessage = "\(err)"
+                return
+            }
+            print("Se ha actualizado la información del usuario")
+            self.fetchCurrentUser() // Recarga la información del usuario
+        }
+    }
+
     
     
     func logout() {
