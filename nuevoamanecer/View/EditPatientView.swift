@@ -206,11 +206,12 @@ struct EditPatientView: View {
                                 }
                             }
                         }
-                    } else {
+                    }  else {
                         //Checar que datos son validos
-                        if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == "" || upload_image == nil){
-                            
-                            showAlert = true
+                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                            uploadPatient.toggle()
+                            //showAlert = true
+                            dismiss()
                             
                         }
                     }
