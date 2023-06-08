@@ -20,6 +20,7 @@ struct BaseCommunicatorView: View {
     @State var pickedCategoryId: String = ""
     
     @State var isConfiguring = false
+    @State var isBlocked = true
     
     @State var voiceGender = "Masculina"
     @State var talkingSpeed = "Normal"
@@ -34,13 +35,13 @@ struct BaseCommunicatorView: View {
             ZStack {
                 VStack(spacing: 0) {
                     HStack {
-                        ButtonView(text: "Iniciar Sesión", color: .blue) {
+                        ButtonView(text: "Iniciar Sesión", color: .blue, isDisabled: isBlocked) {
                             //vista de autenticacion
                         }
                         
                         Spacer()
                         
-                        ButtonView(text: "Configuración Voz", color: .blue) {
+                        ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isBlocked) {
                             //modal con opciones de velocidad de pronunciacion y genero de voz
                             isConfiguring = true
                         }
@@ -57,6 +58,14 @@ struct BaseCommunicatorView: View {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
                         CategoryPickerView(categoryModels: userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
+                        
+                        Image(systemName: isBlocked ? "lock.filled" : "lock.open.filled")
+                            .gesture(
+                                LongPressGesture(minimumDuration: isBlocked ? 5 : 0.1)
+                                    .onEnded({ value in
+                                        isBlocked.toggle()
+                                    })
+                            )
                     }
                     .padding(.vertical)
                     .padding(.horizontal, 60)
