@@ -17,9 +17,9 @@ struct AdminNav: View {
     var body: some View {
         ZStack {
             HStack {
-                Image("logo")
+                Image("logo_name")
                     .resizable()
-                    .renderingMode(.template)
+                    //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 40)
                 Spacer()

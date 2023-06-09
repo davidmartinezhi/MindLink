@@ -245,6 +245,25 @@ struct AdminView: View {
                          .background(Color.blue)
                          .foregroundColor(.white)
                          .cornerRadius(10)
+                         
+                         
+                         
+                         //Boton para ACCEDER A COMUNICADOR BASE
+                         Button(action: {
+                             showAddPatient.toggle()
+                         }) {
+                             HStack {
+                                 Image(systemName: "message.fill")
+                                     .resizable()
+                                     .frame(width: 20, height: 20)
+                                 Text("Comunicador base")
+                                     .font(.headline)
+                             }
+                         }
+                         .padding(10)
+                         .background(Color.blue)
+                         .foregroundColor(.white)
+                         .cornerRadius(10)
                      }
                      .padding(.horizontal, 50)
                      .padding(.vertical, 20)

@@ -14,51 +14,76 @@ struct AuthView: View {
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
-                VStack(spacing: 50) {
-                    Text("Inicia sesión para tener acceso a tus niños")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
-                    Text("Administra a tus pacientes, guarda su información y accede al comunicador universal de cada uno de ellos.")
-                        .font(.title2)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
-                    NavigationLink(destination: LoginView(authViewModel: authViewModel)) {
-                        Text("Iniciar sesión")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .cornerRadius(10)
+                VStack {
+                    ZStack {
+                        //Color.blue.opacity(0.9)
+                        Color.blue
+                            .ignoresSafeArea()
+                        VStack {
+                            Image("logo_white")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 300)
+                                .padding()
+                            
+                            Text("“MindLink” – Creando conexiones mentales para facilitar la comunicación entre terapeutas y niños.")
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 80)
+                                .padding(.bottom, 40)
+                                .foregroundColor(.white)
+                                .fixedSize(horizontal: false, vertical: true)
+                            
+                        }.padding(.top, geometry.size.height * 0.1)
+                        
                     }
-                    .padding(.horizontal)
+                    .frame(height: geometry.size.height / 2)
                     
-                    NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
-                        Text("Registrarse")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.green)
-                            .cornerRadius(10)
+                    ZStack {
+                        Color.white
+                            .ignoresSafeArea()
+                        VStack(spacing: 20) {
+                            Text("Inicia sesión para tener acceso a tus niños")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .padding(.bottom)
+                            
+                            NavigationLink(destination: LoginView(authViewModel: authViewModel)) {
+                                Text("Iniciar sesión")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                            }
+                            .padding(.horizontal, 80)
+                            
+                            NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
+                                Text("Registrarse")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.green)
+                                    .cornerRadius(10)
+                            }
+                            .padding(.horizontal, 80)
+                        }
+                        .padding(.bottom, geometry.size.height * 0.1)
                     }
-                    .padding(.horizontal)
-                     
+                    .frame(height: geometry.size.height / 2)
                 }
-                .frame(maxWidth: min(500, geometry.size.width), alignment: .center)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .padding()
-                .navigationTitle("")
             }
+            .accentColor(.white) // Cambia el color del título y los enlaces de navegación a blanco para un aspecto más profesional
         }
         .navigationViewStyle(.stack)
-        .accentColor(.black) // Cambia el color del título y los enlaces de navegación a negro para un aspecto más profesional
     }
 }
+
 
 
 struct AuthView_Previews: PreviewProvider {
