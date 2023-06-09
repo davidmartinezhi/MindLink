@@ -427,3 +427,4 @@ struct EditPatientView_Previews: PreviewProvider {
         EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
     }
 }
+

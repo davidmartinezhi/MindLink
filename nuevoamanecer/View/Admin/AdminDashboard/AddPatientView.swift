@@ -357,3 +357,4 @@ struct AddPatientView_Previews: PreviewProvider {
         AddPatientView(patients: PatientsViewModel())
     }
 }
+
