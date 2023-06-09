@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PictogramEditorWindowView: View {
+    @Environment(\.dismiss) var dismiss
     @State var pictoModel: PictogramModel
     let pictoModelCapture: PictogramModel
     var isNewPicto: Bool
@@ -23,6 +24,8 @@ struct PictogramEditorWindowView: View {
     @State private var showImagePicker: Bool = false
     @State var temporaryUIImage: UIImage? = nil
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
+    
+    @State private var uploadPicto = false
     
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
@@ -87,12 +90,38 @@ struct PictogramEditorWindowView: View {
                             let imageName: String = catVM.getCat(catId: pictoModel.categoryId)!.name + "_" + pictoModel.name + "_pictogram" + pictoModel.id!
                             if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
                                 self.pictoModel.imageUrl = downloadUrl.absoluteString
+                                uploadPicto.toggle()
+                                isEditingPicto = false
                             } else {
                                 // Error al subir imagen.
                             }
                         }
                     }
                     
+//                    if isNewPicto && uploadPicto {
+//                        pictoVM.addPicto(pictoModel: self.pictoModel) {error in
+//                            if error != nil {
+//                                showErrorMessage = true
+//                            } else {
+//                                pickedCategoryId = pictoModel.categoryId
+//                                isEditingPicto = false
+//                                uploadPicto.toggle()
+//                            }
+//                        }
+//                    } else if isEditingPicto && uploadPicto {
+//                        pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
+//                            if error != nil {
+//                                showErrorMessage = true
+//                            } else {
+//                                isEditingPicto = false
+//                                uploadPicto.toggle()
+//                            }
+//                        }
+//                    }
+                }
+            }
+            .onDisappear {
+                if(uploadPicto) {
                     if isNewPicto {
                         pictoVM.addPicto(pictoModel: self.pictoModel) {error in
                             if error != nil {
@@ -100,6 +129,7 @@ struct PictogramEditorWindowView: View {
                             } else {
                                 pickedCategoryId = pictoModel.categoryId
                                 isEditingPicto = false
+                                uploadPicto.toggle()
                             }
                         }
                     } else {
@@ -108,10 +138,11 @@ struct PictogramEditorWindowView: View {
                                 showErrorMessage = true
                             } else {
                                 isEditingPicto = false
+                                uploadPicto.toggle()
                             }
                         }
                     }
-                }    
+                }
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .background(.white)
@@ -128,7 +159,7 @@ struct PictogramEditorWindowView: View {
                         .padding(40)
                 }
             }
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error 
+            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
             .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
                 ImagePicker(image: $temporaryUIImage)
             }
