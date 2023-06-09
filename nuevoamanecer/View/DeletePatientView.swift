@@ -12,6 +12,7 @@ struct DeletePatientView: View {
     @ObservedObject var patients: PatientsViewModel
     @State var patient: Patient
     @State private var showAlert = false
+    @State private var storage = FirebaseAlmacenamiento()
 
     var body: some View {
         HStack {
@@ -39,6 +40,7 @@ struct DeletePatientView: View {
                       primaryButton: .destructive(Text("Eliminar")) {
                         // Aquí va la lógica para eliminar al paciente
                     Task{
+                        storage.deleteFile(name: patient.lastName + patient.firstName + "profile_picture")
                         await patients.deleteData(patient: patient){ error in
                             if error != "OK"{
                                 print(error)

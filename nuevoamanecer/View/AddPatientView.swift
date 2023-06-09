@@ -184,6 +184,12 @@ struct AddPatientView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .foregroundColor(.white)
+                .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                    Button("Ok") {}
+                }
+            message: {
+                Text("Asegurate de haber llenado todos los campos requeridos")
+            }
             }
         }
         .padding()

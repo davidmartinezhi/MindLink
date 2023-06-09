@@ -209,9 +209,9 @@ struct EditPatientView: View {
                         //Checar que datos son validos
                         if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
                             uploadPatient.toggle()
-                            //showAlert = true
                             dismiss()
-                            
+                        } else {
+                            showAlert = true
                         }
                     }
                 }){
@@ -227,6 +227,12 @@ struct EditPatientView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .foregroundColor(.white)
+                .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                    Button("Ok") {}
+                }
+            message: {
+                Text("Asegurate de haber llenado todos los campos requeridos")
+            }
                 
             }
         }
