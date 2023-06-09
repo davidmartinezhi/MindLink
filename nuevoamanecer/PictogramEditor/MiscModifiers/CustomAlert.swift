@@ -22,7 +22,6 @@ struct CustomAlert: ViewModifier {
             } message: {
                 Text(message)
             }
-
     }
 }
 

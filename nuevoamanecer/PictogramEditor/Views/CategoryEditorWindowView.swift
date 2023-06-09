@@ -16,15 +16,18 @@ struct CategoryEditorWindowView: View {
     @ObservedObject var pictoVM: PictogramViewModel
     @ObservedObject var catVM: CategoryViewModel
     
+    @Binding var pickedCategoryId: String
+    
     @State var showErrorMessage: Bool = false
     
-    init(catModel: CategoryModel?, isNewCat: Bool, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel){
+    init(catModel: CategoryModel?, isNewCat: Bool, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
         self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
         self.isNewCat = isNewCat
         _isEditingCat = isEditingCat
         self.pictoVM = pictoVM
         self.catVM = catVM
+        _pickedCategoryId = pickedCategoryId
     }
     
     var body: some View {
@@ -61,6 +64,7 @@ struct CategoryEditorWindowView: View {
                             if error != nil  {
                                 showErrorMessage = true
                             } else {
+                                pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
                                 isEditingCat = false
                             }
                         }
@@ -69,10 +73,11 @@ struct CategoryEditorWindowView: View {
                 
                 ButtonView(text: "Guardar", color: .blue, isDisabled: !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture)){
                     if isNewCat {
-                        catVM.addCat(catModel: catModel){ error in
+                        catVM.addCat(catModel: catModel){ error, docId in
                             if error != nil {
                                 showErrorMessage = true
                             } else {
+                                pickedCategoryId = docId ?? ""
                                 isEditingCat = false
                             }
                         }

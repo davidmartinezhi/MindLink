@@ -16,15 +16,18 @@ struct PictogramEditorWindowView: View {
     @ObservedObject var pictoVM: PictogramViewModel
     @ObservedObject var catVM: CategoryViewModel
     
+    @Binding var pickedCategoryId: String
+    
     @State var showErrorMessage: Bool = false
     
-    init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel){
+    init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram()
         self.isNewPicto = isNewPicto
         _isEditingPicto = isEditingPicto
         self.pictoVM = pictoVM
         self.catVM = catVM
+        _pickedCategoryId = pickedCategoryId
     }
     
     var body: some View {
@@ -66,6 +69,7 @@ struct PictogramEditorWindowView: View {
                             if error != nil {
                                 showErrorMessage = true
                             } else {
+                                pickedCategoryId = pictoModel.categoryId
                                 isEditingPicto = false
                             }
                         }
