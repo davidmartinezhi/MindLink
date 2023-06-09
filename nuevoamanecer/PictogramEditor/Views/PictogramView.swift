@@ -18,6 +18,9 @@ struct PictogramView: View {
     var overlayImageWidth: CGFloat = 0.2
     var overlayImageColor: Color = .black
     var overlyImageOpacity: Double = 1
+    @Binding var imagen: UIImage?
+    
+    
     
     var body: some View {
         GeometryReader { geo in
@@ -33,9 +36,17 @@ struct PictogramView: View {
                             .font(.system(size: w * 0.1, weight: .bold))
                             .foregroundColor(.black)
                     }
-                    KFImage(URL(string: "https://www.akc.org/wp-content/themes/akc/component-library/assets/img/welcome.jpg"))
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+                    
+                    if let thisImage = imagen {
+                        Image(uiImage: thisImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } else {
+                        //print("Error, no se selecciono ninguna imagen")
+                        KFImage(URL(string: pictoModel.imageUrl))
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    }
                 }
                 .padding(.horizontal, w * 0.05)
                 .padding(.vertical, h * 0.05)

@@ -17,6 +17,10 @@ struct PictogramEditorWindowView: View {
     @ObservedObject var catVM: CategoryViewModel
     
     @State var showErrorMessage: Bool = false
+    @State private var shouldShowImagePicker: Bool = false
+    @State var upload_image: UIImage?
+    @State var imageURL = URL(string: "")
+    
     
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
@@ -41,7 +45,7 @@ struct PictogramEditorWindowView: View {
                 
                 HStack(spacing: 30) {
                     VStack {
-                        PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true)
+                        PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, imagen: $upload_image, imageUrl: imageURL.absoluteString)
                             .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
                     }
                                         
@@ -52,11 +56,22 @@ struct PictogramEditorWindowView: View {
                         
                         Text("Imagen" + (pictoModel.imageUrl == pictoModelCapture.imageUrl ? "" : "*"))
                             .font(.system(size: 20, weight: .bold))
-                        TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Imagen", inputText: $pictoModel.imageUrl)
+                        //TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Imagen", inputText: $pictoModel.imageUrl)
+                        
+                        Button {
+                            shouldShowImagePicker.toggle()
+                        } label: {
+                            Text("Agregar imagen")
+                        }
+                        
+                        //Image(uiImage: upload_image)
 
                         Text("Categoría" + (pictoModel.categoryId == pictoModelCapture.categoryId ? "" : "*"))
                             .font(.system(size: 20, weight: .bold))
                         DropDownCategoryPicker(categoryModels: catVM.getCats(), pickedCategoryId: $pictoModel.categoryId, pickedCatModel: catVM.getCat(catId: pictoModel.categoryId), itemWidth: geo.size.width * 0.3)
+                    }
+                    .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+                        ImagePicker(image: $upload_image)
                     }
                 }
                 
