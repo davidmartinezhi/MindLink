@@ -21,7 +21,8 @@ struct AdminNav: View {
                     .resizable()
                     //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 40)
+                    .frame(height: 55)
+                    .padding()
                 Spacer()
                 Button(action: { showAdminMenu = true }) {
                     
@@ -39,13 +40,15 @@ struct AdminNav: View {
                             .clipShape(Circle())
                             .padding(.trailing)
                             .foregroundColor(.gray)
+                            .padding()
                     } else {
                         KFImage(URL(string: user.image))
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 55, height: 55)
                             .clipShape(Circle())
                             .padding(.trailing)
+                            .padding()
                     }
                     //}
                 }
@@ -54,12 +57,14 @@ struct AdminNav: View {
         }
         .frame(height: 70)
         .foregroundColor(.white)
+        /*
         .overlay(
             Rectangle()
                 .fill(Color.gray)
                 .frame(height: 0.5)
                 .edgesIgnoringSafeArea(.horizontal), alignment: .bottom
         )
+         */
     }
 }
 
