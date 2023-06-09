@@ -35,7 +35,6 @@
 		C2BEDB062A0DA77A005398F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */; };
 		C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB0B2A1410AC005398F9 /* DismissView.swift */; };
 		C2BEDB0F2A141262005398F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C2BEDB0E2A141262005398F9 /* FirebaseAuth */; };
-		C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB192A14507C005398F9 /* HomeView.swift */; };
 		C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB622A157B12005398F9 /* LoginView.swift */; };
 		C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB642A157B22005398F9 /* RegisterView.swift */; };
 		C2BEDB672A157B72005398F9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB662A157B72005398F9 /* User.swift */; };
@@ -69,7 +68,6 @@
 		C2A8CABC2A0D9F580026DB96 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C2BEDB0B2A1410AC005398F9 /* DismissView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissView.swift; sourceTree = "<group>"; };
-		C2BEDB192A14507C005398F9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		C2BEDB622A157B12005398F9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C2BEDB642A157B22005398F9 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		C2BEDB662A157B72005398F9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -98,6 +96,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C22ECD3D2A33C3D900DF8A06 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				C22ECD3F2A33C3F300DF8A06 /* PatientProfile */,
+				C22ECD3E2A33C3E500DF8A06 /* AdminDashboard */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		C22ECD3E2A33C3E500DF8A06 /* AdminDashboard */ = {
+			isa = PBXGroup;
+			children = (
+				C2CF668C2A2FE308005A7338 /* AdminMenuView.swift */,
+				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
+				C2CF668E2A302982005A7338 /* PatientCardView.swift */,
+				C235FDAC2A18106E005412A7 /* AdminView.swift */,
+			);
+			path = AdminDashboard;
+			sourceTree = "<group>";
+		};
+		C22ECD3F2A33C3F300DF8A06 /* PatientProfile */ = {
+			isa = PBXGroup;
+			children = (
+				C2207F032A206B4900F31578 /* AddNoteView.swift */,
+				C2207F0D2A268C5A00F31578 /* EditNoteView.swift */,
+				C2CF66902A302A7F005A7338 /* NoteCardView.swift */,
+				C2207F052A2162E600F31578 /* EditPatientView.swift */,
+				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
+				C235FDAE2A181080005412A7 /* PatientView.swift */,
+			);
+			path = PatientProfile;
+			sourceTree = "<group>";
+		};
 		C29428042A15B3B100E814C9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,7 +163,6 @@
 				C2BEDB602A157A93005398F9 /* ViewModel */,
 				C2BEDB5F2A157A8D005398F9 /* View */,
 				C2BEDB5E2A157A84005398F9 /* Model */,
-				C2BEDB192A14507C005398F9 /* HomeView.swift */,
 				C2BEDB0B2A1410AC005398F9 /* DismissView.swift */,
 				C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */,
 				C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */,
@@ -170,19 +200,10 @@
 		C2BEDB5F2A157A8D005398F9 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C22ECD3D2A33C3D900DF8A06 /* Admin */,
 				C2CF66852A2E8A7F005A7338 /* Layout */,
 				C2BEDB612A157AF5005398F9 /* Authentication */,
-				C235FDAC2A18106E005412A7 /* AdminView.swift */,
-				C235FDAE2A181080005412A7 /* PatientView.swift */,
-				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
 				A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */,
-				C2207F032A206B4900F31578 /* AddNoteView.swift */,
-				C2207F052A2162E600F31578 /* EditPatientView.swift */,
-				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
-				C2207F0D2A268C5A00F31578 /* EditNoteView.swift */,
-				C2CF668C2A2FE308005A7338 /* AdminMenuView.swift */,
-				C2CF668E2A302982005A7338 /* PatientCardView.swift */,
-				C2CF66902A302A7F005A7338 /* NoteCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -302,7 +323,6 @@
 			files = (
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
-				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */,
