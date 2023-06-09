@@ -67,10 +67,7 @@ class CategoryViewModel: ObservableObject {
     
     // getFirstCat: returns the first category of the stored collection of categories.
     func getFirstCat() -> CategoryModel? {
-        if let catTuple: (key: String, value: CategoryModel) = self.categories.first {
-            return catTuple.value
-        }
-        return nil
+        return self.getCats().first
     }
         
     func getCats() -> [CategoryModel] {
@@ -79,41 +76,44 @@ class CategoryViewModel: ObservableObject {
         }
     }
                         
-    func addCat(name: String, color: (r: Double, g: Double, b: Double), completition: @escaping (Error?)->Void) -> Void {
-        let catModel: CategoryModel = CategoryModel(name: name, color: CategoryColor(r: color.r, g: color.g, b: color.b))
-        
-        do {
-            _ = try self.catCollection.addDocument(from: catModel) {error in
-                if let error = error {
-                    // Failure: unable to add cateogry to the collection.
-                    completition(error)
-                } else {
-                    // Adición exitosa.
-                    completition(nil)
-                }
-            }
-        } catch let error {
-            // Failure: unable to add document to the collection.
-            completition(error)
-        }
-    }
-    
-    func addCat(catModel: CategoryModel, completition: @escaping (Error?)->Void) -> Void {
-        do {
-            _ = try self.catCollection.addDocument(from: catModel) {error in
-                if let error = error {
-                    // Failure: unable to add document to the collection.
-                    completition(error)
-                } else {
-                    // Success.
-                    completition(nil)
-                }
-            }
-        } catch let error {
-            // Failure: unable to add document to the collection.
-            completition(error)
-        }
-    }
+    func addCat(name: String, color: (r: Double, g: Double, b: Double), completition: @escaping (Error?, String?)->Void) -> Void {
+         let catModel: CategoryModel = CategoryModel(name: name, color: CategoryColor(r: color.r, g: color.g, b: color.b))
+         var docRef: DocumentReference?
+
+         do {
+             docRef = try self.catCollection.addDocument(from: catModel) {error in
+                 if let error = error {
+                     // Failure: unable to add cateogry to the collection.
+                     completition(error, nil)
+                 } else {
+                     // Adición exitosa.
+                     completition(nil, docRef?.documentID)
+                 }
+             }
+         } catch let error {
+             // Failure: unable to add document to the collection.
+             completition(error, nil)
+         }
+     }
+
+     func addCat(catModel: CategoryModel, completition: @escaping (Error?, String?)->Void) -> Void {
+         var docRef: DocumentReference?
+
+         do {
+             docRef = try self.catCollection.addDocument(from: catModel) {error in
+                 if let error = error {
+                     // Failure: unable to add document to the collection.
+                     completition(error, nil)
+                 } else {
+                     // Success.
+                     completition(nil, docRef?.documentID)
+                 }
+             }
+         } catch let error {
+             // Failure: unable to add document to the collection.
+             completition(error, nil)
+         }
+     }
     
     func removeCat(catId: String, completition: @escaping (Error?)->Void) -> Void {
         if self.categories[catId] == nil {
@@ -216,4 +216,5 @@ class CategoryViewModel: ObservableObject {
     func stopListening() -> Void {
         self.listenerHandle?.remove()
     }
+    
 }

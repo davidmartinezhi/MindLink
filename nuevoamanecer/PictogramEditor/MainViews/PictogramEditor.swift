@@ -118,16 +118,21 @@ struct PictogramEditor: View {
                     }
 
                     if isEditingPicto {
-                        PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: userPictoVM, catVM: userCatVM)
+                        PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: userPictoVM, catVM: userCatVM, pickedCategoryId: $pickedCategoryId)
                             .frame(width: geo.size.width * 0.7, height: 600)
                     } else if isEditingCat {
-                        CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: isNewCat, isEditingCat: $isEditingCat, pictoVM: userPictoVM, catVM: userCatVM)
+                        CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: isNewCat, isEditingCat: $isEditingCat, pictoVM: userPictoVM, catVM: userCatVM, pickedCategoryId: $pickedCategoryId)
                             .frame(width: geo.size.width * 0.7)
                     }
                 }
             }
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error 
+            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
         }
+        .onReceive(userCatVM.objectWillChange) { _ in
+             if pickedCategoryId.isEmpty {
+                 pickedCategoryId = userCatVM.getFirstCat()?.id! ?? ""
+             }
+         }
     }
     
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
