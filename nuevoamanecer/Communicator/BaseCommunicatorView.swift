@@ -9,10 +9,6 @@ import SwiftUI
 import AVFoundation
 
 struct BaseCommunicatorView: View {
-    // @StateObject var basePictoVM: PictogramViewModel = PictogramViewModel(collectionPath: "basePictograms")
-    // @StateObject var baseCatVM: CategoryViewModel = CategoryViewModel(collectionPath: "baseCategories")
-    // "users/user_id/pictograms"
-    // "users/user_id/categories"
     @StateObject var userPictoVM: PictogramViewModel = PictogramViewModel(collectionPath: "basePictograms")
     @StateObject var userCatVM: CategoryViewModel = CategoryViewModel(collectionPath: "baseCategories")
     
@@ -20,7 +16,7 @@ struct BaseCommunicatorView: View {
     @State var pickedCategoryId: String = ""
     
     @State var isConfiguring = false
-    @State var isBlocked = true
+    @State var isBlocked = false
     
     @State var voiceGender = "Masculina"
     @State var talkingSpeed = "Normal"
@@ -36,18 +32,19 @@ struct BaseCommunicatorView: View {
                 VStack(spacing: 0) {
                     HStack {
                         ButtonView(text: "Iniciar Sesión", color: .blue, isDisabled: isBlocked) {
-                            //vista de autenticacion
+                            //sign in view
                         }
                         
                         Spacer()
                         
                         ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isBlocked) {
-                            //modal con opciones de velocidad de pronunciacion y genero de voz
+                            //modal view with voice settings
                             isConfiguring = true
                         }
                         .sheet(isPresented: $isConfiguring) {
                             VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
                         }
+                        
                     }
                     .frame(height: 40)
                     .padding(.vertical)
@@ -66,7 +63,7 @@ struct BaseCommunicatorView: View {
                             .scaledToFit()
                             .frame(width: 50, height: 50)
                             .gesture(
-                                LongPressGesture(minimumDuration: isBlocked ? 2.5 : 0.1)
+                                LongPressGesture(minimumDuration: isBlocked ? 2 : 0.1)
                                     .onEnded({ value in
                                         isBlocked.toggle()
                                     })
