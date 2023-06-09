@@ -84,7 +84,8 @@ struct PictogramEditorWindowView: View {
                 ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
                     if temporaryUIImage != nil {
                         Task {
-                            if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: pictoModel.name){
+                            let imageName: String = catVM.getCat(catId: pictoModel.categoryId)!.name + "_" + pictoModel.name + "_pictogram" + pictoModel.id!
+                            if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
                                 self.pictoModel.imageUrl = downloadUrl.absoluteString
                             } else {
                                 // Error al subir imagen.
