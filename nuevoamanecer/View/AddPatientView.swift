@@ -187,8 +187,11 @@ struct AddPatientView: View {
             }
         }
         .padding()
+        .background(Color(.init(white: 0, alpha: 0.05))
+            .ignoresSafeArea())
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
+            
         }
         .onDisappear {
             if(uploadPatient) {
