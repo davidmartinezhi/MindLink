@@ -17,8 +17,6 @@ struct PictogramModel: Identifiable, Codable {
     func isValidPictogram() -> Bool {
         if name.isEmpty || name.count > 20 { // Definir número máximo de caracteres.
             return false
-        } else if imageUrl.isEmpty {
-            return false
         } else if categoryId.isEmpty {
             return false
         }
@@ -26,7 +24,7 @@ struct PictogramModel: Identifiable, Codable {
     }
     
     func isEqualTo(_ pictoModel: PictogramModel) -> Bool {
-        return name == pictoModel.name && imageUrl == pictoModel.imageUrl && categoryId == pictoModel.categoryId
+        return name == pictoModel.name && categoryId == pictoModel.categoryId
     }
     
     static func defaultPictogram() -> PictogramModel {

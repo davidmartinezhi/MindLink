@@ -23,6 +23,8 @@ struct PictogramEditor: View {
     @State var isEditingPicto: Bool = false
     @State var isEditingCat: Bool = false
     
+    @State var showErrorMessage: Bool = false
+    
     init(userId: String){
         _userPictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: "User/\(userId)/pictograms"))
         _userCatVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: "User/\(userId)/categories"))
@@ -124,6 +126,7 @@ struct PictogramEditor: View {
                     }
                 }
             }
+            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error 
         }
     }
     
@@ -135,6 +138,11 @@ struct PictogramEditor: View {
                 Button(action: {
                     if isDeleting == true {
                         userPictoVM.removePicto(pictoId: pictoModel.id!) { error in
+                            if error != nil {
+                                showErrorMessage = true
+                            } else {
+                                isDeleting = false
+                            }
                         }
                     } else {
                         isNewPicto = false

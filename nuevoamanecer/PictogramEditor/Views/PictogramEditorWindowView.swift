@@ -17,10 +17,10 @@ struct PictogramEditorWindowView: View {
     @ObservedObject var catVM: CategoryViewModel
     
     @State var showErrorMessage: Bool = false
-    @State private var shouldShowImagePicker: Bool = false
-    @State var upload_image: UIImage?
-    @State var imageURL = URL(string: "")
     
+    @State private var showImagePicker: Bool = false
+    @State var temporaryUIImage: UIImage? = nil
+    var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
     
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
@@ -45,7 +45,7 @@ struct PictogramEditorWindowView: View {
                 
                 HStack(spacing: 30) {
                     VStack {
-                        PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, imagen: $upload_image, imageUrl: imageURL.absoluteString)
+                        PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
                             .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
                     }
                                         
@@ -54,30 +54,43 @@ struct PictogramEditorWindowView: View {
                             .font(.system(size: 20, weight: .bold))
                         TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Nombre", inputText: $pictoModel.name)
                         
-                        Text("Imagen" + (pictoModel.imageUrl == pictoModelCapture.imageUrl ? "" : "*"))
+                        Text("Imagen" + (temporaryUIImage == nil ? "" : "*"))
                             .font(.system(size: 20, weight: .bold))
-                        //TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Imagen", inputText: $pictoModel.imageUrl)
-                        
                         Button {
-                            shouldShowImagePicker.toggle()
+                            showImagePicker.toggle()
                         } label: {
-                            Text("Agregar imagen")
+                            HStack {
+                                Image(systemName: temporaryUIImage == nil ? "arrow.up.square" : "checkmark")
+                                    .foregroundColor(temporaryUIImage == nil ? .black : .green)
+                                Text(temporaryUIImage == nil ? "Subir una imagen" : "Subir otra imagen")
+                                    .bold()
+                                    .foregroundColor(.white)
+                            }
+                            .padding()
+                            .frame(height: 50)
+                            .background(.gray)
+                            .cornerRadius(10)
                         }
                         
-                        //Image(uiImage: upload_image)
-
                         Text("Categoría" + (pictoModel.categoryId == pictoModelCapture.categoryId ? "" : "*"))
                             .font(.system(size: 20, weight: .bold))
                         DropDownCategoryPicker(categoryModels: catVM.getCats(), pickedCategoryId: $pictoModel.categoryId, pickedCatModel: catVM.getCat(catId: pictoModel.categoryId), itemWidth: geo.size.width * 0.3)
                     }
-                    .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
-                        ImagePicker(image: $upload_image)
-                    }
                 }
                 
-                ButtonView(text: "Guardar", color: pictoModel.isValidPictogram() ? .blue : .gray, isDisabled: !pictoModel.isValidPictogram() || pictoModel.isEqualTo(pictoModelCapture)) {
+                ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
+                    if temporaryUIImage != nil {
+                        Task {
+                            if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: pictoModel.name){
+                                self.pictoModel.imageUrl = downloadUrl.absoluteString
+                            } else {
+                                // Error al subir imagen.
+                            }
+                        }
+                    }
+                    
                     if isNewPicto {
-                        pictoVM.addPicto(pictoModel: pictoModel) {error in
+                        pictoVM.addPicto(pictoModel: self.pictoModel) {error in
                             if error != nil {
                                 showErrorMessage = true
                             } else {
@@ -85,7 +98,7 @@ struct PictogramEditorWindowView: View {
                             }
                         }
                     } else {
-                        pictoVM.editPicto(pictoId: pictoModel.id!, pictoModel: pictoModel) {error in
+                        pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
                             if error != nil {
                                 showErrorMessage = true
                             } else {
@@ -110,7 +123,10 @@ struct PictogramEditorWindowView: View {
                         .padding(40)
                 }
             }
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage)
+            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error 
+            .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
+                ImagePicker(image: $temporaryUIImage)
+            }
         }
     }
 }

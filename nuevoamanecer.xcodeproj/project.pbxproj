@@ -295,11 +295,19 @@
 			path = Communicator;
 			sourceTree = "<group>";
 		};
+		BC7EF1A52A32D9F3009EDB46 /* ImageHandling */ = {
+			isa = PBXGroup;
+			children = (
+				A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */,
+				A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */,
+			);
+			path = ImageHandling;
+			sourceTree = "<group>";
+		};
 		C29428042A15B3B100E814C9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				C29428052A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift */,
-				A9594A102A2842DC0063C0D7 /* FirebaseStorage.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -324,6 +332,7 @@
 		C2A8CAB42A0D9F540026DB96 /* nuevoamanecer */ = {
 			isa = PBXGroup;
 			children = (
+				BC7EF1A52A32D9F3009EDB46 /* ImageHandling */,
 				BC2C880D2A3122AB009503DD /* Communicator */,
 				BC2C88082A3122A2009503DD /* Album */,
 				BC2C87D82A312295009503DD /* PictogramEditor */,
@@ -372,7 +381,6 @@
 				C235FDAC2A18106E005412A7 /* AdminView.swift */,
 				C235FDAE2A181080005412A7 /* PatientView.swift */,
 				C2207EFD2A1C04A500F31578 /* AddPatientView.swift */,
-				A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */,
 				C2207F032A206B4900F31578 /* AddNoteView.swift */,
 				C2207F052A2162E600F31578 /* EditPatientView.swift */,
 				C2207F072A252D2800F31578 /* DeletePatientView.swift */,

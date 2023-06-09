@@ -14,13 +14,12 @@ struct PictogramView: View {
     var displayName: Bool
     var displayCatColor: Bool
     
-    var overlayImage: Image?
+    var overlayImage: Image? = nil
     var overlayImageWidth: CGFloat = 0.2
     var overlayImageColor: Color = .black
     var overlyImageOpacity: Double = 1
-    @Binding var imagen: UIImage?
     
-    
+    var temporaryUIImage: UIImage? = nil 
     
     var body: some View {
         GeometryReader { geo in
@@ -37,13 +36,20 @@ struct PictogramView: View {
                             .foregroundColor(.black)
                     }
                     
-                    if let thisImage = imagen {
-                        Image(uiImage: thisImage)
+                    if let tempUIImage = temporaryUIImage { // Si existe una imagen temporal, utilizarla.
+                        Image(uiImage: tempUIImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     } else {
-                        //print("Error, no se selecciono ninguna imagen")
                         KFImage(URL(string: pictoModel.imageUrl))
+                            .placeholder{
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: geo.size.width * 0.6)
+                                    .foregroundColor(.gray)
+                                    .opacity(0.6)
+                            }
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     }
