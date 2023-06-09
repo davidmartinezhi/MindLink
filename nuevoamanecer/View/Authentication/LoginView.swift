@@ -11,6 +11,9 @@ struct LoginView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @State var email = ""
     @State var password = ""
+    @State private var contraseñaIncorrecta: Bool = false
+    @State private var usuarioNoExiste: Bool = false
+    @State private var showAlert: Bool = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -35,7 +38,16 @@ struct LoginView: View {
                 
                 Button(action: {
                     Task {
-                        authViewModel.loginUser(email: email, password: password)
+                        if(email != "" && password != "") {
+                            authViewModel.loginUser(email: email, password: password)
+                            
+                            if(authViewModel.errorMessage != nil) {
+                                showAlert.toggle()
+                            }
+                        } else {
+                            authViewModel.errorMessage = "Favor de completar todos los campos"
+                            showAlert.toggle()
+                        }
                     }
                 }) {
                     Text("Iniciar sesión")
@@ -47,6 +59,12 @@ struct LoginView: View {
                         .cornerRadius(10)
                 }
                 .padding(.horizontal)
+                .alert("Error", isPresented: $showAlert){
+                    Button("Ok") {}
+                }
+            message: {
+                Text(authViewModel.errorMessage!)
+            }
                 
                 /*
                 if let messageError = authViewModel.errorMessage {
