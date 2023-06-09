@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AdminMenuView: View {
     @Environment(\.dismiss) var dismiss
@@ -19,6 +20,12 @@ struct AdminMenuView: View {
     @State private var alertMessage = ""
     
     @State private var showLogoutAlert = false
+    
+    @State private var upload_image: UIImage?
+    @State private var shouldShowImagePicker: Bool = false
+    @State private var uploadData: Bool = false
+    @State private var imageURL = URL(string: "")
+    @State private var storage = FirebaseAlmacenamiento()
 
     init(authViewModel: AuthViewModel, user: User) {
         self.authViewModel = authViewModel
@@ -54,10 +61,66 @@ struct AdminMenuView: View {
             }
             
             VStack {
+                
+                //Imagen del niño
+                VStack{
+                    Button() {
+                        shouldShowImagePicker.toggle()
+                    } label: {
+                        if let displayImage = self.upload_image {
+                            Image(uiImage: displayImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 128, height: 128)
+                                .cornerRadius(128)
+                                .padding(.horizontal, 20)
+                        } else {
+                                //No imagen
+                                if(user.image == "placeholder") {
+                                    ZStack{
+                                        Image(systemName: "person.circle")
+                                            .font(.system(size: 100))
+                                        //.foregroundColor(Color(.label))
+                                            .foregroundColor(.gray)
+                                        
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 25))
+                                            .offset(x: 35, y: 40)
+                                            .foregroundColor(.blue)
+                                    }
+                                    .padding(.horizontal, 20)
+                                }
+                                
+                                //Imagen previamente subida
+                                else{
+                                    
+                                    ZStack{
+                                        KFImage(URL(string: user.image))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 128, height: 128)
+                                            .cornerRadius(128)
+                                            .padding(.horizontal, 20)
+                                        
+                                        Image(systemName: "pencil")
+                                            .font(.system(size: 25))
+                                            .offset(x: 35, y: 40)
+                                            .foregroundColor(.blue)
+                                    }
+                                    .padding(.horizontal, 20)
+                                }
+                        }
+                    }
+                    //Spacer()
+                }
+                .frame(maxHeight: 150)
+                
+                /*
                 Image(systemName: "person.circle")
                     .font(.system(size: 80))
                     //.foregroundColor(Color(.label))
                     .foregroundColor(.gray)
+                 */
                 
                 Text(name)
                     .font(.title)
@@ -104,18 +167,46 @@ struct AdminMenuView: View {
                     //Guardar
                     Button(action: {
                         
-                        //checamos que no estén vacios los campos
-                        if (name == "") {
-                            self.alertTitle = "Faltan campos"
-                            self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
-                            self.showingAlert = true
-                            
+                        
+                        
+                        
+                        if let thisImage = self.upload_image {
+                            Task {
+                                await storage.uploadImage(image: thisImage, name: user.name + "admin_profile_picture") { url in
+                                    
+                                    imageURL = url
+                                    
+                                    //Checar que datos son validos
+                                    if (name == "") {
+                                        self.alertTitle = "Faltan campos"
+                                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                                        self.showingAlert = true
+                                        
+                                    }
+                                    else{
+                                        uploadData.toggle()
+                                        dismiss()
+                                    }
+                                }
+                            }
                         } else {
-                            self.name = name
-                            
-                            authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: user.image)
+                            //Checar que datos son validos
+                            if (name == "") {
+                                self.alertTitle = "Faltan campos"
+                                self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                                self.showingAlert = true
+                                
+                            }
+                            else{
+                                uploadData.toggle()
+                                dismiss()
+                            }
                         }
-                        dismiss()
+                        
+                        
+                        
+                        
+                    
                     }) {
                         HStack {
                             Text("Guardar")
@@ -166,6 +257,18 @@ struct AdminMenuView: View {
             Spacer()
         }
         .padding()
+        .background(Color(.init(white: 0, alpha: 0.05))
+            .ignoresSafeArea())
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+            ImagePicker(image: $upload_image)
+        }
+        .onDisappear{
+            if(uploadData) {
+                self.name = name
+                
+                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder")
+            }
+        }
     }
 }
 

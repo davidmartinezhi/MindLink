@@ -121,7 +121,6 @@ struct EditPatientView: View {
                                 }
                                 .padding(.horizontal, 20)
                             }
-                            
                         }
                     }
                     //Spacer()
@@ -232,6 +231,8 @@ struct EditPatientView: View {
             }
         }
         .padding()
+        .background(Color(.init(white: 0, alpha: 0.05))
+            .ignoresSafeArea())
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
         }
