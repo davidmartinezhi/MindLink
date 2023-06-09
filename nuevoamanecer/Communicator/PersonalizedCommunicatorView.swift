@@ -21,6 +21,7 @@ struct PersonalizedCommunicatorView: View {
     
     @State var isConfiguring = false
     @State var isBase = true
+    @State var isBlocked = false
     
     @State var voiceGender = "Masculina"
     @State var talkingSpeed = "Normal"
@@ -40,23 +41,23 @@ struct PersonalizedCommunicatorView: View {
             ZStack {
                 VStack(spacing: 0) {
                     HStack {
-                        ButtonView(text: "Regresar", color: .blue) {
+                        ButtonView(text: "Regresar", color: .blue, isDisabled: isBlocked) {
                             //regresar a perfil de niño
                         }
                         
                         Spacer()
                         
-                        ButtonView(text: "Pictogramas Base", color: isBase ? .green : .blue) {
+                        ButtonView(text: "Pictogramas Base", color: isBase ? .green : .blue, isDisabled: isBlocked) {
                             isBase = true
                         }
                         
-                        ButtonView(text: "Mis Pictogramas", color: isBase ? .blue : .green) {
+                        ButtonView(text: "Mis Pictogramas", color: isBase ? .blue : .green, isDisabled: isBlocked) {
                             isBase = false
                         }
                         
                         Spacer()
                         
-                        ButtonView(text: "Configuración Voz", color: .blue) {
+                        ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isBlocked) {
                             //modal con opciones de velocidad de pronunciacion y genero de voz
                             isConfiguring = true
                         }
@@ -71,8 +72,21 @@ struct PersonalizedCommunicatorView: View {
                     
                     HStack(spacing: 25) {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                            .disabled(isBlocked)
                         
                         CategoryPickerView(categoryModels: isBase ? baseCatVM.getCats() : userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
+                            .disabled(isBlocked)
+                        
+                        Image(systemName: isBlocked ? "lock.fill" : "lock.open.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .gesture(
+                                LongPressGesture(minimumDuration: isBlocked ? 2.5 : 0.1)
+                                    .onEnded({ value in
+                                        isBlocked.toggle()
+                                    })
+                            )
                     }
                     .padding(.vertical)
                     .padding(.horizontal, 60)

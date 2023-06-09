@@ -56,12 +56,17 @@ struct BaseCommunicatorView: View {
                     
                     HStack(spacing: 25) {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                            .disabled(isBlocked)
                         
                         CategoryPickerView(categoryModels: userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
+                            .disabled(isBlocked)
                         
-                        Image(systemName: isBlocked ? "lock.filled" : "lock.open.filled")
+                        Image(systemName: isBlocked ? "lock.fill" : "lock.open.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
                             .gesture(
-                                LongPressGesture(minimumDuration: isBlocked ? 5 : 0.1)
+                                LongPressGesture(minimumDuration: isBlocked ? 2.5 : 0.1)
                                     .onEnded({ value in
                                         isBlocked.toggle()
                                     })
