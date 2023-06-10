@@ -19,6 +19,7 @@
 		C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F052A2162E600F31578 /* EditPatientView.swift */; };
 		C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F072A252D2800F31578 /* DeletePatientView.swift */; };
 		C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F0D2A268C5A00F31578 /* EditNoteView.swift */; };
+		C22ECD452A33E32200DF8A06 /* CommunicatorMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22ECD442A33E32200DF8A06 /* CommunicatorMenuView.swift */; };
 		C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAC2A18106E005412A7 /* AdminView.swift */; };
 		C235FDAF2A181080005412A7 /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAE2A181080005412A7 /* PatientView.swift */; };
 		C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */; };
@@ -55,6 +56,7 @@
 		C2207F052A2162E600F31578 /* EditPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPatientView.swift; sourceTree = "<group>"; };
 		C2207F072A252D2800F31578 /* DeletePatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePatientView.swift; sourceTree = "<group>"; };
 		C2207F0D2A268C5A00F31578 /* EditNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteView.swift; sourceTree = "<group>"; };
+		C22ECD442A33E32200DF8A06 /* CommunicatorMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicatorMenuView.swift; sourceTree = "<group>"; };
 		C235FDAC2A18106E005412A7 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		C235FDAE2A181080005412A7 /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsViewModel.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				C2CF66852A2E8A7F005A7338 /* Layout */,
 				C2BEDB612A157AF5005398F9 /* Authentication */,
 				A9594A0E2A2842BF0063C0D7 /* ImagePicker.swift */,
+				C22ECD442A33E32200DF8A06 /* CommunicatorMenuView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
+				C22ECD452A33E32200DF8A06 /* CommunicatorMenuView.swift in Sources */,
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

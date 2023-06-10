@@ -85,13 +85,19 @@ struct PatientCardView: View {
                 Button(action: {
                     print("Comunicador")
                 }) {
-                    Text("Comunicador")
-                        .font(.system(size: 16, weight: .bold))
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    HStack {
+                        Image(systemName: "message.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        Text("Comunicador")
+                            .font(.headline)
+
+                    }
+                    
+                    .padding(10)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
             }
             .padding(.horizontal)

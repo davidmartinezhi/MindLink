@@ -21,7 +21,7 @@ struct AdminNav: View {
                     .resizable()
                     //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 55)
+                    .frame(height: 40)
                     .padding()
                 Spacer()
                 Button(action: { showAdminMenu = true }) {

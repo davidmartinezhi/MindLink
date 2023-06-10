@@ -26,11 +26,11 @@ struct AuthView: View {
                                 .frame(height: 300)
                                 .padding()
                             
-                            Text("“MindLink” – Creando conexiones mentales para facilitar la comunicación entre terapeutas y niños.")
+                            Text("“MindLink” – Creando conexiones para facilitar la comunicación entre terapeutas y niños.")
                                 .font(.title)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 80)
-                                .padding(.bottom, 40)
+                                .padding(.bottom, 50)
                                 .foregroundColor(.white)
                                 .fixedSize(horizontal: false, vertical: true)
                             

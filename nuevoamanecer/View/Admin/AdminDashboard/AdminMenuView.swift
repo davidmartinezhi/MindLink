@@ -102,9 +102,9 @@ struct AdminMenuView: View {
                                             .cornerRadius(128)
                                             .padding(.horizontal, 20)
                                         
-                                        Image(systemName: "pencil")
-                                            .font(.system(size: 25))
-                                            .offset(x: 35, y: 40)
+                                        Image(systemName: "pencil.circle.fill")
+                                            .font(.system(size: 40))
+                                            .offset(x: 40, y: 40)
                                             .foregroundColor(.blue)
                                     }
                                     .padding(.horizontal, 20)
@@ -130,7 +130,7 @@ struct AdminMenuView: View {
                     .foregroundColor(.gray)
                 
             }
-            .frame(maxHeight: 150)
+            .frame(maxHeight: 200)
             //.padding(.top, 50)
             
             VStack{

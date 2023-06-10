@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Patient: Hashable{
+struct Patient: Hashable, Codable, Identifiable{
     var id: String
     let firstName: String
     let lastName: String
