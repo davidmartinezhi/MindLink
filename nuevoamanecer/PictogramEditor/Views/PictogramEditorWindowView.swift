@@ -7,8 +7,14 @@
 
 import SwiftUI
 
+func buildImageName(catName: String, pictoName: String) -> String {
+    let newCatName = catName.replacingOccurrences(of: " ", with: "")
+    let newPictoName = pictoName.replacingOccurrences(of: " ", with: "")
+    
+    return newCatName + "_" + newPictoName + "_" + UUID().uuidString
+}
+
 struct PictogramEditorWindowView: View {
-    @Environment(\.dismiss) var dismiss
     @State var pictoModel: PictogramModel
     let pictoModelCapture: PictogramModel
     var isNewPicto: Bool
@@ -24,9 +30,7 @@ struct PictogramEditorWindowView: View {
     @State private var showImagePicker: Bool = false
     @State var temporaryUIImage: UIImage? = nil
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
-    
-    @State private var uploadPicto = false
-    
+        
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram()
@@ -85,60 +89,32 @@ struct PictogramEditorWindowView: View {
                 }
                 
                 ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
-                    if temporaryUIImage != nil {
-                        Task {
-                            let imageName: String = catVM.getCat(catId: pictoModel.categoryId)!.name + "_" + pictoModel.name + "_pictogram" + pictoModel.id!
+                    Task {
+                        if temporaryUIImage != nil {
+                            let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
                             if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
                                 self.pictoModel.imageUrl = downloadUrl.absoluteString
-                                uploadPicto.toggle()
-                                isEditingPicto = false
                             } else {
                                 // Error al subir imagen.
                             }
                         }
-                    }
-                    
-//                    if isNewPicto && uploadPicto {
-//                        pictoVM.addPicto(pictoModel: self.pictoModel) {error in
-//                            if error != nil {
-//                                showErrorMessage = true
-//                            } else {
-//                                pickedCategoryId = pictoModel.categoryId
-//                                isEditingPicto = false
-//                                uploadPicto.toggle()
-//                            }
-//                        }
-//                    } else if isEditingPicto && uploadPicto {
-//                        pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
-//                            if error != nil {
-//                                showErrorMessage = true
-//                            } else {
-//                                isEditingPicto = false
-//                                uploadPicto.toggle()
-//                            }
-//                        }
-//                    }
-                }
-            }
-            .onDisappear {
-                if(uploadPicto) {
-                    if isNewPicto {
-                        pictoVM.addPicto(pictoModel: self.pictoModel) {error in
-                            if error != nil {
-                                showErrorMessage = true
-                            } else {
-                                pickedCategoryId = pictoModel.categoryId
-                                isEditingPicto = false
-                                uploadPicto.toggle()
+
+                        if isNewPicto {
+                            pictoVM.addPicto(pictoModel: self.pictoModel) {error in
+                                if error != nil {
+                                    showErrorMessage = true
+                                } else {
+                                    pickedCategoryId = pictoModel.categoryId
+                                    isEditingPicto = false
+                                }
                             }
-                        }
-                    } else {
-                        pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
-                            if error != nil {
-                                showErrorMessage = true
-                            } else {
-                                isEditingPicto = false
-                                uploadPicto.toggle()
+                        } else {
+                            pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
+                                if error != nil {
+                                    showErrorMessage = true
+                                } else {
+                                    isEditingPicto = false
+                                }
                             }
                         }
                     }
