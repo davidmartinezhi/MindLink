@@ -41,16 +41,12 @@
 		BCDEAEBD2A36B9AB00A13E52 /* SwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDEAEBC2A36B9AB00A13E52 /* SwitchView.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C29428022A15A8F000E814C9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C29428012A15A8F000E814C9 /* FirebaseFirestore */; };
-		C29428082A15B85500E814C9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29428072A15B85500E814C9 /* ContentView.swift */; };
-		C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */; };
 		C2A8CABA2A0D9F580026DB96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */; };
 		C2A8CABD2A0D9F580026DB96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2A8CABC2A0D9F580026DB96 /* Preview Assets.xcassets */; };
 		C2BEDB002A0DA53B005398F9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C2BEDAFF2A0DA53B005398F9 /* FirebaseAnalytics */; };
 		C2BEDB022A0DA53B005398F9 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C2BEDB012A0DA53B005398F9 /* FirebaseAnalyticsSwift */; };
 		C2BEDB062A0DA77A005398F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */; };
-		C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB0B2A1410AC005398F9 /* DismissView.swift */; };
 		C2BEDB0F2A141262005398F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C2BEDB0E2A141262005398F9 /* FirebaseAuth */; };
-		C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEDB192A14507C005398F9 /* HomeView.swift */; };
 		FB96129A2A3126C100E55F0E /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FB9612992A3126C100E55F0E /* FirebaseFirestoreSwift */; };
 /* End PBXBuildFile section */
 
@@ -85,14 +81,10 @@
 		BCA3B1C52A36F7A800C90BD9 /* SingleCommunicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCommunicator.swift; sourceTree = "<group>"; };
 		BCA3B1C72A36F95E00C90BD9 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
 		BCDEAEBC2A36B9AB00A13E52 /* SwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchView.swift; sourceTree = "<group>"; };
-		C29428072A15B85500E814C9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C2A8CAB22A0D9F540026DB96 /* nuevoamanecer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nuevoamanecer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nuevoamanecerApp.swift; sourceTree = "<group>"; };
 		C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2A8CABC2A0D9F580026DB96 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C2BEDB0B2A1410AC005398F9 /* DismissView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissView.swift; sourceTree = "<group>"; };
-		C2BEDB192A14507C005398F9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,10 +308,6 @@
 			isa = PBXGroup;
 			children = (
 				BCF3C1FF2A37BDFF0026E02F /* PictogramSection */,
-				C29428072A15B85500E814C9 /* ContentView.swift */,
-				C2BEDB192A14507C005398F9 /* HomeView.swift */,
-				C2BEDB0B2A1410AC005398F9 /* DismissView.swift */,
-				C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */,
 				C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */,
 				C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */,
 				C2A8CABB2A0D9F580026DB96 /* Preview Content */,
@@ -429,14 +417,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC2C88002A312295009503DD /* SortedArray.swift in Sources */,
-				C2BEDB1A2A14507C005398F9 /* HomeView.swift in Sources */,
 				BC2C87F42A312295009503DD /* PictogramViewModel.swift in Sources */,
 				BCDEAEBD2A36B9AB00A13E52 /* SwitchView.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage.swift in Sources */,
 				BC2C88142A312322009503DD /* Album.swift in Sources */,
 				BC2C87F72A312295009503DD /* TextFieldView.swift in Sources */,
-				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
-				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				BC2C88022A312295009503DD /* PictogramView.swift in Sources */,
 				BC2C88062A312295009503DD /* PictogramEditorWindowView.swift in Sources */,
 				BC2C88122A312300009503DD /* VoiceConfigurationView.swift in Sources */,
@@ -444,7 +429,6 @@
 				BC2C87F62A312295009503DD /* ColorPickerView.swift in Sources */,
 				BCA3B1C82A36F95E00C90BD9 /* LockView.swift in Sources */,
 				BC2C87FC2A312295009503DD /* PictogramEditor.swift in Sources */,
-				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				BC2C881A2A31362A009503DD /* DoubleCommunicator.swift in Sources */,
 				BC2C87FA2A312295009503DD /* XOverCircleView.swift in Sources */,
 				BC2C88052A312295009503DD /* PictogramGridView.swift in Sources */,
