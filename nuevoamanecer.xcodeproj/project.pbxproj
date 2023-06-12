@@ -172,9 +172,9 @@
 		C2A8CAB42A0D9F540026DB96 /* nuevoamanecer */ = {
 			isa = PBXGroup;
 			children = (
+				C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */,
 				C29428072A15B85500E814C9 /* ContentView.swift */,
 				C22ECD462A37B7A300DF8A06 /* Admin */,
-				C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */,
 				C2BEDB052A0DA77A005398F9 /* GoogleService-Info.plist */,
 				C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */,
 				C2A8CABB2A0D9F580026DB96 /* Preview Content */,

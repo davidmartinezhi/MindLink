@@ -76,7 +76,7 @@ struct AdminMenuView: View {
                                 .padding(.horizontal, 20)
                         } else {
                                 //No imagen
-                                if(user.image == "placeholder") {
+                            if(user.image == "placeholder" || user.image == "") {
                                     ZStack{
                                         Image(systemName: "person.circle")
                                             .font(.system(size: 100))
