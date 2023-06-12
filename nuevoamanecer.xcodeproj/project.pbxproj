@@ -36,6 +36,8 @@
 		BC2C88162A312333009503DD /* PageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88152A312333009503DD /* PageModel.swift */; };
 		BC2C88182A31234B009503DD /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88172A31234B009503DD /* PageViewModel.swift */; };
 		BC2C881A2A31362A009503DD /* DoubleCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2C88192A31362A009503DD /* DoubleCommunicator.swift */; };
+		BCA3B1C62A36F7A800C90BD9 /* SingleCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3B1C52A36F7A800C90BD9 /* SingleCommunicator.swift */; };
+		BCA3B1C82A36F95E00C90BD9 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA3B1C72A36F95E00C90BD9 /* LockView.swift */; };
 		BCDEAEBD2A36B9AB00A13E52 /* SwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDEAEBC2A36B9AB00A13E52 /* SwitchView.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
@@ -101,6 +103,8 @@
 		BC2C88152A312333009503DD /* PageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageModel.swift; sourceTree = "<group>"; };
 		BC2C88172A31234B009503DD /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		BC2C88192A31362A009503DD /* DoubleCommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleCommunicator.swift; sourceTree = "<group>"; };
+		BCA3B1C52A36F7A800C90BD9 /* SingleCommunicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCommunicator.swift; sourceTree = "<group>"; };
+		BCA3B1C72A36F95E00C90BD9 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
 		BCDEAEBC2A36B9AB00A13E52 /* SwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchView.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
@@ -310,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				BC2C88192A31362A009503DD /* DoubleCommunicator.swift */,
+				BCA3B1C52A36F7A800C90BD9 /* SingleCommunicator.swift */,
 				BC2C880F2A3122F4009503DD /* Communicator.swift */,
 			);
 			path = MainViews;
@@ -327,6 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				BCDEAEBC2A36B9AB00A13E52 /* SwitchView.swift */,
+				BCA3B1C72A36F95E00C90BD9 /* LockView.swift */,
 			);
 			path = GenericViews;
 			sourceTree = "<group>";
@@ -556,6 +562,7 @@
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
 				BC2C88012A312295009503DD /* ColorMaker.swift in Sources */,
 				BC2C87F62A312295009503DD /* ColorPickerView.swift in Sources */,
+				BCA3B1C82A36F95E00C90BD9 /* LockView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
 				BC2C87FC2A312295009503DD /* PictogramEditor.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
@@ -565,6 +572,7 @@
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
 				BC2C88052A312295009503DD /* PictogramGridView.swift in Sources */,
 				BC2C87F82A312295009503DD /* SearchBarView.swift in Sources */,
+				BCA3B1C62A36F7A800C90BD9 /* SingleCommunicator.swift in Sources */,
 				BC2C87F52A312295009503DD /* CategoryViewModel.swift in Sources */,
 				BC2C88162A312333009503DD /* PageModel.swift in Sources */,
 				BC2C87FE2A312295009503DD /* PictogramModel.swift in Sources */,

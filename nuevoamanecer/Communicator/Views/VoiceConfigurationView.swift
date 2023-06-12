@@ -65,7 +65,6 @@ struct VoiceConfigurationView: View {
                 dismiss()
             }
         }
-        
     }
 }
 

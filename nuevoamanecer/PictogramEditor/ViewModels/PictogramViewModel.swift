@@ -176,7 +176,7 @@ class PictogramViewModel: ObservableObject {
     func editPicto(pictoId: String, name: String, imageUrl: String, cateogryId: String, completition: @escaping (Error?)->Void) -> Void {
         if self.pictograms[pictoId] == nil {
             completition(PictoError.doesNotExist)
-            return
+            return // hola
         }
         
         let pictoModel: PictogramModel = PictogramModel(name: name,

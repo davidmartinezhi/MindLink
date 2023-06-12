@@ -16,23 +16,20 @@ struct Communicator: View {
     @State var pickedCategoryId: String = ""
     
     @State var isConfiguring = false
-    
-    @State var voiceGender: String = "Masculina"
-    @State var talkingSpeed: String = "Normal"
-    
+    @Binding var voiceGender: String
+    @Binding var talkingSpeed: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     @State var userHasChosenCat: Bool = false
     
-    @State var isLocked: Bool = false
-    var runWhenLocked: (()->Void)?
-    var runWhenUnlocked: (()->Void)?
+    @Binding var isLocked: Bool
     
-    init(pictoCollectionPath: String, catCollectionPath: String, runWhenLocked: (()->Void)? = nil, runWhenUnlocked: (()->Void)? = nil){
+    init(pictoCollectionPath: String, catCollectionPath: String, voiceGender: Binding<String>, talkingSpeed: Binding<String>, isLocked: Binding<Bool>){
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
-        self.runWhenLocked = runWhenLocked
-        self.runWhenUnlocked = runWhenUnlocked
+        _voiceGender = voiceGender
+        _talkingSpeed = talkingSpeed
+        _isLocked = isLocked
     }
     
     var body: some View {
@@ -52,7 +49,7 @@ struct Communicator: View {
                         
                         Spacer()
                         
-                        ButtonView(text: "Configuración Voz", color: .blue) {
+                        ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
                             //modal con opciones de velocidad de pronunciacion y genero de voz
                             isConfiguring = true
                         }
@@ -69,6 +66,10 @@ struct Communicator: View {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
                         CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                        
+                        Spacer()
+                        
+                        LockView(isLocked: $isLocked)
                     }
                     .padding(.vertical)
                     .padding(.horizontal, 60)

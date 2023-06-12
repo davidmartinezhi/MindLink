@@ -18,6 +18,8 @@ struct SwitchView: View {
     var foregroundColor: Color = .blue
     var textColor: Color = .black
     
+    var isDisabled: Bool = false
+    
     var body: some View {
         ZStack {
             Rectangle()
@@ -26,7 +28,8 @@ struct SwitchView: View {
                 .overlay(alignment: .center) {
                     Rectangle()
                         .frame(width: width/2, height: height)
-                        .foregroundColor(foregroundColor)
+                        .foregroundColor(isDisabled ? .gray : foregroundColor)
+                        .cornerRadius(10)
                         .offset(x: onLeft ? ((width/2) * -1) +  width/4: (width/2) - width/4)
                 }
             
@@ -41,7 +44,7 @@ struct SwitchView: View {
                         .foregroundColor(textColor)
                         .bold()
                 }
-                .allowsHitTesting(!onLeft)
+                .allowsHitTesting(!onLeft && !isDisabled)
                 
                 Button {
                     withAnimation {
@@ -53,7 +56,7 @@ struct SwitchView: View {
                         .foregroundColor(textColor)
                         .bold()
                 }
-                .allowsHitTesting(onLeft)
+                .allowsHitTesting(onLeft && !isDisabled)
             }
             .cornerRadius(10)
         }
