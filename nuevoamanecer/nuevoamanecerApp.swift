@@ -25,17 +25,16 @@ struct nuevoamanecerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // PictogramEditor(userId: "hcx4EZbRyth07y5gVYOm")
             let pcPath1: String = "basePictograms"
             let cPath1: String = "baseCategories"
             let pcPath2: String = "User/hcx4EZbRyth07y5gVYOm/pictograms"
             let cPath2: String = "User/hcx4EZbRyth07y5gVYOm/categories"
             
-            // PictogramEditor(pictoCollectionPath: pcPath2, catCollectionPath: cPath2)
+            // PictogramEditor(pictoCollectionPath: pcPath1, catCollectionPath: cPath1)
             
-            SingleCommunicator(pictoCollectionPath: pcPath1, catCollectionPath: cPath1)
+            // SingleCommunicator(pictoCollectionPath: pcPath1, catCollectionPath: cPath1)
     
-            // DoubleCommunicator(pictoCollectionPath1: pcPath1, catCollectionPath1: cPath1, pictoCollectionPath2: pcPath2, catCollectionPath2: cPath2)
+            DoubleCommunicator(pictoCollectionPath1: pcPath1, catCollectionPath1: cPath1, pictoCollectionPath2: pcPath2, catCollectionPath2: cPath2)
         }
     }
 }

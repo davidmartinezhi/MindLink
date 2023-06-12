@@ -337,6 +337,17 @@
 			path = GenericViews;
 			sourceTree = "<group>";
 		};
+		BCF3C1FF2A37BDFF0026E02F /* PictogramSection */ = {
+			isa = PBXGroup;
+			children = (
+				BC7EF1A52A32D9F3009EDB46 /* ImageHandling */,
+				BC2C88082A3122A2009503DD /* Album */,
+				BC2C87D82A312295009503DD /* PictogramEditor */,
+				BC2C880D2A3122AB009503DD /* Communicator */,
+			);
+			path = PictogramSection;
+			sourceTree = "<group>";
+		};
 		C29428042A15B3B100E814C9 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -365,10 +376,7 @@
 		C2A8CAB42A0D9F540026DB96 /* nuevoamanecer */ = {
 			isa = PBXGroup;
 			children = (
-				BC7EF1A52A32D9F3009EDB46 /* ImageHandling */,
-				BC2C880D2A3122AB009503DD /* Communicator */,
-				BC2C88082A3122A2009503DD /* Album */,
-				BC2C87D82A312295009503DD /* PictogramEditor */,
+				BCF3C1FF2A37BDFF0026E02F /* PictogramSection */,
 				BC2C87D72A312255009503DD /* Admin */,
 				C29428072A15B85500E814C9 /* ContentView.swift */,
 				C2BEDB192A14507C005398F9 /* HomeView.swift */,
