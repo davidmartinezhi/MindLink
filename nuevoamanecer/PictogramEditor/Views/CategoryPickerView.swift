@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryPickerView: View {
     var categoryModels: [CategoryModel]
     @Binding var pickedCategoryId: String
+    @Binding var userHasChosenCat: Bool
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -17,6 +18,9 @@ struct CategoryPickerView: View {
                 ForEach(categoryModels) { catModel in
                     Button {
                         pickedCategoryId = catModel.id!
+                        if !userHasChosenCat {
+                            userHasChosenCat = true 
+                        }
                     } label: {
                         Text(catModel.name)
                             .padding()

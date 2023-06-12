@@ -107,6 +107,7 @@ struct PictogramGridView: View {
                 Spacer()
             }
         }
+        .background(.white)
     }
     
     private func realCurrPage(numPages: Int) -> Int {

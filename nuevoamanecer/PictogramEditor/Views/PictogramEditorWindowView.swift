@@ -32,8 +32,8 @@ struct PictogramEditorWindowView: View {
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
         
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
-        _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram())
-        self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram()
+        _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
+        self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
         self.isNewPicto = isNewPicto
         _isEditingPicto = isEditingPicto
         self.pictoVM = pictoVM

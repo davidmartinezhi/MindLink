@@ -8,51 +8,47 @@
 import SwiftUI
 import AVFoundation
 
-struct PersonalizedCommunicatorView: View {
-    @StateObject var basePictoVM: PictogramViewModel = PictogramViewModel(collectionPath: "basePictograms")
-    @StateObject var baseCatVM: CategoryViewModel = CategoryViewModel(collectionPath: "baseCategories")
-    // "users/user_id/pictograms"
-    // "users/user_id/categories"
-    @StateObject var userPictoVM: PictogramViewModel
-    @StateObject var userCatVM: CategoryViewModel
+struct Communicator: View {
+    @StateObject var pictoVM: PictogramViewModel
+    @StateObject var catVM: CategoryViewModel
     
     @State var searchText: String = ""
     @State var pickedCategoryId: String = ""
     
     @State var isConfiguring = false
-    @State var isBase = true
     
-    @State var voiceGender = "Masculina"
-    @State var talkingSpeed = "Normal"
+    @State var voiceGender: String = "Masculina"
+    @State var talkingSpeed: String = "Normal"
     
-    let synthesizer = AVSpeechSynthesizer()
+    let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
-    init(userId : String) {
-        _userPictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: "User/\(userId)/pictograms"))
-        _userCatVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: "User/\(userId)/categories"))
+    @State var userHasChosenCat: Bool = false
+    
+    @State var isLocked: Bool = false
+    var runWhenLocked: (()->Void)?
+    var runWhenUnlocked: (()->Void)?
+    
+    init(pictoCollectionPath: String, catCollectionPath: String, runWhenLocked: (()->Void)? = nil, runWhenUnlocked: (()->Void)? = nil){
+        _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
+        _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
+        self.runWhenLocked = runWhenLocked
+        self.runWhenUnlocked = runWhenUnlocked
     }
     
-        
     var body: some View {
-        let currCatColor: Color? = isBase ? baseCatVM.getCat(catId: pickedCategoryId)?.buildColor() : userCatVM.getCat(catId: pickedCategoryId)?.buildColor()
+        let currCatColor: Color? = catVM.getCat(catId: pickedCategoryId)?.buildColor()
+        let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
+        pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
         
         GeometryReader { geo in
             ZStack {
                 VStack(spacing: 0) {
                     HStack {
-                        ButtonView(text: "Regresar", color: .blue) {
-                            //regresar a perfil de niño
+                        /*
+                        ButtonView(text: "Iniciar Sesión", color: .blue) {
+                            //vista de autenticacion
                         }
-                        
-                        Spacer()
-                        
-                        ButtonView(text: "Pictogramas Base", color: isBase ? .green : .blue) {
-                            isBase = true
-                        }
-                        
-                        ButtonView(text: "Mis Pictogramas", color: isBase ? .blue : .green) {
-                            isBase = false
-                        }
+                         */ 
                         
                         Spacer()
                         
@@ -72,27 +68,22 @@ struct PersonalizedCommunicatorView: View {
                     HStack(spacing: 25) {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
-                        CategoryPickerView(categoryModels: isBase ? baseCatVM.getCats() : userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
+                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                     }
                     .padding(.vertical)
                     .padding(.horizontal, 60)
                     .background(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                     
-                    if isBase {
-                        PictogramGridView(pictograms: buildPictoViewButtons(searchText.isEmpty ? basePictoVM.getPictosFromCat(catId: pickedCategoryId) :
-                                                                                basePictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)),
-                                          pictoWidth: 200, pictoHeight: 200)
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 200, pictoHeight: 200)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else {
-                        PictogramGridView(pictograms: buildPictoViewButtons(searchText.isEmpty ? userPictoVM.getPictosFromCat(catId: pickedCategoryId) :
-                                                                                userPictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)),
-                                          pictoWidth: 200, pictoHeight: 200)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                    
                 }
             }
         }
+        .onReceive(catVM.objectWillChange) { _ in
+             if pickedCategoryId.isEmpty || !userHasChosenCat {
+                 pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
+             }
+         }
     }
     
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
@@ -116,7 +107,7 @@ struct PersonalizedCommunicatorView: View {
 
                 }, label: {
                     PictogramView(pictoModel: pictoModel,
-                                  catModel: isBase ? baseCatVM.getCat(catId: pictoModel.categoryId)! : userCatVM.getCat(catId: pictoModel.categoryId)!,
+                                  catModel: catVM.getCat(catId: pictoModel.categoryId)!,
                                   displayName: true,
                                   displayCatColor: false,
                                   overlayImage: Image(systemName: "speaker.wave.3.fill"),

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PictogramEditor: View {
-    @StateObject var userPictoVM: PictogramViewModel
-    @StateObject var userCatVM: CategoryViewModel
+    @StateObject var pictoVM: PictogramViewModel
+    @StateObject var catVM: CategoryViewModel
     
     @State var searchText: String = ""
     @State var pickedCategoryId: String = ""
@@ -25,13 +25,17 @@ struct PictogramEditor: View {
     
     @State var showErrorMessage: Bool = false
     
-    init(userId: String){
-        _userPictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: "User/\(userId)/pictograms"))
-        _userCatVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: "User/\(userId)/categories"))
+    @State var userHasChosenCat: Bool = false
+    
+    init(pictoCollectionPath: String, catCollectionPath: String){
+        _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
+        _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
     }
         
     var body: some View {
-        let currCat: CategoryModel? = userCatVM.getCat(catId: pickedCategoryId)
+        let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
+        let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
+        pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
         
         GeometryReader { geo in
             ZStack {
@@ -41,11 +45,12 @@ struct PictogramEditor: View {
                         
                         Spacer()
                         
-                        ButtonView(text: isDeleting ?  "Cancelar" : "Eliminar Pictograma", color: .red) {
+                        ButtonView(text: isDeleting ?  "Cancelar" : "Eliminar Pictograma", color: .red, isDisabled: pictosInScreen.count == 0) {
                             isDeleting.toggle()
                         }
                         
-                        ButtonView(text: "Agregar Pictograma", color: .blue) {
+                        let noCategories: Bool = catVM.getCats().count == 0
+                        ButtonView(text: noCategories ? "Crea una categoría" : "Agregar Pictograma", color: .blue, isDisabled: noCategories) {
                             isNewPicto = true
                             pictoBeingEdited = nil
                             isEditingPicto = true
@@ -59,13 +64,13 @@ struct PictogramEditor: View {
                     HStack(spacing: 25) {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
-                        CategoryPickerView(categoryModels: userCatVM.getCats(), pickedCategoryId: $pickedCategoryId)
+                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                                                 
                         let editCatButtonsColor: Color = currCat != nil ? ColorMaker.buildforegroundTextColor(catColor: currCat!.color) : .black
-                        let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || userCatVM.getCat(catId: pickedCategoryId) == nil
+                        let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         Button { // Editar
                             isNewCat = false
-                            catBeingEdited = userCatVM.getCat(catId: pickedCategoryId)
+                            catBeingEdited = catVM.getCat(catId: pickedCategoryId)
                             isEditingCat = true
                         } label: {
                             Image(systemName: "pencil")
@@ -102,10 +107,8 @@ struct PictogramEditor: View {
                             .foregroundColor(.black)
                     }
                     
-                    PictogramGridView(pictograms: buildPictoViewButtons(searchText.isEmpty ? userPictoVM.getPictosFromCat(catId: pickedCategoryId) :
-                                                                            userPictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)),
-                                      pictoWidth: 200, pictoHeight: 200)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 200, pictoHeight: 200)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 
                 if isEditingPicto || isEditingCat {
@@ -118,19 +121,19 @@ struct PictogramEditor: View {
                     }
 
                     if isEditingPicto {
-                        PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: userPictoVM, catVM: userCatVM, pickedCategoryId: $pickedCategoryId)
+                        PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
                             .frame(width: geo.size.width * 0.7, height: 600)
                     } else if isEditingCat {
-                        CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: isNewCat, isEditingCat: $isEditingCat, pictoVM: userPictoVM, catVM: userCatVM, pickedCategoryId: $pickedCategoryId)
+                        CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
                             .frame(width: geo.size.width * 0.7)
                     }
                 }
             }
             .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
         }
-        .onReceive(userCatVM.objectWillChange) { _ in
-             if pickedCategoryId.isEmpty {
-                 pickedCategoryId = userCatVM.getFirstCat()?.id! ?? ""
+        .onReceive(catVM.objectWillChange) { _ in
+             if pickedCategoryId.isEmpty || !userHasChosenCat {
+                 pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
          }
     }
@@ -142,7 +145,7 @@ struct PictogramEditor: View {
             pictoButtons.append(
                 Button(action: {
                     if isDeleting == true {
-                        userPictoVM.removePicto(pictoId: pictoModel.id!) { error in
+                        pictoVM.removePicto(pictoId: pictoModel.id!) { error in
                             if error != nil {
                                 showErrorMessage = true
                             } else {
@@ -156,7 +159,7 @@ struct PictogramEditor: View {
                     }
                 }, label: {
                     PictogramView(pictoModel: pictoModel,
-                                  catModel: userCatVM.getCat(catId: pictoModel.categoryId)!,
+                                  catModel: catVM.getCat(catId: pictoModel.categoryId)!,
                                   displayName: true,
                                   displayCatColor: false,
                                   overlayImage: isDeleting ? Image(systemName: "xmark.circle") : Image(systemName: "pencil"),

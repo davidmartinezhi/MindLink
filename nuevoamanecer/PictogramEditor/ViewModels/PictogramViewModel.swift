@@ -30,7 +30,7 @@ enum PictogramProperty: String {
 // in the path given in the parameter 'collectionPath' of the class' initializer.
 class PictogramViewModel: ObservableObject {
     @Published private var pictograms: [String:PictogramModel] = [:] // [pictogramId:PictogramModel]
-    private var categoryMap: [String:SortedPictoArray] = [:] // [categoryId:SortedPictoArray]
+    private var categoryMap: [String:SortedArray<PictogramModel>] = [:] // [categoryId:SortedPictoArray]
     private var listenerHandle: ListenerRegistration? = nil
     private var pictoCollection: CollectionReference
     
@@ -64,28 +64,28 @@ class PictogramViewModel: ObservableObject {
         case .added:
             self.pictograms[pictoModel.id!] = pictoModel
             if self.categoryMap[pictoModel.categoryId] == nil {
-                self.categoryMap[pictoModel.categoryId] = SortedPictoArray()
+                self.categoryMap[pictoModel.categoryId] = SortedArray<PictogramModel>()
             }
-            self.categoryMap[pictoModel.categoryId]!.add(picto: pictoModel)
+            self.categoryMap[pictoModel.categoryId]!.add(item: pictoModel)
             
         case .removed:
             if self.pictograms[pictoModel.id!] != nil {
                 self.pictograms.removeValue(forKey: pictoModel.id!)
-                self.categoryMap[pictoModel.categoryId]!.remove(picto: pictoModel)
+                self.categoryMap[pictoModel.categoryId]!.remove(item: pictoModel)
             }
         case .modified:
             let beforeChangePictoModel: PictogramModel = self.pictograms[pictoModel.id!]!
             self.pictograms[pictoModel.id!] = pictoModel
 
             if pictoModel.categoryId != beforeChangePictoModel.categoryId {
-                self.categoryMap[beforeChangePictoModel.categoryId]!.remove(picto: beforeChangePictoModel)
+                self.categoryMap[beforeChangePictoModel.categoryId]!.remove(item: beforeChangePictoModel)
                 
                 if self.categoryMap[pictoModel.categoryId] == nil {
-                    self.categoryMap[pictoModel.categoryId] = SortedPictoArray()
+                    self.categoryMap[pictoModel.categoryId] = SortedArray<PictogramModel>()
                 }
-                self.categoryMap[pictoModel.categoryId]!.add(picto: pictoModel)
+                self.categoryMap[pictoModel.categoryId]!.add(item: pictoModel)
             } else {
-                self.categoryMap[pictoModel.categoryId]!.updateWith(picto: beforeChangePictoModel, with: pictoModel)
+                self.categoryMap[pictoModel.categoryId]!.updateWith(item: beforeChangePictoModel, with: pictoModel)
             }
         }
     }
@@ -93,7 +93,7 @@ class PictogramViewModel: ObservableObject {
     // getPictosFromCat: returns an array of PictogramModels whose category has as id 'catId'.
     func getPictosFromCat(catId: String) -> [PictogramModel] {
         if self.categoryMap[catId] != nil {
-            return self.categoryMap[catId]!.elements()
+            return self.categoryMap[catId]!.getItems()
         }
         return []
     }
@@ -104,7 +104,7 @@ class PictogramViewModel: ObservableObject {
         let nameFilterLowered: String = nameFilter.lowercased().trimmingCharacters(in: .whitespaces)
                 
         if self.categoryMap[catId] != nil {
-            let pictoModels: [PictogramModel] = self.categoryMap[catId]!.elements()
+            let pictoModels: [PictogramModel] = self.categoryMap[catId]!.getItems()
             
             if nameFilterLowered.isEmpty {
                 return pictoModels

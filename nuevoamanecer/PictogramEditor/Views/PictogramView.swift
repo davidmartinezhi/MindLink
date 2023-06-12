@@ -19,7 +19,7 @@ struct PictogramView: View {
     var overlayImageColor: Color = .black
     var overlyImageOpacity: Double = 1
     
-    var temporaryUIImage: UIImage? = nil 
+    var temporaryUIImage: UIImage? = nil
     
     var body: some View {
         GeometryReader { geo in

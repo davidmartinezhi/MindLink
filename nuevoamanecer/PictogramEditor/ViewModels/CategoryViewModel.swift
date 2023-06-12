@@ -24,6 +24,7 @@ enum CatError: Error, LocalizedError {
 // in the path given in the parameter 'collectionPath' of the class' initializer.
 class CategoryViewModel: ObservableObject {
     @Published private var categories: [String:CategoryModel] = [:] // [categoryId:CategoryModel]
+    private var sortedCategories: SortedArray<CategoryModel> = SortedArray()
     private var listenerHandle: ListenerRegistration? = nil
     private var catCollection: CollectionReference
     
@@ -54,9 +55,14 @@ class CategoryViewModel: ObservableObject {
     // updateCat: auxiliary function, handles a document change in the observed collection.
     private func updateCat(catModel: CategoryModel, changeType: DocumentChangeType) -> Void {
         switch changeType {
-        case .added, .modified:
+        case .added:
+            self.categories[catModel.id!] = catModel
+            self.sortedCategories.add(item: catModel)
+        case .modified:
+            self.sortedCategories.updateWith(item: categories[catModel.id!]!, with: catModel)
             self.categories[catModel.id!] = catModel
         case .removed:
+            self.sortedCategories.remove(item: self.categories[catModel.id!]!)
             self.categories.removeValue(forKey: catModel.id!)
         }
     }
@@ -71,9 +77,7 @@ class CategoryViewModel: ObservableObject {
     }
         
     func getCats() -> [CategoryModel] {
-        return Array(self.categories.values).sorted{ elemA, elemB in
-            return elemA.name < elemB.name
-        }
+        return sortedCategories.getItems()
     }
                         
     func addCat(name: String, color: (r: Double, g: Double, b: Double), completition: @escaping (Error?, String?)->Void) -> Void {
