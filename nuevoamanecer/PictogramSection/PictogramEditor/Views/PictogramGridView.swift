@@ -97,7 +97,6 @@ struct PictogramGridView: View {
                         }
                     }
                     .frame(width: gridWidth, height: gridHeight)
-                    .border(.black)
                     
                     Spacer()
                 }

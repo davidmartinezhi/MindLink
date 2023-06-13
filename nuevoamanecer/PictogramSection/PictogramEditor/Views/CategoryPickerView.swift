@@ -13,6 +13,7 @@ struct CategoryPickerView: View {
     @Binding var userHasChosenCat: Bool
     
     var body: some View {
+        
         ScrollView(.horizontal) {
             HStack(spacing: 11) {
                 ForEach(categoryModels) { catModel in
@@ -22,10 +23,14 @@ struct CategoryPickerView: View {
                             userHasChosenCat = true 
                         }
                     } label: {
+                        let categoryBGColor: CategoryColor = catModel.buildColorCatColor(colorShift: -0.2)
+                        let categoryFGColor: Color = ColorMaker.buildforegroundTextColor(catColor: categoryBGColor)
+                        
                         Text(catModel.name)
+                            .frame(minWidth: 60)
                             .padding()
                             .bold()
-                            .foregroundColor(pickedCategoryId == catModel.id! ? ColorMaker.buildforegroundTextColor(r: catModel.color.r, g: catModel.color.g, b: catModel.color.b) : .black)
+                            .foregroundColor(pickedCategoryId == catModel.id! ? categoryFGColor : .black)
                             .background(pickedCategoryId == catModel.id! ? catModel.buildColor(colorShift: -0.2) : .white)
                             .cornerRadius(10)
                     }
