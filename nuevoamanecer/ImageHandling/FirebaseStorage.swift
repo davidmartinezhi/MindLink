@@ -78,4 +78,15 @@ class FirebaseAlmacenamiento {
           }
         }
     }
+    
+    func deleteImage(donwloadUrl: String) async -> Bool {
+        let storageRef: StorageReference = Storage.storage().reference(forURL: donwloadUrl)
+        
+        do {
+            try await storageRef.delete()
+            return true
+        } catch {
+            return false
+        }
+    }
 }

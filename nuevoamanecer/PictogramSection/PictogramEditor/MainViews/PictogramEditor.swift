@@ -27,6 +27,8 @@ struct PictogramEditor: View {
     
     @State var userHasChosenCat: Bool = false
     
+    var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
+
     init(pictoCollectionPath: String, catCollectionPath: String){
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
@@ -145,11 +147,17 @@ struct PictogramEditor: View {
             pictoButtons.append(
                 Button(action: {
                     if isDeleting == true {
-                        pictoVM.removePicto(pictoId: pictoModel.id!) { error in
-                            if error != nil {
-                                showErrorMessage = true
-                            } else {
-                                isDeleting = false
+                        Task {
+                            if !pictoModel.imageUrl.isEmpty {
+                                _  = await imageHandler.deleteImage(donwloadUrl: pictoModel.imageUrl)
+                            }
+
+                            pictoVM.removePicto(pictoId: pictoModel.id!) { error in
+                                if error != nil {
+                                    showErrorMessage = true
+                                } else {
+                                    isDeleting = false
+                                }
                             }
                         }
                     } else {
