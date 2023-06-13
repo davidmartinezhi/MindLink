@@ -83,128 +83,189 @@ struct PatientView: View {
         
         VStack{
             //user header
-            
-            HStack {
-                VStack{
-                    if(patient.image == "placeholder") {
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .padding(.trailing)
-                    } else {
-                        KFImage(URL(string: patient.image))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .padding(.trailing)
-                    }
-                }
+            GeometryReader{ geo in
                 
-                VStack(alignment: .leading) {
+                HStack {
+                    VStack{
+                        if(patient.image == "placeholder") {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                        } else {
+                            KFImage(URL(string: patient.image))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                        }
+                    }
                     
-                    HStack{
-                        Text(patient.firstName + " " + patient.lastName)
-                            .font(.system(size: 24, weight: .bold))
+                    VStack(alignment: .leading) {
+                        
+                        HStack{
+                            Text(patient.firstName + " " + patient.lastName)
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(Color.black)
+                                .padding(.vertical, 1)
+                            
+                            Text(String(getAge(patient: patient)) + " años")
+                                .font(.system(size: 24, weight: .regular))
+                                .foregroundColor(Color.gray)
+                                .padding(.vertical, 1)
+                            
+                        }
+                        
+                        
+                        Text("Grupo: " + patient.group)
+                            .font(.system(size: 18, weight: .regular))
                             .foregroundColor(Color.black)
                             .padding(.vertical, 1)
                         
-                        Text(String(getAge(patient: patient)) + " años")
-                           .font(.system(size: 24, weight: .regular))
-                           .foregroundColor(Color.gray)
-                           .padding(.vertical, 1)
-
+                        // Add other patient details here
+                        Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 1)
+                        
+                        // Add other patient details here
+                        Text("Comunicación: " + patient.communicationStyle)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 2)
                     }
+                    Spacer()
                     
-                    
-                    Text("Grupo: " + patient.group)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 1)
+                    VStack{
+                        
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                // Handle settings action here
+                                showEditPatientView.toggle()
+                                
+                            }) {
+                                HStack{
+                                    Image(systemName: "gear")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Editar Perfil")
+                                }
+                                .padding(10)
+                                .frame(width: 157, height: 40)
+                            }
+                        }
+                        .padding(.bottom)
+                        .fixedSize(horizontal: false, vertical: true)
+                        
+                        
+                        
+                        if geo.size.width < 900 {
+                            VStack{
+                                HStack{
+                                    Spacer()
+                                    Button(action: {
+                                        showCommunicatorMenu.toggle()
+                                    }) {
+                                        
+                                        Text("Editar Comunicador")
+                                                .font(.headline)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                    }
+                                    .padding(10)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    .frame(width: 157, height: 40)
+                                }
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top, 10)
 
-                    // Add other patient details here
-                    Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 1)
-                    
-                    // Add other patient details here
-                    Text("Comunicación: " + patient.communicationStyle)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 2)
+                                //.padding()
+                                
+                                HStack{
+                                    Spacer()
+                                    Button(action: {
+                                        showCommunicatorMenu.toggle()
+                                    }) {
+                                        HStack {
+                                            Text("Comunicador")
+                                                .font(.headline)
+                                        }
+                                        
+                                        .padding(10)
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                    }
+                                    .frame(width: 157, height: 40)
+                                    //.padding()
+                                }
+                                .padding(.top, 20)
+                                
+                            }
+                        }
+                        else{
+                            HStack{
+                                Spacer()
+                                
+                                Button(action: {
+                                    showCommunicatorMenu.toggle()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "pencil")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        
+                                        Text("Editar Comunicador")
+                                            .font(.headline)
+                                        
+                                    }
+                                    .padding(10)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                }
+                                //.padding()
+                                
+                                
+                                Button(action: {
+                                    showCommunicatorMenu.toggle()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "message.fill")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        Text("Comunicador")
+                                            .font(.headline)
+                                        
+                                    }
+                                    
+                                    .padding(10)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                }
+                                //.padding()
+                            }
+                        }
+                        
+                        //}
+                        
+                        
+                        
+                    }
                 }
+                .padding(20)
+                .padding(.horizontal, 50)
                 Spacer()
                 
-                VStack{
-                    
-                    HStack{
-                        Spacer()
-                        Button(action: {
-                            // Handle settings action here
-                            showEditPatientView.toggle()
-                            
-                        }) {
-                            HStack{
-                                Image(systemName: "gear")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("Editar Perfil")
-                            }
-                            .padding(10)
-                        }
-                    }
-                    .padding(.bottom)
-                    
-                    HStack{
-                        Spacer()
-                        
-                        Button(action: {
-                            showCommunicatorMenu.toggle()
-                        }) {
-                            HStack {
-                                Image(systemName: "pencil")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                
-                                Text("Editar Comunicador")
-                                    .font(.headline)
-
-                            }
-                            .padding(10)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        }
-                        //.padding()
-                        
-                        
-                        Button(action: {
-                            showCommunicatorMenu.toggle()
-                        }) {
-                            HStack {
-                                Image(systemName: "message.fill")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("Comunicador")
-                                    .font(.headline)
-
-                            }
-                            
-                            .padding(10)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        }
-                        //.padding()
-                    }
-
-                }
             }
-            .padding(20)
-            .padding(.horizontal, 50)
+            .frame(maxHeight: 210)
+            //.background(.red)
             
             Divider()
             
@@ -376,7 +437,7 @@ struct PatientView: View {
 
                 }
             }
-            .padding()
+            .padding([.bottom, .trailing, .leading])
             
         }
         .sheet(isPresented: $showAddNoteView) {
