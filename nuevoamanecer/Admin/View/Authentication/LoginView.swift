@@ -11,8 +11,6 @@ struct LoginView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @State var email = ""
     @State var password = ""
-    @State private var contraseñaIncorrecta: Bool = false
-    @State private var usuarioNoExiste: Bool = false
     @State private var showAlert: Bool = false
 
     var body: some View {
@@ -42,11 +40,11 @@ struct LoginView: View {
                             authViewModel.loginUser(email: email, password: password)
                             
                             if(authViewModel.errorMessage != nil) {
-                                showAlert.toggle()
+                                //showAlert.toggle()
                             }
                         } else {
                             authViewModel.errorMessage = "Favor de completar todos los campos"
-                            showAlert.toggle()
+                            //showAlert.toggle()
                         }
                     }
                 }) {
@@ -63,7 +61,7 @@ struct LoginView: View {
                     Button("Ok") {}
                 }
             message: {
-                Text(authViewModel.errorMessage!)
+                //Text(authViewModel.errorMessage!)
             }
                 
                 /*
