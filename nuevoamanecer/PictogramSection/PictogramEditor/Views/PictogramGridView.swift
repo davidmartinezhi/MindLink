@@ -55,7 +55,7 @@ struct PictogramGridView: View {
     
     var body: some View {
         GeometryReader { geo in
-            let gridWidth: CGFloat = geo.size.width * 0.8
+            let gridWidth: CGFloat = geo.size.width * (geo.size.height > geo.size.width ? 0.6 : 0.8)
             let gridHeight: CGFloat = geo.size.height * 0.95
             let gridHorSpacing: Double = 25
             let gridVerSpacing: Double = 25
