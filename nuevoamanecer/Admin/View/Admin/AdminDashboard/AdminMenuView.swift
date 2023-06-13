@@ -74,7 +74,7 @@ struct AdminMenuView: View {
                                 Text("Seleccionar Imagen")
                             })
                             Button(action: {
-                                if (user.image == "placeholder") {
+                                if (user.image == "placeholder" || deletedImage) {
                                     showAlertNoImage.toggle()
                                 } else {
                                     deletedImage = true
@@ -280,7 +280,7 @@ struct AdminMenuView: View {
         .padding()
         .background(Color(.init(white: 0, alpha: 0.05))
             .ignoresSafeArea())
-        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: { print("HOLAAAAA") }) {
             ImagePicker(image: $upload_image)
         }
         .onDisappear{

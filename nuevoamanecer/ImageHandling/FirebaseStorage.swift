@@ -89,31 +89,4 @@ class FirebaseAlmacenamiento {
             return false
         }
     }
-    
-    func deleteFileReference(name: String) async -> Void {
-        var imageURL = URL(string: "")
-        var referencia: StorageReference
-        let storageRef = Storage.storage().reference(withPath: name)
-        
-        storageRef.downloadURL { (url, error) in
-            if error != nil {
-                print((error?.localizedDescription)!)
-                return
-            }
-            imageURL = url!
-        }
-        
-        if let thisImage = imageURL {
-            referencia = Storage.storage().reference(forURL: thisImage.absoluteString)
-        } else {
-            referencia = Storage.storage().reference(forURL: "https://")
-            print("No hay ninguna imagen con ese URL")
-        }
-        do {
-            try await referencia.delete()
-            
-        } catch {
-            print("Ha ocurrido un error y no se pudo eliminar la imagen")
-        }
-    }
 }
