@@ -28,7 +28,20 @@ struct CategoryModel: Identifiable, Codable, Comparable {
     }
     
     func buildColor(colorShift: Double) -> Color {
-        return Color(red: color.r + colorShift, green: color.g + colorShift, blue: color.b + colorShift)
+        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
+        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
+        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+
+        return Color(red: rShift, green: gShift, blue: bShift)
+    }
+    
+    func buildColorCatColor(colorShift: Double) -> CategoryColor {
+        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
+        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
+        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+
+        
+        return CategoryColor(r: rShift, g: gShift, b: bShift)
     }
     
     // isEqualTo: determina si dos instancias de CategoryModel son iguales, sin considerar sus ids. 

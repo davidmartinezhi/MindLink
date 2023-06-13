@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct PictogramGridArrowView: View {
-    var width: CGFloat
-    var height: CGFloat
     var systemName: String
     var isDisabled: Bool
     var arrowAction: () -> Void
@@ -22,22 +20,30 @@ struct PictogramGridArrowView: View {
     ]
     
     var body: some View {
-        Button(action: {
-            arrowAction()
-        }) {
+        GeometryReader { geo in
             VStack {
-                Image(systemName: systemName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(5)
-                    .foregroundColor(isDisabled ? colors["disabledArrow"] : colors["arrow"])
+                Spacer()
+                
+                Button(action: {
+                    arrowAction()
+                }) {
+                    VStack {
+                        Image(systemName: systemName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(10)
+                            .foregroundColor(isDisabled ? colors["disabledArrow"] : colors["arrow"])
+                    }
+                    .frame(width: geo.size.width * 0.7, height: geo.size.height * 0.6)
+                    .background(isDisabled ? colors["disabledBackground"] : colors["background"])
+                    .cornerRadius(30)
+                }
+                .allowsHitTesting(!isDisabled)
+                
+                Spacer()
             }
-            .padding()
-            .frame(width: width, height: height)
-            .background(isDisabled ? colors["disabledBackground"] : colors["background"])
-            .cornerRadius(30)
+            .frame(width: geo.size.width, height: geo.size.height)
         }
-        .allowsHitTesting(!isDisabled)
     }
 }
 
@@ -49,20 +55,21 @@ struct PictogramGridView: View {
     
     var body: some View {
         GeometryReader { geo in
-            let gridWidth: CGFloat = geo.size.width * 0.8
-            let gridHeight: CGFloat = geo.size.height * 0.9
-            let numColumns: Int = Int(gridWidth / pictoWidth)
-            let numRows: Int = Int(gridHeight / pictoHeight)
+            let gridWidth: CGFloat = geo.size.width * (geo.size.height > geo.size.width ? 0.6 : 0.8)
+            let gridHeight: CGFloat = geo.size.height * 0.95
+            let gridHorSpacing: Double = 25
+            let gridVerSpacing: Double = 25
+            let _numColumns: Int = Int((gridWidth + gridHorSpacing) / (pictoWidth + gridHorSpacing))
+            let _numRows: Int = Int((gridHeight + gridVerSpacing) / (pictoHeight + gridVerSpacing))
+            let numColumns: Int = _numColumns == 0 ? 1 : _numColumns
+            let numRows: Int = _numRows == 0 ? 1 : _numRows
             let numGridItems: Int = numColumns * numRows
             let numPages: Int = ceiling(pictograms.count, numGridItems) == 0 ? 1 : ceiling(pictograms.count, numGridItems)
                     
-            HStack(spacing: 5) {
+            HStack {
                 Spacer()
-                
-                PictogramGridArrowView(width: (geo.size.width - gridWidth) * 0.4,
-                                       height: gridHeight * 0.8,
-                                       systemName: "arrow.left",
-                                       isDisabled: realCurrPage(numPages: numPages) == 1) {
+
+                PictogramGridArrowView(systemName: "arrow.left", isDisabled: realCurrPage(numPages: numPages) == 1) {
                     currPage = realCurrPage(numPages: numPages)
                     currPage = currPage - 1
                 }
@@ -91,15 +98,15 @@ struct PictogramGridView: View {
                     }
                     .frame(width: gridWidth, height: gridHeight)
                     
+                    Spacer()
+                }
+                .overlay(alignment: .bottom){
                     Text("\(realCurrPage(numPages: numPages))/\(numPages)")
                         .font(.system(size: 20, weight: .bold, design: .default))
                         .padding()
                 }
                 
-                PictogramGridArrowView(width: (geo.size.width - gridWidth) * 0.4,
-                                       height: gridHeight * 0.8,
-                                       systemName: "arrow.right",
-                                       isDisabled: realCurrPage(numPages: numPages) == numPages) {
+                PictogramGridArrowView(systemName: "arrow.right", isDisabled: realCurrPage(numPages: numPages) == numPages) {
                     currPage = realCurrPage(numPages: numPages)
                     currPage = currPage + 1
                 }
