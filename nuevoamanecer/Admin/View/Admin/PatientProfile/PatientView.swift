@@ -168,7 +168,7 @@ struct PatientView: View {
                                 HStack{
                                     Spacer()
                                     Button(action: {
-                                        showCommunicatorMenu.toggle()
+                                        print("Editar")
                                     }) {
                                         
                                         Text("Editar Comunicador")
@@ -181,6 +181,7 @@ struct PatientView: View {
                                     .cornerRadius(10)
                                     .frame(width: 157, height: 40)
                                 }
+                                .background(NavigationLink("", destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")))
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.top, 10)
 
@@ -189,7 +190,7 @@ struct PatientView: View {
                                 HStack{
                                     Spacer()
                                     Button(action: {
-                                        showCommunicatorMenu.toggle()
+                                        print("Comunicador")
                                     }) {
                                         HStack {
                                             Text("Comunicador")
@@ -212,9 +213,7 @@ struct PatientView: View {
                             HStack{
                                 Spacer()
                                 
-                                Button(action: {
-                                    showCommunicatorMenu.toggle()
-                                }) {
+                                NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
                                     HStack {
                                         Image(systemName: "pencil")
                                             .resizable()
@@ -229,7 +228,7 @@ struct PatientView: View {
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                                 }
-                                //.padding()
+                                
                                 
                                 
                                 Button(action: {

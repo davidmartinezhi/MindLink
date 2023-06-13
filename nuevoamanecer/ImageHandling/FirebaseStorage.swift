@@ -62,4 +62,20 @@ class FirebaseAlmacenamiento {
             //self.imageURL = url!
         }
     }
+    
+    
+    func deleteFile(name: String) {
+        //Crear referencia
+        let referencia = Storage.storage().reference().child(name + ".jpg")
+        //Borrar archivo
+        referencia.delete { error in
+          if let error = error {
+            // Uh-oh, an error occurred!
+              print(error.localizedDescription)
+          } else {
+            // File deleted successfully
+              print("Archivo borrado con exito")
+          }
+        }
+    }
 }

@@ -5,7 +5,7 @@
 //  Created by Jose Arguelles Rios on 28/05/23.
 //
 
-
+/*
 import Foundation
 import FirebaseStorage
 import UIKit
@@ -50,4 +50,4 @@ class FirebaseAlmacenamiento {
         }
     }
 }
-
+*/
