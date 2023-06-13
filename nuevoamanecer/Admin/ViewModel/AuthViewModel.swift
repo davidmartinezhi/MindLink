@@ -120,6 +120,33 @@ class AuthViewModel: ObservableObject {
             self.fetchCurrentUser() // Recarga la información del usuario
         }
     }
+    
+    func updateUserImage(name: String?, image: String?) {
+        // Verificar si hay un usuario autenticado actualmente
+        guard let id = Auth.auth().currentUser?.uid else {
+            self.errorMessage = "No se encontró el id del usuario autenticado"
+            return
+        }
+
+        // Crear un objeto con la información actualizada
+        var updateData: [String: Any] = [:]
+
+        // Verificar si cada parámetro no es nil antes de agregarlo al objeto de actualización
+        if let name = name { updateData["name"] = name }
+        //if let isAdmin = isAdmin { updateData["isAdmin"] = isAdmin }
+        if let image = image { updateData["image"] = image }
+
+        // Llamar a la función de actualización de Firestore para el usuario con la identificación actual
+        Firestore.firestore().collection("User").document(id).updateData(updateData) { err in
+            if let err = err {
+                print(err)
+                self.errorMessage = "\(err)"
+                return
+            }
+            print("Se ha actualizado la información del usuario")
+            self.fetchCurrentUser() // Recarga la información del usuario
+        }
+    }
 
     
     

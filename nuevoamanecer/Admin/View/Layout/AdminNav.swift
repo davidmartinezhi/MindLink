@@ -32,7 +32,7 @@ struct AdminNav: View {
                       //      .padding()
                       //      .foregroundColor(Color(.label))
                     //}else{
-                    if(user.image == "") {
+                    if(user.image == "" || user.image == "placeholder") {
                         Image(systemName: "person.circle")
                             .resizable()
                             .scaledToFill()
