@@ -23,10 +23,10 @@ struct AuthView: View {
                             Image("logo_white")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(height: 300)
-                                .padding()
+                                .frame(height:300)
+                                .padding([.leading, .trailing, .top])
                             
-                            Text("“MindLink” – Creando conexiones para facilitar la comunicación entre terapeutas y niños.")
+                            Text("Creando conexiones para facilitar la comunicación entre terapeutas y niños.")
                                 .font(.title)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 80)
