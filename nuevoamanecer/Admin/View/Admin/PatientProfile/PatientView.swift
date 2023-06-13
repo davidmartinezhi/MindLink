@@ -167,44 +167,47 @@ struct PatientView: View {
                             VStack{
                                 HStack{
                                     Spacer()
-                                    Button(action: {
-                                        print("Editar")
-                                    }) {
+                                    NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
                                         
-                                        Text("Editar Comunicador")
+                                        HStack {
+                                            Text("Editar Comunicador")
                                                 .font(.headline)
-                                                .fixedSize(horizontal: false, vertical: true)
+                                            
+                                        }
+                                        .padding(10)
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                        .fixedSize(horizontal: false, vertical: true)
                                     }
-                                    .padding(10)
-                                    .background(Color.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
                                     .frame(width: 157, height: 40)
+                                    .fixedSize(horizontal: false, vertical: true)
                                 }
-                                .background(NavigationLink("", destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")))
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.top, 10)
+
 
                                 //.padding()
                                 
                                 HStack{
                                     Spacer()
-                                    Button(action: {
-                                        print("Comunicador")
-                                    }) {
+                                    NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
+                                        
                                         HStack {
                                             Text("Comunicador")
                                                 .font(.headline)
+                                            
                                         }
-                                        
                                         .padding(10)
                                         .background(Color.blue)
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
+                                        .fixedSize(horizontal: false, vertical: true)
                                     }
                                     .frame(width: 157, height: 40)
-                                    //.padding()
+                                    .fixedSize(horizontal: false, vertical: true)
                                 }
+                                .fixedSize(horizontal: false, vertical: true)
                                 .padding(.top, 20)
                                 
                             }
@@ -230,10 +233,7 @@ struct PatientView: View {
                                 }
                                 
                                 
-                                
-                                Button(action: {
-                                    showCommunicatorMenu.toggle()
-                                }) {
+                                NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
                                     HStack {
                                         Image(systemName: "message.fill")
                                             .resizable()
@@ -242,20 +242,13 @@ struct PatientView: View {
                                             .font(.headline)
                                         
                                     }
-                                    
                                     .padding(10)
                                     .background(Color.blue)
                                     .foregroundColor(.white)
                                     .cornerRadius(10)
                                 }
-                                //.padding()
                             }
                         }
-                        
-                        //}
-                        
-                        
-                        
                     }
                 }
                 .padding(20)
