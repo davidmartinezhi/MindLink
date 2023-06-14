@@ -20,12 +20,14 @@ struct AdminMenuView: View {
     @State private var alertMessage = ""
     
     @State private var showLogoutAlert = false
+    @State private var showAlertNoImage = false
     
     @State private var upload_image: UIImage?
     @State private var shouldShowImagePicker: Bool = false
     @State private var uploadData: Bool = false
     @State private var imageURL = URL(string: "")
     @State private var storage = FirebaseAlmacenamiento()
+    @State private var deletedImage = false
 
     init(authViewModel: AuthViewModel, user: User) {
         self.authViewModel = authViewModel
@@ -61,58 +63,77 @@ struct AdminMenuView: View {
             }
             
             VStack {
-                
-                //Imagen del niño
+                //Imagen del admin
                 VStack{
-                    Button() {
-                        shouldShowImagePicker.toggle()
-                    } label: {
-                        if let displayImage = self.upload_image {
-                            Image(uiImage: displayImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 128, height: 128)
-                                .cornerRadius(128)
-                                .padding(.horizontal, 20)
-                        } else {
-                                //No imagen
-                            if(user.image == "placeholder" || user.image == "") {
-                                    ZStack{
-                                        Image(systemName: "person.circle")
-                                            .font(.system(size: 100))
-                                        //.foregroundColor(Color(.label))
-                                            .foregroundColor(.gray)
-                                        
-                                        Image(systemName: "plus.circle.fill")
-                                            .font(.system(size: 25))
-                                            .offset(x: 35, y: 40)
-                                            .foregroundColor(.blue)
-                                    }
-                                    .padding(.horizontal, 20)
-                                }
+                        Menu {
+                            Button(action: {
+                                shouldShowImagePicker.toggle()
+                                deletedImage = false
                                 
-                                //Imagen previamente subida
-                                else{
-                                    
-                                    ZStack{
-                                        KFImage(URL(string: user.image))
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 128, height: 128)
-                                            .cornerRadius(128)
-                                            .padding(.horizontal, 20)
-                                        
-                                        Image(systemName: "pencil.circle.fill")
-                                            .font(.system(size: 40))
-                                            .offset(x: 40, y: 40)
-                                            .foregroundColor(.blue)
-                                    }
-                                    .padding(.horizontal, 20)
+                            }, label: {
+                                Text("Seleccionar Imagen")
+                            })
+                            Button(action: {
+                                if (user.image == "placeholder" || deletedImage) {
+                                    showAlertNoImage.toggle()
+                                } else {
+                                    deletedImage = true
                                 }
+                            }, label: {
+                                Text("Eliminar Imagen")
+                            })
+                        } label: {
+                            if let displayImage = self.upload_image {
+                                Image(uiImage: displayImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 128, height: 128)
+                                    .cornerRadius(128)
+                                    .padding(.horizontal, 20)
+                            } else {
+                                    //No imagen
+                                if(user.image == "placeholder" || user.image == "" || deletedImage) {
+                                        ZStack{
+                                            Image(systemName: "person.circle")
+                                                .font(.system(size: 100))
+                                            //.foregroundColor(Color(.label))
+                                                .foregroundColor(.gray)
+                                            
+                                            Image(systemName: "plus.circle.fill")
+                                                .font(.system(size: 25))
+                                                .offset(x: 35, y: 40)
+                                                .foregroundColor(.blue)
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                                    
+                                    //Imagen previamente subida
+                                    else{
+                                        ZStack{
+                                            KFImage(URL(string: user.image))
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 128, height: 128)
+                                                .cornerRadius(128)
+                                                .padding(.horizontal, 20)
+                                            /* # Creo que es mejor quitar el lapiz azul cuando ya hay una foto de perfil #
+                                            Image(systemName: "pencil.circle.fill")
+                                                .font(.system(size: 50))
+                                                .offset(x: 35, y: 40)
+                                                .foregroundColor(.blue)
+                                             */
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                            }
                         }
-                    }
-                    //Spacer()
                 }
+                .alert("Error", isPresented: $showAlertNoImage){
+                    Button("Ok") {}
+                }
+            message: {
+                Text("Este perfil no cuenta con imagen")
+            }
                 .frame(maxHeight: 150)
                 
                 /*
@@ -259,7 +280,7 @@ struct AdminMenuView: View {
         .padding()
         .background(Color(.init(white: 0, alpha: 0.05))
             .ignoresSafeArea())
-        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: { print("HOLAAAAA") }) {
             ImagePicker(image: $upload_image)
         }
         .onDisappear{
@@ -267,6 +288,10 @@ struct AdminMenuView: View {
                 self.name = name
                 
                 authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder")
+                //Si se presiono el boton de eliminar imagen y despues guardar, se borra la imagen de la base de datos
+                if(deletedImage) {
+                    storage.deleteFile(name: user.name + "admin_profile_picture")
+                }
             }
         }
     }
