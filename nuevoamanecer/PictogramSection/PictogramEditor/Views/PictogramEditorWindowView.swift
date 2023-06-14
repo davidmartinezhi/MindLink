@@ -17,7 +17,7 @@ func buildImageName(catName: String, pictoName: String) -> String {
 struct PictogramEditorWindowView: View {
     @State var pictoModel: PictogramModel
     let pictoModelCapture: PictogramModel
-    var isNewPicto: Bool
+    @Binding var isNewPicto: Bool
     @Binding var isEditingPicto: Bool
     
     @ObservedObject var pictoVM: PictogramViewModel
@@ -31,10 +31,10 @@ struct PictogramEditorWindowView: View {
     @State var temporaryUIImage: UIImage? = nil
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
             
-    init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
+    init(pictoModel: PictogramModel?, isNewPicto: Binding<Bool>, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
-        self.isNewPicto = isNewPicto
+        _isNewPicto = isNewPicto
         _isEditingPicto = isEditingPicto
         self.pictoVM = pictoVM
         self.catVM = catVM
@@ -46,18 +46,12 @@ struct PictogramEditorWindowView: View {
         
         GeometryReader { geo in
             VStack(spacing: 30) {
-                HStack{
-                    Spacer()
-                    Text(isNewPicto ? "Nuevo Pictograma" : pictoModelCapture.name)
-                        .font(.system(size: 35, weight: .bold))
-                    Spacer()
-                }
-                
+                Text(isNewPicto ? "Nuevo Pictograma" : pictoModelCapture.name)
+                    .font(.system(size: 35, weight: .bold))
+
                 HStack(spacing: 30) {
-                    VStack {
-                        PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
-                            .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
-                    }
+                    PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
+                        .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
                                         
                     VStack(alignment: .leading) {
                         Text("Nombre" + (pictoModel.name == pictoModelCapture.name ? "" : "*"))
@@ -78,7 +72,6 @@ struct PictogramEditorWindowView: View {
                             }
                             .padding()
                             .frame(height: 50)
-                            //.background(.gray)
                             .background(.blue)
                             .cornerRadius(10)
                         }
@@ -89,99 +82,16 @@ struct PictogramEditorWindowView: View {
                     }
                 }
                 
-                HStack{
+                HStack {
                     
                     //Cancel
-                    Button(action: {
+                    ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
                         isEditingPicto = false
-                    }){
-                        HStack {
-                            Text("Cancelar")
-                                .font(.headline)
-                            
-                            
-                            Image(systemName: "xmark.circle.fill")
-                                .padding(.leading)
-                        }
                     }
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(10)
-                    .foregroundColor(.white)
                     
-                    
-                    //Save
-                    
-                    //Dissabled button
-                    if(!(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
-                        
-                        Button(action:{
-                            print("No activo")
-                        }){
-                            HStack {
-                                Text("Guardar")
-                                    .font(.headline)
-                                
-                                
-                                Image(systemName: "arrow.right.circle.fill")
-                                    .padding(.leading)
-                            }
-                        }
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                        .foregroundColor(.white)
-                    }
-                    else{
-                        
-                        Button(action:{
-                            Task {
-                                if temporaryUIImage != nil {
-                                    let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
-                                    if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
-                                        self.pictoModel.imageUrl = downloadUrl.absoluteString
-                                    } else {
-                                        // Error al subir imagen.
-                                    }
-                                }
-
-                                if isNewPicto {
-                                    pictoVM.addPicto(pictoModel: self.pictoModel) {error in
-                                        if error != nil {
-                                            showErrorMessage = true
-                                        } else {
-                                            pickedCategoryId = pictoModel.categoryId
-                                            isEditingPicto = false
-                                        }
-                                    }
-                                } else {
-                                    pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
-                                        if error != nil {
-                                            showErrorMessage = true
-                                        } else {
-                                            isEditingPicto = false
-                                        }
-                                    }
-                                }
-                            }
-
-                        }){
-                            HStack {
-                                Text("Guardar")
-                                    .font(.headline)
-                                
-                                Image(systemName: "arrow.right.circle.fill")
-                                    .padding(.leading)
-                            }
-                        }
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                        .foregroundColor(.white)
-                        
-                    }
-                    /*
-                    ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
+                    // Save
+                    let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))
+                    ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: saveButtonIsDisabled) {
                         Task {
                             if temporaryUIImage != nil {
                                 let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
@@ -191,7 +101,7 @@ struct PictogramEditorWindowView: View {
                                     // Error al subir imagen.
                                 }
                             }
-
+                            
                             if isNewPicto {
                                 pictoVM.addPicto(pictoModel: self.pictoModel) {error in
                                     if error != nil {
@@ -212,32 +122,10 @@ struct PictogramEditorWindowView: View {
                             }
                         }
                     }
-                    .padding()
-                    .cornerRadius(10)
-                    */
                 }
-                
-                
-
             }
-            .frame(width: geo.size.width, height: geo.size.height)
-            .background(.white)
             .padding()
-            //.border(.black, width: 5)
-            
-            .overlay(alignment: .topLeading) {
-                Button {
-                    isEditingPicto = false
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 25)
-                        .foregroundColor(.black)
-                        .padding(40)
-                }
-            }
-             
+            .frame(width: geo.size.width, height: geo.size.height)
             .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
             .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
                 ImagePicker(image: $temporaryUIImage)

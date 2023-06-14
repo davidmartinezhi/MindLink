@@ -38,68 +38,55 @@ struct Communicator: View {
         pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
         
         GeometryReader { geo in
-            ZStack {
-                VStack(spacing: 0) {
-                    HStack {
-                        /*
-                        ButtonView(text: "Iniciar Sesión", color: .blue) {
-                            //vista de autenticacion
-                        }
-                         */
-                        SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
-                        
-                        Spacer()
-                        
-                        
-                        
-                        ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
-                            //modal con opciones de velocidad de pronunciacion y genero de voz
-                            isConfiguring = true
-                        }
-                        .font(.headline)
-                        .sheet(isPresented: $isConfiguring) {
-                            VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
-                        }
-                        
-                        LockView(isLocked: $isLocked)
-                    }
-                    .frame(height: 40)
-                    .padding(.vertical)
-                    .padding(.horizontal, 70)
-                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
-                    
-                    HStack(spacing: 15) {
-                        Text("Categorias")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(Color.gray)
-                        Divider()
+            VStack(spacing: 0) {
+                HStack {
 
-                        HStack{
-                            CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                        }
-                        //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
-                        .padding([.leading, .top, .bottom])
-                        Spacer()
+                    SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    
+                    Spacer()
+                    
+                    ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
+                        //modal con opciones de velocidad de pronunciacion y genero de voz
+                        isConfiguring = true
                     }
-                    .frame(maxHeight: 60)
-                    .padding(.vertical, 20)
-                    .padding(.horizontal, 70)
+                    .font(.headline)
+                    .sheet(isPresented: $isConfiguring) {
+                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                    }
                     
-                    Rectangle()
-                        .frame(height: 20.0, alignment: .bottom)
-                        .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
-                    
-                    
-                    
-                    
-                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    LockView(isLocked: $isLocked)
                 }
+                .frame(height: 40)
+                .padding(.vertical)
+                .padding(.horizontal, 70)
+                
+                HStack(spacing: 15) {
+                    Text("Categorias")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color.gray)
+                    Divider()
+
+                    HStack{
+                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                    }
+                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .padding([.leading, .top, .bottom])
+                    Spacer()
+                }
+                .frame(maxHeight: 60)
+                .padding(.vertical, 20)
+                .padding(.horizontal, 70)
+                
+                Rectangle()
+                    .frame(height: 20.0, alignment: .bottom)
+                    .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                
+                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            
         }
-        .onReceive(catVM.objectWillChange) { _ in
-             if pickedCategoryId.isEmpty || !userHasChosenCat {
+        .onChange(of: catVM.categories) { _ in
+             if pickedCategoryId.isEmpty && !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
          }

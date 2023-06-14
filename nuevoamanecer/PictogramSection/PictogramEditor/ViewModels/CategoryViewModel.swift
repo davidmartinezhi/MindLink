@@ -23,7 +23,7 @@ enum CatError: Error, LocalizedError {
 // CategoryViewModel: interface that provides an access to a Firestore collection of categories, found in
 // in the path given in the parameter 'collectionPath' of the class' initializer.
 class CategoryViewModel: ObservableObject {
-    @Published private var categories: [String:CategoryModel] = [:] // [categoryId:CategoryModel]
+    @Published var categories: [String:CategoryModel] = [:] // [categoryId:CategoryModel]
     private var sortedCategories: SortedArray<CategoryModel> = SortedArray()
     private var listenerHandle: ListenerRegistration? = nil
     private var catCollection: CollectionReference

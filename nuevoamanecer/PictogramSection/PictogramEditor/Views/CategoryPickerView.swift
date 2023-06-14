@@ -23,15 +23,15 @@ struct CategoryPickerView: View {
                             userHasChosenCat = true 
                         }
                     } label: {
-                        let categoryBGColor: CategoryColor = catModel.buildColorCatColor(colorShift: -0.2)
-                        let categoryFGColor: Color = ColorMaker.buildforegroundTextColor(catColor: categoryBGColor)
+                        // let categoryBGColor: CategoryColor = catModel.build
+                        // let categoryFGColor: Color = ColorMaker.buildforegroundTextColor(catColor: categoryBGColor)
                         
                         Text(catModel.name)
                             .frame(minWidth: 60)
                             .padding()
                             .bold()
-                            .foregroundColor(pickedCategoryId == catModel.id! ? categoryFGColor : .black)
-                            .background(pickedCategoryId == catModel.id! ? catModel.buildColor(colorShift: -0.2) : .white)
+                            .foregroundColor(pickedCategoryId == catModel.id! ? ColorMaker.buildforegroundTextColor(catColor: catModel.color) : .black)
+                            .background(pickedCategoryId == catModel.id! ? catModel.buildColor() : .white)
                             .cornerRadius(10)
                     }
                 }

@@ -29,6 +29,7 @@ struct SearchBarView: View {
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.gray)
+                        .padding(.trailing, 20)
                 }
             }
         }
@@ -42,6 +43,5 @@ struct SearchBarView: View {
                 .stroke(Color.gray, lineWidth: 1)
         }
         */
-         
     }
 }

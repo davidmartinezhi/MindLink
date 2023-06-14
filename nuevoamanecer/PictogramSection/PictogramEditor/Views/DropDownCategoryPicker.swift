@@ -13,6 +13,7 @@ struct DropDownCategoryPicker: View {
     @State var pickedCatModel: CategoryModel?
     var itemWidth: CGFloat
     var itemHeight: CGFloat
+    var textSize: Double = 15
     
     @State private var listWindowHeight: CGFloat = 0
     
@@ -38,10 +39,10 @@ struct DropDownCategoryPicker: View {
                     .frame(width: 10, height: itemHeight)
                     .foregroundColor(pickedCatModel == nil ? bgColor : pickedCatModel!.buildColor())
                 Text(pickedCatModel == nil ? "Categoría" : pickedCatModel!.name)
-                    .font(.system(size: itemWidth * 0.08, weight: .bold))
+                    .font(.system(size: textSize, weight: .bold))
                     .foregroundColor(.black)
                 Spacer()
-                Image(systemName: listWindowHeight == 0 ? "chevron.down" : "chevron.up")
+                Image(systemName: listWindowHeight == 0 ? "chevron.up" : "chevron.down")
             }
             .padding(.trailing, 10)
             .frame(width: itemWidth, height: itemHeight)
@@ -62,7 +63,7 @@ struct DropDownCategoryPicker: View {
                             } label: {
                                 HStack {
                                     Text(catModel.name)
-                                        .font(.system(size: itemWidth * 0.08, weight: .bold))
+                                        .font(.system(size: textSize, weight: .bold))
                                         .foregroundColor(ColorMaker.buildforegroundTextColor(catColor: catModel.color))
                                     Spacer()
                                     if catModel.id! == pickedCategoryId {

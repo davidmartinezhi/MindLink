@@ -10,7 +10,7 @@ import SwiftUI
 struct LockView: View {
     @Binding var isLocked: Bool
     var width: CGFloat = 150
-    var height: CGFloat = 50
+    var height: CGFloat = 30
     
     var longPressDuration: Double = 3 // Segundos
     @State var longPressProgress: Double = 0
@@ -52,13 +52,11 @@ struct LockView: View {
     
     private var lockViewContent: some View {
         
-        
         ZStack {
             Rectangle()
                 .frame(width: width, height: height)
                 .foregroundColor(.white)
                 .cornerRadius(10)
-                
                 .overlay(alignment: .leading){
                     Rectangle()
                         .frame(width: width * (longPressProgress / longPressDuration), height: height)
@@ -66,19 +64,15 @@ struct LockView: View {
                         .cornerRadius(10)
                 }
             
-            HStack{
+            HStack(spacing: 5) {
                 Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
                     .resizable()
-                    .frame(width: 20, height: 20)
+                    .aspectRatio(contentMode: .fit)
                 
-                if(isLocked){
-                    Text("Desbloquear")
-                }else{
-                    Text("Bloquear")
-                }
-                
+                Text(isLocked ? "Desbloquear" : "Bloquear")
             }
             .padding(10)
+            .frame(width: width, height: height)
             .background(!isLocked ? Color.blue : nil)
             .foregroundColor(!isLocked ? Color.white : Color.blue)
             .cornerRadius(10)
