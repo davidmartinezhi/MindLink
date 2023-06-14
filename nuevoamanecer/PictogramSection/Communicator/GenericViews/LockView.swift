@@ -10,7 +10,7 @@ import SwiftUI
 struct LockView: View {
     @Binding var isLocked: Bool
     var width: CGFloat = 150
-    var height: CGFloat = 30
+    var height: CGFloat = 40
     
     var longPressDuration: Double = 3 // Segundos
     @State var longPressProgress: Double = 0
