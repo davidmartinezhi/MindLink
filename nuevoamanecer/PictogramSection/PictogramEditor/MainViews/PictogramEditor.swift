@@ -18,6 +18,8 @@ struct PictogramEditor: View {
     @State var searchText: String = "" // Texto de búsqueda
     @State var pickedCategoryId: String = "" // ID de la categoría seleccionada
     @State var isDeleting: Bool = false // Estado de eliminación
+    @State var showDeleteAlert: Bool = false
+    @State var pictoModelToDelete: PictogramModel? = nil
     @State var isNewPicto: Bool = false // Si se está creando un nuevo pictograma
     @State var isNewCat: Bool = false // Si se está creando una nueva categoría
     @State var pictoBeingEdited: PictogramModel? = nil // Pictograma que se está editando
@@ -89,6 +91,7 @@ struct PictogramEditor: View {
                     
                 }
                 .frame(height: 40)
+                .background(Color.white)
                 .padding(.vertical)
                 .padding(.horizontal, 70)
                 
@@ -123,7 +126,8 @@ struct PictogramEditor: View {
                     
                     CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
-                .frame(maxHeight: 60)
+                .frame(height: 60)
+                .background(Color.white)
                 .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                
@@ -135,21 +139,38 @@ struct PictogramEditor: View {
                 PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .sheet(isPresented: $isEditingPicto) {
+            .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
                 PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
-
             }
-            .sheet(isPresented: $isEditingCat) {
+            .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
                 CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
             }
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Alerta de error
+            .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
+            .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {
+                if pictoModelToDelete != nil {
+                    Task {
+                        if !pictoModelToDelete!.imageUrl.isEmpty {
+                            _  = await imageHandler.deleteImage(donwloadUrl: pictoModelToDelete!.imageUrl)
+                        }
+                        pictoVM.removePicto(pictoId: pictoModelToDelete!.id!) { error in
+                            if error != nil {
+                                showErrorMessage = true
+                            } else {
+                                isDeleting = false
+                            }
+                        }
+                    }
+                } else {
+                    // El pictograma a eliminar está vacío. 
+                }
+            }
         }
         // Si la categoría seleccionada es nula y no ha sido elegida por el usuario, seleccionamos la primera categoría
         .onChange(of: catVM.categories) { _ in
              if pickedCategoryId.isEmpty || !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
-         }
+        }
     }
         
     
@@ -161,18 +182,8 @@ struct PictogramEditor: View {
             pictoButtons.append(
                 Button(action: {
                     if isDeleting == true {
-                        Task {
-                            if !pictoModel.imageUrl.isEmpty {
-                                _  = await imageHandler.deleteImage(donwloadUrl: pictoModel.imageUrl)
-                            }
-                            pictoVM.removePicto(pictoId: pictoModel.id!) { error in
-                                if error != nil {
-                                    showErrorMessage = true
-                                } else {
-                                    isDeleting = false
-                                }
-                            }
-                        }
+                        pictoModelToDelete = pictoModel
+                        showDeleteAlert = true
                     } else {
                         isNewPicto = false
                         pictoBeingEdited = pictoModel
