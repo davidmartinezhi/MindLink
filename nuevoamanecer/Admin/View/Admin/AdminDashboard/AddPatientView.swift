@@ -34,6 +34,8 @@ struct AddPatientView: View {
     
     @State private var uploadPatient: Bool = false
     
+    @State var isSaving : Bool = false
+    
     func loadImageFromFirebase(name:String) {
         let storageRef = Storage.storage().reference(withPath: name)
         
@@ -140,6 +142,9 @@ struct AddPatientView: View {
                 
                 //botón de crear usuario
                 Button(action: {
+                    
+                    isSaving = true
+                    
                     //Subir imagen a firebase
                     if let thisImage = self.upload_image {
                         Task {
@@ -184,6 +189,7 @@ struct AddPatientView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .foregroundColor(.white)
+                .allowsHitTesting(!isSaving)
                 .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
                     Button("Ok") {}
                 }

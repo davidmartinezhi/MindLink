@@ -17,6 +17,8 @@ struct AddNoteView: View {
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
+    @State var isSaving : Bool = false
+    
     var body: some View {
         VStack {
             Form {
@@ -50,6 +52,7 @@ struct AddNoteView: View {
                 
                 //Save
                 Button(action: {
+                    isSaving = true
                     if noteTitle.isEmpty || noteContent.isEmpty {
                         self.alertTitle = "Faltan campos"
                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
@@ -92,6 +95,7 @@ struct AddNoteView: View {
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(10)
+                .allowsHitTesting(!isSaving)
                 .alert(isPresented: $showingAlert) {
                     Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
