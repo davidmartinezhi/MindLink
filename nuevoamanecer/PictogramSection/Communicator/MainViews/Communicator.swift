@@ -61,8 +61,8 @@ struct Communicator: View {
                     
                     LockView(isLocked: $isLocked)
                 }
-                .background(Color.white)
                 .frame(height: 40)
+                .background(Color.white)
                 .padding(.vertical)
                 .padding(.horizontal, 70)
                 
@@ -84,7 +84,8 @@ struct Communicator: View {
                     .padding([.leading, .top, .bottom])
                     Spacer()
                 }
-                .frame(maxHeight: 60)
+                .frame(height: 60)
+                .background(Color.white)
                 .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                 
