@@ -76,15 +76,15 @@ struct Communicator: View {
                         HStack{
                             CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                         }
-                        //.background(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                        //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
                         .padding([.leading, .top, .bottom])
                         Spacer()
                     }
                     //.padding(.vertical)
-                    .padding(.horizontal, 60)
+                    .padding(.horizontal, 70)
                     
                     Rectangle()
-                        .frame(height: 10.0, alignment: .bottom)
+                        .frame(height: 20.0, alignment: .bottom)
                         .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                     
                     
