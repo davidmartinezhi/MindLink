@@ -25,7 +25,7 @@ struct DeletePatientView: View {
                     
                     Spacer()
                     
-                    Image(systemName: "xmark.circle.fill")
+                    Image(systemName: "trash")
                         .font(.system(size: 16))
                 }
             }

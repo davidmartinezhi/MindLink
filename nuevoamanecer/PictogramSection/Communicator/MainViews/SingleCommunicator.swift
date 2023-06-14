@@ -15,8 +15,14 @@ struct SingleCommunicator: View {
     @State var talkingSpeed: String = "Normal"
     
     @State var isLocked: Bool = false
+    @Binding var hiddenNavBar: Bool
+    
+
     
     var body: some View {
         Communicator(pictoCollectionPath: pictoCollectionPath, catCollectionPath: catCollectionPath, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked)
+            .onAppear{
+                hiddenNavBar = true
+            }
     }
 }

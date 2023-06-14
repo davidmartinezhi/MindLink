@@ -77,8 +77,11 @@ struct AdminView: View {
         }
         
         filteredPatients = searchingWithFilters.filter{ patient in
+            let firstAndLastName = patient.firstName + " " + patient.lastName
+            let firstAndLastNameComponent = firstAndLastName.lowercased()
             let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
             let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
+            
             
             var firstNameMatch = false
             var lastNameMatch = false
@@ -99,7 +102,7 @@ struct AdminView: View {
                 }
             }
 
-            return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased())
+            return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased())
         }
     }
     
@@ -118,6 +121,8 @@ struct AdminView: View {
         //filtramos por busqueda en search bar
         if(search != ""){
             searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstAndLastName = patient.firstName + " " + patient.lastName
+                let firstAndLastNameComponent = firstAndLastName.lowercased()
                 let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
                 let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
                 
@@ -140,7 +145,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased())
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased())
             }
         }
         
@@ -171,6 +176,8 @@ struct AdminView: View {
         //filtramos por palabras en el searchbar
         if(search != ""){
             searchingWithFilters = searchingWithFilters.filter{ patient in
+                let firstAndLastName = patient.firstName + " " + patient.lastName
+                let firstAndLastNameComponent = firstAndLastName.lowercased()
                 let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
                 let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
                 
@@ -193,7 +200,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased())
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased())
             }
         }
         
@@ -267,9 +274,7 @@ struct AdminView: View {
                          
                          
                          //Boton para ACCEDER A COMUNICADOR BASE
-                         Button(action: {
-                             showAddPatient.toggle()
-                         }) {
+                         NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories", hiddenNavBar: $hiddenNavBar)) {
                              HStack {
                                  Image(systemName: "message.fill")
                                      .resizable()
@@ -277,11 +282,11 @@ struct AdminView: View {
                                  Text("Comunicador base")
                                      .font(.headline)
                              }
+                             .padding(10)
+                             .background(Color.blue)
+                             .foregroundColor(.white)
+                             .cornerRadius(10)
                          }
-                         .padding(10)
-                         .background(Color.blue)
-                         .foregroundColor(.white)
-                         .cornerRadius(10)
                      }
                      .padding(.horizontal, 50)
                      .padding(.vertical, 20)

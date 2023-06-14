@@ -143,7 +143,7 @@ struct PictogramEditor: View {
         }
         // Si la categoría seleccionada es nula y no ha sido elegida por el usuario, seleccionamos la primera categoría
         .onChange(of: catVM.categories) { _ in
-             if pickedCategoryId.isEmpty && !userHasChosenCat {
+             if pickedCategoryId.isEmpty || !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
          }

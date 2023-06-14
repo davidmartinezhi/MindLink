@@ -56,6 +56,7 @@ struct Communicator: View {
                     
                     LockView(isLocked: $isLocked)
                 }
+                .background(Color.white)
                 .frame(height: 40)
                 .padding(.vertical)
                 .padding(.horizontal, 70)
@@ -69,7 +70,7 @@ struct Communicator: View {
                     HStack{
                         CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                     }
-                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .background(Color.white)
                     .padding([.leading, .top, .bottom])
                     Spacer()
                 }
@@ -86,7 +87,7 @@ struct Communicator: View {
             }
         }
         .onChange(of: catVM.categories) { _ in
-             if pickedCategoryId.isEmpty && !userHasChosenCat {
+             if pickedCategoryId.isEmpty || !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
          }

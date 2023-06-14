@@ -191,7 +191,7 @@ struct PatientView: View {
                                 
                                 HStack{
                                     Spacer()
-                                    NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
+                                    NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories")) {
                                         
                                         HStack {
                                             Text("Comunicador")
@@ -233,7 +233,7 @@ struct PatientView: View {
                                 }
                                 
                                 
-                                NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
+                                NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories")) {
                                     HStack {
                                         Image(systemName: "message.fill")
                                             .resizable()
