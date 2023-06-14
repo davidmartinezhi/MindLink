@@ -45,97 +45,87 @@ struct PictogramEditor: View {
         pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
         
         GeometryReader { geo in
-            ZStack {
-                VStack(spacing: 0) {
-                    // Barra superior con botones para eliminar y agregar pictogramas
-                    HStack {
-                        Spacer()
-                        ButtonView(text: isDeleting ?  "Cancelar" : "Eliminar Pictograma", color: .red, isDisabled: pictosInScreen.count == 0) {
-                            isDeleting.toggle()
-                        }
-                        
-                        
-                        let noCategories: Bool = catVM.getCats().count == 0
-                        
-                        ButtonView(text: noCategories ? "Crea una categoría" : "Agregar Pictograma", color: .blue, isDisabled: noCategories) {
-                            isNewPicto = true
-                            pictoBeingEdited = nil
-                            isEditingPicto = true
-                        }
+            VStack(spacing: 0) {
+                // Barra superior con botones para eliminar y agregar pictogramas
+                HStack {
+                    SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+
+                    Spacer()
+                    
+                    ButtonView(text: isDeleting ?  "Cancelar" : "Eliminar Pictograma", color: .red, isDisabled: pictosInScreen.count == 0) {
+                        isDeleting.toggle()
                     }
-                    .frame(height: 40)
-                    .padding(.vertical)
-                    .padding(.horizontal, 60)
-                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
                     
-                    // Barra de búsqueda, selector de categoría y botones para editar y agregar categorías
-                    HStack(spacing: 25) {
-                        SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
-                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                        let editCatButtonsColor: Color = currCat != nil ? ColorMaker.buildforegroundTextColor(catColor: currCat!.color) : .black
-                        let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
-                        Button { // Botón para editar
-                            isNewCat = false
-                            catBeingEdited = catVM.getCat(catId: pickedCategoryId)
-                            isEditingCat = true
-                        } label: {
-                            Image(systemName: "pencil")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 40)
-                                .foregroundColor(editCatButtonsColor)
-                                .overlay(alignment: .center) {
-                                    if editCatButtonisDisabled{
-                                        XOverCircleView(diameter: 20)
-                                    }
-                                }
-                        }
-                        .allowsHitTesting(!editCatButtonisDisabled)
-                        Button { // Botón para agregar
-                            isNewCat = true
-                            catBeingEdited = nil
-                            isEditingCat = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 40)
-                                .foregroundColor(editCatButtonsColor)
-                        }
+                    let noCategories: Bool = catVM.getCats().count == 0
+                    ButtonView(text: noCategories ? "Crea una categoría" : "Agregar Pictograma", color: .blue, isDisabled: noCategories) {
+                        isNewPicto = true
+                        pictoBeingEdited = nil
+                        isEditingPicto = true
                     }
-                    .padding(.vertical)
-                    .padding(.horizontal, 60)
-                    .background(currCat?.buildColor() ?? Color(red: 0.9, green: 0.9, blue: 0.9))
-                    /*.overlay(alignment: .bottom) {
-                        Rectangle()
-                            .frame(width: geo.size.width, height: 0.5)
-                            .foregroundColor(.black)
-                    }*/
-                    
-                    Divider()
-                    
-                    // Cuadrícula de pictogramas
-                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .padding(.horizontal, 70)
                 
-                // Si se está editando un pictograma o una categoría, se muestra la vista de edición correspondiente
-                if isEditingPicto || isEditingCat {
-                    Button {
-                        isEditingCat = false
-                        isEditingPicto = false
+                // Barra de búsqueda, selector de categoría y botones para editar y agregar categorías
+                HStack(spacing: 25) {
+                    Text("Categorias")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(Color.gray)
+                    
+                    CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                    
+                    Spacer()
+                    
+                    let editCatButtonsColor: Color = currCat != nil ? ColorMaker.buildforegroundTextColor(catColor: currCat!.color) : .black
+                    let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
+                    Button { // Botón para editar
+                        isNewCat = false
+                        catBeingEdited = catVM.getCat(catId: pickedCategoryId)
+                        isEditingCat = true
                     } label: {
-                        Color(.gray)
-                            .opacity(0.5)
+                        Image(systemName: "pencil")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40)
+                            .foregroundColor(editCatButtonsColor)
+                            .overlay(alignment: .center) {
+                                if editCatButtonisDisabled{
+                                    XOverCircleView(diameter: 20)
+                                }
+                            }
                     }
-                    if isEditingPicto {
-                        PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
-                            .frame(width: geo.size.width * 0.7, height: 600)
-                    } else if isEditingCat {
-                        CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
-                            .frame(width: geo.size.width * 0.7)
+                    .allowsHitTesting(!editCatButtonisDisabled)
+                    
+                    Button { // Botón para agregar
+                        isNewCat = true
+                        catBeingEdited = nil
+                        isEditingCat = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40)
+                            .foregroundColor(editCatButtonsColor)
                     }
                 }
+                .padding(.top)
+                .padding(.horizontal, 70)
+                .frame(height: 85)
+                
+                Rectangle()
+                    .frame(height: 20.0, alignment: .bottom)
+                    .foregroundColor(currCat?.buildColor() ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                
+                // Cuadrícula de pictogramas
+                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .sheet(isPresented: $isEditingPicto) {
+                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                    .frame(width: geo.size.width * 0.7, height: 600)
+            }
+            .sheet(isPresented: $isEditingCat) {
+                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                    .frame(width: geo.size.width * 0.7)
             }
             .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Alerta de error
         }

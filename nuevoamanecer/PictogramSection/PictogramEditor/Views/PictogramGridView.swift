@@ -51,6 +51,7 @@ struct PictogramGridView: View {
     let pictograms: [Button<PictogramView>]
     let pictoWidth: CGFloat
     let pictoHeight: CGFloat
+    let isBeingFiltered: Bool
     @State private var currPage: Int = 1
     
     var body: some View {
@@ -97,6 +98,15 @@ struct PictogramGridView: View {
                         }
                     }
                     .frame(width: gridWidth, height: gridHeight)
+                    .overlay(alignment: .center) {
+                        if pictograms.count == 0 {
+                            Text(isBeingFiltered ? "Sin resultados" : "No hay pictogramas")
+                                .font(.system(size: 25, weight: .bold))
+                                .frame(width: gridWidth, height: gridHeight)
+                                .background(.white)
+                                .cornerRadius(10)
+                        }
+                    }
                     
                     Spacer()
                 }

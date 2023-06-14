@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryEditorWindowView: View {
     @State var catModel: CategoryModel
     let catModelCapture: CategoryModel
-    var isNewCat: Bool
+    @Binding var isNewCat: Bool
     @Binding var isEditingCat: Bool
     
     @ObservedObject var pictoVM: PictogramViewModel
@@ -20,10 +20,10 @@ struct CategoryEditorWindowView: View {
     
     @State var showErrorMessage: Bool = false
     
-    init(catModel: CategoryModel?, isNewCat: Bool, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
+    init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
         self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
-        self.isNewCat = isNewCat
+        _isNewCat = isNewCat
         _isEditingCat = isEditingCat
         self.pictoVM = pictoVM
         self.catVM = catVM
@@ -99,18 +99,6 @@ struct CategoryEditorWindowView: View {
         .padding(.vertical, 50)
         .background(.white)
         .border(.black, width: 5)
-        .overlay(alignment: .topLeading) {
-            Button {
-                isEditingCat = false
-            } label: {
-                Image(systemName: "xmark")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 25)
-                    .foregroundColor(.black)
-                    .padding(40)
-            }
-        }
         .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage)
     }
 }
