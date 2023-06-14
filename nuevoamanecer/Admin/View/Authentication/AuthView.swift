@@ -43,25 +43,25 @@ struct AuthView: View {
                         Color.white
                             .ignoresSafeArea()
                         VStack(spacing: 20) {
-                            Text("Inicia sesión para tener acceso a tus niños")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
+                            Text("Accede a tu cuenta para ver a tus niños")
+                                .font(.title)
+                                .fontWeight(.regular)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal)
                                 .foregroundColor(.black)
                                 .padding(.bottom)
                             
                             NavigationLink(destination: LoginView(authViewModel: authViewModel)) {
-                                Text("Iniciar sesión")
+                                Text("Empezar")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.blue)
+                                    .frame(maxWidth: 600)
+                                    .background(Color.green)
                                     .cornerRadius(10)
                             }
                             .padding(.horizontal, 80)
-                            
+                            /*
                             NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
                                 Text("Registrarse")
                                     .font(.headline)
@@ -72,6 +72,7 @@ struct AuthView: View {
                                     .cornerRadius(10)
                             }
                             .padding(.horizontal, 80)
+                             */
                         }
                         .padding(.bottom, geometry.size.height * 0.1)
                     }
