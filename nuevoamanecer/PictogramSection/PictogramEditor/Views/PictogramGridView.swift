@@ -14,6 +14,7 @@ struct PictogramGridArrowView: View {
     
     let colors: [String:Color] = [
         "disabledArrow": Color(red: 0.92, green: 0.92, blue: 0.92),
+        // "disabledArrow": Color(red: 0.5, green: 0.5, blue: 0.5),
         "disabledBackground": Color(red: 0.97, green: 0.97, blue: 0.97),
         "arrow": Color(red: 0.8, green: 0.8, blue: 0.8),
         "background": Color(red: 0.87, green: 0.87, blue: 0.87)
@@ -51,6 +52,7 @@ struct PictogramGridView: View {
     let pictograms: [Button<PictogramView>]
     let pictoWidth: CGFloat
     let pictoHeight: CGFloat
+    let isBeingFiltered: Bool
     @State private var currPage: Int = 1
     
     var body: some View {
@@ -97,6 +99,15 @@ struct PictogramGridView: View {
                         }
                     }
                     .frame(width: gridWidth, height: gridHeight)
+                    .overlay(alignment: .center) {
+                        if pictograms.count == 0 {
+                            Text(isBeingFiltered ? "Sin resultados" : "No hay pictogramas")
+                                .font(.system(size: 25, weight: .bold))
+                                .frame(width: gridWidth, height: gridHeight)
+                                .background(.white)
+                                .cornerRadius(10)
+                        }
+                    }
                     
                     Spacer()
                 }
