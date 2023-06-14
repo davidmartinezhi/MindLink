@@ -30,7 +30,7 @@ struct PictogramEditorWindowView: View {
     @State private var showImagePicker: Bool = false
     @State var temporaryUIImage: UIImage? = nil
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
-        
+            
     init(pictoModel: PictogramModel?, isNewPicto: Bool, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
@@ -71,14 +71,15 @@ struct PictogramEditorWindowView: View {
                         } label: {
                             HStack {
                                 Image(systemName: temporaryUIImage == nil ? "arrow.up.square" : "checkmark")
-                                    .foregroundColor(temporaryUIImage == nil ? .black : .green)
+                                    .foregroundColor(temporaryUIImage == nil ? .white : .green)
                                 Text(temporaryUIImage == nil ? "Subir una imagen" : "Subir otra imagen")
                                     .bold()
                                     .foregroundColor(.white)
                             }
                             .padding()
                             .frame(height: 50)
-                            .background(.gray)
+                            //.background(.gray)
+                            .background(.blue)
                             .cornerRadius(10)
                         }
                         
@@ -88,41 +89,142 @@ struct PictogramEditorWindowView: View {
                     }
                 }
                 
-                ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
-                    Task {
-                        if temporaryUIImage != nil {
-                            let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
-                            if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
-                                self.pictoModel.imageUrl = downloadUrl.absoluteString
-                            } else {
-                                // Error al subir imagen.
+                HStack{
+                    
+                    //Cancel
+                    Button(action: {
+                        isEditingPicto = false
+                    }){
+                        HStack {
+                            Text("Cancelar")
+                                .font(.headline)
+                            
+                            
+                            Image(systemName: "xmark.circle.fill")
+                                .padding(.leading)
+                        }
+                    }
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
+                    .foregroundColor(.white)
+                    
+                    
+                    //Save
+                    
+                    //Dissabled button
+                    if(!(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
+                        
+                        Button(action:{
+                            print("No activo")
+                        }){
+                            HStack {
+                                Text("Guardar")
+                                    .font(.headline)
+                                
+                                
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .padding(.leading)
                             }
                         }
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                    }
+                    else{
+                        
+                        Button(action:{
+                            Task {
+                                if temporaryUIImage != nil {
+                                    let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
+                                    if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
+                                        self.pictoModel.imageUrl = downloadUrl.absoluteString
+                                    } else {
+                                        // Error al subir imagen.
+                                    }
+                                }
 
-                        if isNewPicto {
-                            pictoVM.addPicto(pictoModel: self.pictoModel) {error in
-                                if error != nil {
-                                    showErrorMessage = true
+                                if isNewPicto {
+                                    pictoVM.addPicto(pictoModel: self.pictoModel) {error in
+                                        if error != nil {
+                                            showErrorMessage = true
+                                        } else {
+                                            pickedCategoryId = pictoModel.categoryId
+                                            isEditingPicto = false
+                                        }
+                                    }
                                 } else {
-                                    pickedCategoryId = pictoModel.categoryId
-                                    isEditingPicto = false
+                                    pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
+                                        if error != nil {
+                                            showErrorMessage = true
+                                        } else {
+                                            isEditingPicto = false
+                                        }
+                                    }
                                 }
                             }
-                        } else {
-                            pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
-                                if error != nil {
-                                    showErrorMessage = true
+
+                        }){
+                            HStack {
+                                Text("Guardar")
+                                    .font(.headline)
+                                
+                                Image(systemName: "arrow.right.circle.fill")
+                                    .padding(.leading)
+                            }
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                        
+                    }
+                    /*
+                    ButtonView(text: "Guardar", color: .blue, isDisabled: !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))){
+                        Task {
+                            if temporaryUIImage != nil {
+                                let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
+                                if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
+                                    self.pictoModel.imageUrl = downloadUrl.absoluteString
                                 } else {
-                                    isEditingPicto = false
+                                    // Error al subir imagen.
+                                }
+                            }
+
+                            if isNewPicto {
+                                pictoVM.addPicto(pictoModel: self.pictoModel) {error in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        pickedCategoryId = pictoModel.categoryId
+                                        isEditingPicto = false
+                                    }
+                                }
+                            } else {
+                                pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        isEditingPicto = false
+                                    }
                                 }
                             }
                         }
                     }
+                    .padding()
+                    .cornerRadius(10)
+                    */
                 }
+                
+                
+
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .background(.white)
-            .border(.black, width: 5)
+            .padding()
+            //.border(.black, width: 5)
+            
             .overlay(alignment: .topLeading) {
                 Button {
                     isEditingPicto = false
@@ -135,6 +237,7 @@ struct PictogramEditorWindowView: View {
                         .padding(40)
                 }
             }
+             
             .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
             .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
                 ImagePicker(image: $temporaryUIImage)

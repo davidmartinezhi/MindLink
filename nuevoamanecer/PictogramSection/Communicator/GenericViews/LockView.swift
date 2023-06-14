@@ -51,11 +51,14 @@ struct LockView: View {
     }
     
     private var lockViewContent: some View {
+        
+        
         ZStack {
             Rectangle()
                 .frame(width: width, height: height)
                 .foregroundColor(.white)
                 .cornerRadius(10)
+                
                 .overlay(alignment: .leading){
                     Rectangle()
                         .frame(width: width * (longPressProgress / longPressDuration), height: height)
@@ -63,10 +66,22 @@ struct LockView: View {
                         .cornerRadius(10)
                 }
             
-            Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(10)
+            HStack{
+                Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                
+                if(isLocked){
+                    Text("Desbloquear")
+                }else{
+                    Text("Bloquear")
+                }
+                
+            }
+            .padding(10)
+            .background(!isLocked ? Color.blue : nil)
+            .foregroundColor(!isLocked ? Color.white : Color.blue)
+            .cornerRadius(10)
         }
         .frame(width: width, height: height)
     }

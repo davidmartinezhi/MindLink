@@ -72,6 +72,17 @@ struct PictogramView: View {
                 .background(.white)   // Fondo de la vista
             }
             .border(.gray)
+            .overlay(alignment: .topTrailing) {
+                if overlayImage != nil {
+                    overlayImage!
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(overlayImageColor)
+                        .opacity(overlyImageOpacity)
+                        .frame(width: geo.size.width * overlayImageWidth)
+                        .padding(10)
+                }
+            }
         }
     }
 }

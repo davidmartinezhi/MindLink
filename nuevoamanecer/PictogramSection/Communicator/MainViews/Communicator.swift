@@ -45,40 +45,56 @@ struct Communicator: View {
                         ButtonView(text: "Iniciar Sesión", color: .blue) {
                             //vista de autenticacion
                         }
-                         */ 
+                         */
+                        SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                         
                         Spacer()
+                        
+                        
                         
                         ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
                             //modal con opciones de velocidad de pronunciacion y genero de voz
                             isConfiguring = true
                         }
+                        .font(.headline)
                         .sheet(isPresented: $isConfiguring) {
                             VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
                         }
-                    }
-                    .frame(height: 40)
-                    .padding(.vertical)
-                    .padding(.horizontal, 60)
-                    .background(Color(red: 0.9, green: 0.9, blue: 0.9))
-                    
-                    HStack(spacing: 25) {
-                        SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
-                        
-                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                        
-                        Spacer()
                         
                         LockView(isLocked: $isLocked)
                     }
+                    .frame(height: 40)
                     .padding(.vertical)
-                    .padding(.horizontal, 60)
-                    .background(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .padding(.horizontal, 70)
+                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
                     
-                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 200, pictoHeight: 200)
+                    HStack(spacing: 15) {
+                        Text("Categorias")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color.gray)
+
+                        HStack{
+                            CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                        }
+                        //.background(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                        .padding([.leading, .top, .bottom])
+                        Spacer()
+                    }
+                    //.padding(.vertical)
+                    .padding(.horizontal, 60)
+                    
+                    Rectangle()
+                        .frame(height: 10.0, alignment: .bottom)
+                        .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
+                    
+                    
+                    
+                    
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            
         }
         .onReceive(catVM.objectWillChange) { _ in
              if pickedCategoryId.isEmpty || !userHasChosenCat {

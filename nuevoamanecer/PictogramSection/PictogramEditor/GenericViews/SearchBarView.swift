@@ -15,10 +15,13 @@ struct SearchBarView: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(Color.gray)
+                .padding()
             
-            TextField("Buscar", text: $searchText)
-                .foregroundColor(.black)
+            TextField("Buscar pictograma", text: $searchText)
+                .padding([.bottom, .top, .trailing])
             
             if !searchText.isEmpty {
                 Button(action: {
@@ -30,14 +33,15 @@ struct SearchBarView: View {
             }
         }
         .frame(width: searchBarWidth)
-        .padding()
-        .background(backgroundColor)
-        .cornerRadius(10)
+        .cornerRadius(10) // Asegúrate de que este está aquí
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
         /*
         .overlay {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray, lineWidth: 2)
+                .stroke(Color.gray, lineWidth: 1)
         }
-         */
+        */
+         
     }
 }
