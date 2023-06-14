@@ -18,11 +18,11 @@ struct ButtonView: View {
         Button(text) {
             buttonAction()
         }
-        .padding()
-        .foregroundColor(.white)
+        .padding(10)
         .background(!isDisabled ? color : .gray)
-        .cornerRadius(5)
-        .font(.system(size: textSize, weight: .bold, design: .default))
+        .foregroundColor(.white)
+        .cornerRadius(10)
+        .font(.system(size: textSize, weight: .regular, design: .default))
         .allowsHitTesting(!isDisabled)
     }
 }

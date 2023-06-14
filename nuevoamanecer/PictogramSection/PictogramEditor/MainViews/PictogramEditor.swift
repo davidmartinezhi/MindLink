@@ -5,36 +5,41 @@
 //  Created by emilio on 27/05/23.
 //
 
+// Importamos SwiftUI
 import SwiftUI
 
+// Definimos el struct PictogramEditor que cumple con el protocolo View
 struct PictogramEditor: View {
+    // Inicializamos los objetos que manejarán los pictogramas y las categorías
     @StateObject var pictoVM: PictogramViewModel
     @StateObject var catVM: CategoryViewModel
     
-    @State var searchText: String = ""
-    @State var pickedCategoryId: String = ""
+    // Estados de la interfaz gráfica
+    @State var searchText: String = "" // Texto de búsqueda
+    @State var pickedCategoryId: String = "" // ID de la categoría seleccionada
+    @State var isDeleting: Bool = false // Estado de eliminación
+    @State var isNewPicto: Bool = false // Si se está creando un nuevo pictograma
+    @State var isNewCat: Bool = false // Si se está creando una nueva categoría
+    @State var pictoBeingEdited: PictogramModel? = nil // Pictograma que se está editando
+    @State var catBeingEdited: CategoryModel? = nil // Categoría que se está editando
+    @State var isEditingPicto: Bool = false // Si se está editando un pictograma
+    @State var isEditingCat: Bool = false // Si se está editando una categoría
+    @State var showErrorMessage: Bool = false // Si se muestra un mensaje de error
+    @State var userHasChosenCat: Bool = false // Si el usuario ha seleccionado una categoría
     
-    @State var isDeleting: Bool = false
-    
-    @State var isNewPicto: Bool = false
-    @State var isNewCat: Bool = false
-    @State var pictoBeingEdited: PictogramModel? = nil
-    @State var catBeingEdited: CategoryModel? = nil
-    @State var isEditingPicto: Bool = false
-    @State var isEditingCat: Bool = false
-    
-    @State var showErrorMessage: Bool = false
-    
-    @State var userHasChosenCat: Bool = false
-    
+    // Handler para las imágenes en Firebase
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
 
+    // Inicializador del PictogramEditor
     init(pictoCollectionPath: String, catCollectionPath: String){
+        // Inicializamos los ViewModel con los paths correspondientes
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
     }
-        
+    
+    // Cuerpo de la vista
     var body: some View {
+        // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
         pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
@@ -42,16 +47,16 @@ struct PictogramEditor: View {
         GeometryReader { geo in
             ZStack {
                 VStack(spacing: 0) {
+                    // Barra superior con botones para eliminar y agregar pictogramas
                     HStack {
-                        ButtonView(text: "Regresar", color: .blue) {}
-                        
                         Spacer()
-                        
                         ButtonView(text: isDeleting ?  "Cancelar" : "Eliminar Pictograma", color: .red, isDisabled: pictosInScreen.count == 0) {
                             isDeleting.toggle()
                         }
                         
+                        
                         let noCategories: Bool = catVM.getCats().count == 0
+                        
                         ButtonView(text: noCategories ? "Crea una categoría" : "Agregar Pictograma", color: .blue, isDisabled: noCategories) {
                             isNewPicto = true
                             pictoBeingEdited = nil
@@ -61,16 +66,15 @@ struct PictogramEditor: View {
                     .frame(height: 40)
                     .padding(.vertical)
                     .padding(.horizontal, 60)
-                    .background(Color(red: 0.9, green: 0.9, blue: 0.9))
+                    //.background(Color(red: 0.9, green: 0.9, blue: 0.9))
                     
+                    // Barra de búsqueda, selector de categoría y botones para editar y agregar categorías
                     HStack(spacing: 25) {
                         SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
-                        
                         CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                                                
                         let editCatButtonsColor: Color = currCat != nil ? ColorMaker.buildforegroundTextColor(catColor: currCat!.color) : .black
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
-                        Button { // Editar
+                        Button { // Botón para editar
                             isNewCat = false
                             catBeingEdited = catVM.getCat(catId: pickedCategoryId)
                             isEditingCat = true
@@ -87,8 +91,7 @@ struct PictogramEditor: View {
                                 }
                         }
                         .allowsHitTesting(!editCatButtonisDisabled)
-                        
-                        Button { // Agregar
+                        Button { // Botón para agregar
                             isNewCat = true
                             catBeingEdited = nil
                             isEditingCat = true
@@ -103,25 +106,28 @@ struct PictogramEditor: View {
                     .padding(.vertical)
                     .padding(.horizontal, 60)
                     .background(currCat?.buildColor() ?? Color(red: 0.9, green: 0.9, blue: 0.9))
-                    .overlay(alignment: .bottom) {
+                    /*.overlay(alignment: .bottom) {
                         Rectangle()
                             .frame(width: geo.size.width, height: 0.5)
                             .foregroundColor(.black)
-                    }
+                    }*/
                     
-                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 200, pictoHeight: 200)
+                    Divider()
+                    
+                    // Cuadrícula de pictogramas
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 
+                // Si se está editando un pictograma o una categoría, se muestra la vista de edición correspondiente
                 if isEditingPicto || isEditingCat {
                     Button {
                         isEditingCat = false
-                        isEditingPicto = false 
+                        isEditingPicto = false
                     } label: {
                         Color(.gray)
                             .opacity(0.5)
                     }
-
                     if isEditingPicto {
                         PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
                             .frame(width: geo.size.width * 0.7, height: 600)
@@ -131,8 +137,9 @@ struct PictogramEditor: View {
                     }
                 }
             }
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
+            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Alerta de error
         }
+        // Si la categoría seleccionada es nula o no ha sido elegida por el usuario, seleccionamos la primera categoría
         .onReceive(catVM.objectWillChange) { _ in
              if pickedCategoryId.isEmpty || !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
@@ -140,6 +147,7 @@ struct PictogramEditor: View {
          }
     }
     
+    // Función que construye los botones de los pictogramas
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
         var pictoButtons: [Button<PictogramView>] = []
         
@@ -151,7 +159,6 @@ struct PictogramEditor: View {
                             if !pictoModel.imageUrl.isEmpty {
                                 _  = await imageHandler.deleteImage(donwloadUrl: pictoModel.imageUrl)
                             }
-
                             pictoVM.removePicto(pictoId: pictoModel.id!) { error in
                                 if error != nil {
                                     showErrorMessage = true
