@@ -226,8 +226,26 @@ struct AdminView: View {
         NavigationStack{
                  VStack{
                      
-                     //Boton para agregar niños
+                     //Search bar y Boton para agregar niños
                      HStack{
+                         
+                         //Search Bar
+                         HStack{
+                             Image(systemName: "magnifyingglass")
+                                 .resizable()
+                                 .frame(width: 20, height: 20)
+                                 .foregroundColor(Color.gray)
+                                 .padding()
+                             TextField("Buscar niño o grupo", text: $search)
+                                 .padding()
+                                 .onChange(of: search, perform: performSearchByName)
+                                  
+                         }
+                         .frame(width: 300)
+                         .cornerRadius(10) // Asegúrate de que este está aquí
+                         .background(Color(.systemGray6))
+                         .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
+                         
                          Spacer()
                          //Boton para añadir paciente
                          Button(action: {
@@ -350,8 +368,10 @@ struct AdminView: View {
                          Spacer()
                      }
                      .padding(.horizontal, 50)
-                     .padding(.bottom, 10)
+                     .padding(.vertical, 20)
+
                      
+                     /*
                      // Barra de busqueda
                      HStack {
                          HStack{
@@ -365,6 +385,7 @@ struct AdminView: View {
                                  .onChange(of: search, perform: performSearchByName)
                                   
                          }
+                         .frame(width: 300)
                          .cornerRadius(10) // Asegúrate de que este está aquí
                          .background(Color(.systemGray6))
                          .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
@@ -372,10 +393,11 @@ struct AdminView: View {
                          Spacer()
                               
                      }
+                     .frame(width: 300)
                      .padding(.horizontal, 50)
                      .padding(.bottom, 20)
                      
-                     
+                     */
 
 
                          
