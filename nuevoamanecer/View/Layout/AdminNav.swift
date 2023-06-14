@@ -34,38 +34,28 @@ struct AdminNav: View {
                     .padding()
                 Spacer()
                 ZStack{
-                    if let displayImage = self.upload_image {
-                        Image(uiImage: displayImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .cornerRadius(128)
-                            .padding(.horizontal, 20)
-                    } else {
-                            //No imagen
-                            if(user.image == "placeholder") {
-                                ZStack{
-                                    Image(systemName: "person.circle")
-                                        .font(.system(size: 60))
-                                    //.foregroundColor(Color(.label))
-                                        .foregroundColor(.gray)
-                                }
+                    //No imagen
+                    if(user.image == "placeholder") {
+                        ZStack{
+                            Image(systemName: "person.circle")
+                                .font(.system(size: 60))
+                            //.foregroundColor(Color(.label))
+                                .foregroundColor(.gray)
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                    //Imagen previamente subida
+                    else{
+                        
+                        ZStack{
+                            KFImage(URL(string: user.image))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(128)
                                 .padding(.horizontal, 20)
-                            }
-                            
-                            //Imagen previamente subida
-                            else{
-                                
-                                ZStack{
-                                    KFImage(URL(string: user.image))
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .cornerRadius(128)
-                                        .padding(.horizontal, 20)
-                                }
-                                .padding(.horizontal, 20)
-                            }
+                        }
+                        .padding(.horizontal, 20)
                     }
                     Menu ("           "){
                         // boton para ir a la vista de perfil

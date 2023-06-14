@@ -120,16 +120,16 @@ struct AdminMenuView: View {
                         TextField("Email", text: $email)
                             .textContentType(.emailAddress)
                         SecureField("Nueva contraseña", text: $password)
-                        textInputAutocapitalization(.never)
+                            .textInputAutocapitalization(.never)
                         .keyboardType(.asciiCapable)
                         .autocorrectionDisabled(true)
                         .textContentType(.newPassword)
                         if (password != ""){
                             SecureField("confirmar contraseña", text: $confirmpassword)
-                            textInputAutocapitalization(.never)
+                                .textInputAutocapitalization(.never)
                             .keyboardType(.asciiCapable)
                             .autocorrectionDisabled(true)
-                            .textContentType(.password)
+                            .textContentType(.newPassword)
                         }
                     }
                 }
