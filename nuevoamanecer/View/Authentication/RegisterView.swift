@@ -31,6 +31,7 @@ struct RegisterView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .padding(.bottom, 20)
+                .textContentType(.emailAddress)
             
             SecureField("Contraseña", text: $password)
                 .padding()

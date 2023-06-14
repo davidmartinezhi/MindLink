@@ -14,6 +14,10 @@ struct AdminNav: View {
     @Binding var showAdminView: Bool
     @Binding var showRegisterView: Bool
     
+    @State private var upload_image: UIImage?
+    @State private var imageURL = URL(string: "")
+    @State private var storage = FirebaseAlmacenamiento()
+    
     @State private var showLogoutAlert = false
     
     var user: User
@@ -30,11 +34,40 @@ struct AdminNav: View {
                     .padding()
                 Spacer()
                 ZStack{
-                    Image(systemName: "gear")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.black)
-                    Menu ("...."){
+                    if let displayImage = self.upload_image {
+                        Image(uiImage: displayImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(128)
+                            .padding(.horizontal, 20)
+                    } else {
+                            //No imagen
+                            if(user.image == "placeholder") {
+                                ZStack{
+                                    Image(systemName: "person.circle")
+                                        .font(.system(size: 60))
+                                    //.foregroundColor(Color(.label))
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                            
+                            //Imagen previamente subida
+                            else{
+                                
+                                ZStack{
+                                    KFImage(URL(string: user.image))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(128)
+                                        .padding(.horizontal, 20)
+                                }
+                                .padding(.horizontal, 20)
+                            }
+                    }
+                    Menu ("           "){
                         // boton para ir a la vista de perfil
                         Button(action: { showAdminView = true }) {
                             HStack {
@@ -67,9 +100,9 @@ struct AdminNav: View {
                             }
                         }
                     }
-                    .frame(width: 40, height: 40)
+                    .frame(width: 50, height: 50)
                 }
-                .scaledToFit()
+                .frame(width: 50, height: 50)
             }
             .padding(.horizontal, 50)
             .alert(isPresented: $showLogoutAlert) {

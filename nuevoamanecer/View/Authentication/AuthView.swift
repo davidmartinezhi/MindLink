@@ -10,6 +10,12 @@ import SwiftUI
 struct AuthView: View {
     
     @ObservedObject var authViewModel: AuthViewModel
+    
+    @State var email = ""
+    @State var password = ""
+    @State private var contraseñaIncorrecta: Bool = false
+    @State private var usuarioNoExiste: Bool = false
+    @State private var showAlert: Bool = false
 
     var body: some View {
         NavigationView {
@@ -58,17 +64,6 @@ struct AuthView: View {
                                     .padding()
                                     .frame(maxWidth: .infinity)
                                     .background(Color.blue)
-                                    .cornerRadius(10)
-                            }
-                            .padding(.horizontal, 80)
-                            
-                            NavigationLink(destination: RegisterView(authViewModel: authViewModel)) {
-                                Text("Registrarse")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.green)
                                     .cornerRadius(10)
                             }
                             .padding(.horizontal, 80)
