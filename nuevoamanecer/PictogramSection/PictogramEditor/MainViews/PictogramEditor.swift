@@ -88,6 +88,7 @@ struct PictogramEditor: View {
                     
                 }
                 .frame(height: 40)
+                .background(Color.white)
                 .padding(.vertical)
                 .padding(.horizontal, 70)
                 
@@ -122,7 +123,8 @@ struct PictogramEditor: View {
                     
                     CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
-                .frame(maxHeight: 60)
+                .frame(height: 60)
+                .background(Color.white)
                 .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                
@@ -142,17 +144,21 @@ struct PictogramEditor: View {
             }
             .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
             .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {
-                Task {
-                    if !pictoModelToDelete!.imageUrl.isEmpty {
-                        _  = await imageHandler.deleteImage(donwloadUrl: pictoModelToDelete!.imageUrl)
-                    }
-                    pictoVM.removePicto(pictoId: pictoModelToDelete!.id!) { error in
-                        if error != nil {
-                            showErrorMessage = true
-                        } else {
-                            isDeleting = false
+                if pictoModelToDelete != nil {
+                    Task {
+                        if !pictoModelToDelete!.imageUrl.isEmpty {
+                            _  = await imageHandler.deleteImage(donwloadUrl: pictoModelToDelete!.imageUrl)
+                        }
+                        pictoVM.removePicto(pictoId: pictoModelToDelete!.id!) { error in
+                            if error != nil {
+                                showErrorMessage = true
+                            } else {
+                                isDeleting = false
+                            }
                         }
                     }
+                } else {
+                    // El pictograma a eliminar está vacío. 
                 }
             }
         }
