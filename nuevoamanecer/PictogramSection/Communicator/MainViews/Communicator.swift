@@ -24,12 +24,17 @@ struct Communicator: View {
     
     @Binding var isLocked: Bool
     
-    init(pictoCollectionPath: String, catCollectionPath: String, voiceGender: Binding<String>, talkingSpeed: Binding<String>, isLocked: Binding<Bool>){
+    var showSwitchView: Bool
+    @Binding var onLeftOfSwitch: Bool
+    
+    init(pictoCollectionPath: String, catCollectionPath: String, voiceGender: Binding<String>, talkingSpeed: Binding<String>, isLocked: Binding<Bool>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
         _voiceGender = voiceGender
         _talkingSpeed = talkingSpeed
         _isLocked = isLocked
+        self.showSwitchView = showSwitchView
+        _onLeftOfSwitch = onLeftOfSwitch
     }
     
     var body: some View {
@@ -65,6 +70,11 @@ struct Communicator: View {
                     Text("Categorias")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color.gray)
+                    
+                    if showSwitchView {
+                        SwitchView(onLeft: $onLeftOfSwitch, leftText: "Base", rightText: "Personal", width: 200)
+                    }
+                    
                     Divider()
 
                     HStack{

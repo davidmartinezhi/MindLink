@@ -14,6 +14,7 @@ enum ImagePosition {
 
 struct ButtonWithImageView: View {
     var text: String
+    var width: CGFloat = 150
     var height: CGFloat = 50
     var systemNameImage: String
     var imagePosition: ImagePosition = .right
@@ -39,8 +40,8 @@ struct ButtonWithImageView: View {
                 }
             }
         }
-        .padding()
-        .frame(height: height)
+        .padding(10)
+        .frame(width: width, height: height)
         .background(isDisabled ? Color.gray : self.background)
         .cornerRadius(10)
         .foregroundColor(.white)

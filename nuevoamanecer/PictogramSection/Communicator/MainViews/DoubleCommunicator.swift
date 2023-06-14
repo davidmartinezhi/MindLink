@@ -20,23 +20,17 @@ struct DoubleCommunicator: View {
     @State var talkingSpeed: String = "Normal"
     
     @State var isLocked: Bool = false
-        
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 // Communicator 1
-                Communicator(pictoCollectionPath: pictoCollectionPath1, catCollectionPath: catCollectionPath1, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked)
+                Communicator(pictoCollectionPath: pictoCollectionPath1, catCollectionPath: catCollectionPath1, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 1 : 0)
                 
                 // Communicator 2
-                Communicator(pictoCollectionPath: pictoCollectionPath2, catCollectionPath: catCollectionPath2, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked)
+                Communicator(pictoCollectionPath: pictoCollectionPath2, catCollectionPath: catCollectionPath2, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 0 : 1)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay(alignment: .top) {
-                SwitchView(onLeft: $showingCommunicator1, leftText: "Base", rightText: "Mis Pictogramas", isDisabled: isLocked)
-                    .zIndex(2)
-                    .offset(y: 3)
             }
         }
     }
