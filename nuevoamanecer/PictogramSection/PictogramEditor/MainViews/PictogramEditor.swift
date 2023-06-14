@@ -132,11 +132,10 @@ struct PictogramEditor: View {
                 PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .sheet(isPresented: $isEditingPicto) {
+            .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
                 PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
-
             }
-            .sheet(isPresented: $isEditingCat) {
+            .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
                 CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
             }
             .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Alerta de error
@@ -146,7 +145,7 @@ struct PictogramEditor: View {
              if pickedCategoryId.isEmpty || !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
-         }
+        }
     }
     
     // Función que construye los botones de los pictogramas
