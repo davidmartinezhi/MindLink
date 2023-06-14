@@ -81,7 +81,7 @@ struct PatientCardView: View {
                 .padding(.leading)
                 
                 Spacer()
-                
+                /*
                 Button(action: {
                     print("Comunicador")
                 }) {
@@ -99,6 +99,7 @@ struct PatientCardView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                 }
+                */
             }
             .padding(.horizontal)
         }

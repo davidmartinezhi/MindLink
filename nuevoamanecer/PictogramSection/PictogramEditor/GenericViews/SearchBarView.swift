@@ -18,7 +18,7 @@ struct SearchBarView: View {
                 .resizable()
                 .frame(width: 20, height: 20)
                 .foregroundColor(Color.gray)
-                .padding()
+                .padding([.bottom, .top, .leading])
             
             TextField("Buscar pictograma", text: $searchText)
                 .padding([.bottom, .top, .trailing])
