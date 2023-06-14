@@ -81,6 +81,31 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    //funcion que verifique que la contraseña ingresada contenga los caracteres necesarios para tener una contraseña fuerte
+    func isWeak (_ password: String)-> Bool{
+        let passwordLenght = password.count
+        var containsSynbol = false
+        var containsNumber = false
+        var containsUpercase = false
+        for character in password {
+            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(character)){
+                containsUpercase = true
+            }
+            if ("1234567890".contains(character)){
+                containsNumber = true
+            }
+            if ("!?#$%&/()=;:_-.,°".contains(character)){
+                containsSynbol = true
+            }
+        }
+        if (passwordLenght > 8 && containsSynbol  && containsUpercase && containsNumber){
+            return false
+        } else {
+            return true
+        }
+    }
+
+    
     private func storeUserInformation(id: String, name: String, email: String, isAdmin: Bool, image: String) {
         let userData = ["name": name, "email": email, "isAdmin": isAdmin, "id": id, "image": image] as [String : Any]
         Firestore.firestore().collection("User").document(id).setData(userData) { err in
@@ -94,7 +119,7 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func updateUser(name: String?, isAdmin: Bool?, image: String?) {
+    func updateUser(name: String?, isAdmin: Bool?, image: String?, email: String?) {
         // Verificar si hay un usuario autenticado actualmente
         guard let id = Auth.auth().currentUser?.uid else {
             self.errorMessage = "No se encontró el id del usuario autenticado"
@@ -108,6 +133,7 @@ class AuthViewModel: ObservableObject {
         if let name = name { updateData["name"] = name }
         if let isAdmin = isAdmin { updateData["isAdmin"] = isAdmin }
         if let image = image { updateData["image"] = image }
+        if let email = email { updateData["email"] = email }
 
         // Llamar a la función de actualización de Firestore para el usuario con la identificación actual
         Firestore.firestore().collection("User").document(id).updateData(updateData) { err in
@@ -121,7 +147,25 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    
+    // Actualizar datos de autentificacion
+    func updateAuthEmail (email: String) {
+        Auth.auth().currentUser?.updateEmail(to: email) {(error) in
+            if let error = error as NSError? {
+                print(error)
+            }else {
+                print("se actualizo el email")
+            }
+        }
+    }
+    func updateAuthPassword (password: String) {
+        Auth.auth().currentUser?.updatePassword(to: password ) { (error) in
+            if let error = error as NSError? {
+                print(error)
+            }else {
+                print("se actualizo la contraseña")
+            }
+        }
+    }
     
     func logout() {
         do {

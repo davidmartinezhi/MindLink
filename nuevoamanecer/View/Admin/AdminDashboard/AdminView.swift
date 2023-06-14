@@ -233,9 +233,9 @@ struct AdminView: View {
                      HStack{
                          Spacer()
                         //El boton aparece si el usuario es admin
-                        if (users.user?.isAdmin == true) {
-                            //Boton para añadir paciente
-                            Button(action: {
+                         if (users.user?.isAdmin == true) {
+                             //Boton para añadir paciente
+                             Button(action: {
                                  showAddPatient.toggle()
                              }) {
                                  HStack {
@@ -250,8 +250,7 @@ struct AdminView: View {
                              .background(Color.blue.opacity(0.1))
                              .foregroundColor(.blue)
                              .cornerRadius(10)
-                         
-                         
+                         }
                          
                          //Boton para ACCEDER A COMUNICADOR BASE
                          Button(action: {

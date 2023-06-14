@@ -14,7 +14,9 @@ struct AdminMenuView: View {
     
     var user: User
     @State private var name: String
-
+    @State private var email: String
+    @State private var password = ""
+    @State private var confirmpassword = ""
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -31,38 +33,14 @@ struct AdminMenuView: View {
         self.authViewModel = authViewModel
         self.user = user
         _name = State(initialValue: user.name)
+        _email = State(initialValue: user.email)
     }
     
     var body: some View {
         VStack {
-            
-            //Logout button
-            HStack{
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    HStack {
-                        Text("Cerrar sesión")
-                            .font(.system(size: 16))
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrowshape.turn.up.left.fill")
-                            .font(.system(size: 12))
-                    }
-                }
-                .padding()
-                .background(Color.red)
-                .cornerRadius(10)
-                .foregroundColor(.white)
-                .frame(maxWidth: 170)
-                
-                Spacer()
-            }
-            
             VStack {
                 
-                //Imagen del niño
+                //Imagen del usuario
                 VStack{
                     Button() {
                         shouldShowImagePicker.toggle()
@@ -113,6 +91,7 @@ struct AdminMenuView: View {
                     }
                     //Spacer()
                 }
+                .padding(.top, 30)
                 .frame(maxHeight: 150)
                 
                 /*
@@ -137,6 +116,11 @@ struct AdminMenuView: View {
                 Form {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
+                        TextField("Email", text: $email)
+                        SecureField("Nueva contraseña", text: $password)
+                        if (password != ""){
+                            SecureField("confirmar contraseña", text: $confirmpassword)
+                        }
                     }
                 }
             }
@@ -167,9 +151,6 @@ struct AdminMenuView: View {
                     //Guardar
                     Button(action: {
                         
-                        
-                        
-                        
                         if let thisImage = self.upload_image {
                             Task {
                                 await storage.uploadImage(image: thisImage, name: user.name + "admin_profile_picture") { url in
@@ -177,13 +158,19 @@ struct AdminMenuView: View {
                                     imageURL = url
                                     
                                     //Checar que datos son validos
-                                    if (name == "") {
+                                    if (name.isEmpty || email.isEmpty) {
                                         self.alertTitle = "Faltan campos"
                                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                                         self.showingAlert = true
-                                        
-                                    }
-                                    else{
+                                    } else if (password != confirmpassword) {
+                                        self.alertTitle = "Confirme su contraseña"
+                                        self.alertMessage = "Por favor, confirme correctamente su contraseña."
+                                        self.showingAlert = true
+                                    } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                                        self.alertTitle = "Contraseña Invalida"
+                                        self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                        self.showingAlert = true
+                                    } else{
                                         uploadData.toggle()
                                         dismiss()
                                     }
@@ -191,21 +178,24 @@ struct AdminMenuView: View {
                             }
                         } else {
                             //Checar que datos son validos
-                            if (name == "") {
+                            if (name.isEmpty || email.isEmpty) {
                                 self.alertTitle = "Faltan campos"
                                 self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                                 self.showingAlert = true
                                 
-                            }
-                            else{
+                            } else if (password != confirmpassword) {
+                                self.alertTitle = "Confirme su contraseña"
+                                self.alertMessage = "Por favor, confirme correctamente su contraseña."
+                                self.showingAlert = true
+                            } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                                self.alertTitle = "Contraseña Invalida"
+                                self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                self.showingAlert = true
+                            } else{
                                 uploadData.toggle()
                                 dismiss()
                             }
                         }
-                        
-                        
-                        
-                        
                     
                     }) {
                         HStack {
@@ -221,38 +211,8 @@ struct AdminMenuView: View {
                     .cornerRadius(10)
                     .foregroundColor(.white)
                 }
-                //.padding(.bottom)
-
-                /**
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    HStack {
-                        Text("Cerrar sesión")
-                            .font(.headline)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrowshape.turn.up.left.fill")
-                    }
-                }
-                .padding()
-                .background(Color.red.opacity(0.1))
-                .cornerRadius(10)
-                .foregroundColor(.red)
-                 */
             }
             .padding()
-            .alert(isPresented: $showLogoutAlert) {
-                Alert(
-                    title: Text("Cerrar Sesión"),
-                    message: Text("¿Estás seguro que quieres cerrar la sesión?"),
-                    primaryButton: .destructive(Text("Cerrar sesión"), action: {
-                       authViewModel.logout()
-                    }),
-                    secondaryButton: .cancel()
-                )
-            }
             
             Spacer()
         }
@@ -262,11 +222,21 @@ struct AdminMenuView: View {
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
         }
+        .alert(alertTitle, isPresented: $showingAlert){
+            Button("OK"){}
+        } message: {
+            Text(alertMessage)
+        }
         .onDisappear{
             if(uploadData) {
                 self.name = name
+                self.email = email
                 
-                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder")
+                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder", email: email)
+                authViewModel.updateAuthEmail(email: email)
+                if(password != ""){
+                    authViewModel.updateAuthPassword(password: password)
+                }
             }
         }
     }

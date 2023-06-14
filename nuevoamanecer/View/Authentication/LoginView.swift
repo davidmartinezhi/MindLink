@@ -55,7 +55,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
+                        .background(email.isEmpty || password.isEmpty ? .gray : .blue)
                         .cornerRadius(10)
                 }
                 .disabled(email.isEmpty || password.isEmpty)

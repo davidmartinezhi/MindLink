@@ -8,41 +8,18 @@
 import SwiftUI
 
 struct RegisterView: View {
+    @Environment(\.dismiss) var dismiss
     @ObservedObject var authViewModel: AuthViewModel
+    
     @State var email = ""
     @State var password = ""
     @State var name = ""
     @State var isAdmin = false
     @State var confirmpassword = ""
-    @State var name = ""
-    @State var isAdmin = false
+    
     @State private var mostrarAlerta = false
     @State private var mostrarAlerta1 = false
     
-    //funcion que verifique que la contraseña ingresada contenga los caracteres necesarios para tener una contraseña fuerte
-    func isWeak (_ password: String)-> Bool{
-        let passwordLenght = password.count
-        var containsSynbol = false
-        var containsNumber = false
-        var containsUpercase = false
-        for character in password {
-            if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(character)){
-                containsUpercase = true
-            }
-            if ("1234567890".contains(character)){
-                containsNumber = true
-            }
-            if ("!?#$%&/()=;:_-.,°".contains(character)){
-                containsSynbol = true
-            }
-        }
-        if (passwordLenght > 8 && containsSynbol  && containsUpercase && containsNumber){
-            return false
-        } else {
-            return true
-        }
-    }
-
     var body: some View {
         VStack {
             Text("Registrarse")
@@ -89,20 +66,20 @@ struct RegisterView: View {
             Button(action: {
                 if(password != confirmpassword){
                     mostrarAlerta = true
-                } else if (isWeak(password)){
+                } else if (authViewModel.isWeak(password)){
                     mostrarAlerta1 = true
                 } else {
                     Task {
                         authViewModel.createNewAccount(email: email, password: password, name: name, isAdmin: isAdmin)
                     }
+                    dismiss()
                 }
             }) {
                 Text("Registrarse")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.green)
-                    .background(email.isEmpty || password.isEmpty || name.isEmpty ?  .gray : .green )
+                    .background(email.isEmpty || password.isEmpty || name.isEmpty ?  .gray : .blue )
                     .cornerRadius(10)
             }
             .disabled(email.isEmpty || password.isEmpty || name.isEmpty)
@@ -124,8 +101,7 @@ struct RegisterView: View {
                     .padding(.top, 20)
             }
         }
-        .padding()
-        .navigationTitle("Registrarse")
+        .padding(.all)
     }
 }
 
