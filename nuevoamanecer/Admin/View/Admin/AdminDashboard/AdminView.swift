@@ -241,7 +241,7 @@ struct AdminView: View {
                                  .onChange(of: search, perform: performSearchByName)
                                   
                          }
-                         .frame(width: 300)
+                         .frame(width: 250)
                          .cornerRadius(10) // Asegúrate de que este está aquí
                          .background(Color(.systemGray6))
                          .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
@@ -294,6 +294,9 @@ struct AdminView: View {
                          Text("Filtrado")
                              .font(.system(size: 24, weight: .bold))
                              .foregroundColor(Color.gray)
+                             .padding(.trailing)
+                         
+                         Divider()
                          
                          
                          //Nivel cognitivo
@@ -367,8 +370,9 @@ struct AdminView: View {
                          }
                          Spacer()
                      }
-                     .padding(.horizontal, 50)
+                     .frame(maxHeight: 50)
                      .padding(.vertical, 20)
+                     .padding(.horizontal, 70)
 
                      
                      /*

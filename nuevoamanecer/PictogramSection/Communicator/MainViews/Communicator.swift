@@ -72,6 +72,7 @@ struct Communicator: View {
                         Text("Categorias")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(Color.gray)
+                        Divider()
 
                         HStack{
                             CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
@@ -80,7 +81,8 @@ struct Communicator: View {
                         .padding([.leading, .top, .bottom])
                         Spacer()
                     }
-                    //.padding(.vertical)
+                    .frame(maxHeight: 60)
+                    .padding(.vertical, 20)
                     .padding(.horizontal, 70)
                     
                     Rectangle()
