@@ -235,9 +235,9 @@ struct AdminView: View {
                                  .resizable()
                                  .frame(width: 20, height: 20)
                                  .foregroundColor(Color.gray)
-                                 .padding()
+                                 .padding([.top, .bottom, .leading])
                              TextField("Buscar niño o grupo", text: $search)
-                                 .padding()
+                                 .padding([.top, .bottom, .trailing])
                                  .onChange(of: search, perform: performSearchByName)
                                   
                          }
