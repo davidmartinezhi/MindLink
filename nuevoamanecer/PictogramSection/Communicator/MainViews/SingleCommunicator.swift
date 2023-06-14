@@ -13,16 +13,10 @@ struct SingleCommunicator: View {
         
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
-    
     @State var isLocked: Bool = false
-    @Binding var hiddenNavBar: Bool
-    
     @State var onLeftOfSwitch: Bool = true
     
     var body: some View {
         Communicator(pictoCollectionPath: pictoCollectionPath, catCollectionPath: catCollectionPath, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, isLocked: $isLocked, showSwitchView: false, onLeftOfSwitch: $onLeftOfSwitch)
-            .onAppear{
-                hiddenNavBar = true
-            }
     }
 }

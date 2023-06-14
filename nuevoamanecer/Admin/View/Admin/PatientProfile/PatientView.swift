@@ -31,10 +31,11 @@ struct PatientView: View {
     @State private var selectedNoteIndex: Int?
     @State var selectedNoteToEdit: Note?
     //= Note(id: "", patientId: "", order: 0, title: "", text: "")
-    
-    @Binding var hiddenNavBar: Bool
-    
+        
     @State private var showCommunicatorMenu: Bool = false
+    
+    @State private var selection: String? = nil
+
 
     
     //obtiene edad del paciente
@@ -83,180 +84,142 @@ struct PatientView: View {
         
         VStack{
             //user header
-            GeometryReader{ geo in
+
                 
-                HStack {
-                    VStack{
-                        if(patient.image == "placeholder") {
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .padding(.trailing)
-                        } else {
-                            KFImage(URL(string: patient.image))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .padding(.trailing)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        
-                        HStack{
-                            Text(patient.firstName + " " + patient.lastName)
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(Color.black)
-                                .padding(.vertical, 1)
-                            
-                            Text(String(getAge(patient: patient)) + " años")
-                                .font(.system(size: 24, weight: .regular))
-                                .foregroundColor(Color.gray)
-                                .padding(.vertical, 1)
-                            
-                        }
-                        
-                        
-                        Text("Grupo: " + patient.group)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
-                            .padding(.vertical, 1)
-                        
-                        // Add other patient details here
-                        Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
-                            .padding(.vertical, 1)
-                        
-                        // Add other patient details here
-                        Text("Comunicación: " + patient.communicationStyle)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
-                            .padding(.vertical, 2)
-                    }
-                    Spacer()
-                    
-                    VStack{
-                        
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                // Handle settings action here
-                                showEditPatientView.toggle()
-                                
-                            }) {
-                                HStack{
-                                    Image(systemName: "gear")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                    Text("Editar Perfil")
-                                }
-                                .padding(10)
-                                .frame(width: 157, height: 40)
-                            }
-                        }
-                        .padding(.bottom)
-                        .fixedSize(horizontal: false, vertical: true)
-                        
-                        
-                        
-                        if geo.size.width < 900 {
-                            VStack{
-                                HStack{
-                                    Spacer()
-                                    NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
-                                        
-                                        HStack {
-                                            Text("Editar Comunicador")
-                                                .font(.headline)
-                                            
-                                        }
-                                        .padding(10)
-                                        .background(Color.green)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                    }
-                                    .frame(width: 157, height: 40)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(.top, 10)
-
-
-                                //.padding()
-                                
-                                HStack{
-                                    Spacer()
-                                    NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories")) {
-                                        
-                                        HStack {
-                                            Text("Comunicador")
-                                                .font(.headline)
-                                            
-                                        }
-                                        .padding(10)
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                    }
-                                    .frame(width: 157, height: 40)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(.top, 20)
-                                
-                            }
-                        }
-                        else{
-                            HStack{
-                                Spacer()
-                                
-                                NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories")) {
-                                    HStack {
-                                        Image(systemName: "pencil")
-                                            .resizable()
-                                            .frame(width: 20, height: 20)
-                                        
-                                        Text("Editar Comunicador")
-                                            .font(.headline)
-                                        
-                                    }
-                                    .padding(10)
-                                    .background(Color.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                                }
-                                
-                                
-                                NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories")) {
-                                    HStack {
-                                        Image(systemName: "message.fill")
-                                            .resizable()
-                                            .frame(width: 20, height: 20)
-                                        Text("Comunicador")
-                                            .font(.headline)
-                                        
-                                    }
-                                    .padding(10)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                                }
-                            }
-                        }
+            HStack {
+                VStack{
+                    if(patient.image == "placeholder") {
+                        Image(systemName: "person.circle")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                            .padding(.trailing)
+                    } else {
+                        KFImage(URL(string: patient.image))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                            .padding(.trailing)
                     }
                 }
-                .padding(20)
-                .padding(.horizontal, 50)
+                
+                VStack(alignment: .leading) {
+                    
+                    HStack{
+                        Text(patient.firstName + " " + patient.lastName)
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 1)
+                        
+                        Text(String(getAge(patient: patient)) + " años")
+                            .font(.system(size: 24, weight: .regular))
+                            .foregroundColor(Color.gray)
+                            .padding(.vertical, 1)
+                        
+                    }
+                    
+                    
+                    Text("Grupo: " + patient.group)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(Color.black)
+                        .padding(.vertical, 1)
+                    
+                    // Add other patient details here
+                    Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(Color.black)
+                        .padding(.vertical, 1)
+                    
+                    // Add other patient details here
+                    Text("Comunicación: " + patient.communicationStyle)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(Color.black)
+                        .padding(.vertical, 2)
+                }
                 Spacer()
                 
+                
+                
+                VStack{
+                    
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            // Handle settings action here
+                            showEditPatientView.toggle()
+                            
+                        }) {
+                            HStack{
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                Text("Editar Perfil")
+                            }
+                            .padding(10)
+                            .frame(width: 157, height: 40)
+                        }
+                    }
+                    .padding(.bottom)
+                    .fixedSize(horizontal: false, vertical: true)
+                    
+                    
+
+                    HStack{
+                        Spacer()
+                        
+                            
+                            Menu {
+                                
+                                Button {
+                                    selection = "A"
+                                } label: {
+                                    Text("Editar comunicador de \(patient.firstName)")
+                                    Image(systemName: "pencil")
+                                }
+                                
+                                Button {
+                                    selection = "B"
+                                } label: {
+                                    Text("Acceder a comunicador de \(patient.firstName)")
+                                    Image(systemName: "message.fill")
+                                }
+
+                                
+                            } label: {
+                                HStack {
+                                    Image(systemName: "ellipsis.circle")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Comunicador base")
+                                        .font(.headline)
+                                }
+                                .padding(10)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                            }
+                            
+                            // Para EDITAR COMUNICADOR BASE
+                            NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories"), tag: "A", selection: $selection) {
+                                EmptyView()
+                            }
+                            // Para ACCEDER A COMUNICADOR BASE
+                            NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories"), tag: "B", selection: $selection) {
+                                EmptyView()
+                            }
+                        
+                        
+                    }
+                }
             }
-            .frame(maxHeight: 210)
+            .padding(20)
+            .padding(.horizontal, 50)
+            Spacer()
+                
+
+            //.frame(maxHeight: 210)
             //.background(.red)
             
             Divider()
@@ -446,7 +409,6 @@ struct PatientView: View {
         }
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
-            hiddenNavBar = true
         }
 
         
@@ -456,6 +418,6 @@ struct PatientView: View {
 
 struct PatientView_Previews: PreviewProvider {
     static var previews: some View {
-        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()), hiddenNavBar: .constant(false))
+        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
     }
 }

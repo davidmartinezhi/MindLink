@@ -12,6 +12,7 @@ import Kingfisher
 struct AdminView: View {
     
     //Modelo pacientes y notas
+    @ObservedObject var authViewModel: AuthViewModel
     @StateObject var patients = PatientsViewModel()
     @StateObject var notes = NotesViewModel()
     
@@ -44,8 +45,12 @@ struct AdminView: View {
     @State private var showSelectedCognitiveLevel = false
     
     //Hidden NavBar
-    @Binding var hiddenNavBar: Bool
+    @State private var showAdminMenu = false
     
+    var user: User
+    
+    @State private var selection: String? = nil
+        
 
     //Reseteo de filtrado
     // Filtrado
@@ -231,6 +236,7 @@ struct AdminView: View {
     
     var body: some View {
         NavigationStack{
+                AdminNav(showAdminMenu: $showAdminMenu, user: user)
                  VStack{
                      
                      //Search bar y Boton para agregar niños
@@ -271,21 +277,49 @@ struct AdminView: View {
                          .foregroundColor(.white)
                          .cornerRadius(10)
                          
-                         
-                         
-                         //Boton para ACCEDER A COMUNICADOR BASE
-                         NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories", hiddenNavBar: $hiddenNavBar)) {
-                             HStack {
-                                 Image(systemName: "message.fill")
-                                     .resizable()
-                                     .frame(width: 20, height: 20)
-                                 Text("Comunicador base")
-                                     .font(.headline)
+                         HStack{
+                             
+                             Menu {
+                                 
+                                 Button {
+                                     selection = "A"
+                                 } label: {
+                                     Text("Editar comunicador base")
+                                     Image(systemName: "pencil")
+                                 }
+                                 
+                                 Button {
+                                     selection = "B"
+                                 } label: {
+                                     Text("Acceder a comunicador base")
+                                     Image(systemName: "message.fill")
+                                 }
+
+                                 
+                             } label: {
+                                 HStack {
+                                     Image(systemName: "ellipsis.circle")
+                                         .resizable()
+                                         .frame(width: 20, height: 20)
+                                     Text("Comunicador base")
+                                         .font(.headline)
+                                 }
+                                 .padding(10)
+                                 .background(Color.blue)
+                                 .foregroundColor(.white)
+                                 .cornerRadius(10)
                              }
-                             .padding(10)
-                             .background(Color.blue)
-                             .foregroundColor(.white)
-                             .cornerRadius(10)
+                             
+                             // Para EDITAR COMUNICADOR BASE
+                             NavigationLink(destination: PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "A", selection: $selection) {
+                                 EmptyView()
+                                 
+                             }
+                             
+                             // Para ACCEDER A COMUNICADOR BASE
+                             NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "B", selection: $selection) {
+                                 EmptyView()
+                             }
                          }
                      }
                      .padding(.horizontal, 50)
@@ -466,16 +500,16 @@ struct AdminView: View {
                                  .cornerRadius(10)
                                  //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
                                  .padding([.leading, .trailing, .bottom], 10) 
-                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient, hiddenNavBar: $hiddenNavBar)).opacity(0))
+                                 .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
                          }
                          .listStyle(.automatic)
                          .sheet(isPresented: $showAddPatient) {
                              AddPatientView(patients:patients)
                          }
+                         .sheet(isPresented: $showAdminMenu){
+                             AdminMenuView(authViewModel: authViewModel, user: user)
+                         }
                      }
-                 }
-                 .onAppear{
-                     hiddenNavBar = false
                  }
              }
         }
@@ -485,7 +519,7 @@ struct AdminView: View {
 
     struct AdminView_Previews: PreviewProvider {
         static var previews: some View {
-            AdminView(hiddenNavBar: .constant(false))
+            AdminView(authViewModel: AuthViewModel(), user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
         }
     }
     

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var authViewModel = AuthViewModel()
-    @State var hiddenNavBar = false
-    @State private var showAdminMenu = false
+    //@State var hiddenNavBar = false
+    //@State private var showAdminMenu = false
 
     func initialFetch() {
         authViewModel.fetchCurrentUser()
@@ -20,16 +20,10 @@ struct ContentView: View {
         VStack {
             if let user = authViewModel.user {
                 VStack {
-                    // Barra de navegación personalizada
-                    if (!hiddenNavBar) {
-                        AdminNav(showAdminMenu: $showAdminMenu, user: user)
-                    }
                     // Contenido principal de la vista
-                    AdminView(hiddenNavBar: $hiddenNavBar)
+                    AdminView(authViewModel: authViewModel, user: user)
                 }
-                .sheet(isPresented: $showAdminMenu){
-                    AdminMenuView(authViewModel: authViewModel, user: user)
-                }
+                
             } else {
                 AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión
             }

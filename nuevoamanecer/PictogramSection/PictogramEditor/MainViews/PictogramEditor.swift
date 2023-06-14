@@ -39,6 +39,9 @@ struct PictogramEditor: View {
     
     // Cuerpo de la vista
     var body: some View {
+        
+        
+        
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
@@ -148,6 +151,7 @@ struct PictogramEditor: View {
              }
          }
     }
+        
     
     // Función que construye los botones de los pictogramas
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
