@@ -55,12 +55,12 @@ struct LockView: View {
         ZStack {
             Rectangle()
                 .frame(width: width, height: height)
-                .foregroundColor(.white)
+                .foregroundColor(isLocked ? .gray : .blue)
                 .cornerRadius(10)
                 .overlay(alignment: .leading){
                     Rectangle()
                         .frame(width: width * (longPressProgress / longPressDuration), height: height)
-                        .foregroundColor(.green)
+                        .foregroundColor(.blue)
                         .cornerRadius(10)
                 }
             
@@ -73,8 +73,7 @@ struct LockView: View {
             }
             .padding(10)
             .frame(width: width, height: height)
-            .background(!isLocked ? Color.blue : nil)
-            .foregroundColor(!isLocked ? Color.white : Color.blue)
+            .foregroundColor(Color.white)
             .cornerRadius(10)
         }
         .frame(width: width, height: height)
