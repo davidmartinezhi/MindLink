@@ -14,126 +14,84 @@ struct AdminMenuView: View {
     
     var user: User
     @State private var name: String
-
+    @State private var email: String
+    @State private var password = ""
+    @State private var confirmpassword = ""
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
     @State private var showLogoutAlert = false
-    @State private var showAlertNoImage = false
     
     @State private var upload_image: UIImage?
     @State private var shouldShowImagePicker: Bool = false
     @State private var uploadData: Bool = false
     @State private var imageURL = URL(string: "")
     @State private var storage = FirebaseAlmacenamiento()
-    @State private var deletedImage = false
 
     init(authViewModel: AuthViewModel, user: User) {
         self.authViewModel = authViewModel
         self.user = user
         _name = State(initialValue: user.name)
+        _email = State(initialValue: user.email)
     }
     
     var body: some View {
         VStack {
-            
-            //Logout button
-            HStack{
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    HStack {
-                        Text("Cerrar sesión")
-                            .font(.system(size: 16))
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrowshape.turn.up.left.fill")
-                            .font(.system(size: 12))
-                    }
-                }
-                .padding()
-                .background(Color.red)
-                .cornerRadius(10)
-                .foregroundColor(.white)
-                .frame(maxWidth: 170)
-                
-                Spacer()
-            }
-            
             VStack {
-                //Imagen del admin
+                
+                //Imagen del usuario
                 VStack{
-                        Menu {
-                            Button(action: {
-                                shouldShowImagePicker.toggle()
-                                deletedImage = false
-                                
-                            }, label: {
-                                Text("Seleccionar Imagen")
-                            })
-                            Button(action: {
-                                if (user.image == "placeholder" || deletedImage) {
-                                    showAlertNoImage.toggle()
-                                } else {
-                                    deletedImage = true
-                                }
-                            }, label: {
-                                Text("Eliminar Imagen")
-                            })
-                        } label: {
-                            if let displayImage = self.upload_image {
-                                Image(uiImage: displayImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 128, height: 128)
-                                    .cornerRadius(128)
+                    Button() {
+                        shouldShowImagePicker.toggle()
+                    } label: {
+                        if let displayImage = self.upload_image {
+                            Image(uiImage: displayImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 128, height: 128)
+                                .cornerRadius(128)
+                                .padding(.horizontal, 20)
+                        } else {
+                                //No imagen
+                                if(user.image == "placeholder") {
+                                    ZStack{
+                                        Image(systemName: "person.circle")
+                                            .font(.system(size: 100))
+                                        //.foregroundColor(Color(.label))
+                                            .foregroundColor(.gray)
+                                        
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 25))
+                                            .offset(x: 35, y: 40)
+                                            .foregroundColor(.blue)
+                                    }
                                     .padding(.horizontal, 20)
-                            } else {
-                                    //No imagen
-                                if(user.image == "placeholder" || user.image == "" || deletedImage) {
-                                        ZStack{
-                                            Image(systemName: "person.circle")
-                                                .font(.system(size: 100))
-                                            //.foregroundColor(Color(.label))
-                                                .foregroundColor(.gray)
-                                            
-                                            Image(systemName: "plus.circle.fill")
-                                                .font(.system(size: 25))
-                                                .offset(x: 35, y: 40)
-                                                .foregroundColor(.blue)
-                                        }
-                                        .padding(.horizontal, 20)
-                                    }
+                                }
+                                
+                                //Imagen previamente subida
+                                else{
                                     
-                                    //Imagen previamente subida
-                                    else{
-                                        ZStack{
-                                            KFImage(URL(string: user.image))
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 128, height: 128)
-                                                .cornerRadius(128)
-                                                .padding(.horizontal, 20)
-                                            /* # Creo que es mejor quitar el lapiz azul cuando ya hay una foto de perfil #
-                                            Image(systemName: "pencil.circle.fill")
-                                                .font(.system(size: 50))
-                                                .offset(x: 35, y: 40)
-                                                .foregroundColor(.blue)
-                                             */
-                                        }
-                                        .padding(.horizontal, 20)
+                                    ZStack{
+                                        KFImage(URL(string: user.image))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 128, height: 128)
+                                            .cornerRadius(128)
+                                            .padding(.horizontal, 20)
+                                        
+                                        Image(systemName: "pencil")
+                                            .font(.system(size: 25))
+                                            .offset(x: 35, y: 40)
+                                            .foregroundColor(.blue)
                                     }
-                            }
+                                    .padding(.horizontal, 20)
+                                }
                         }
+                    }
+                    //Spacer()
                 }
-                .alert("Error", isPresented: $showAlertNoImage){
-                    Button("Ok") {}
-                }
-            message: {
-                Text("Este perfil no cuenta con imagen")
-            }
+                .padding(.top, 30)
                 .frame(maxHeight: 150)
                 
                 /*
@@ -151,13 +109,28 @@ struct AdminMenuView: View {
                     .foregroundColor(.gray)
                 
             }
-            .frame(maxHeight: 200)
+            .frame(maxHeight: 150)
             //.padding(.top, 50)
             
             VStack{
                 Form {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
+                            .textContentType(.username)
+                        TextField("Email", text: $email)
+                            .textContentType(.emailAddress)
+                        SecureField("Nueva contraseña", text: $password)
+                            .textInputAutocapitalization(.never)
+                        .keyboardType(.asciiCapable)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.newPassword)
+                        if (password != ""){
+                            SecureField("confirmar contraseña", text: $confirmpassword)
+                                .textInputAutocapitalization(.never)
+                            .keyboardType(.asciiCapable)
+                            .autocorrectionDisabled(true)
+                            .textContentType(.newPassword)
+                        }
                     }
                 }
             }
@@ -188,9 +161,6 @@ struct AdminMenuView: View {
                     //Guardar
                     Button(action: {
                         
-                        
-                        
-                        
                         if let thisImage = self.upload_image {
                             Task {
                                 await storage.uploadImage(image: thisImage, name: user.name + "admin_profile_picture") { url in
@@ -198,13 +168,19 @@ struct AdminMenuView: View {
                                     imageURL = url
                                     
                                     //Checar que datos son validos
-                                    if (name == "") {
+                                    if (name.isEmpty || email.isEmpty) {
                                         self.alertTitle = "Faltan campos"
                                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                                         self.showingAlert = true
-                                        
-                                    }
-                                    else{
+                                    } else if (password != confirmpassword) {
+                                        self.alertTitle = "Confirme su contraseña"
+                                        self.alertMessage = "Por favor, confirme correctamente su contraseña."
+                                        self.showingAlert = true
+                                    } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                                        self.alertTitle = "Contraseña Invalida"
+                                        self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                        self.showingAlert = true
+                                    } else{
                                         uploadData.toggle()
                                         dismiss()
                                     }
@@ -212,21 +188,24 @@ struct AdminMenuView: View {
                             }
                         } else {
                             //Checar que datos son validos
-                            if (name == "") {
+                            if (name.isEmpty || email.isEmpty) {
                                 self.alertTitle = "Faltan campos"
                                 self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                                 self.showingAlert = true
                                 
-                            }
-                            else{
+                            } else if (password != confirmpassword) {
+                                self.alertTitle = "Confirme su contraseña"
+                                self.alertMessage = "Por favor, confirme correctamente su contraseña."
+                                self.showingAlert = true
+                            } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                                self.alertTitle = "Contraseña Invalida"
+                                self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                self.showingAlert = true
+                            } else{
                                 uploadData.toggle()
                                 dismiss()
                             }
                         }
-                        
-                        
-                        
-                        
                     
                     }) {
                         HStack {
@@ -242,55 +221,31 @@ struct AdminMenuView: View {
                     .cornerRadius(10)
                     .foregroundColor(.white)
                 }
-                //.padding(.bottom)
-
-                /**
-                Button(action: {
-                    self.showLogoutAlert.toggle()
-                }) {
-                    HStack {
-                        Text("Cerrar sesión")
-                            .font(.headline)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrowshape.turn.up.left.fill")
-                    }
-                }
-                .padding()
-                .background(Color.red.opacity(0.1))
-                .cornerRadius(10)
-                .foregroundColor(.red)
-                 */
             }
             .padding()
-            .alert(isPresented: $showLogoutAlert) {
-                Alert(
-                    title: Text("Cerrar Sesión"),
-                    message: Text("¿Estás seguro que quieres cerrar la sesión?"),
-                    primaryButton: .destructive(Text("Cerrar sesión"), action: {
-                       authViewModel.logout()
-                    }),
-                    secondaryButton: .cancel()
-                )
-            }
             
             Spacer()
         }
         .padding()
         .background(Color(.init(white: 0, alpha: 0.05))
             .ignoresSafeArea())
-        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: { print("HOLAAAAA") }) {
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
+        }
+        .alert(alertTitle, isPresented: $showingAlert){
+            Button("OK"){}
+        } message: {
+            Text(alertMessage)
         }
         .onDisappear{
             if(uploadData) {
                 self.name = name
+                self.email = email
                 
-                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder")
-                //Si se presiono el boton de eliminar imagen y despues guardar, se borra la imagen de la base de datos
-                if(deletedImage) {
-                    storage.deleteFile(name: user.name + "admin_profile_picture")
+                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder", email: email)
+                authViewModel.updateAuthEmail(email: email)
+                if(password != ""){
+                    authViewModel.updateAuthPassword(password: password)
                 }
             }
         }
@@ -302,3 +257,4 @@ struct AdminMenuView_Previews: PreviewProvider {
         AdminMenuView(authViewModel: AuthViewModel() ,user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
     }
 }
+
