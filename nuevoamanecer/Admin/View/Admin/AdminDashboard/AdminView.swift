@@ -13,6 +13,7 @@ struct AdminView: View {
     
     //Modelo pacientes y notas
     @ObservedObject var authViewModel: AuthViewModel
+    @StateObject var users = AuthViewModel()
     @StateObject var patients = PatientsViewModel()
     @StateObject var notes = NotesViewModel()
     
@@ -236,7 +237,6 @@ struct AdminView: View {
     
     var body: some View {
         NavigationStack{
-                AdminNav(showAdminMenu: $showAdminMenu, user: user)
                  VStack{
                      
                      //Search bar y Boton para agregar niños
@@ -261,31 +261,35 @@ struct AdminView: View {
                          
                          Spacer()
                          //Boton para añadir paciente
-                         Button(action: {
-                             showAddPatient.toggle()
-                         }) {
-                             HStack {
-                                 Image(systemName: "plus.circle.fill")
-                                     .resizable()
-                                     .frame(width: 20, height: 20)
-                                 Text("Agregar Niño")
-                                     .font(.headline)
+                         if (users.user?.isAdmin == true) {
+                             Button(action: {
+                                 showAddPatient.toggle()
+                             }) {
+                                 HStack {
+                                     Image(systemName: "plus.circle.fill")
+                                         .resizable()
+                                         .frame(width: 20, height: 20)
+                                     Text("Agregar Niño")
+                                         .font(.headline)
+                                 }
                              }
+                             .padding(10)
+                             .background(Color.blue)
+                             .foregroundColor(.white)
+                             .cornerRadius(10)
                          }
-                         .padding(10)
-                         .background(Color.blue)
-                         .foregroundColor(.white)
-                         .cornerRadius(10)
                          
                          HStack{
                              
                              Menu {
                                  
-                                 Button {
-                                     selection = "A"
-                                 } label: {
-                                     Text("Editar comunicador base")
-                                     Image(systemName: "pencil")
+                                 if (users.user?.isAdmin == true) {
+                                     Button {
+                                         selection = "A"
+                                     } label: {
+                                         Text("Editar comunicador base")
+                                         Image(systemName: "pencil")
+                                 }
                                  }
                                  
                                  Button {

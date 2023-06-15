@@ -11,6 +11,8 @@ struct ContentView: View {
     @ObservedObject var authViewModel = AuthViewModel()
     //@State var hiddenNavBar = false
     //@State private var showAdminMenu = false
+    @State private var showAdminView = false
+    @State private var showRegisterView = false
 
     func initialFetch() {
         authViewModel.fetchCurrentUser()
@@ -21,7 +23,14 @@ struct ContentView: View {
             if let user = authViewModel.user {
                 VStack {
                     // Contenido principal de la vista
+                    AdminNav(authViewModel:authViewModel, showAdminView: $showAdminView, showRegisterView: $showRegisterView, user: user)
                     AdminView(authViewModel: authViewModel, user: user)
+                }
+                .sheet(isPresented: $showAdminView){
+                    AdminMenuView(authViewModel: authViewModel, user: user)
+                }
+                .sheet(isPresented: $showRegisterView){
+                    RegisterView(authViewModel: authViewModel)
                 }
                 
             } else {
