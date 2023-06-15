@@ -25,6 +25,7 @@ struct RegisterView: View {
             Text("Registrarse")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .frame(maxWidth: 600)
             
             TextField("Correo electrónico", text: $email)
                 .padding()
@@ -32,6 +33,7 @@ struct RegisterView: View {
                 .cornerRadius(10)
                 .padding(.bottom, 20)
                 .textContentType(.emailAddress)
+                .frame(maxWidth: 600)
             
             SecureField("Contraseña", text: $password)
                 .padding()
@@ -42,6 +44,7 @@ struct RegisterView: View {
                 .keyboardType(.asciiCapable)
                 .autocorrectionDisabled(true)
                 .textContentType(.newPassword)
+                .frame(maxWidth: 600)
             
             SecureField("Confrimar Contraseña", text: $confirmpassword)
                 .padding()
@@ -52,12 +55,14 @@ struct RegisterView: View {
                 .keyboardType(.asciiCapable)
                 .autocorrectionDisabled(true)
                 .textContentType(.password)
+                .frame(maxWidth: 600)
             
             TextField("Nombre", text: $name)
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .padding(.bottom, 20)
+                .frame(maxWidth: 600)
             
             Toggle(isOn: $isAdmin) {
                 Text("¿Es administrador?")
@@ -83,6 +88,7 @@ struct RegisterView: View {
                     .background(email.isEmpty || password.isEmpty || name.isEmpty ?  .gray : .blue )
                     .cornerRadius(10)
             }
+            .frame(maxWidth: 600)
             .disabled(email.isEmpty || password.isEmpty || name.isEmpty)
             .alert("Error", isPresented: $mostrarAlerta){
                 Button("OK"){}
@@ -102,7 +108,8 @@ struct RegisterView: View {
                     .padding(.top, 20)
             }
         }
-        .padding(.all)
+        .padding()
+        .padding(.horizontal, 70)
     }
 }
 

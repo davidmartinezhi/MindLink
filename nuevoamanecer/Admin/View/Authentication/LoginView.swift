@@ -63,10 +63,11 @@ struct LoginView: View {
                 .alert("Error", isPresented: $showAlert){
                     Button("Ok") {}
                 }
+                /*
             message: {
                 Text(authViewModel.errorMessage!)
             }
-                
+               */
                 /*
                 if let messageError = authViewModel.errorMessage {
                     Text(messageError)
