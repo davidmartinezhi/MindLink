@@ -20,6 +20,8 @@ struct CategoryEditorWindowView: View {
     
     @State var showErrorMessage: Bool = false
     
+    @State var DBActionInProgress: Bool = false
+    
     init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
         self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
@@ -83,6 +85,7 @@ struct CategoryEditorWindowView: View {
                     
                     let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture)
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: addButtonIsDisabled){
+                        DBActionInProgress = true
                         if isNewCat {
                             catVM.addCat(catModel: catModel){ error, docId in
                                 if error != nil {
@@ -102,6 +105,7 @@ struct CategoryEditorWindowView: View {
                             }
                         }
                     }
+                    .allowsHitTesting(!DBActionInProgress)
                                         
                     Spacer()
                 }

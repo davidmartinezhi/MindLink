@@ -30,6 +30,8 @@ struct PictogramEditorWindowView: View {
     @State private var showImagePicker: Bool = false
     @State var temporaryUIImage: UIImage? = nil
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
+    
+    @State var DBActionInProgress: Bool = false
             
     init(pictoModel: PictogramModel?, isNewPicto: Binding<Bool>, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
         _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
@@ -92,6 +94,7 @@ struct PictogramEditorWindowView: View {
                     // Save
                     let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: saveButtonIsDisabled) {
+                        DBActionInProgress = true
                         Task {
                             if temporaryUIImage != nil {
                                 let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
@@ -122,6 +125,7 @@ struct PictogramEditorWindowView: View {
                             }
                         }
                     }
+                    .allowsHitTesting(!DBActionInProgress)
                 }
             }
             .padding()
