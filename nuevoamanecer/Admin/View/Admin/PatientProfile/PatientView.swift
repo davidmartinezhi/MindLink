@@ -15,6 +15,7 @@ struct PatientView: View {
     //ViewModels
     @ObservedObject var patients : PatientsViewModel
     @ObservedObject var notes : NotesViewModel
+    @StateObject var users = AuthViewModel()
     
     
     //patient
@@ -146,19 +147,22 @@ struct PatientView: View {
                     
                     HStack{
                         Spacer()
-                        Button(action: {
-                            // Handle settings action here
-                            showEditPatientView.toggle()
-                            
-                        }) {
-                            HStack{
-                                Image(systemName: "gear")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("Editar Perfil")
-                            }
-                            .padding(10)
-                            .frame(width: 157, height: 40)
+                        // validar que el usuario sea admin para mostrar
+                        if (users.user?.isAdmin == true) {
+                            Button(action: {
+                                // Handle settings action here
+                                showEditPatientView.toggle()
+                                
+                            }) {
+                                HStack{
+                                    Image(systemName: "gear")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Editar Perfil")
+                                }
+                                .padding(10)
+                                .frame(width: 157, height: 40)
+                        }
                         }
                     }
                     .padding(.bottom)
@@ -171,12 +175,14 @@ struct PatientView: View {
                         
                             
                             Menu {
-                                
-                                Button {
-                                    selection = "A"
-                                } label: {
-                                    Text("Editar comunicador de \(patient.firstName)")
-                                    Image(systemName: "pencil")
+                                // validar que el usuario sea admin para mostrar
+                                if (users.user?.isAdmin == true) {
+                                    Button {
+                                        selection = "A"
+                                    } label: {
+                                        Text("Editar comunicador de \(patient.firstName)")
+                                        Image(systemName: "pencil")
+                                }
                                 }
                                 
                                 Button {
@@ -192,7 +198,7 @@ struct PatientView: View {
                                     Image(systemName: "ellipsis.circle")
                                         .resizable()
                                         .frame(width: 20, height: 20)
-                                    Text("Comunicador base")
+                                    Text("Comunicador de \(patient.firstName)")
                                         .font(.headline)
                                 }
                                 .padding(10)
@@ -334,27 +340,30 @@ struct PatientView: View {
                                 .frame(minHeight: 150)
                                 .padding([.top, .bottom], 5)
                                 .swipeActions(edge: .trailing) {
-                                    Button {
-                                        //selectedNote = note
-                                        selectedNoteIndex = index
-                                        showDeleteNoteAlert = true
+                                    // validar que el usuario sea admin para mostrar
+                                    if (users.user?.isAdmin == true) {
+                                        Button {
+                                            //selectedNote = note
+                                            selectedNoteIndex = index
+                                            showDeleteNoteAlert = true
+                                            
+                                        } label: {
+                                            Label("Eliminar", systemImage: "trash")
+                                        }
+                                        .tint(.red)
+                                        .padding()
                                         
-                                    } label: {
-                                        Label("Eliminar", systemImage: "trash")
+                                        Button {
+                                            // Aquí va la lógica para actualizar la nota
+                                            selectedNoteToEdit = note
+                                            showEditNoteView = true
+                                            
+                                        } label: {
+                                            Label("Editar", systemImage: "pencil")
+                                        }
+                                        .tint(.blue)
+                                        .padding()
                                     }
-                                    .tint(.red)
-                                    .padding()
-                                    
-                                    Button {
-                                        // Aquí va la lógica para actualizar la nota
-                                        selectedNoteToEdit = note
-                                        showEditNoteView = true
-                                        
-                                    } label: {
-                                        Label("Editar", systemImage: "pencil")
-                                    }
-                                    .tint(.blue)
-                                    .padding()
                                 }
                             }
                             .onMove(perform: moveNote)

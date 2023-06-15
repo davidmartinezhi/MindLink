@@ -11,6 +11,8 @@ struct LoginView: View {
     @ObservedObject var authViewModel: AuthViewModel
     @State var email = ""
     @State var password = ""
+    @State private var contraseñaIncorrecta: Bool = false
+    @State private var usuarioNoExiste: Bool = false
     @State private var showAlert: Bool = false
 
     var body: some View {
@@ -33,6 +35,9 @@ struct LoginView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .padding(.bottom, 20)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.asciiCapable)
+                    .autocorrectionDisabled(true)
                 
                 Button(action: {
                     Task {
@@ -40,11 +45,8 @@ struct LoginView: View {
                             authViewModel.loginUser(email: email, password: password)
                             
                             if(authViewModel.errorMessage != nil) {
-                                //showAlert.toggle()
+                                showAlert.toggle()
                             }
-                        } else {
-                            authViewModel.errorMessage = "Favor de completar todos los campos"
-                            //showAlert.toggle()
                         }
                     }
                 }) {
@@ -53,15 +55,16 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
+                        .background(email.isEmpty || password.isEmpty ? .gray : .blue)
                         .cornerRadius(10)
                 }
+                .disabled(email.isEmpty || password.isEmpty)
                 .padding(.horizontal)
                 .alert("Error", isPresented: $showAlert){
                     Button("Ok") {}
                 }
             message: {
-                //Text(authViewModel.errorMessage!)
+                Text(authViewModel.errorMessage!)
             }
                 
                 /*

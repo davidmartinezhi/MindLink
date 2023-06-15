@@ -172,7 +172,6 @@ struct PictogramEditor: View {
              }
         }
     }
-        
     
     // Función que construye los botones de los pictogramas
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
