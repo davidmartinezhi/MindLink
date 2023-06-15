@@ -192,7 +192,7 @@ struct PatientView: View {
                                     Image(systemName: "ellipsis.circle")
                                         .resizable()
                                         .frame(width: 20, height: 20)
-                                    Text("Comunicador base")
+                                    Text("Comunicador de \(patient.firstName)")
                                         .font(.headline)
                                 }
                                 .padding(10)

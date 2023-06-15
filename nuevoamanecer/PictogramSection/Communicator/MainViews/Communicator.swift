@@ -102,6 +102,7 @@ struct Communicator: View {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
          }
+        .navigationBarBackButtonHidden(isLocked)
     }
     
     private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
