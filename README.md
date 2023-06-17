@@ -12,7 +12,7 @@ The application offers a range of communication tools, including Visual Board, S
 
 To install the application, follow the steps below:
 
-1. Clone this repository on your local machine using `https://github.com/<your-github-username>/<your-repo-name>.git`.
+1. Clone this repository on your local machine using `https://github.com/davidmartinezhi/MindLink.git`.
 2. `cd` into the cloned repository directory.
 3. If you have not installed Swift and SwiftUI on your machine, install it following the instructions on its official website.
 4. Open the project in Xcode and click on the Run button.
