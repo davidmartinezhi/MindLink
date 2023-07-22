@@ -10,6 +10,7 @@ import SwiftUI
 struct TextFieldView: View {
     var fieldWidth: Double
     var placeHolder: String
+    var background: Color = Color(red: 0.9, green: 0.9, blue: 0.9)
     @Binding var inputText: String
     
     var body: some View {
@@ -29,7 +30,7 @@ struct TextFieldView: View {
             }
         }
         .frame(width: fieldWidth)
-        .background(Color(red: 0.9, green: 0.9, blue: 0.9))
+        .background(background)
         .cornerRadius(10)
     }
 }

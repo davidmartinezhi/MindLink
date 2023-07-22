@@ -40,8 +40,16 @@ class SortedArray<T: Comparable> {
         self.add(item: newItem)
     }
     
-    func getItems() -> [T] {
-        return self.items
+    func getItems(descending: Bool = false) -> [T] {
+        if descending {
+            var itemsDescending: [T] = []
+            for i in (self.count-1)...0 {
+                itemsDescending.append(self.items[i])
+            }
+            return itemsDescending
+        } else {
+            return self.items
+        }
     }
     
     private func findItem(item: T) -> Int? {

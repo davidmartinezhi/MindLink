@@ -26,8 +26,6 @@ struct nuevoamanecerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-            // PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
-            //SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
         }
     }
 }

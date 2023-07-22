@@ -42,8 +42,6 @@ struct PictogramEditor: View {
     // Cuerpo de la vista
     var body: some View {
         
-        
-        
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
@@ -54,7 +52,7 @@ struct PictogramEditor: View {
                 // Barra superior con botones para eliminar y agregar pictogramas
                 HStack {
                     
-                    SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                     
                     Spacer()
                     
