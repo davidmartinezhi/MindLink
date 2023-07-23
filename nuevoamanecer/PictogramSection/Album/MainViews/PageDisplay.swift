@@ -25,7 +25,7 @@ struct PageDisplay: View {
                     
                     Spacer()
                     
-                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", systemNameImage: soundOn ? "speaker.slash" : "speaker"){
+                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", width: 200, systemNameImage: soundOn ? "speaker.slash" : "speaker"){
                         soundOn.toggle()
                     }
                 }

@@ -41,7 +41,7 @@ struct PageCreationView: View {
         .padding(.vertical, 30)
         .frame(width: width)
         .background(.white)
-        .border(.black)
+        .cornerRadius(10)
     }
 }
 

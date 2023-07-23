@@ -17,13 +17,18 @@ struct PageEdit: View {
     
     @State var pickingPictograms: Bool = false
     
-    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, pictoCache: PictogramCache, catCache: CategoryCache){
+    var isNew: Bool
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, pictoCache: PictogramCache, catCache: CategoryCache, isNew: Bool){
         self.patientId = patientId
         self.pageVM = pageVM
         _pageModel = State(initialValue: pageModel)
         _pageModelCapture = State(initialValue: pageModel)
         self.pictoCache = pictoCache
         self.catCache = catCache
+        self.isNew = isNew
     }
     
     var body: some View {
@@ -34,17 +39,28 @@ struct PageEdit: View {
                     
                     Spacer()
                     
-                    ButtonWithImageView(text: "Agregar pictogramas", systemNameImage: "plus") {
+                    ButtonWithImageView(text: "Agregar pictogramas", width: 250, systemNameImage: "plus") {
                         pickingPictograms = true
                     }
                     
                     let pageHasChanged: Bool = pageModelCapture != pageModel
-                    ButtonWithImageView(text: pageHasChanged ? "Guardar" : "Guardado", systemNameImage: pageHasChanged ? "square.and.arrow.down" : "checkmark", isDisabled: !pageHasChanged) {
-                        pageVM.editPage(pageId: pageModel.id!, pageModel: pageModel){ error in
-                            if error != nil {
-                                // Error
-                            } else {
-                                pageModelCapture = pageModel
+                    ButtonWithImageView(text: pageHasChanged || isNew ? "Guardar" : "Guardado", systemNameImage: pageHasChanged || isNew ? "square.and.arrow.down" : "checkmark", isDisabled: !(pageHasChanged || isNew)) {
+                        if isNew {
+                            pageVM.addPage(pageModel: pageModel) { error in
+                                if error != nil {
+                                    // Error
+                                } else {
+                                    pageModelCapture = pageModel
+                                    dismiss()
+                                }
+                            }
+                        } else {
+                            pageVM.editPage(pageId: pageModel.id!, pageModel: pageModel){ error in
+                                if error != nil {
+                                    // Error
+                                } else {
+                                    pageModelCapture = pageModel
+                                }
                             }
                         }
                     }
@@ -61,11 +77,13 @@ struct PageEdit: View {
             DoublePictogramPickerView(pageModel: $pageModel, isPresented: $pickingPictograms, pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "Patient/\(patientId)/pictograms", catCollectionPath2: "Patient/\(patientId)/categories")
         }
         .onAppear {
-            pageVM.updatePageLastOpenedAt(pageId: pageModel.id!) { error in
-                if error != nil {
-                    // Error
-                } else {
-                    // Exito
+            if !isNew {
+                pageVM.updatePageLastOpenedAt(pageId: pageModel.id!) { error in
+                    if error != nil {
+                        // Error
+                    } else {
+                        // Exito
+                    }
                 }
             }
         }

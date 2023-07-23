@@ -8,6 +8,17 @@
 import SwiftUI
 import AVFoundation
 
+func positionPictogramsInPage(pickedPictos: [String:PictogramInPage]) -> [PictogramInPage] {
+    var pictosInPage: [PictogramInPage] = []
+    
+    for var (i, pictoInPage) in pickedPictos.values.enumerated() {
+        pictoInPage.xOffset = Double(i) * 0.1
+        pictosInPage.append(pictoInPage)
+    }
+    
+    return pictosInPage
+}
+
 struct DoublePictogramPickerView: View {
     @Binding var pageModel: PageModel
     @State var pickedPictos: [String:PictogramInPage] = [:]
@@ -32,15 +43,17 @@ struct DoublePictogramPickerView: View {
                 PictogramPickerView(pickedPictos: $pickedPictos, pictoCollectionPath: pictoCollectionPath2, catCollectionPath: catCollectionPath2, showSwitchView: true, onLeftOfSwitch: $showingPictogramPicker1)
                 .zIndex(showingPictogramPicker1 ? 0 : 1)
             }
-            .onDisappear {
-                pageModel.pictogramsInPage += Array(pickedPictos.values)
-            }
             .overlay(alignment: .top) {
-                Button {
-                    isPresented = false 
-                } label: {
-                    Text("Done")
+                VStack {
+                    let pictosChosen: Bool = pickedPictos.count > 0
+                    ButtonWithImageView(text: pictosChosen ? "Añadir Pictogramas" : "Cancelar", width: 220, height: 50, systemNameImage: pictosChosen ? "plus" : "xmark") {
+                        if pictosChosen {
+                            pageModel.pictogramsInPage += positionPictogramsInPage(pickedPictos: pickedPictos)
+                        }
+                        isPresented = false
+                    }
                 }
+                .padding(.top, 10)
             }
         }
     }

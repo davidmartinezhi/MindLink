@@ -11,6 +11,7 @@
 		A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */; };
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
+		BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
@@ -95,6 +96,7 @@
 /* Begin PBXFileReference section */
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker_BACKUP.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage_BACKUP.swift; sourceTree = "<group>"; };
+		BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOptionsView.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */,
 				BCE68F752A47DCE00086F413 /* PageCreationView.swift */,
 				BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */,
+				BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -639,6 +642,7 @@
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				BCB1B7052A429ACB00C01B15 /* PictogramCache.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
+				BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */,
 				BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */,
 				BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */,
