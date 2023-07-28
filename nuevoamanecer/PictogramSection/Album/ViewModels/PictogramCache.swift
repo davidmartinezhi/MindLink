@@ -9,8 +9,8 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class PictogramCache: ObservableObject {
-    @Published private var cachedPictos: [String:PictogramModel] = [:]
+class PictogramCache {
+    private var cachedPictos: [String:PictogramModel] = [:]
     private var basePictoCollection: CollectionReference
     private var patientPictoCollection: CollectionReference
 
@@ -27,15 +27,11 @@ class PictogramCache: ObservableObject {
         if cachedPictos[pictoId] == nil {
             if isBasePicto {
                 if let pictoModel: PictogramModel = try? await basePictoCollection.document(pictoId).getDocument(as: PictogramModel.self) {
-                    DispatchQueue.main.async { [self] in
-                        self.cachedPictos[pictoId] = pictoModel
-                    }
+                    self.cachedPictos[pictoId] = pictoModel
                 }
             } else {
                 if let pictoModel: PictogramModel = try? await patientPictoCollection.document(pictoId).getDocument(as: PictogramModel.self) {
-                    DispatchQueue.main.async { [self] in
-                        self.cachedPictos[pictoId] = pictoModel
-                    }
+                    self.cachedPictos[pictoId] = pictoModel
                 }
             }
         }

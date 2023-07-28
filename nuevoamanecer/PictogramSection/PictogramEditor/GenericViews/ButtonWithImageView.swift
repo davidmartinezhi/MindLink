@@ -14,11 +14,13 @@ enum ImagePosition {
 
 struct ButtonWithImageView: View {
     var text: String
-    var width: CGFloat = 150
-    var height: CGFloat = 50
+    var textSize: CGFloat = 15
+    var width: CGFloat? = nil
+    
     var systemNameImage: String
     var imagePosition: ImagePosition = .right
     var imagePadding: CGFloat = 10
+    
     var background: Color = Color.blue
     var isDisabled: Bool = false
     var action: () -> Void
@@ -32,19 +34,19 @@ struct ButtonWithImageView: View {
                 }
                 
                 Text(text)
-                    .font(.headline)
+                    .font(.system(size: textSize))
                 
                 if imagePosition == .right {
                     Image(systemName: systemNameImage)
                         .padding(.leading, imagePadding)
                 }
             }
+            .padding(10)
+            .frame(width: width)
+            .background(isDisabled ? Color.gray : self.background)
+            .cornerRadius(10)
+            .foregroundColor(.white)
+            .allowsHitTesting(!isDisabled)
         }
-        .padding(10)
-        .frame(width: width, height: height)
-        .background(isDisabled ? Color.gray : self.background)
-        .cornerRadius(10)
-        .foregroundColor(.white)
-        .allowsHitTesting(!isDisabled)
     }
 }

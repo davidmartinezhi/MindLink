@@ -7,12 +7,37 @@
 
 import SwiftUI
 import AVFoundation
+import Foundation
+
+struct BoardCoordinate {
+    var xPos: Double
+    var yPos :Double
+    var disToCenter: Double {
+        return sqrt(pow(xPos, 2) + pow(yPos, 2))
+    }
+}
+
+func boardCoordinates(disBetweenCoords: Double) -> [BoardCoordinate] {
+    var boardCoordinates: [BoardCoordinate] = []
+    
+    for x in stride(from: -1, to: 1, by: disBetweenCoords){
+        for y in stride(from: -1, to: 1, by: disBetweenCoords){
+            boardCoordinates.append(BoardCoordinate(xPos: x, yPos: y))
+        }
+    }
+    
+    return boardCoordinates
+}
 
 func positionPictogramsInPage(pickedPictos: [String:PictogramInPage]) -> [PictogramInPage] {
     var pictosInPage: [PictogramInPage] = []
+    let boardCoordinates: [BoardCoordinate] = boardCoordinates(disBetweenCoords: 0.4).sorted{$0.disToCenter < $1.disToCenter}
+    var coordinateIndex: Int = 0
     
-    for var (i, pictoInPage) in pickedPictos.values.enumerated() {
-        pictoInPage.xOffset = Double(i) * 0.1
+    for var pictoInPage in pickedPictos.values {
+        pictoInPage.xOffset = boardCoordinates[coordinateIndex].xPos
+        pictoInPage.yOffset = boardCoordinates[coordinateIndex].yPos
+        coordinateIndex = (coordinateIndex + 1) % boardCoordinates.count
         pictosInPage.append(pictoInPage)
     }
     
@@ -46,7 +71,7 @@ struct DoublePictogramPickerView: View {
             .overlay(alignment: .top) {
                 VStack {
                     let pictosChosen: Bool = pickedPictos.count > 0
-                    ButtonWithImageView(text: pictosChosen ? "Añadir Pictogramas" : "Cancelar", width: 220, height: 50, systemNameImage: pictosChosen ? "plus" : "xmark") {
+                    ButtonWithImageView(text: pictosChosen ? "Añadir Pictogramas" : "Cancelar", systemNameImage: pictosChosen ? "plus" : "xmark") {
                         if pictosChosen {
                             pageModel.pictogramsInPage += positionPictogramsInPage(pickedPictos: pickedPictos)
                         }

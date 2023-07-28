@@ -11,10 +11,14 @@ struct PageDisplay: View {
     var patientId: String
     @ObservedObject var pageVM: PageViewModel
     @State var pageModel: PageModel
-    @ObservedObject var pictoCache: PictogramCache
-    @ObservedObject var catCache: CategoryCache
+    @ObservedObject var boardCache: BoardCache
     
+    @State var isConfiguringVoice: Bool = false
     @State var soundOn: Bool = true
+    @State var voiceGender: String = "Femenina"
+    @State var talkingSpeed: String = "Normal"
+    
+    @State var isLocked: Bool = false
     
     var body: some View {
         GeometryReader { geo in
@@ -25,16 +29,27 @@ struct PageDisplay: View {
                     
                     Spacer()
                     
-                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", width: 200, systemNameImage: soundOn ? "speaker.slash" : "speaker"){
+                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", systemNameImage: soundOn ? "speaker.slash" : "speaker", isDisabled: isLocked){
                         soundOn.toggle()
                     }
+                    
+                    ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
+                        //modal con opciones de velocidad de pronunciacion y genero de voz
+                        isConfiguringVoice = true
+                    }
+                    .font(.headline)
+                    .sheet(isPresented: $isConfiguringVoice) {
+                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                    }
+                    
+                    LockView(isLocked: $isLocked)
                 }
                 .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                 
                 Divider()
                 
-                PageBoardView(pageModel: $pageModel, pictoCache: pictoCache, catCache: catCache, isEditing: false, soundOn: soundOn, pictoBaseWidth: 200, pictoBaseHeight: 200)
+                PageBoardView(pageModel: $pageModel, boardCache: boardCache, pictoBaseWidth: 200, pictoBaseHeight: 200, isEditing: false, soundOn: soundOn, voiceGender: voiceGender, talkingSpeed: talkingSpeed)
             }
         }
         .onAppear {
@@ -46,5 +61,6 @@ struct PageDisplay: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(isLocked)
     }
 }

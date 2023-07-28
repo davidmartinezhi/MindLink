@@ -11,8 +11,7 @@ struct Album: View {
     var patientId: String
     
     @StateObject var pageVM: PageViewModel
-    @StateObject var pictoCache: PictogramCache
-    @StateObject var catCache: CategoryCache
+    @StateObject var boardCache: BoardCache
     
     @State var searchText: String = ""
     @State var sortType: SortType = .byLastOpenedAt
@@ -25,8 +24,13 @@ struct Album: View {
     init(patientId: String){
         self.patientId = patientId
         _pageVM = StateObject(wrappedValue: PageViewModel(collectionPath: "Patient/\(patientId)/pages"))
-        _pictoCache = StateObject(wrappedValue: PictogramCache(basePictoCollectionPath: "basePictograms", patientPictoCollectionPath: "Patient/\(patientId)/pictograms"))
-        _catCache = StateObject(wrappedValue: CategoryCache(baseCatCollectionPath: "baseCategories", patientCatCollectionPath: "Patient/\(patientId)/categories"))
+        
+        let basePictoCollPath: String = "basePictograms"
+        let patientPictoCollPath: String = "Patient/\(patientId)/pictograms"
+        let baseCatCollPath: String = "baseCategories"
+        let patientCatCollPath: String = "Patient/\(patientId)/categories"
+        
+        _boardCache = StateObject(wrappedValue: BoardCache(basePictoCollPath: basePictoCollPath, patientPictoCollPath: patientPictoCollPath, baseCatCollPath: baseCatCollPath, patientCatCollPath: patientCatCollPath))
     }
     
     var body: some View {
@@ -72,7 +76,7 @@ struct Album: View {
                     ScrollView {
                         LazyVGrid(columns: gridColumns, spacing: thumbnailVerSpacing) {
                             NavigationLink {
-                                PageEdit(patientId: patientId, pageVM: pageVM, pageModel: PageModel.defaultPage(), pictoCache: pictoCache, catCache: catCache, isNew: true)
+                                PageEdit(patientId: patientId, pageVM: pageVM, pageModel: PageModel.defaultPage(), boardCache: boardCache, isNew: true)
                             } label: {
                                 VStack {
                                     Image(systemName: "plus")
@@ -90,9 +94,9 @@ struct Album: View {
                             
                             ForEach(pagesInScreen, id: \.id){ pageModel in
                                 NavigationLink {
-                                    PageDisplay(patientId: patientId, pageVM: pageVM, pageModel: pageModel, pictoCache: pictoCache, catCache: catCache)
+                                    PageDisplay(patientId: patientId, pageVM: pageVM, pageModel: pageModel, boardCache: boardCache)
                                 } label: {
-                                    PageThumbnail(pageModel: pageModel, pictoCache: pictoCache, catCache: catCache)
+                                    PageThumbnail(pageModel: pageModel, boardCache: boardCache)
                                         .id(UUID()) // ???
                                         .overlay(alignment: .top){
                                             let performWhenDeleted: () -> Void = {
@@ -100,7 +104,7 @@ struct Album: View {
                                                 isDeleting = true
                                             }
                                             
-                                            PageOptionsView(pageId: pageModel.id!, showingOptionsOf: $showingOptionsOf, patientId: patientId, pageVM: pageVM, pageModel: pageModel, pictoCache: pictoCache, catCache: catCache, performWhenDeleted: performWhenDeleted)
+                                            PageOptionsView(pageId: pageModel.id!, showingOptionsOf: $showingOptionsOf, patientId: patientId, pageVM: pageVM, pageModel: pageModel, boardCache: boardCache, performWhenDeleted: performWhenDeleted)
                                                 .frame(width: thumbnailWidth * 0.75, height: thumbnailHeight * 0.9)
                                         }
                                 }

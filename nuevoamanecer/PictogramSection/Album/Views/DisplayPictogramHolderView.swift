@@ -6,18 +6,22 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct DisplayPictogramHolderView: View {
     var pictoModel: PictogramModel?
     var catModel: CategoryModel?
     @Binding var pictoInPage: PictogramInPage
-    
-    var soundOn: Bool
-    
+        
     var pictoBaseWidth: CGFloat
     var pictoBaseHeight: CGFloat
     var spaceWidth: CGFloat
     var spaceHeight: CGFloat
+    
+    var soundOn: Bool
+    var voiceGender: String
+    var talkingSpeed: String
+    let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     var body: some View {
         VStack {
@@ -25,7 +29,13 @@ struct DisplayPictogramHolderView: View {
                 PictogramPlaceholderView()
             } else {
                 Button {
-                    // Reproducir el nombre del pictograma (Text-To-Speech)
+                    let utterance = AVSpeechUtterance(string: pictoModel!.name)
+                    
+                    utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                    
+                    utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
+                    
+                    synthesizer.speak(utterance)
                 } label: {
                     PictogramView(pictoModel: pictoModel!, catModel: catModel!, displayName: true, displayCatColor: true)
                 }

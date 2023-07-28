@@ -9,19 +9,17 @@ import SwiftUI
 
 struct PageThumbnail: View {
     @State var pageModel: PageModel
-    @ObservedObject var pictoCache: PictogramCache
-    @ObservedObject var catCache: CategoryCache
+    @ObservedObject var boardCache: BoardCache
     
-    init(pageModel: PageModel, pictoCache: PictogramCache, catCache: CategoryCache){
+    init(pageModel: PageModel, boardCache: BoardCache){
         _pageModel = State(wrappedValue: pageModel)
-        self.pictoCache = pictoCache
-        self.catCache = catCache
+        self.boardCache = boardCache
     }
     
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 10) {
-                PageBoardView(pageModel: $pageModel, pictoCache: pictoCache, catCache: catCache, isEditing: false, soundOn: false, pictoBaseWidth: 40, pictoBaseHeight: 40)
+                PageBoardView(pageModel: $pageModel, boardCache: boardCache, pictoBaseWidth: 40, pictoBaseHeight: 40, isEditing: false)
                     .border(.gray)
                 
                 Text("\(pageModel.name)")

@@ -14,8 +14,7 @@ struct PageOptionsView: View {
     var patientId: String
     @ObservedObject var pageVM: PageViewModel
     var pageModel: PageModel
-    @ObservedObject var pictoCache: PictogramCache
-    @ObservedObject var catCache: CategoryCache
+    @ObservedObject var boardCache: BoardCache
     
     var performWhenDeleted: () -> Void
 
@@ -42,7 +41,7 @@ struct PageOptionsView: View {
                 if showingOptionsOf == pageId {
                     VStack(spacing: 10) {
                         NavigationLink {
-                            PageEdit(patientId: patientId, pageVM: pageVM, pageModel: pageModel, pictoCache: pictoCache, catCache: catCache, isNew: false)
+                            PageEdit(patientId: patientId, pageVM: pageVM, pageModel: pageModel, boardCache: boardCache, isNew: false)
                         } label: {
                             HStack(spacing: 20) {
                                 Text("Editar")
@@ -61,7 +60,7 @@ struct PageOptionsView: View {
                             .cornerRadius(10)
                         }
                         
-                        ButtonWithImageView(text: "Eliminar", width: geo.size.width, systemNameImage: "trash", background: .red) {
+                        ButtonWithImageView(text: "Eliminar", systemNameImage: "trash", background: .red) {
                             performWhenDeleted()
                         }
                     }

@@ -9,8 +9,8 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class CategoryCache: ObservableObject {
-    @Published private var cachedCats: [String:CategoryModel] = [:]
+class CategoryCache {
+    private var cachedCats: [String:CategoryModel] = [:]
     private var baseCatCollection: CollectionReference
     private var patientCatCollection: CollectionReference
     
@@ -27,15 +27,11 @@ class CategoryCache: ObservableObject {
         if cachedCats[catId] == nil {
             if isBaseCat {
                 if let catModel: CategoryModel = try? await baseCatCollection.document(catId).getDocument(as: CategoryModel.self) {
-                    DispatchQueue.main.async { [self] in
-                        self.cachedCats[catId] = catModel
-                    }
+                    self.cachedCats[catId] = catModel
                 }
             } else {
                 if let catModel: CategoryModel = try? await patientCatCollection.document(catId).getDocument(as: CategoryModel.self) {
-                    DispatchQueue.main.async { [self] in
-                        self.cachedCats[catId] = catModel
-                    }
+                    self.cachedCats[catId] = catModel
                 }
             }
         }

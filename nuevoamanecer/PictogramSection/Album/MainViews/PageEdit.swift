@@ -12,8 +12,7 @@ struct PageEdit: View {
     @ObservedObject var pageVM: PageViewModel
     @State var pageModel: PageModel
     @State var pageModelCapture: PageModel
-    @ObservedObject var pictoCache: PictogramCache
-    @ObservedObject var catCache: CategoryCache
+    @ObservedObject var boardCache: BoardCache
     
     @State var pickingPictograms: Bool = false
     
@@ -21,13 +20,12 @@ struct PageEdit: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, pictoCache: PictogramCache, catCache: CategoryCache, isNew: Bool){
+    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, boardCache: BoardCache, isNew: Bool){
         self.patientId = patientId
         self.pageVM = pageVM
         _pageModel = State(initialValue: pageModel)
         _pageModelCapture = State(initialValue: pageModel)
-        self.pictoCache = pictoCache
-        self.catCache = catCache
+        self.boardCache = boardCache
         self.isNew = isNew
     }
     
@@ -39,7 +37,7 @@ struct PageEdit: View {
                     
                     Spacer()
                     
-                    ButtonWithImageView(text: "Agregar pictogramas", width: 250, systemNameImage: "plus") {
+                    ButtonWithImageView(text: "Agregar pictogramas", systemNameImage: "plus") {
                         pickingPictograms = true
                     }
                     
@@ -70,7 +68,12 @@ struct PageEdit: View {
                 
                 Divider()
                 
-                PageBoardView(pageModel: $pageModel, pictoCache: pictoCache, catCache: catCache, isEditing: true, soundOn: false, pictoBaseWidth: 200, pictoBaseHeight: 200)
+                PageBoardView(pageModel: $pageModel, boardCache: boardCache, pictoBaseWidth: 200, pictoBaseHeight: 200, isEditing: true)
+            }
+            .onChange(of: pickingPictograms) { _ in
+                Task {
+                    await boardCache.populateBoard(pictosInPage: pageModel.pictogramsInPage)
+                }
             }
         }
         .fullScreenCover(isPresented: $pickingPictograms) {
