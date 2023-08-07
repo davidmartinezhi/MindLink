@@ -46,7 +46,7 @@ struct ButtonWithImageView: View {
             .background(isDisabled ? Color.gray : self.background)
             .cornerRadius(10)
             .foregroundColor(.white)
-            .allowsHitTesting(!isDisabled)
         }
+        .allowsHitTesting(!isDisabled)
     }
 }

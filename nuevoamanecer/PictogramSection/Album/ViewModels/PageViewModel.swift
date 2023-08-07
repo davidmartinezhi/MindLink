@@ -79,13 +79,15 @@ class PageViewModel: ObservableObject {
         }
     }
     
-    func addPage(pageModel: PageModel, completition: @escaping (Error?)->Void) -> Void {
+    func addPage(pageModel: PageModel, completition: @escaping (Error?, String?)->Void) -> Void {
+        var docRef: DocumentReference? = nil
+        
         do {
-            _ = try self.pageCollection.addDocument(from: pageModel) { error in
-                completition(error)
+            docRef = try self.pageCollection.addDocument(from: pageModel) { error in
+                completition(error, docRef?.documentID)
             }
         } catch let error {
-            completition(error)
+            completition(error, nil)
         }
     }
     

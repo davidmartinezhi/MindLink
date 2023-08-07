@@ -214,12 +214,12 @@ struct PatientView: View {
                         }
                         
                         // Para EDITAR COMUNICADOR
-                        NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictogramas", catCollectionPath: "User/\(patient.id)/categories"), tag: "A", selection: $selection) {
+                        NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictograms", catCollectionPath: "User/\(patient.id)/categories"), tag: "A", selection: $selection) {
                             EmptyView()
                         }
                         
                         // Para ACCEDER A COMUNICADOR
-                        NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictogramas", catCollectionPath2: "User/\(patient.id)/categories"), tag: "B", selection: $selection) {
+                        NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictograms", catCollectionPath2: "User/\(patient.id)/categories"), tag: "B", selection: $selection) {
                             EmptyView()
                         }
                         // Para ACCEDER AL ALBUM

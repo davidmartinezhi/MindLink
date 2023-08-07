@@ -16,24 +16,24 @@ struct PageEdit: View {
     
     @State var pickingPictograms: Bool = false
     
-    var isNew: Bool
+    @State var pageId: String?
     
     @Environment(\.dismiss) private var dismiss
     
-    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, boardCache: BoardCache, isNew: Bool){
+    init(patientId: String, pageVM: PageViewModel, pageModel: PageModel, boardCache: BoardCache){
         self.patientId = patientId
         self.pageVM = pageVM
         _pageModel = State(initialValue: pageModel)
         _pageModelCapture = State(initialValue: pageModel)
         self.boardCache = boardCache
-        self.isNew = isNew
+        _pageId = State(initialValue: pageModel.id)
     }
     
     var body: some View {
         GeometryReader { geo in
             VStack {
                 HStack(spacing: 15) {
-                    TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: pageModelCapture.name, inputText: $pageModel.name)
+                    TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: pageModelCapture.name, inputText: $pageModel.name, maxCharLength: 25) // 25: número máximo de caracteres que el nombre de la página puede tener. 
                     
                     Spacer()
                     
@@ -42,18 +42,20 @@ struct PageEdit: View {
                     }
                     
                     let pageHasChanged: Bool = pageModelCapture != pageModel
-                    ButtonWithImageView(text: pageHasChanged || isNew ? "Guardar" : "Guardado", systemNameImage: pageHasChanged || isNew ? "square.and.arrow.down" : "checkmark", isDisabled: !(pageHasChanged || isNew)) {
-                        if isNew {
-                            pageVM.addPage(pageModel: pageModel) { error in
+                    ButtonWithImageView(text: pageHasChanged || pageId == nil ? "Guardar" : "Guardado", systemNameImage: pageHasChanged || pageId == nil ? "square.and.arrow.down" : "checkmark", isDisabled: !(pageHasChanged || pageId == nil)) {
+                        if pageId == nil {
+                            pageVM.addPage(pageModel: pageModel) { error, docId in
                                 if error != nil {
                                     // Error
-                                } else {
-                                    pageModelCapture = pageModel
+                                } else if docId == nil {
                                     dismiss()
+                                } else {
+                                    pageId = docId!
+                                    pageModelCapture = pageModel
                                 }
                             }
                         } else {
-                            pageVM.editPage(pageId: pageModel.id!, pageModel: pageModel){ error in
+                            pageVM.editPage(pageId: pageId!, pageModel: pageModel){ error in
                                 if error != nil {
                                     // Error
                                 } else {
@@ -77,10 +79,10 @@ struct PageEdit: View {
             }
         }
         .fullScreenCover(isPresented: $pickingPictograms) {
-            DoublePictogramPickerView(pageModel: $pageModel, isPresented: $pickingPictograms, pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "Patient/\(patientId)/pictograms", catCollectionPath2: "Patient/\(patientId)/categories")
+            DoublePictogramPickerView(pageModel: $pageModel, isPresented: $pickingPictograms, pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patientId)/pictograms", catCollectionPath2: "User/\(patientId)/categories")
         }
         .onAppear {
-            if !isNew {
+            if pageId != nil {
                 pageVM.updatePageLastOpenedAt(pageId: pageModel.id!) { error in
                     if error != nil {
                         // Error

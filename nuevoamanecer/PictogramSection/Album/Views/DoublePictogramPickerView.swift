@@ -31,7 +31,7 @@ func boardCoordinates(disBetweenCoords: Double) -> [BoardCoordinate] {
 
 func positionPictogramsInPage(pickedPictos: [String:PictogramInPage]) -> [PictogramInPage] {
     var pictosInPage: [PictogramInPage] = []
-    let boardCoordinates: [BoardCoordinate] = boardCoordinates(disBetweenCoords: 0.4).sorted{$0.disToCenter < $1.disToCenter}
+    let boardCoordinates: [BoardCoordinate] = boardCoordinates(disBetweenCoords: 0.5).sorted{$0.disToCenter < $1.disToCenter}
     var coordinateIndex: Int = 0
     
     for var pictoInPage in pickedPictos.values {

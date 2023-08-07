@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+struct VerticalEllipsisView: View {
+    var body: some View {
+        VStack(spacing: 3) {
+            Circle()
+                .frame(width: 6, height: 6)
+            Circle()
+                .frame(width: 6, height: 6)
+            Circle()
+                .frame(width: 6, height: 6)
+        }
+    }
+}
+
 struct PageOptionsView: View {
     var pageId: String
     @Binding var showingOptionsOf: String?
@@ -41,7 +54,7 @@ struct PageOptionsView: View {
                 if showingOptionsOf == pageId {
                     VStack(spacing: 10) {
                         NavigationLink {
-                            PageEdit(patientId: patientId, pageVM: pageVM, pageModel: pageModel, boardCache: boardCache, isNew: false)
+                            PageEdit(patientId: patientId, pageVM: pageVM, pageModel: pageModel, boardCache: boardCache)
                         } label: {
                             HStack(spacing: 20) {
                                 Text("Editar")

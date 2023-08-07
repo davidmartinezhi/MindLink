@@ -26,9 +26,9 @@ struct Album: View {
         _pageVM = StateObject(wrappedValue: PageViewModel(collectionPath: "Patient/\(patientId)/pages"))
         
         let basePictoCollPath: String = "basePictograms"
-        let patientPictoCollPath: String = "Patient/\(patientId)/pictograms"
+        let patientPictoCollPath: String = "User/\(patientId)/pictograms"
         let baseCatCollPath: String = "baseCategories"
-        let patientCatCollPath: String = "Patient/\(patientId)/categories"
+        let patientCatCollPath: String = "User/\(patientId)/categories"
         
         _boardCache = StateObject(wrappedValue: BoardCache(basePictoCollPath: basePictoCollPath, patientPictoCollPath: patientPictoCollPath, baseCatCollPath: baseCatCollPath, patientCatCollPath: patientCatCollPath))
     }
@@ -76,7 +76,7 @@ struct Album: View {
                     ScrollView {
                         LazyVGrid(columns: gridColumns, spacing: thumbnailVerSpacing) {
                             NavigationLink {
-                                PageEdit(patientId: patientId, pageVM: pageVM, pageModel: PageModel.defaultPage(), boardCache: boardCache, isNew: true)
+                                PageEdit(patientId: patientId, pageVM: pageVM, pageModel: PageModel.defaultPage(), boardCache: boardCache)
                             } label: {
                                 VStack {
                                     Image(systemName: "plus")
