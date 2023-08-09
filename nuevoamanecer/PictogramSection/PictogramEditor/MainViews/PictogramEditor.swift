@@ -42,8 +42,6 @@ struct PictogramEditor: View {
     // Cuerpo de la vista
     var body: some View {
         
-        
-        
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
@@ -54,7 +52,7 @@ struct PictogramEditor: View {
                 // Barra superior con botones para eliminar y agregar pictogramas
                 HStack {
                     
-                    SearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
                     
                     Spacer()
                     
@@ -106,14 +104,14 @@ struct PictogramEditor: View {
 
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         //Editar categoria
-                        ButtonWithImageView(text: "Editar", width: 120, height: 35, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
+                        ButtonWithImageView(text: "Editar", width: 120, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
                             isNewCat = false
                             catBeingEdited = catVM.getCat(catId: pickedCategoryId)
                             isEditingCat = true
                         }
                         
                         //Agregar categoria
-                        ButtonWithImageView(text: "Agregar", width: 120, height: 35, systemNameImage: "plus", imagePosition: .left, imagePadding: 2){
+                        ButtonWithImageView(text: "Agregar", width: 120, systemNameImage: "plus", imagePosition: .left, imagePadding: 2){
                             isNewCat = true
                             catBeingEdited = nil
                             isEditingCat = true

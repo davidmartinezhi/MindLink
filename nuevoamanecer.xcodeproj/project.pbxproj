@@ -11,6 +11,7 @@
 		A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */; };
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
+		BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
@@ -42,7 +43,18 @@
 		BC8F7E4A2A37FFBD008E97B2 /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E2A2A37FFBD008E97B2 /* PageViewModel.swift */; };
 		BC8F7E4B2A37FFBD008E97B2 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E2C2A37FFBD008E97B2 /* Album.swift */; };
 		BC8F7E4C2A37FFBD008E97B2 /* PageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */; };
+		BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */; };
+		BCB1B7092A42BA6E00C01B15 /* PageThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */; };
+		BCB1B70B2A42BA7600C01B15 /* PageDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */; };
+		BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */; };
+		BCB1B70F2A42BB6A00C01B15 /* PageBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70E2A42BB6A00C01B15 /* PageBoardView.swift */; };
+		BCB1B7112A42BBD100C01B15 /* PictogramPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7102A42BBD100C01B15 /* PictogramPickerView.swift */; };
 		BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */; };
+		BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */; };
+		BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */; };
+		BCD0B78A2A457BDD00E83CA6 /* PictogramPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */; };
+		BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */; };
+		BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -82,6 +94,7 @@
 /* Begin PBXFileReference section */
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker_BACKUP.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage_BACKUP.swift; sourceTree = "<group>"; };
+		BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOptionsView.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -113,7 +126,18 @@
 		BC8F7E2A2A37FFBD008E97B2 /* PageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		BC8F7E2C2A37FFBD008E97B2 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageModel.swift; sourceTree = "<group>"; };
+		BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCache.swift; sourceTree = "<group>"; };
+		BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageThumbnail.swift; sourceTree = "<group>"; };
+		BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDisplay.swift; sourceTree = "<group>"; };
+		BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageEdit.swift; sourceTree = "<group>"; };
+		BCB1B70E2A42BB6A00C01B15 /* PageBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageBoardView.swift; sourceTree = "<group>"; };
+		BCB1B7102A42BBD100C01B15 /* PictogramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramPickerView.swift; sourceTree = "<group>"; };
 		BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithImageView.swift; sourceTree = "<group>"; };
+		BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPictogramHolderView.swift; sourceTree = "<group>"; };
+		BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPictogramHolderView.swift; sourceTree = "<group>"; };
+		BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramPlaceholderView.swift; sourceTree = "<group>"; };
+		BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoublePictogramPickerView.swift; sourceTree = "<group>"; };
+		BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramScaleModifierView.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -307,6 +331,7 @@
 		BC8F7E282A37FFBD008E97B2 /* Album */ = {
 			isa = PBXGroup;
 			children = (
+				BCB1B7032A428AF900C01B15 /* Views */,
 				BC8F7E292A37FFBD008E97B2 /* ViewModels */,
 				BC8F7E2B2A37FFBD008E97B2 /* MainViews */,
 				BC8F7E2D2A37FFBD008E97B2 /* Models */,
@@ -318,6 +343,7 @@
 			isa = PBXGroup;
 			children = (
 				BC8F7E2A2A37FFBD008E97B2 /* PageViewModel.swift */,
+				BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -325,6 +351,9 @@
 		BC8F7E2B2A37FFBD008E97B2 /* MainViews */ = {
 			isa = PBXGroup;
 			children = (
+				BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */,
+				BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */,
+				BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */,
 				BC8F7E2C2A37FFBD008E97B2 /* Album.swift */,
 			);
 			path = MainViews;
@@ -336,6 +365,21 @@
 				BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		BCB1B7032A428AF900C01B15 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BCB1B70E2A42BB6A00C01B15 /* PageBoardView.swift */,
+				BCB1B7102A42BBD100C01B15 /* PictogramPickerView.swift */,
+				BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */,
+				BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */,
+				BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */,
+				BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */,
+				BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */,
+				BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		C22ECD3D2A33C3D900DF8A06 /* Admin */ = {
@@ -575,18 +619,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCB1B7092A42BA6E00C01B15 /* PageThumbnail.swift in Sources */,
 				BC8F7E4A2A37FFBD008E97B2 /* PageViewModel.swift in Sources */,
 				BC8F7E342A37FFBD008E97B2 /* Communicator.swift in Sources */,
 				BC8F7E442A37FFBD008E97B2 /* PictogramView.swift in Sources */,
+				BCD0B78A2A457BDD00E83CA6 /* PictogramPlaceholderView.swift in Sources */,
 				C235FDAF2A181080005412A7 /* PatientView.swift in Sources */,
 				BC8F7E3C2A37FFBD008E97B2 /* XOverCircleView.swift in Sources */,
 				BC8F7E422A37FFBD008E97B2 /* ColorMaker.swift in Sources */,
 				BC8F7E472A37FFBD008E97B2 /* PictogramGridView.swift in Sources */,
 				BC8F7E412A37FFBD008E97B2 /* CustomAlert.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
+				BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */,
 				BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
+				BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
+				BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */,
+				BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */,
+				BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
@@ -605,15 +656,20 @@
 				BC8F7E402A37FFBD008E97B2 /* PictogramModel.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
 				BC8F7E3D2A37FFBD008E97B2 /* ButtonView.swift in Sources */,
+				BCB1B70F2A42BB6A00C01B15 /* PageBoardView.swift in Sources */,
 				C250AFC72A174B60008F5699 /* AuthView.swift in Sources */,
+				BCB1B70B2A42BA7600C01B15 /* PageDisplay.swift in Sources */,
 				BC8F7E3B2A37FFBD008E97B2 /* SearchBarView.swift in Sources */,
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
 				C2CF668F2A302982005A7338 /* PatientCardView.swift in Sources */,
 				BC8F7E432A37FFBD008E97B2 /* SortedArray.swift in Sources */,
+				BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */,
 				BC8F7E482A37FFBD008E97B2 /* PictogramEditorWindowView.swift in Sources */,
 				BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */,
 				BC8F7E322A37FFBD008E97B2 /* SwitchView.swift in Sources */,
 				BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */,
+				BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */,
+				BCB1B7112A42BBD100C01B15 /* PictogramPickerView.swift in Sources */,
 				C2207F002A1F1AF400F31578 /* Note.swift in Sources */,
 				C2BEDB672A157B72005398F9 /* User.swift in Sources */,
 				BC8F7E3F2A37FFBD008E97B2 /* CategoryModel.swift in Sources */,

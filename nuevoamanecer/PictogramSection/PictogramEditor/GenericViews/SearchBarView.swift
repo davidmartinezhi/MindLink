@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchBarView: View {
     @Binding var searchText: String
+    var placeholder: String
     var searchBarWidth: Double
     var backgroundColor: Color
     
@@ -20,7 +21,7 @@ struct SearchBarView: View {
                 .foregroundColor(Color.gray)
                 .padding([.bottom, .top, .leading])
             
-            TextField("Buscar pictograma", text: $searchText)
+            TextField(placeholder, text: $searchText)
                 .padding([.bottom, .top, .trailing])
             
             if !searchText.isEmpty {
