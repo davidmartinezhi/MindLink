@@ -116,6 +116,9 @@ struct Album: View {
                     .frame(width: gridWidth)
                 }
             }
+            .onTapGesture {
+                showingOptionsOf = nil 
+            }
         }
         .onAppear {
             showingOptionsOf = nil

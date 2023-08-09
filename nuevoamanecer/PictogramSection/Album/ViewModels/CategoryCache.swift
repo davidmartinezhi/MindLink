@@ -9,6 +9,8 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+/*
+
 class CategoryCache {
     private var cachedCats: [String:CategoryModel] = [:]
     private var baseCatCollection: CollectionReference
@@ -45,3 +47,5 @@ class CategoryCache {
         }
     }
 }
+
+*/ 
