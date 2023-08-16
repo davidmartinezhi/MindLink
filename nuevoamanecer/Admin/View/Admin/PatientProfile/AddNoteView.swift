@@ -24,7 +24,6 @@ struct AddNoteView: View {
             Form {
                 Section(header: Text("Título")) {
                     TextField("Introduce el título de la nota", text: $noteTitle)
-                        .keyboardType(.alphabet)
                 }
                 
                 Section(header: Text("Contenido")) {
