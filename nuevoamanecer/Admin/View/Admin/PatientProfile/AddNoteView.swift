@@ -24,11 +24,12 @@ struct AddNoteView: View {
             Form {
                 Section(header: Text("Título")) {
                     TextField("Introduce el título de la nota", text: $noteTitle)
+                        .keyboardType(.alphabet)
                 }
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
-                        //.frame(minHeight: 400)
+                        .frame(minHeight: 200)
                 }
             }
             
@@ -52,12 +53,12 @@ struct AddNoteView: View {
                 
                 //Save
                 Button(action: {
-                    isSaving = true
                     if noteTitle.isEmpty || noteContent.isEmpty {
                         self.alertTitle = "Faltan campos"
                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                         self.showingAlert = true
                     } else {
+                        isSaving = true
                         let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
                         
                         notes.addData(patient: patient, note: newNote) { response in

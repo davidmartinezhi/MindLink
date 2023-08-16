@@ -34,7 +34,7 @@ struct EditNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
-                        //.frame(minHeight: 200)
+                        .frame(minHeight: 200)
                 }
             }
             

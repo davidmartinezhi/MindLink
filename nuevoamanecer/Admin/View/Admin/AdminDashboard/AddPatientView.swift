@@ -143,8 +143,6 @@ struct AddPatientView: View {
                 //botón de crear usuario
                 Button(action: {
                     
-                    isSaving = true
-                    
                     //Subir imagen a firebase
                     if let thisImage = self.upload_image {
                         Task {
@@ -154,10 +152,9 @@ struct AddPatientView: View {
                                 
                                 //Checar que datos son validos
                                 if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
-                                    
+                                    isSaving = true
                                     uploadPatient.toggle()
                                     dismiss()
-                                     
                                 }
                                 else{
                                     showAlert = true
@@ -167,7 +164,7 @@ struct AddPatientView: View {
                     } else {
                         //Checar que datos son validos
                         if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                            
+                            isSaving = true
                             uploadPatient.toggle()
                             dismiss()
                              
