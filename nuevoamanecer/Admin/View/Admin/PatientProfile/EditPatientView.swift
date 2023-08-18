@@ -1,27 +1,35 @@
+//EditPatientView.swift
+// nuevoamanecer
 //
-//  EditPatientView.swift
-//  nuevoamanecer
-//
-//  Created by Gerardo Martínez on 26/05/23.
-//
+// Created by Gerardo Martínez on 26/05/23.
 
+// Importación de bibliotecas y módulos necesarios
 import SwiftUI
 import FirebaseStorage
 import SDWebImageSwiftUI
 import Kingfisher
+import Foundation
 
+// Definición de la vista EditPatientView
 struct EditPatientView: View {
+    // Objeto observado que contiene el modelo de vista de pacientes
     @ObservedObject var patients: PatientsViewModel
+    // Estado que contiene la información del paciente que se está editando
     @State var patient: Patient
+    // Variable de entorno para cerrar la vista
     @Environment(\.dismiss) var dismiss
 
-    
+    // Lista de niveles cognitivos
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
+    // Selector de nivel cognitivo
     @State private var congnitiveLevelSelector = ""
-    
+
+    // Lista de estilos de comunicación
     var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
+    // Selector de estilo de comunicación
     @State private var communicationStyleSelector = ""
-    
+
+    // Variables de estado para controlar la interfaz de usuario y la lógica de la vista
     @State var showAlert : Bool = false
     @State private var showAlertNoImage = false
     @State private var firstName : String = ""
@@ -30,28 +38,60 @@ struct EditPatientView: View {
     @State private var group : String = ""
     @State private var upload_image: UIImage?
     @State private var deletedImage = false
-
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
     @State private var storage = FirebaseAlmacenamiento()
-    
     @State private var shouldShowImagePicker = false
-    
     @State private var imageURL = URL(string: "")
     @State private var uploadPatient: Bool = false
     
-    
+
+    // Función para inicializar los datos del paciente en la vista
     func initializeData(patient: Patient) -> Void{
         firstName = patient.firstName
         lastName = patient.lastName
         birthDate = patient.birthDate
         group = patient.group
-        //image = patient.image
         communicationStyleSelector = patient.communicationStyle
         congnitiveLevelSelector = patient.cognitiveLevel
     }
     
+    
+    // Función para validar si un nombre es válido utilizando una expresión regular
+    func isValidName(name: String) -> Bool {
+        // Elimina los espacios en blanco al final del nombre
+        let trimmedName = name.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
+        
+        // Expresión regular para validar el nombre
+        let pattern = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$"
+        let regex = try? NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: trimmedName.utf16.count)
+        return regex?.firstMatch(in: trimmedName, options: [], range: range) != nil
+    }
+    
+    // Función para validar si una fecha de cumpleaños es válida
+    func isValidBirthDate(birthDate: Date) -> Bool {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: currentDate)!
+        
+        // Verifica si la fecha de nacimiento está en el futuro
+        if birthDate.compare(currentDate) == .orderedDescending {
+            return false
+        }
+        
+        // Verifica si la fecha de nacimiento está en el mes previo
+        if birthDate.compare(oneMonthAgo) == .orderedDescending {
+            return false
+        }
+        
+        return true
+    }
+
+    
+    // Función para cargar la imagen del paciente desde Firebase
     func loadImageFromFirebase(name:String) {
         let storageRef = Storage.storage().reference(withPath: name)
-        
         storageRef.downloadURL { (url, error) in
             if error != nil {
                 print("Este usuario no tiene una imagen de perfil")
@@ -60,18 +100,18 @@ struct EditPatientView: View {
             self.imageURL = url!
         }
     }
+
     
     
     
     var body: some View {
         
-        VStack{
-            
-            //Delete patient button
-            DeletePatientView(patients:patients, patient:patient)
+        // Contenedor vertical que agrupa los elementos de la vista
+          VStack{
+              // Vista para eliminar al paciente
+              DeletePatientView(patients:patients, patient:patient)
 
-            
-            //Imagen del niño
+              // Contenedor para la imagen del paciente
             VStack{
                 
                 VStack{
@@ -188,7 +228,6 @@ struct EditPatientView: View {
             
             
             //Buttons
-            
             HStack{
                 //Cancel
                 Button(action: {
@@ -217,26 +256,59 @@ struct EditPatientView: View {
                                 
                                 imageURL = url
                                 
-                                //Checar que datos son validos
-                                if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
-                                    
+                                //Validamos que no existan campos vaciós
+                                if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                                    errorTitle = "Campos vacíos"
+                                    errorMessage = "Todos los campos deben ser llenados."
+                                    showAlert = true
+                                }
+                                //Validamos que no existán caracteres especiales en nombre
+                                else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                                    errorTitle = "Nombre y/ apellido no valido"
+                                    errorMessage = "El nombre y apellido deben de solamente contener letras."
+                                    showAlert = true
+                                }
+                                //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
+                                //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
+                                else if(!isValidBirthDate(birthDate: birthDate)){
+                                    errorTitle = "Fecha de nacimiento incorrecta"
+                                    errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                                    showAlert = true
+                                }
+                                //Actualización de datos en la base de datos
+                                else {
                                     uploadPatient.toggle()
                                     dismiss()
-                                     
-                                }
-                                else{
-                                    showAlert = true
                                 }
                             }
                         }
                     }  else {
-                        //Checar que datos son validos
-                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                            uploadPatient.toggle()
-                            dismiss()
-                        } else {
+                        
+                        //Validamos que no existan campos vaciós
+                        if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                            errorTitle = "Campos vacíos"
+                            errorMessage = "Todos los campos deben ser llenados."
                             showAlert = true
                         }
+                        //Validamos que no existán caracteres especiales en nombre
+                        else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                            errorTitle = "Nombre y/ apellido no valido"
+                            errorMessage = "El nombre y apellido deben de solamente contener letras."
+                            showAlert = true
+                        }
+                        //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
+                        //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
+                        else if(!isValidBirthDate(birthDate: birthDate)){
+                            errorTitle = "Fecha de nacimiento incorrecta"
+                            errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                            showAlert = true
+                        }
+                        //Actualización de datos en la base de datos
+                        else {
+                            uploadPatient.toggle()
+                            dismiss()
+                        }
+                        
                     }
                 }){
                     HStack {
@@ -251,11 +323,12 @@ struct EditPatientView: View {
                 .background(Color.blue)
                 .cornerRadius(10)
                 .foregroundColor(.white)
-                .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                
+                .alert(errorTitle, isPresented: $showAlert){
                     Button("Ok") {}
                 }
             message: {
-                Text("Asegurate de haber llenado todos los campos requeridos")
+                Text(errorMessage)
             }
                 
             }

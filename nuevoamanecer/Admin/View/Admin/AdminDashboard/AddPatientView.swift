@@ -11,32 +11,74 @@ import FirebaseStorage
 
 struct AddPatientView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var patients : PatientsViewModel
+    @ObservedObject var patients: PatientsViewModel
     
+    // Variables para los selectores de nivel cognitivo y estilo de comunicación
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     
     var communicationStyles = ["Verbal", "No-verbal", "Mixto"]
     @State private var communicationStyleSelector = ""
     
-    @State private var firstName : String = ""
-    @State private var lastName : String = ""
+    // Variables para los campos de texto del formulario
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     @State private var birthDate: Date = Date()
-    @State private var group : String = ""
+    @State private var group: String = ""
     @State private var upload_image: UIImage?
     
+    // Variables para mostrar alertas de error
     @State private var showAlert = false
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
+    @State private var hasSelectedBirthday: Bool = false
     
+    // Variables para la carga de imágenes en Firebase
     @State private var storage = FirebaseAlmacenamiento()
-    
     @State private var shouldShowImagePicker = false
     @State private var imageURL = URL(string: "")
-    
     @State private var uploadPatient: Bool = false
+    @State var isSaving: Bool = false
     
-    @State var isSaving : Bool = false
     
-    func loadImageFromFirebase(name:String) {
+    
+    
+    // Función para validar si un nombre es válido utilizando una expresión regular
+    func isValidName(name: String) -> Bool {
+        // Elimina los espacios en blanco al final del nombre
+        let trimmedName = name.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
+        
+        // Expresión regular para validar el nombre
+        let pattern = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$"
+        let regex = try? NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: trimmedName.utf16.count)
+        return regex?.firstMatch(in: trimmedName, options: [], range: range) != nil
+    }
+
+    // Función para validar si una fecha de cumpleaños es válida
+    func isValidBirthDate(birthDate: Date) -> Bool {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: currentDate)!
+        
+        // Verifica si la fecha de nacimiento está en el futuro
+        if birthDate.compare(currentDate) == .orderedDescending {
+            return false
+        }
+        
+        // Verifica si la fecha de nacimiento está en el mes previo
+        if birthDate.compare(oneMonthAgo) == .orderedDescending {
+            return false
+        }
+        
+        return true
+    }
+    
+
+    
+
+    // Función para cargar la imagen del paciente desde Firebase
+    func loadImageFromFirebase(name: String) {
         let storageRef = Storage.storage().reference(withPath: name)
         
         storageRef.downloadURL { (url, error) in
@@ -47,7 +89,6 @@ struct AddPatientView: View {
             self.imageURL = url!
         }
     }
-
     
     var body: some View {
         
@@ -96,6 +137,9 @@ struct AddPatientView: View {
                         TextField("Apellidos", text: $lastName)
                         TextField("Grupo", text: $group)
                         DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                            .onChange(of: birthDate, perform: { value in
+                                                hasSelectedBirthday = true
+                                            })
                     }
                     
                     Section(header: Text("Nivel Cognitivo")) {
@@ -150,27 +194,75 @@ struct AddPatientView: View {
                                 
                                 imageURL = url
                                 
-                                //Checar que datos son validos
-                                if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
+                                //Validamos que no existan campos vaciós
+                                if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                                    errorTitle = "Campos vacíos"
+                                    errorMessage = "Todos los campos deben ser llenados"
+                                    showAlert = true
+                                }
+                                //Validamos que selecciono una fecha de nacimiento
+                                else if(!hasSelectedBirthday){
+                                    errorTitle = "Campos vacíos"
+                                    errorMessage = "Debes seleccionar una fecha de cumpleaños"
+                                    showAlert = true
+                                }
+                                //Validamos que no existán caracteres especiales en nombre
+                                else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                                    errorTitle = "Favor de volver a ingresar sus datos"
+                                    errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
+                                    firstName = ""
+                                    lastName = ""
+                                    showAlert = true
+                                }
+                                //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
+                                //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
+                                else if(!isValidBirthDate(birthDate: birthDate)){
+                                    errorTitle = "Fecha de nacimiento incorrecta"
+                                    errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                                    showAlert = true
+                                }
+                                //Actualización de datos en la base de datos
+                                else {
                                     isSaving = true
                                     uploadPatient.toggle()
                                     dismiss()
                                 }
-                                else{
-                                    showAlert = true
-                                }
                             }
                         }
                     } else {
-                        //Checar que datos son validos
-                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                        
+                        //Validamos que no existan campos vaciós
+                        if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                            errorTitle = "Campos vacíos"
+                            errorMessage = "Todos los campos deben ser llenados"
+                            showAlert = true
+                        }
+                        //Validamos que selecciono una fecha de nacimiento
+                        else if(!hasSelectedBirthday){
+                            errorTitle = "Campos vacíos"
+                            errorMessage = "Debes seleccionar una fecha de cumpleaños"
+                            showAlert = true
+                        }
+                        //Validamos que no existán caracteres especiales en nombre
+                        else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                            errorTitle = "Favor de volver a ingresar sus datos"
+                            errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
+                            firstName = ""
+                            lastName = ""
+                            showAlert = true
+                        }
+                        //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
+                        //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
+                        else if(!isValidBirthDate(birthDate: birthDate)){
+                            errorTitle = "Fecha de nacimiento incorrecta"
+                            errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                            showAlert = true
+                        }
+                        //Actualización de datos en la base de datos
+                        else {
                             isSaving = true
                             uploadPatient.toggle()
                             dismiss()
-                             
-                        }
-                        else{
-                            showAlert = true
                         }
                     }
                 }){
@@ -187,11 +279,11 @@ struct AddPatientView: View {
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .allowsHitTesting(!isSaving)
-                .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                .alert(errorTitle, isPresented: $showAlert){
                     Button("Ok") {}
                 }
             message: {
-                Text("Asegurate de haber llenado todos los campos requeridos")
+                Text(errorMessage)
             }
             }
         }
@@ -221,136 +313,6 @@ struct AddPatientView: View {
                }
             }
         }
-
-      /*
-        NavigationView {
-            VStack {
-                VStack {
-                    //Imagen del niño
-                    Button() {
-                        shouldShowImagePicker.toggle()
-                    } label: {
-                        if let displayImage = self.upload_image {
-                            Image(uiImage: displayImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 128, height: 128)
-                                .cornerRadius(128)
-                        } else {
-                            ZStack {
-                                Image(systemName: "person.circle")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(Color(.label))
-
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 20))
-                                    .offset(x: 35, y: 35)
-                                    .foregroundColor(.blue)
-                            }
-                            
-                        }
-                    }
-                    .padding(.top)
-                }
-                .overlay(RoundedRectangle(cornerRadius: 64)
-                            .stroke(Color.gray, lineWidth: 2))
-                Form {
-                    Section(header: Text("Información del Paciente")) {
-                        TextField("Primer Nombre", text: $firstName)
-                        TextField("Apellidos", text: $lastName)
-                        TextField("Grupo", text: $group)
-                        DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
-                    }
-                    
-                    Section(header: Text("Nivel Cognitivo")) {
-                        Picker("Nivel Cognitivo", selection: $congnitiveLevelSelector) {
-                            ForEach(cognitiveLevels, id: \.self) {
-                                Text($0)
-                            }
-                        }
-                    }
-                    
-                    Section(header: Text("Estilo de Comunicación")) {
-                        Picker("Tipo de comunicación", selection: $communicationStyleSelector) {
-                            ForEach(communicationStyles, id: \.self) {
-                                Text($0)
-                            }
-                        }
-                    }
-                    /*
-                    Section(header: Text("Foto de perfil")) {
-                        Button() {
-                            shouldShowImagePicker.toggle()
-                        } label: {
-                            Text("Seleccionar imagen")
-                        }
-                    }
-                     */
-                    
-                    Section {
-                        
-                        //botón de crear usuario
-                        Button("Agregar Niño"){
-                            
-                            //Subir imagen a firestore
-                            if let thisImage = self.upload_image {
-                                storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture")
-                            } else {
-                                print("No se pudo subir imagen, no se selecciono ninguna")
-                            }
-                            
-                            //Generar URl para la imagen del niño
-                            loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
-                             
-                            //debug
-                            print(imageURL?.absoluteString ?? "ERROR")
-                            
-                            //Checar que datos son validos
-                            if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
-                                
-                                uploadPatient.toggle()
-                                dismiss()
-                                 
-                            }
-                            else{
-                                showAlert = true
-                            }
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
-                            Button("Ok") {}
-                        }
-                    message: {
-                        Text("Asegurate de haber llenado todos los campos requeridos")
-                    }
-                        
-                        //botón de cancelar
-                        Button("Cancelar"){
-                            dismiss()
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.gray)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        
-                    }
-                }
-                .padding()
-            }
-            //.navigationTitle("Agregar Niño")
-            .background(Color(.init(white: 0, alpha: 0.05))
-                .ignoresSafeArea())
-            //.navigationBarTitleDisplayMode(.inline)
-            .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
-                ImagePicker(image: $upload_image)
-            }
-        }
-       */
     }
        
 }
