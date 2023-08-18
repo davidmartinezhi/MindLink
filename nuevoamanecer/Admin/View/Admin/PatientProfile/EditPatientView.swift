@@ -259,13 +259,13 @@ struct EditPatientView: View {
                                 //Validamos que no existan campos vaciós
                                 if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
                                     errorTitle = "Campos vacíos"
-                                    errorMessage = "Todos los campos deben ser llenados."
+                                    errorMessage = "Todos los campos deben ser llenados"
                                     showAlert = true
                                 }
                                 //Validamos que no existán caracteres especiales en nombre
                                 else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
                                     errorTitle = "Nombre y/ apellido no valido"
-                                    errorMessage = "El nombre y apellido deben de solamente contener letras."
+                                    errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
                                     showAlert = true
                                 }
                                 //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
@@ -293,7 +293,7 @@ struct EditPatientView: View {
                         //Validamos que no existán caracteres especiales en nombre
                         else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
                             errorTitle = "Nombre y/ apellido no valido"
-                            errorMessage = "El nombre y apellido deben de solamente contener letras."
+                            errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
                             showAlert = true
                         }
                         //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
@@ -357,7 +357,6 @@ struct EditPatientView: View {
                     if error != "OK" {
                         print(error)
                     }else{
-                        
                         Task {
                             if let patientsList = await patients.getData(){
                                 DispatchQueue.main.async {
