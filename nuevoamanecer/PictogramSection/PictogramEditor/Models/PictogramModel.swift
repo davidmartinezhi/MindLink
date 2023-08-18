@@ -55,7 +55,7 @@ struct PictogramModel: Identifiable, Codable, Comparable {
     
     static func defaultPictogram(catId: String? = nil) -> PictogramModel {
         return PictogramModel(
-            name: "Nombre",
+            name: "",
             imageUrl: "",
             categoryId: catId ?? ""
         )
