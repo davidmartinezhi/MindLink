@@ -114,11 +114,7 @@ struct Communicator: View {
                     //text to speech
                     let utterance = AVSpeechUtterance(string: pictoModel.name)
                     
-                    if (voiceGender == "Masculina") {
-                        utterance.voice = AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed")
-                    } else {
-                        utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
-                    }
+                    utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
                     
                     utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
                     
