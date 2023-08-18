@@ -21,7 +21,8 @@ struct AdminNav: View {
     @State private var showLogoutAlert = false
     
     var user: User
-
+    
+    @EnvironmentObject var appLock: AppLock
 
     var body: some View {
         ZStack {
@@ -32,7 +33,9 @@ struct AdminNav: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 55)
                     .padding()
+                
                 Spacer()
+                
                 ZStack{
                     //No imagen
                     if(user.image == "placeholder") {
@@ -57,7 +60,8 @@ struct AdminNav: View {
                         }
                         .padding(.horizontal, 20)
                     }
-                    Menu ("           "){
+                    
+                    Menu("           "){
                         // boton para ir a la vista de perfil
                         Button(action: { showAdminView = true }) {
                             HStack {
@@ -91,6 +95,7 @@ struct AdminNav: View {
                         }
                     }
                     .frame(width: 50, height: 50)
+                    .disabled(appLock.isLocked)
                 }
                 .frame(width: 50, height: 50)
             }
@@ -120,9 +125,6 @@ struct AdminNav: View {
          */
     }
 }
-
-
-
 
 
 struct AdminNav_Previews: PreviewProvider {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LockView: View {
-    @Binding var isLocked: Bool
+    @EnvironmentObject var appLock: AppLock
     var width: CGFloat = 150
     var height: CGFloat = 40
     
@@ -19,7 +19,7 @@ struct LockView: View {
     private var longPressGesture: some Gesture {
         LongPressGesture(minimumDuration: longPressDuration)
             .updating($longPressState) { currState, prevState, _ in
-                if isLocked {
+                if appLock.isLocked {
                     if prevState == false && currState == true { // Comienza a presionar
                         // Iniciar progreso
                         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
@@ -29,7 +29,7 @@ struct LockView: View {
                                     
                             if longPressProgress >= longPressDuration {
                                 longPressProgress = 0
-                                isLocked = false
+                                appLock.isLocked = false
                                 timer.invalidate()
                             } else if longPressState == false {
                                 longPressProgress = 0
@@ -46,16 +46,15 @@ struct LockView: View {
     private var tapGesture: some Gesture {
         TapGesture(count: 1)
             .onEnded {
-                isLocked = true
+                appLock.isLocked = true
             }
     }
     
     private var lockViewContent: some View {
-        
         ZStack {
             Rectangle()
                 .frame(width: width, height: height)
-                .foregroundColor(isLocked ? .gray : .blue)
+                .foregroundColor(appLock.isLocked ? .gray : .blue)
                 .cornerRadius(10)
                 .overlay(alignment: .leading){
                     Rectangle()
@@ -65,11 +64,11 @@ struct LockView: View {
                 }
             
             HStack(spacing: 5) {
-                Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
+                Image(systemName: appLock.isLocked ? "lock.fill" : "lock.open.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 
-                Text(isLocked ? "Desbloquear" : "Bloquear")
+                Text(appLock.isLocked ? "Desbloquear" : "Bloquear")
             }
             .padding(10)
             .frame(width: width, height: height)
@@ -80,7 +79,7 @@ struct LockView: View {
     }
     
     var body: some View {
-        if isLocked {
+        if appLock.isLocked {
             lockViewContent
                 .gesture(longPressGesture)
         } else {

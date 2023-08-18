@@ -18,7 +18,7 @@ struct PageDisplay: View {
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
     
-    @State var isLocked: Bool = false
+    @EnvironmentObject var appLock: AppLock
     
     var body: some View {
         GeometryReader { geo in
@@ -29,11 +29,11 @@ struct PageDisplay: View {
                     
                     Spacer()
                     
-                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", systemNameImage: soundOn ? "speaker.slash" : "speaker", isDisabled: isLocked){
+                    ButtonWithImageView(text: soundOn ? "Desactivar Sonido" : "Activar Sonido", systemNameImage: soundOn ? "speaker.slash" : "speaker", isDisabled: appLock.isLocked){
                         soundOn.toggle()
                     }
                     
-                    ButtonView(text: "Configuración Voz", color: .blue, isDisabled: isLocked) {
+                    ButtonView(text: "Configuración Voz", color: .blue, isDisabled: appLock.isLocked) {
                         //modal con opciones de velocidad de pronunciacion y genero de voz
                         isConfiguringVoice = true
                     }
@@ -42,7 +42,7 @@ struct PageDisplay: View {
                         VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
                     }
                     
-                    LockView(isLocked: $isLocked)
+                    LockView()
                 }
                 .padding(.vertical, 20)
                 .padding(.horizontal, 70)
@@ -61,6 +61,6 @@ struct PageDisplay: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(isLocked)
+        .navigationBarBackButtonHidden(appLock.isLocked)
     }
 }
