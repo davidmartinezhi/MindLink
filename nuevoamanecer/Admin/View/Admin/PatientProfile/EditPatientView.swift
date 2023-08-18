@@ -357,7 +357,6 @@ struct EditPatientView: View {
                     if error != "OK" {
                         print(error)
                     }else{
-                        
                         Task {
                             if let patientsList = await patients.getData(){
                                 DispatchQueue.main.async {

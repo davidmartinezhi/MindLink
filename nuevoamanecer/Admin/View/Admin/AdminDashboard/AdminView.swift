@@ -507,6 +507,9 @@ struct AdminView: View {
                                  .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
                          }
                          .listStyle(.automatic)
+                         .onChange(of: patients.patientsList, perform: {value in
+                             resetSearchFilters()
+                         })
                          .sheet(isPresented: $showAddPatient) {
                              AddPatientView(patients:patients)
                          }
