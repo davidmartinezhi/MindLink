@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+class AppLock: ObservableObject {
+    @Published var isLocked: Bool = false
+}
+
 struct ContentView: View {
     @ObservedObject var authViewModel = AuthViewModel()
     //@State var hiddenNavBar = false
     //@State private var showAdminMenu = false
     @State private var showAdminView = false
     @State private var showRegisterView = false
+    
+    @StateObject var appLock: AppLock = AppLock()
 
     func initialFetch() {
         authViewModel.fetchCurrentUser()
@@ -32,6 +38,7 @@ struct ContentView: View {
                 .sheet(isPresented: $showRegisterView){
                     RegisterView(authViewModel: authViewModel)
                 }
+                .environmentObject(appLock)
                 
             } else {
                 AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión

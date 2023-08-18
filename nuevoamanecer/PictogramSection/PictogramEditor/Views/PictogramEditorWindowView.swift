@@ -58,6 +58,7 @@ struct PictogramEditorWindowView: View {
                     VStack(alignment: .leading) {
                         Text("Nombre" + (pictoModel.name == pictoModelCapture.name ? "" : "*"))
                             .font(.system(size: 20, weight: .bold))
+                        
                         TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Nombre", inputText: $pictoModel.name)
                         
                         Text("Imagen" + (temporaryUIImage == nil ? "" : "*"))
@@ -92,7 +93,7 @@ struct PictogramEditorWindowView: View {
                     }
                     
                     // Save
-                    let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && (!pictoModel.isEqualTo(pictoModelCapture) || temporaryUIImage != nil))
+                    let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && !pictoModel.isEqualTo(pictoModelCapture) && (temporaryUIImage != nil || !pictoModel.imageUrl.isEmpty))
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: saveButtonIsDisabled) {
                         DBActionInProgress = true
                         Task {

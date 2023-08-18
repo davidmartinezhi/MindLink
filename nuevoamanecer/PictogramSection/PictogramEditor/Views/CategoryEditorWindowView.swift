@@ -51,7 +51,8 @@ struct CategoryEditorWindowView: View {
                 VStack(alignment: .leading) {
                     Text("Nombre" + (catModel.name == catModelCapture.name ? "" : " *"))
                         .font(.system(size: 20, weight: .bold))
-                    TextFieldView(fieldWidth: geo.size.width * 0.3, placeHolder: "Categoría", inputText: $catModel.name)
+                    
+                    TextFieldView(fieldWidth: geo.size.width * 0.4, placeHolder: "Nombre de la categoría", inputText: $catModel.name)
                 }
                 
                 VStack(alignment: .leading) {
@@ -62,7 +63,6 @@ struct CategoryEditorWindowView: View {
                 }
                 
                 HStack {
-                    
                     Spacer()
                     
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
