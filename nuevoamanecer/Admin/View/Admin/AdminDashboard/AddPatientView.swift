@@ -25,7 +25,13 @@ struct AddPatientView: View {
     @State private var group : String = ""
     @State private var upload_image: UIImage?
     
+    
     @State private var showAlert = false
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
+    @State private var hasSelectedBirthday: Bool = false
+
+
     
     @State private var storage = FirebaseAlmacenamiento()
     
@@ -35,6 +41,15 @@ struct AddPatientView: View {
     @State private var uploadPatient: Bool = false
     
     @State var isSaving : Bool = false
+    
+    
+    
+    func isValidName(name: String) -> Bool {
+        let pattern = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$"
+        let regex = try? NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: name.utf16.count)
+        return regex?.firstMatch(in: name, options: [], range: range) != nil
+    }
     
     func loadImageFromFirebase(name:String) {
         let storageRef = Storage.storage().reference(withPath: name)
@@ -96,6 +111,9 @@ struct AddPatientView: View {
                         TextField("Apellidos", text: $lastName)
                         TextField("Grupo", text: $group)
                         DatePicker("Fecha de nacimiento", selection: $birthDate, displayedComponents: .date)
+                            .onChange(of: birthDate, perform: { value in
+                                                hasSelectedBirthday = true
+                                            })
                     }
                     
                     Section(header: Text("Nivel Cognitivo")) {
@@ -150,27 +168,57 @@ struct AddPatientView: View {
                                 
                                 imageURL = url
                                 
-                                //Checar que datos son validos
-                                if(firstName != "" || lastName != "" || group != "" || communicationStyleSelector != "" || congnitiveLevelSelector != ""){
+                                //Validamos que no existan campos vaciós
+                                if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                                    errorTitle = "Campos vacíos"
+                                    errorMessage = "Todos los campos deben ser llenados."
+                                    showAlert = true
+                                }
+                                //Validamos que selecciono una fecha de nacimiento
+                                else if(!hasSelectedBirthday){
+                                    errorTitle = "Campos vacíos"
+                                    errorMessage = "Debes seleccionar una fecha de cumpleaños"
+                                    showAlert = true
+                                }
+                                //Validamos que no existán caracteres especiales en nombre
+                                else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                                    errorTitle = "Nombre y/ apellido no valido"
+                                    errorMessage = "El nombre y apellido deben de solamente contener letras."
+                                    showAlert = true
+                                }
+                                //Actualización de datos en la base de datos
+                                else {
                                     isSaving = true
                                     uploadPatient.toggle()
                                     dismiss()
                                 }
-                                else{
-                                    showAlert = true
-                                }
                             }
                         }
                     } else {
-                        //Checar que datos son validos
-                        if(firstName != "" && lastName != "" && group != "" && communicationStyleSelector != "" && congnitiveLevelSelector != ""){
+                        
+                        //Validamos que no existan campos vaciós
+                        if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
+                            errorTitle = "Campos vacíos"
+                            errorMessage = "Todos los campos deben ser llenados."
+                            showAlert = true
+                        }
+                        //Validamos que selecciono una fecha de nacimiento
+                        else if(!hasSelectedBirthday){
+                            errorTitle = "Campos vacíos"
+                            errorMessage = "Debes seleccionar una fecha de cumpleaños"
+                            showAlert = true
+                        }
+                        //Validamos que no existán caracteres especiales en nombre
+                        else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
+                            errorTitle = "Nombre y/ apellido no valido"
+                            errorMessage = "El nombre y apellido deben de solamente contener letras."
+                            showAlert = true
+                        }
+                        //Actualización de datos en la base de datos
+                        else {
                             isSaving = true
                             uploadPatient.toggle()
                             dismiss()
-                             
-                        }
-                        else{
-                            showAlert = true
                         }
                     }
                 }){
@@ -187,11 +235,11 @@ struct AddPatientView: View {
                 .cornerRadius(10)
                 .foregroundColor(.white)
                 .allowsHitTesting(!isSaving)
-                .alert("Todos los campos deben ser llenados", isPresented: $showAlert){
+                .alert(errorTitle, isPresented: $showAlert){
                     Button("Ok") {}
                 }
             message: {
-                Text("Asegurate de haber llenado todos los campos requeridos")
+                Text(errorMessage)
             }
             }
         }
