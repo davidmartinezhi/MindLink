@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import FirebaseStorage
 
 struct AdminMenuView: View {
     @Environment(\.dismiss) var dismiss
@@ -34,6 +35,18 @@ struct AdminMenuView: View {
         self.user = user
         _name = State(initialValue: user.name)
         _email = State(initialValue: user.email)
+    }
+    
+    func loadImageFromFirebase(name:String) {
+        let storageRef = Storage.storage().reference(withPath: name)
+        
+        storageRef.downloadURL { (url, error) in
+            if error != nil {
+                print("Este usuario no tiene una imagen de perfil")
+                return
+            }
+            self.imageURL = url!
+        }
     }
     
     var body: some View {
@@ -68,10 +81,8 @@ struct AdminMenuView: View {
                                     }
                                     .padding(.horizontal, 20)
                                 }
-                                
                                 //Imagen previamente subida
                                 else{
-                                    
                                     ZStack{
                                         KFImage(URL(string: user.image))
                                             .resizable()
@@ -89,17 +100,9 @@ struct AdminMenuView: View {
                                 }
                         }
                     }
-                    //Spacer()
                 }
                 .padding(.top, 30)
                 .frame(maxHeight: 150)
-                
-                /*
-                Image(systemName: "person.circle")
-                    .font(.system(size: 80))
-                    //.foregroundColor(Color(.label))
-                    .foregroundColor(.gray)
-                 */
                 
                 Text(name)
                     .font(.title)
@@ -107,10 +110,8 @@ struct AdminMenuView: View {
                 Text(user.email)
                     .font(.subheadline)
                     .foregroundColor(.gray)
-                
             }
             .frame(maxHeight: 150)
-            //.padding(.top, 50)
             
             VStack{
                 Form {
@@ -135,8 +136,6 @@ struct AdminMenuView: View {
                 }
             }
             .frame(maxHeight: 300)
-            
-            //Spacer()
             VStack(alignment: .leading, spacing: 10) {
                 
                 HStack{
@@ -157,13 +156,12 @@ struct AdminMenuView: View {
                     .cornerRadius(10)
                     .foregroundColor(.white)
                     
-                    
                     //Guardar
                     Button(action: {
                         
                         if let thisImage = self.upload_image {
                             Task {
-                                await storage.uploadImage(image: thisImage, name: user.name + "admin_profile_picture") { url in
+                                await storage.uploadImage(image: thisImage, name: "Fotos_perfil/" + user.id + "admin_profile_picture") { url in
                                     
                                     imageURL = url
                                     
@@ -192,7 +190,6 @@ struct AdminMenuView: View {
                                 self.alertTitle = "Faltan campos"
                                 self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                                 self.showingAlert = true
-                                
                             } else if (password != confirmpassword) {
                                 self.alertTitle = "Confirme su contraseña"
                                 self.alertMessage = "Por favor, confirme correctamente su contraseña."
@@ -206,7 +203,6 @@ struct AdminMenuView: View {
                                 dismiss()
                             }
                         }
-                    
                     }) {
                         HStack {
                             Text("Guardar")
@@ -223,7 +219,6 @@ struct AdminMenuView: View {
                 }
             }
             .padding()
-            
             Spacer()
         }
         .padding()
@@ -236,6 +231,9 @@ struct AdminMenuView: View {
             Button("OK"){}
         } message: {
             Text(alertMessage)
+        }
+        .onAppear{
+            loadImageFromFirebase(name: "Fotos_perfil/" + user.id + "admin_profile_picture.jpg")
         }
         .onDisappear{
             if(uploadData) {

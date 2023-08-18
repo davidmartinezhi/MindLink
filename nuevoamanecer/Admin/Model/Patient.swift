@@ -17,4 +17,5 @@ struct Patient: Hashable, Codable, Identifiable{
     let cognitiveLevel: String
     let image: String
     let notes: [String]
+    let identificador: String
 }
