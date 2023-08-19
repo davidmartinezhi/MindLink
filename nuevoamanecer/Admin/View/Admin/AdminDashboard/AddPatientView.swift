@@ -14,6 +14,7 @@ struct AddPatientView: View {
     @ObservedObject var patients: PatientsViewModel
     
     // Variables para los selectores de nivel cognitivo y estilo de comunicación
+    let patientId = UUID().uuidString
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     
@@ -190,7 +191,7 @@ struct AddPatientView: View {
                     //Subir imagen a firebase
                     if let thisImage = self.upload_image {
                         Task {
-                            await storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture") { url in
+                            await storage.uploadImage(image: thisImage, name: "Fotos_perfil/" + patientId + "profile_picture") { url in
                                 
                                 imageURL = url
                                 
@@ -296,7 +297,7 @@ struct AddPatientView: View {
         }
         .onDisappear {
             if(uploadPatient) {
-                let patient = Patient(id: UUID().uuidString ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
+                let patient = Patient(id: patientId ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String](), identificador: patientId)
                 
                patients.addData(patient: patient){ error in
                    if error != "OK" {
@@ -314,7 +315,6 @@ struct AddPatientView: View {
             }
         }
     }
-       
 }
 
 struct AddPatientView_Previews: PreviewProvider {

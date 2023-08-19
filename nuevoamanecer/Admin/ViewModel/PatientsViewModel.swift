@@ -60,8 +60,9 @@ class PatientsViewModel: ObservableObject{
                 let notes = data["notes"] as? [String] ?? []
                 //let id = data["id"] as? String ?? UUID().uuidString
                 let id = document.documentID
+                let identificador = data["id"] as? String ?? ""
                 
-                let patient = Patient(id: id, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes)
+                let patient = Patient(id: id, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador)
                 
                 patients.append(patient)
             }
@@ -96,8 +97,9 @@ class PatientsViewModel: ObservableObject{
             let cognitiveLevel = data["cognitiveLevel"] as? String ?? "No asignado"
             let image = data["image"] as? String ?? ""
             let notes = data["notes"] as? [String] ?? []
+            let identificador = data["id"] as? String ?? ""
             
-            let patient = Patient(id: patientId, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes)
+            let patient = Patient(id: patientId, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador)
             
             return patient
         }
@@ -128,19 +130,6 @@ class PatientsViewModel: ObservableObject{
         }
     }
     
-    /*
-    // Eliminación de un paciente
-    func deleteData(patientId: String, completion: @escaping (String) -> Void) {
-        db.collection("Patient").document(patientId).delete() { err in
-            if let err = err {
-                completion(err.localizedDescription)
-            } else {
-                completion("OK")
-            }
-        }
-    }
-     */
-    
     func deleteData(patient: Patient, completion: @escaping (String) -> Void) async {
         do {
             let patientRef = db.collection("Patient").document(patient.id)
@@ -161,6 +150,4 @@ class PatientsViewModel: ObservableObject{
             completion("Failed")
         }
     }
-
-
 }

@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+class AppLock: ObservableObject {
+    @Published var isLocked: Bool = false
+}
+
 struct ContentView: View {
     @ObservedObject var authViewModel = AuthViewModel()
 
@@ -19,6 +23,7 @@ struct ContentView: View {
         VStack {
             if let user = authViewModel.user {
                 AdminView(authViewModel: authViewModel, user: user)
+
             } else {
                 AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión
             }
@@ -33,3 +38,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+

@@ -38,6 +38,8 @@ struct EditPatientView: View {
     @State private var group : String = ""
     @State private var upload_image: UIImage?
     @State private var deletedImage = false
+    @State private var identificador : String = ""
+
     @State private var errorTitle: String = ""
     @State private var errorMessage: String = ""
     @State private var storage = FirebaseAlmacenamiento()
@@ -54,6 +56,7 @@ struct EditPatientView: View {
         group = patient.group
         communicationStyleSelector = patient.communicationStyle
         congnitiveLevelSelector = patient.cognitiveLevel
+        identificador = patient.id
     }
     
     
@@ -252,9 +255,9 @@ struct EditPatientView: View {
                     //Subir imagen a firebase
                     if let thisImage = self.upload_image {
                         Task {
-                            await storage.uploadImage(image: thisImage, name: lastName + firstName + "profile_picture") { url in
+                            await storage.uploadImage(image: thisImage, name: "Fotos_perfil/" + patient.identificador + "profile_picture") { url in
                                 
-                                imageURL = url
+                                self.imageURL = url
                                 
                                 //Validamos que no existan campos vaciós
                                 if(firstName == "" || lastName == "" || group == "" || communicationStyleSelector == "" || congnitiveLevelSelector == ""){
@@ -341,16 +344,16 @@ struct EditPatientView: View {
         }
         .onAppear{
             initializeData(patient: patient)
-            loadImageFromFirebase(name: lastName + firstName + "profile_picture.jpg")
+            loadImageFromFirebase(name: "Fotos_perfil/" + patient.identificador + "profile_picture.jpg")
         }
         .onDisappear{
             if(uploadPatient){
                 //Si se presiono el boton de eliminar imagen y despues guardar, se borra la imagen de la base de datos
                 if(deletedImage) {
-                    storage.deleteFile(name: lastName + firstName + "profile_picture")
+                    storage.deleteFile(name: "Fotos_perfil/" + patient.identificador + "profile_picture")
                     imageURL = URL(string: "placeholder")
                 }
-                let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String]())
+                let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String](), identificador: patient.identificador)
                 
                 //call method for update
                 patients.updateData(patient: patient){ error in
@@ -377,7 +380,7 @@ struct EditPatientView: View {
 
 struct EditPatientView_Previews: PreviewProvider {
     static var previews: some View {
-        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String]()))
+        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
     }
 }
 

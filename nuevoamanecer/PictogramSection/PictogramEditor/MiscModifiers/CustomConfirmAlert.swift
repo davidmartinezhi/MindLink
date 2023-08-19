@@ -18,12 +18,12 @@ struct CustomConfirmAlert: ViewModifier {
         content
             .alert(title, isPresented: $isPresented) {
                 HStack {
-                    Button("Confirmar") {
-                        action()
+                    Button("Cancelar", role: .cancel) {
+                        isPresented = false
                     }
                     
-                    Button("Cancelar") {
-                        isPresented = false
+                    Button("Eliminar", role: .destructive) {
+                        action()
                     }
                 }
             } message: {

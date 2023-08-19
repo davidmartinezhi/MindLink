@@ -74,7 +74,7 @@ struct CategoryModel: Identifiable, Codable, Comparable {
     }
     
     static func defaultCategory() -> CategoryModel {
-        return CategoryModel(name: "Nombre", color: CategoryColor(r: 0.9, g: 0.9, b: 0.9))
+        return CategoryModel(name: "", color: CategoryColor(r: 0.9, g: 0.9, b: 0.9))
     }
 }
 
