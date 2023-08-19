@@ -11,18 +11,22 @@ import SwiftUI
 struct ColorMaker{
     static func buildforegroundTextColor(r: Double, g: Double, b: Double) -> Color {
         let colorLuminance: Double = (r * 0.2126) + (g * 0.7152) + (b * 0.0722)
-        let contrastWithBlack: Double = (colorLuminance + 0.05) / 0.05
-        let contrastWithWhite: Double = (1 + 0.05) / (colorLuminance + 0.05)
+        // let contrastWithBlack: Double = (colorLuminance + 0.05) / 0.05
+        // let contrastWithWhite: Double = (1 + 0.05) / (colorLuminance + 0.05)
             
-        return contrastWithWhite >= (contrastWithBlack * 0.9) ? .white : .black
+        // return contrastWithWhite >= (contrastWithBlack * 0.9) ? .white : .black
+        
+        return colorLuminance < 0.6 ? .white : .black
     }
     
     static func buildforegroundTextColor(catColor: CategoryColor) -> Color {
         let colorLuminance: Double = (catColor.r * 0.2126) + (catColor.g * 0.7152) + (catColor.b * 0.0722)
-        let contrastWithBlack: Double = (colorLuminance + 0.05) / 0.05
-        let contrastWithWhite: Double = (1 + 0.05) / (colorLuminance + 0.05)
+        // let contrastWithBlack: Double = (colorLuminance + 0.05) / 0.05
+        // let contrastWithWhite: Double = (1 + 0.05) / (colorLuminance + 0.05)
             
-        return contrastWithWhite >= (contrastWithBlack * 0.9) ? .white : .black
+        // return contrastWithWhite >= (contrastWithBlack * 0.9) ? .white : .black
+        
+        return colorLuminance < 0.6 ? .white : .black 
     }
     
     static func getBasicColors() -> [(r: Double, g: Double, b: Double)] {

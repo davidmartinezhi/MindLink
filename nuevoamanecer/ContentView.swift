@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-class AppLock: ObservableObject {
-    @Published var isLocked: Bool = false
-}
-
 struct ContentView: View {
     @ObservedObject var authViewModel = AuthViewModel()
-
 
     func initialFetch() {
         authViewModel.fetchCurrentUser()
