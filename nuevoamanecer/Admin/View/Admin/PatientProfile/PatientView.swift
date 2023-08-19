@@ -242,6 +242,17 @@ struct PatientView: View {
             // 1/4 of the screen for the notes list
                 VStack {
                     
+                    HStack{
+                        Spacer()
+                        Text("Expediente")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(Color.gray)
+                            
+                        
+                        Spacer()
+                    }
+                    .padding(10)
+                    
                     //Add note button
                     HStack{
                         Button(action: {
@@ -258,17 +269,7 @@ struct PatientView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .padding(.vertical)
-                    
-                    HStack{
-                        Spacer()
-                        Text("Esquema")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color.gray)
-                            
-                        
-                        Spacer()
-                    }
+                    .padding(.bottom)
 
                     
                     //checamos si hay notas
