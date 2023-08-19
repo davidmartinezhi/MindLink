@@ -242,6 +242,17 @@ struct PatientView: View {
             // 1/4 of the screen for the notes list
                 VStack {
                     
+                    
+                    HStack{
+                        Spacer()
+                        Text("Expediente")
+                            .font(.system(size: 24, weight: .regular))
+                            .foregroundColor(Color.black)
+                        Spacer()
+                    }
+                    .padding(10)
+                     
+                    
                     //Add note button
                     HStack{
                         Button(action: {
@@ -258,17 +269,7 @@ struct PatientView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .padding(.vertical)
-                    
-                    HStack{
-                        Spacer()
-                        Text("Esquema")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(Color.gray)
-                            
-                        
-                        Spacer()
-                    }
+                    .padding(.bottom, 10)
 
                     
                     //checamos si hay notas
@@ -303,7 +304,7 @@ struct PatientView: View {
                 .background(Color.white.opacity(0.1))
                 //.background(Color.red)
                 
-                
+                Divider()
                 // 3/4 of the screen for patient information and notes
                 VStack {
 
@@ -314,7 +315,7 @@ struct PatientView: View {
                                 Spacer()
                                 VStack {
                                     Spacer()
-                                    Text("Agrega notas sobre tus niños, ordenalas y editalas")
+                                    Text("Agrega, ordena y edita las notas del expediente")
                                         .font(.title2)
                                         .foregroundColor(Color.black)
                                         .multilineTextAlignment(.center)
@@ -426,8 +427,6 @@ struct PatientView: View {
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
         }
-
-        
         Spacer()
     }
 }
