@@ -12,20 +12,19 @@ struct CategoryPickerView: View {
     @Binding var pickedCategoryId: String
     @Binding var userHasChosenCat: Bool
     
+    @State var scrollOffset: Double = 0
+    let coordinateSpaceName: String = "CategoryPickerViewCoordSpace"
+    
     var body: some View {
-        
-        ScrollView(.horizontal) {
-            HStack(spacing: 11) {
+        ScrollView(.horizontal){
+            HStack(spacing: 11){
                 ForEach(categoryModels) { catModel in
                     Button {
                         pickedCategoryId = catModel.id!
                         if !userHasChosenCat {
-                            userHasChosenCat = true 
+                            userHasChosenCat = true
                         }
-                    } label: {
-                        // let categoryBGColor: CategoryColor = catModel.build
-                        // let categoryFGColor: Color = ColorMaker.buildforegroundTextColor(catColor: categoryBGColor)
-                        
+                    } label: {                        
                         Text(catModel.name)
                             .frame(minWidth: 60)
                             .padding()
@@ -36,6 +35,18 @@ struct CategoryPickerView: View {
                     }
                 }
             }
+            .scrollOffset($scrollOffset, direction: .horizontal, coordinateSpaceName: coordinateSpaceName)
+        }
+        .coordinateSpace(name: coordinateSpaceName)
+        .overlay(alignment: .center) {
+            HStack {
+                Image(systemName: "arrowshape.backward.fill")
+                    .opacity(scrollOffset <= -20 ? 0.9 : 0)
+                Spacer()
+                Image(systemName: "arrowshape.right.fill")
+                    .opacity(true ? 0.9 : 0)
+            }
+            .allowsHitTesting(false)
         }
     }
 }

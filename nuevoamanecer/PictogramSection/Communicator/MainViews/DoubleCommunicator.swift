@@ -18,6 +18,8 @@ struct DoubleCommunicator: View {
     
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
+    
+    @State var appLock: AppLock = AppLock()
         
     var body: some View {
         GeometryReader { geo in
@@ -31,5 +33,6 @@ struct DoubleCommunicator: View {
                 .zIndex(showingCommunicator1 ? 0 : 1)
             }
         }
+        .environmentObject(self.appLock)
     }
 }
