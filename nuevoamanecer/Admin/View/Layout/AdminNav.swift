@@ -22,8 +22,6 @@ struct AdminNav: View {
     
     var user: User
     
-    @EnvironmentObject var appLock: AppLock
-
     var body: some View {
         ZStack {
             HStack {
@@ -95,7 +93,6 @@ struct AdminNav: View {
                         }
                     }
                     .frame(width: 50, height: 50)
-                    .disabled(appLock.isLocked)
                 }
                 .frame(width: 50, height: 50)
             }
