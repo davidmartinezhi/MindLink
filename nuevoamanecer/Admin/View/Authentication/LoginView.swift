@@ -28,6 +28,7 @@ struct LoginView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .padding(.bottom, 20)
+                    .textContentType(.emailAddress)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none) // para evitar errores de correo electrónico en mayúsculas
                 
