@@ -55,7 +55,8 @@ struct AdminView: View {
     @State private var showAdminView: Bool = false
     @State private var showRegisterView: Bool = false
     var hiddenNavBar : Bool = false
-
+    
+    @StateObject var pathWrapper = NavigationPathWrapper() // Contiene una instancia de NavigationPath, es proveida como variable de ambiente. 
 
     //Reseteo de filtrado
     // Filtrado
@@ -239,22 +240,12 @@ struct AdminView: View {
         return patients.patientsList
     }
     
-    @State private var path = NavigationPath()
-    
-    private func returnRoot(){
-        path.removeLast(path.count)
-    }
-
     var body: some View {
         VStack{
-            
-
-            NavigationStack(path: $path){
+            NavigationStack(path: $pathWrapper.path){
                         VStack{
-                            
-                            
+
                             AdminNav(authViewModel: AuthViewModel(), showAdminView: $showAdminView, showRegisterView: $showRegisterView, user: user)
-                            
                             
                             //Search bar y Boton para agregar niños
                             HStack{
@@ -500,7 +491,7 @@ struct AdminView: View {
 
                                 }
                                 .navigationDestination(for: Patient.self, destination: { patient in
-                                    PatientView(patients: patients, notes: notes, patient:patient, returnRoot: returnRoot)
+                                    PatientView(patients: patients, notes: notes, patient: patient)
                                 })
                                 .listStyle(.automatic)
                                 .onChange(of: patients.patientsList, perform: {value in
@@ -522,6 +513,7 @@ struct AdminView: View {
             .sheet(isPresented: $showRegisterView){
                 RegisterView(authViewModel: authViewModel)
             }
+            .environmentObject(pathWrapper)
         }
     }
     
