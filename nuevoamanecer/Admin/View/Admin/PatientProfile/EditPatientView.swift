@@ -47,6 +47,8 @@ struct EditPatientView: View {
     @State private var imageURL = URL(string: "")
     @State private var uploadPatient: Bool = false
     
+    var returnRoot: () -> Void
+    
 
     // Función para inicializar los datos del paciente en la vista
     func initializeData(patient: Patient) -> Void{
@@ -78,7 +80,7 @@ struct EditPatientView: View {
         // Contenedor vertical que agrupa los elementos de la vista
           VStack{
               // Vista para eliminar al paciente
-              DeletePatientView(patients:patients, patient:patient)
+              DeletePatientView(patients:patients, patient:patient, returnRoot: returnRoot)
 
               // Contenedor para la imagen del paciente
             VStack{
@@ -364,7 +366,7 @@ struct EditPatientView: View {
 
 struct EditPatientView_Previews: PreviewProvider {
     static var previews: some View {
-        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
+        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""), returnRoot: {})
     }
 }
 

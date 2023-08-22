@@ -239,11 +239,17 @@ struct AdminView: View {
         return patients.patientsList
     }
     
+    @State private var path = NavigationPath()
+    
+    private func returnRoot(){
+        path.removeLast(path.count)
+    }
+
     var body: some View {
         VStack{
             
 
-            NavigationStack{
+            NavigationStack(path: $path){
                         VStack{
                             
                             
@@ -429,34 +435,6 @@ struct AdminView: View {
                             .padding(.horizontal, 70)
 
                             
-                            /*
-                            // Barra de busqueda
-                            HStack {
-                                HStack{
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.gray)
-                                        .padding()
-                                    TextField("Buscar niño o grupo", text: $search)
-                                        .padding()
-                                        .onChange(of: search, perform: performSearchByName)
-                                        
-                                }
-                                .frame(width: 300)
-                                .cornerRadius(10) // Asegúrate de que este está aquí
-                                .background(Color(.systemGray6))
-                                .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
-
-                                Spacer()
-                                    
-                            }
-                            .frame(width: 300)
-                            .padding(.horizontal, 50)
-                            .padding(.bottom, 20)
-                            
-                            */
-
 
                                 
                             //mostramos que no hay pacientes con los filtros seleccionados
@@ -509,14 +487,21 @@ struct AdminView: View {
                             else{
                                 //mostramos lista de pacientes
                                 List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
-                                    PatientCardView(patient: patient)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(10)
-                                        //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                                        .padding([.leading, .trailing, .bottom], 10)
-                                        .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                    NavigationLink(value: patient){
+                                        PatientCardView(patient: patient)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                            //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                                            .padding([.leading, .trailing, .bottom], 10)
+                                            //.background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                    }
+                                    
+
                                 }
+                                .navigationDestination(for: Patient.self, destination: { patient in
+                                    PatientView(patients: patients, notes: notes, patient:patient, returnRoot: returnRoot)
+                                })
                                 .listStyle(.automatic)
                                 .onChange(of: patients.patientsList, perform: {value in
                                     resetSearchFilters()

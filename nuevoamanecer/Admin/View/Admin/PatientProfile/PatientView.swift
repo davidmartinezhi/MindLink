@@ -36,7 +36,9 @@ struct PatientView: View {
     @State private var showCommunicatorMenu: Bool = false
     
     @State private var selection: String? = nil
-
+    
+    var returnRoot: () -> Void
+    
 
     
     //obtiene edad del paciente
@@ -421,7 +423,7 @@ struct PatientView: View {
             EditNoteView(notes: notes, note: note)
         }
         .sheet(isPresented: $showEditPatientView){
-            EditPatientView(patients: patients, patient: patient)
+            EditPatientView(patients: patients, patient: patient, returnRoot: returnRoot)
         }
         .sheet(isPresented: $showCommunicatorMenu){
             CommunicatorMenuView(patient:patient)
@@ -435,6 +437,6 @@ struct PatientView: View {
 
 struct PatientView_Previews: PreviewProvider {
     static var previews: some View {
-        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
+        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""), returnRoot:{})
     }
 }

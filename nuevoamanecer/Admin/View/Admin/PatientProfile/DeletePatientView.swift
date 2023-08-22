@@ -13,6 +13,7 @@ struct DeletePatientView: View {
     @State var patient: Patient
     @State private var showAlert = false
     @State private var storage = FirebaseAlmacenamiento()
+    var returnRoot: () -> Void
 
     var body: some View {
         HStack {
@@ -54,12 +55,9 @@ struct DeletePatientView: View {
                                     }
                                 }
                                 dismiss()
+                                returnRoot()
                             }
                         }
-                    }
-                    // NavigationLink para navegar a la vista de administrador
-                    NavigationLink(destination: AdminView(authViewModel: AuthViewModel(), user: User(id: "", name: "", email: "", isAdmin: false, image: ""))) {
-                        EmptyView()
                     }
 
                       },
@@ -73,7 +71,7 @@ struct DeletePatientView: View {
 
 struct DeletePatientView_Previews: PreviewProvider {
     static var previews: some View {
-        DeletePatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
+        DeletePatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""), returnRoot: {})
     }
 }
 
