@@ -63,8 +63,18 @@ struct EditNoteView: View {
                         self.alertTitle = "Faltan campos"
                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                         self.showingAlert = true
-                    } else {
-                        
+                    }
+                    else if !isValidInputNoWhiteSpaces(input: noteTitle) || !isValidInputNoWhiteSpaces(input: noteContent){
+                        self.alertTitle = "Texto no valido"
+                        self.alertMessage = "El titulo y el contenido no pueden contener solamente espacios en blanco"
+                        self.showingAlert = true
+                    }
+                    else if hasLeadingWhitespace(input: noteTitle) || hasLeadingWhitespace(input: noteContent){
+                        self.alertTitle = "Texto no valido"
+                        self.alertMessage = "El titulo y el contenido no pueden iniciar con campos en blanco"
+                        self.showingAlert = true
+                    }
+                    else {
                         //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
                         self.note.title = noteTitle
                         self.note.text = noteContent

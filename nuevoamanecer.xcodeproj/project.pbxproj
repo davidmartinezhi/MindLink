@@ -65,6 +65,7 @@
 		C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F052A2162E600F31578 /* EditPatientView.swift */; };
 		C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F072A252D2800F31578 /* DeletePatientView.swift */; };
 		C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207F0D2A268C5A00F31578 /* EditNoteView.swift */; };
+		C22A9A682A9432790087AF1F /* HelpersStringValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A9A672A9432790087AF1F /* HelpersStringValidation.swift */; };
 		C22ECD452A33E32200DF8A06 /* CommunicatorMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22ECD442A33E32200DF8A06 /* CommunicatorMenuView.swift */; };
 		C22ECD482A380C4600DF8A06 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C22ECD472A380C4600DF8A06 /* FirebaseFirestoreSwift */; };
 		C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C235FDAC2A18106E005412A7 /* AdminView.swift */; };
@@ -149,6 +150,7 @@
 		C2207F052A2162E600F31578 /* EditPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPatientView.swift; sourceTree = "<group>"; };
 		C2207F072A252D2800F31578 /* DeletePatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePatientView.swift; sourceTree = "<group>"; };
 		C2207F0D2A268C5A00F31578 /* EditNoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteView.swift; sourceTree = "<group>"; };
+		C22A9A672A9432790087AF1F /* HelpersStringValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpersStringValidation.swift; sourceTree = "<group>"; };
 		C22ECD442A33E32200DF8A06 /* CommunicatorMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicatorMenuView.swift; sourceTree = "<group>"; };
 		C235FDAC2A18106E005412A7 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
 		C235FDAE2A181080005412A7 /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
@@ -396,6 +398,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		C22A9A692A94356C0087AF1F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C22A9A672A9432790087AF1F /* HelpersStringValidation.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		C22ECD3D2A33C3D900DF8A06 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
@@ -432,6 +442,7 @@
 		C22ECD462A37B7A300DF8A06 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				C22A9A692A94356C0087AF1F /* Helpers */,
 				C2BEDB602A157A93005398F9 /* ViewModel */,
 				C2BEDB5F2A157A8D005398F9 /* View */,
 				C2BEDB5E2A157A84005398F9 /* Model */,
@@ -700,6 +711,7 @@
 				BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */,
 				BC8F7E352A37FFBD008E97B2 /* DoubleCommunicator.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
+				C22A9A682A9432790087AF1F /* HelpersStringValidation.swift in Sources */,
 				BC8F7E3E2A37FFBD008E97B2 /* PictogramEditor.swift in Sources */,
 				BC8F7E4C2A37FFBD008E97B2 /* PageModel.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,

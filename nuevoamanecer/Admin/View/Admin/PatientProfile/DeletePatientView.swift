@@ -57,6 +57,10 @@ struct DeletePatientView: View {
                             }
                         }
                     }
+                    // NavigationLink para navegar a la vista de administrador
+                    NavigationLink(destination: AdminView(authViewModel: AuthViewModel(), user: User(id: "", name: "", email: "", isAdmin: false, image: ""))) {
+                        EmptyView()
+                    }
 
                       },
                       secondaryButton: .cancel())

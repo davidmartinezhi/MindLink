@@ -58,38 +58,6 @@ struct EditPatientView: View {
         congnitiveLevelSelector = patient.cognitiveLevel
         identificador = patient.id
     }
-    
-    
-    // Función para validar si un nombre es válido utilizando una expresión regular
-    func isValidName(name: String) -> Bool {
-        // Elimina los espacios en blanco al final del nombre
-        let trimmedName = name.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
-        
-        // Expresión regular para validar el nombre
-        let pattern = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)*$"
-        let regex = try? NSRegularExpression(pattern: pattern)
-        let range = NSRange(location: 0, length: trimmedName.utf16.count)
-        return regex?.firstMatch(in: trimmedName, options: [], range: range) != nil
-    }
-    
-    // Función para validar si una fecha de cumpleaños es válida
-    func isValidBirthDate(birthDate: Date) -> Bool {
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let oneMonthAgo = calendar.date(byAdding: .month, value: -1, to: currentDate)!
-        
-        // Verifica si la fecha de nacimiento está en el futuro
-        if birthDate.compare(currentDate) == .orderedDescending {
-            return false
-        }
-        
-        // Verifica si la fecha de nacimiento está en el mes previo
-        if birthDate.compare(oneMonthAgo) == .orderedDescending {
-            return false
-        }
-        
-        return true
-    }
 
     
     // Función para cargar la imagen del paciente desde Firebase
@@ -104,8 +72,6 @@ struct EditPatientView: View {
         }
     }
 
-    
-    
     
     var body: some View {
         
@@ -267,15 +233,24 @@ struct EditPatientView: View {
                                 }
                                 //Validamos que no existán caracteres especiales en nombre
                                 else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
-                                    errorTitle = "Nombre y/ apellido no valido"
-                                    errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
+                                    errorTitle = "Favor de volver a ingresar sus datos"
+                                    errorMessage = "Nombre y apellido del paciente deben contener solamente letras y no tener espacios en blanco al inicio"
+                                    firstName = ""
+                                    lastName = ""
+                                    showAlert = true
+                                }
+                                //Validamos que el grupo tenga un nombre valido. solo letras y numeros
+                                else if(!isValidOnlyCharAndNumbers(input: group)){
+                                    errorTitle = "Nombre de grupo invalido"
+                                    errorMessage = "Nombre del grupo debe contener solamente letras y no tener espacios en blanco al inicio"
+                                    group = ""
                                     showAlert = true
                                 }
                                 //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
                                 //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
                                 else if(!isValidBirthDate(birthDate: birthDate)){
-                                    errorTitle = "Fecha de nacimiento incorrecta"
-                                    errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                                    errorTitle = "Fecha de nacimiento invalida"
+                                    errorMessage = "Ingresa una fecha de nacimiento previa a un mes"
                                     showAlert = true
                                 }
                                 //Actualización de datos en la base de datos
@@ -295,15 +270,24 @@ struct EditPatientView: View {
                         }
                         //Validamos que no existán caracteres especiales en nombre
                         else if(!isValidName(name: firstName) || !isValidName(name: lastName)){
-                            errorTitle = "Nombre y/ apellido no valido"
-                            errorMessage = "El nombre y apellido deben contener solamente letras y no tener espacios en blanco al inicio"
+                            errorTitle = "Favor de volver a ingresar sus datos"
+                            errorMessage = "Nombre y apellido del paciente deben contener solamente letras y no tener espacios en blanco al inicio"
+                            firstName = ""
+                            lastName = ""
+                            showAlert = true
+                        }
+                        //Validamos que el grupo tenga un nombre valido. solo letras y numeros
+                        else if(!isValidOnlyCharAndNumbers(input: group)){
+                            errorTitle = "Nombre de grupo invalido"
+                            errorMessage = "Nombre del grupo debe contener solamente letras y no tener espacios en blanco al inicio"
+                            group = ""
                             showAlert = true
                         }
                         //Validamos que la fecha de nacimiento no sea en el futuro o en el mes previo
                         //La razón del mes previo es para promover que escriban la fecha de nacimiento correcta
                         else if(!isValidBirthDate(birthDate: birthDate)){
-                            errorTitle = "Fecha de nacimiento incorrecta"
-                            errorMessage = "Ingresa una fecha de nacimiento parevia a un mes"
+                            errorTitle = "Fecha de nacimiento invalida"
+                            errorMessage = "Ingresa una fecha de nacimiento previa a un mes"
                             showAlert = true
                         }
                         //Actualización de datos en la base de datos
