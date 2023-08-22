@@ -37,6 +37,8 @@ struct PatientView: View {
     
     @State private var selection: String? = nil
     
+    @EnvironmentObject var pathWrapper: NavigationPathWrapper
+    
     //obtiene edad del paciente
     private func getAge(patient: Patient) -> Int {
         let birthday: Date = patient.birthDate // tu fecha de nacimiento aquí
@@ -80,10 +82,7 @@ struct PatientView: View {
     }
     
     var body: some View {
-        
-
-        
-        VStack{
+        VStack {
             //user header
 
                 
@@ -168,8 +167,6 @@ struct PatientView: View {
                     .padding(.bottom)
                     .fixedSize(horizontal: false, vertical: true)
                     
-                    
-
                     HStack{
                         
                         Spacer()
@@ -178,7 +175,7 @@ struct PatientView: View {
                             // validar que el usuario sea admin para mostrar
                             if (users.user?.isAdmin == true) {
                                 Button {
-                                    selection = "A"
+                                    pathWrapper.path.append(PictogramEditorIdWrapper(id: patient.id))
                                 } label: {
                                     Text("Editar comunicador de \(patient.firstName)")
                                     Image(systemName: "pencil")
@@ -186,14 +183,14 @@ struct PatientView: View {
                             }
                             
                             Button {
-                                selection = "B"
+                                pathWrapper.path.append(CommunicatorIdWrapper(id: patient.id))
                             } label: {
                                 Text("Acceder a comunicador de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
                             
                             Button {
-                                selection = "C"
+                                pathWrapper.path.append(AlbumIdWrapper(id: patient.id))
                             } label: {
                                 Text("Acceder a album de \(patient.firstName)")
                                 Image(systemName: "message.fill")
@@ -212,18 +209,6 @@ struct PatientView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                         }
-                        
-                        // Para EDITAR COMUNICADOR
-                        NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictograms", catCollectionPath: "User/\(patient.id)/categories"), tag: "A", selection: $selection) {
-                            EmptyView()
-                        }
-                        
-                        // Para ACCEDER A COMUNICADOR
-                        NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictograms", catCollectionPath2: "User/\(patient.id)/categories"), tag: "B", selection: $selection) {
-                            EmptyView()
-                        }
-                        // Para ACCEDER AL ALBUM
-                        NavigationLink(destination: Album(patientId: patient.id), tag: "C", selection: $selection) {EmptyView()}
                     }
                 }
             }
@@ -427,6 +412,16 @@ struct PatientView: View {
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
         }
+        .navigationDestination(for: PictogramEditorIdWrapper.self) { pictogramEditor in
+            PictogramEditor(pictoCollectionPath: "User/\(pictogramEditor.id)/pictograms", catCollectionPath: "User/\(pictogramEditor.id)/categories")
+        }
+        .navigationDestination(for: CommunicatorIdWrapper.self) { communicator in
+            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(communicator.id))/pictograms", catCollectionPath2: "User/\(communicator.id)/categories")
+        }
+        .navigationDestination(for: AlbumIdWrapper.self) { album in
+            Album(patientId: album.id)
+        }
+        
         Spacer()
     }
 }

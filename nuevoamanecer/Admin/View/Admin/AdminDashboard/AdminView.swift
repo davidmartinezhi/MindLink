@@ -506,6 +506,7 @@ struct AdminView: View {
                             }
                         }
                     }
+
         }
             .sheet(isPresented: $showAdminView){
                 AdminMenuView(authViewModel: authViewModel, user: user)
