@@ -175,7 +175,7 @@ struct PatientView: View {
                             // validar que el usuario sea admin para mostrar
                             if (users.user?.isAdmin == true) {
                                 Button {
-                                    pathWrapper.path.append(PictogramEditorIdWrapper(id: patient.id))
+                                    pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, id: patient.id))
                                 } label: {
                                     Text("Editar comunicador de \(patient.firstName)")
                                     Image(systemName: "pencil")
@@ -183,14 +183,14 @@ struct PatientView: View {
                             }
                             
                             Button {
-                                pathWrapper.path.append(CommunicatorIdWrapper(id: patient.id))
+                                pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, id: patient.id))
                             } label: {
                                 Text("Acceder a comunicador de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
                             
                             Button {
-                                pathWrapper.path.append(AlbumIdWrapper(id: patient.id))
+                                pathWrapper.push(data: NavigationDestination(viewType: .album, id: patient.id))
                             } label: {
                                 Text("Acceder a album de \(patient.firstName)")
                                 Image(systemName: "message.fill")
@@ -411,15 +411,6 @@ struct PatientView: View {
         }
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
-        }
-        .navigationDestination(for: PictogramEditorIdWrapper.self) { pictogramEditor in
-            PictogramEditor(pictoCollectionPath: "User/\(pictogramEditor.id)/pictograms", catCollectionPath: "User/\(pictogramEditor.id)/categories")
-        }
-        .navigationDestination(for: CommunicatorIdWrapper.self) { communicator in
-            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(communicator.id))/pictograms", catCollectionPath2: "User/\(communicator.id)/categories")
-        }
-        .navigationDestination(for: AlbumIdWrapper.self) { album in
-            Album(patientId: album.id)
         }
         
         Spacer()

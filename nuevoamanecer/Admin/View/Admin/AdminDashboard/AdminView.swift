@@ -293,7 +293,7 @@ struct AdminView: View {
                                         
                                         if (users.user?.isAdmin == true) {
                                             Button {
-                                                selection = "A"
+                                                pathWrapper.push(data: NavigationDestination(viewType: .basePictogramEditor))
                                             } label: {
                                                 Text("Editar comunicador base")
                                                 Image(systemName: "pencil")
@@ -301,13 +301,11 @@ struct AdminView: View {
                                         }
                                         
                                         Button {
-                                            selection = "B"
+                                            pathWrapper.push(data: NavigationDestination(viewType: .singleCommunicator))
                                         } label: {
                                             Text("Acceder a comunicador base")
                                             Image(systemName: "message.fill")
                                         }
-
-                                        
                                     } label: {
                                         HStack {
                                             Image(systemName: "ellipsis.circle")
@@ -321,16 +319,19 @@ struct AdminView: View {
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                     }
-                                    
-                                    // Para EDITAR COMUNICADOR BASE
-                                    NavigationLink(destination: PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "A", selection: $selection) {
-                                        EmptyView()
-                                        
-                                    }
-                                    
-                                    // Para ACCEDER A COMUNICADOR BASE
-                                    NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "B", selection: $selection) {
-                                        EmptyView()
+                                    .navigationDestination(for: NavigationDestination.self) { destination in
+                                        switch destination.viewType {
+                                        case .singleCommunicator:
+                                            SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                        case .doubleCommunicator:
+                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.id))/pictograms", catCollectionPath2: "User/\(destination.id)/categories")
+                                        case .basePictogramEditor:
+                                            PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                        case .userPictogramEditor:
+                                            PictogramEditor(pictoCollectionPath: "User/\(destination.id)/pictograms", catCollectionPath: "User/\(destination.id)/categories")
+                                        default:
+                                            Album(patientId: destination.id)
+                                        }
                                     }
                                 }
                             }
