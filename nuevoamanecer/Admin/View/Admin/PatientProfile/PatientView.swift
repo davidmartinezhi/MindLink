@@ -175,7 +175,7 @@ struct PatientView: View {
                             // validar que el usuario sea admin para mostrar
                             if (users.user?.isAdmin == true) {
                                 Button {
-                                    pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, id: patient.id))
+                                    pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, userId: patient.id))
                                 } label: {
                                     Text("Editar comunicador de \(patient.firstName)")
                                     Image(systemName: "pencil")
@@ -183,14 +183,14 @@ struct PatientView: View {
                             }
                             
                             Button {
-                                pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, id: patient.id))
+                                pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, userId: patient.id))
                             } label: {
                                 Text("Acceder a comunicador de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
                             
                             Button {
-                                pathWrapper.push(data: NavigationDestination(viewType: .album, id: patient.id))
+                                pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
                             } label: {
                                 Text("Acceder a album de \(patient.firstName)")
                                 Image(systemName: "message.fill")

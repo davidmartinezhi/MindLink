@@ -13,6 +13,6 @@ enum ViewType {
 
 struct NavigationDestination: Hashable {
     var viewType: ViewType
-    var id: String = ""
+    var userId: String = ""
 }
 

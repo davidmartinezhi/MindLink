@@ -324,13 +324,13 @@ struct AdminView: View {
                                         case .singleCommunicator:
                                             SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
                                         case .doubleCommunicator:
-                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.id))/pictograms", catCollectionPath2: "User/\(destination.id)/categories")
+                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.userId)/pictograms", catCollectionPath2: "User/\(destination.userId)/categories")
                                         case .basePictogramEditor:
                                             PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
                                         case .userPictogramEditor:
-                                            PictogramEditor(pictoCollectionPath: "User/\(destination.id)/pictograms", catCollectionPath: "User/\(destination.id)/categories")
+                                            PictogramEditor(pictoCollectionPath: "User/\(destination.userId)/pictograms", catCollectionPath: "User/\(destination.userId)/categories")
                                         default:
-                                            Album(patientId: destination.id)
+                                            Album(patientId: destination.userId)
                                         }
                                     }
                                 }
