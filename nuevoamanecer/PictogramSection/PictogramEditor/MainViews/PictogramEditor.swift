@@ -33,7 +33,10 @@ struct PictogramEditor: View {
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
 
     // Inicializador del PictogramEditor
-    init(pictoCollectionPath: String, catCollectionPath: String){
+    init(patientId: String?){
+        let pictoCollectionPath: String = patientId != nil ? "User/\(patientId!)/pictograms" : "basePictograms"
+        let catCollectionPath: String = patientId != nil ? "User/\(patientId!)/categories" : "baseCategories"
+        
         // Inicializamos los ViewModel con los paths correspondientes
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
@@ -41,7 +44,6 @@ struct PictogramEditor: View {
     
     // Cuerpo de la vista
     var body: some View {
-        
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :

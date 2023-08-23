@@ -27,7 +27,10 @@ struct Communicator: View {
     
     @EnvironmentObject var appLock: AppLock
     
-    init(pictoCollectionPath: String, catCollectionPath: String, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
+    init(patientId: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
+        let pictoCollectionPath: String = patientId != nil ? "User/\(patientId!)/pictograms" : "basePictograms"
+        let catCollectionPath: String = patientId != nil ? "User/\(patientId!)/categories" : "baseCategories"
+
         _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
         _voiceGender = voiceGender

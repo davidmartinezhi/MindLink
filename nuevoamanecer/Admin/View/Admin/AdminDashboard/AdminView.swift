@@ -322,13 +322,13 @@ struct AdminView: View {
                                     .navigationDestination(for: NavigationDestination.self) { destination in
                                         switch destination.viewType {
                                         case .singleCommunicator:
-                                            SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                            SingleCommunicator(patientId: nil)
                                         case .doubleCommunicator:
-                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.userId)/pictograms", catCollectionPath2: "User/\(destination.userId)/categories")
+                                            DoubleCommunicator(patientId: destination.userId)
                                         case .basePictogramEditor:
-                                            PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                            PictogramEditor(patientId: nil)
                                         case .userPictogramEditor:
-                                            PictogramEditor(pictoCollectionPath: "User/\(destination.userId)/pictograms", catCollectionPath: "User/\(destination.userId)/categories")
+                                            PictogramEditor(patientId: destination.userId)
                                         default:
                                             Album(patientId: destination.userId)
                                         }
