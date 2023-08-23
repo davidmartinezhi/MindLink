@@ -226,13 +226,7 @@ struct AdminView: View {
         
     }
     
-    //Lista de pacientes mostrada al usuario
-    /*
-    private var patientsListDisplayed: [Patient] {
-        filteredPatients.isEmpty ? patients.patientsList : filteredPatients
-    }
-     */
-    
+
     private var patientsListDisplayed: [Patient]? {
         if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
             return filteredPatients.isEmpty ? nil : filteredPatients
@@ -425,12 +419,8 @@ struct AdminView: View {
                             .frame(maxHeight: 50)
                             .padding(.vertical, 20)
                             .padding(.horizontal, 70)
-
-                            
-
                                 
-                            //mostramos que no hay pacientes con los filtros seleccionados
-                            
+                            //mostramos que no existe pacientes con los filtros seleccionados
                             if(patientsListDisplayed == nil){
                                 
                                 if(patients.patientsList.count == 0){
@@ -479,17 +469,32 @@ struct AdminView: View {
                             else{
                                 //mostramos lista de pacientes
                                 List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
-                                    NavigationLink(value: patient){
+                                    
+                                    ZStack(alignment: .trailing) {
                                         PatientCardView(patient: patient)
                                             .padding()
                                             .background(Color.white)
                                             .cornerRadius(10)
-                                            //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
                                             .padding([.leading, .trailing, .bottom], 10)
-                                            //.background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                            .contentShape(Rectangle()) // Importante para detectar toques en toda el área
+                                            .onTapGesture {
+                                                pathWrapper.push(data: patient)
+                                            }
+                                        
+                                        Button {
+                                            pathWrapper.pop()
+                                            pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, userId: patient.id))
+                                        } label: {
+                                            Text("Comunicador")
+                                                .fontWeight(.bold)
+                                                .padding(10)
+                                                .padding([.leading, .trailing], 15)
+                                                .background(Color.green)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
+                                        }
+                                        .padding(.trailing, 20)
                                     }
-                                    
-
                                 }
                                 .navigationDestination(for: Patient.self, destination: { patient in
                                     PatientView(patients: patients, notes: notes, patient: patient)
