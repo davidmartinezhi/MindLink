@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct DeletePatientView: View {
-    @Environment(\.dismiss) var dismiss
     @ObservedObject var patients: PatientsViewModel
     @State var patient: Patient
     @State private var showAlert = false
     @State private var storage = FirebaseAlmacenamiento()
+    
+    @EnvironmentObject var pathWrapper: NavigationPathWrapper
 
     var body: some View {
         HStack {
@@ -53,7 +54,7 @@ struct DeletePatientView: View {
                                         }
                                     }
                                 }
-                                dismiss()
+                                pathWrapper.returnToRoot()
                             }
                         }
                     }

@@ -36,8 +36,8 @@ struct PatientView: View {
     @State private var showCommunicatorMenu: Bool = false
     
     @State private var selection: String? = nil
-
-
+    
+    @EnvironmentObject var pathWrapper: NavigationPathWrapper
     
     //obtiene edad del paciente
     private func getAge(patient: Patient) -> Int {
@@ -82,8 +82,7 @@ struct PatientView: View {
     }
     
     var body: some View {
-        
-        VStack{
+        VStack {
             //user header
 
                 
@@ -168,8 +167,6 @@ struct PatientView: View {
                     .padding(.bottom)
                     .fixedSize(horizontal: false, vertical: true)
                     
-                    
-
                     HStack{
                         
                         Spacer()
@@ -178,7 +175,7 @@ struct PatientView: View {
                             // validar que el usuario sea admin para mostrar
                             if (users.user?.isAdmin == true) {
                                 Button {
-                                    selection = "A"
+                                    pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, userId: patient.id))
                                 } label: {
                                     Text("Editar comunicador de \(patient.firstName)")
                                     Image(systemName: "pencil")
@@ -186,18 +183,20 @@ struct PatientView: View {
                             }
                             
                             Button {
-                                selection = "B"
+                                pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, userId: patient.id))
                             } label: {
                                 Text("Acceder a comunicador de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
                             
+                            /*
                             Button {
-                                selection = "C"
+                                pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
                             } label: {
                                 Text("Acceder a album de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
+                             */
                             
                         } label: {
                             HStack {
@@ -212,18 +211,6 @@ struct PatientView: View {
                             .foregroundColor(.white)
                             .cornerRadius(10)
                         }
-                        
-                        // Para EDITAR COMUNICADOR
-                        NavigationLink(destination: PictogramEditor(pictoCollectionPath: "User/\(patient.id)/pictograms", catCollectionPath: "User/\(patient.id)/categories"), tag: "A", selection: $selection) {
-                            EmptyView()
-                        }
-                        
-                        // Para ACCEDER A COMUNICADOR
-                        NavigationLink(destination: DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(patient.id)/pictograms", catCollectionPath2: "User/\(patient.id)/categories"), tag: "B", selection: $selection) {
-                            EmptyView()
-                        }
-                        // Para ACCEDER AL ALBUM
-                        NavigationLink(destination: Album(patientId: patient.id), tag: "C", selection: $selection) {EmptyView()}
                     }
                 }
             }
@@ -427,6 +414,7 @@ struct PatientView: View {
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
         }
+        
         Spacer()
     }
 }

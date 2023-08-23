@@ -55,7 +55,8 @@ struct AdminView: View {
     @State private var showAdminView: Bool = false
     @State private var showRegisterView: Bool = false
     var hiddenNavBar : Bool = false
-
+    
+    @StateObject var pathWrapper = NavigationPathWrapper() // Contiene una instancia de NavigationPath, es proveida como variable de ambiente. 
 
     //Reseteo de filtrado
     // Filtrado
@@ -241,14 +242,10 @@ struct AdminView: View {
     
     var body: some View {
         VStack{
-            
-
-            NavigationStack{
+            NavigationStack(path: $pathWrapper.path){
                         VStack{
-                            
-                            
+
                             AdminNav(authViewModel: AuthViewModel(), showAdminView: $showAdminView, showRegisterView: $showRegisterView, user: user)
-                            
                             
                             //Search bar y Boton para agregar niños
                             HStack{
@@ -296,7 +293,7 @@ struct AdminView: View {
                                         
                                         if (users.user?.isAdmin == true) {
                                             Button {
-                                                selection = "A"
+                                                pathWrapper.push(data: NavigationDestination(viewType: .basePictogramEditor))
                                             } label: {
                                                 Text("Editar comunicador base")
                                                 Image(systemName: "pencil")
@@ -304,13 +301,11 @@ struct AdminView: View {
                                         }
                                         
                                         Button {
-                                            selection = "B"
+                                            pathWrapper.push(data: NavigationDestination(viewType: .singleCommunicator))
                                         } label: {
                                             Text("Acceder a comunicador base")
                                             Image(systemName: "message.fill")
                                         }
-
-                                        
                                     } label: {
                                         HStack {
                                             Image(systemName: "ellipsis.circle")
@@ -324,16 +319,19 @@ struct AdminView: View {
                                         .foregroundColor(.white)
                                         .cornerRadius(10)
                                     }
-                                    
-                                    // Para EDITAR COMUNICADOR BASE
-                                    NavigationLink(destination: PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "A", selection: $selection) {
-                                        EmptyView()
-                                        
-                                    }
-                                    
-                                    // Para ACCEDER A COMUNICADOR BASE
-                                    NavigationLink(destination: SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories"), tag: "B", selection: $selection) {
-                                        EmptyView()
+                                    .navigationDestination(for: NavigationDestination.self) { destination in
+                                        switch destination.viewType {
+                                        case .singleCommunicator:
+                                            SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                        case .doubleCommunicator:
+                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.userId)/pictograms", catCollectionPath2: "User/\(destination.userId)/categories")
+                                        case .basePictogramEditor:
+                                            PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                        case .userPictogramEditor:
+                                            PictogramEditor(pictoCollectionPath: "User/\(destination.userId)/pictograms", catCollectionPath: "User/\(destination.userId)/categories")
+                                        default:
+                                            Album(patientId: destination.userId)
+                                        }
                                     }
                                 }
                             }
@@ -429,34 +427,6 @@ struct AdminView: View {
                             .padding(.horizontal, 70)
 
                             
-                            /*
-                            // Barra de busqueda
-                            HStack {
-                                HStack{
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.gray)
-                                        .padding()
-                                    TextField("Buscar niño o grupo", text: $search)
-                                        .padding()
-                                        .onChange(of: search, perform: performSearchByName)
-                                        
-                                }
-                                .frame(width: 300)
-                                .cornerRadius(10) // Asegúrate de que este está aquí
-                                .background(Color(.systemGray6))
-                                .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
-
-                                Spacer()
-                                    
-                            }
-                            .frame(width: 300)
-                            .padding(.horizontal, 50)
-                            .padding(.bottom, 20)
-                            
-                            */
-
 
                                 
                             //mostramos que no hay pacientes con los filtros seleccionados
@@ -509,14 +479,21 @@ struct AdminView: View {
                             else{
                                 //mostramos lista de pacientes
                                 List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
-                                    PatientCardView(patient: patient)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(10)
-                                        //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-                                        .padding([.leading, .trailing, .bottom], 10)
-                                        .background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                    NavigationLink(value: patient){
+                                        PatientCardView(patient: patient)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                            //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                                            .padding([.leading, .trailing, .bottom], 10)
+                                            //.background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                    }
+                                    
+
                                 }
+                                .navigationDestination(for: Patient.self, destination: { patient in
+                                    PatientView(patients: patients, notes: notes, patient: patient)
+                                })
                                 .listStyle(.automatic)
                                 .onChange(of: patients.patientsList, perform: {value in
                                     resetSearchFilters()
@@ -530,6 +507,7 @@ struct AdminView: View {
                             }
                         }
                     }
+
         }
             .sheet(isPresented: $showAdminView){
                 AdminMenuView(authViewModel: authViewModel, user: user)
@@ -537,6 +515,7 @@ struct AdminView: View {
             .sheet(isPresented: $showRegisterView){
                 RegisterView(authViewModel: authViewModel)
             }
+            .environmentObject(pathWrapper)
         }
     }
     

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct AddNoteView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var notes: NotesViewModel
@@ -56,7 +57,18 @@ struct AddNoteView: View {
                         self.alertTitle = "Faltan campos"
                         self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
                         self.showingAlert = true
-                    } else {
+                    }
+                    else if !isValidInputNoWhiteSpaces(input: noteTitle) || !isValidInputNoWhiteSpaces(input: noteContent){
+                        self.alertTitle = "Texto no valido"
+                        self.alertMessage = "El titulo y el contenido no pueden contener solamente espacios en blanco"
+                        self.showingAlert = true
+                    }
+                    else if hasLeadingWhitespace(input: noteTitle) || hasLeadingWhitespace(input: noteContent){
+                        self.alertTitle = "Texto no valido"
+                        self.alertMessage = "El titulo y el contenido no pueden iniciar con campos en blanco"
+                        self.showingAlert = true
+                    }
+                    else {
                         isSaving = true
                         let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
                         
