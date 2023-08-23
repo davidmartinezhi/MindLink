@@ -51,7 +51,7 @@ struct DropDownCategoryPicker: View {
         }
         .overlay(alignment: .top){
             if listWindowHeight != 0 {
-                ScrollView(.vertical){
+                MarkedScrollView(scrollDirection: .vertical) {
                     VStack(spacing: 0){
                         ForEach(categoryModels){ catModel in
                             Button {
