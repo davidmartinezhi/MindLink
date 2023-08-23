@@ -322,15 +322,13 @@ struct AdminView: View {
                                     .navigationDestination(for: NavigationDestination.self) { destination in
                                         switch destination.viewType {
                                         case .singleCommunicator:
-                                            SingleCommunicator(patientId: nil)
+                                            SingleCommunicator(patient: nil)
                                         case .doubleCommunicator:
-                                            DoubleCommunicator(patientId: destination.userId)
+                                            DoubleCommunicator(patient: destination.patient!)
                                         case .basePictogramEditor:
-                                            PictogramEditor(patientId: nil)
-                                        case .userPictogramEditor:
-                                            PictogramEditor(patientId: destination.userId)
-                                        default:
-                                            Album(patientId: destination.userId)
+                                            PictogramEditor(patient: nil)
+                                        default: // .userPictogramEditor
+                                            PictogramEditor(patient: destination.patient)
                                         }
                                     }
                                 }

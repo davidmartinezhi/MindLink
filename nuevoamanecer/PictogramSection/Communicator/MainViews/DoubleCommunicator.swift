@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct DoubleCommunicator: View {
-    var patientId: String
+    var patient: Patient
     
     @State var showingCommunicator1: Bool = true
     
@@ -22,11 +22,11 @@ struct DoubleCommunicator: View {
         GeometryReader { geo in
             ZStack {
                 // Communicator 1 (base)
-                Communicator(patientId: nil, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: nil, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 1 : 0)
                 
                 // Communicator 2 (del usuario)
-                Communicator(patientId: patientId, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: patient, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 0 : 1)
             }
         }

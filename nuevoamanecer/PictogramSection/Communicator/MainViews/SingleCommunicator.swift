@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SingleCommunicator: View {
-    var patientId: String?
+    var patient: Patient?
         
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
@@ -17,7 +17,7 @@ struct SingleCommunicator: View {
     @State var appLock: AppLock = AppLock()
     
     var body: some View {
-        Communicator(patientId: patientId, voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: false, onLeftOfSwitch: $onLeftOfSwitch)
+        Communicator(patient: patient, title: patient?.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: false, onLeftOfSwitch: $onLeftOfSwitch)
             .environmentObject(self.appLock)
     }
 }

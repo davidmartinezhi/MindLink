@@ -9,6 +9,9 @@ import SwiftUI
 import AVFoundation
 
 struct Communicator: View {
+    let patient: Patient?
+    let title: String? 
+    
     @StateObject var pictoVM: PictogramViewModel
     @StateObject var catVM: CategoryViewModel
     
@@ -27,16 +30,18 @@ struct Communicator: View {
     
     @EnvironmentObject var appLock: AppLock
     
-    init(patientId: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
-        let pictoCollectionPath: String = patientId != nil ? "User/\(patientId!)/pictograms" : "basePictograms"
-        let catCollectionPath: String = patientId != nil ? "User/\(patientId!)/categories" : "baseCategories"
+    init(patient: Patient?, title: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
+        self.patient = patient
+        self.title = title 
+        let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id)/pictograms" : "basePictograms"
+        let catCollectionPath: String = patient != nil ? "User/\(patient!.id)/categories" : "baseCategories"
 
-        _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
-        _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
-        _voiceGender = voiceGender
-        _talkingSpeed = talkingSpeed
+        self._pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
+        self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
+        self._voiceGender = voiceGender
+        self._talkingSpeed = talkingSpeed
         self.showSwitchView = showSwitchView
-        _onLeftOfSwitch = onLeftOfSwitch
+        self._onLeftOfSwitch = onLeftOfSwitch
     }
     
     var body: some View {
@@ -49,6 +54,12 @@ struct Communicator: View {
                 HStack {
 
                     SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    
+                    if title != nil {
+                        Text(title!)
+                            .font(.system(size: 30))
+                            .padding(.horizontal, 25)
+                    }
                     
                     Spacer()
                     
