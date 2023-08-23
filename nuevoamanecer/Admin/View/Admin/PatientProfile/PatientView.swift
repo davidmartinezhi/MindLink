@@ -189,12 +189,14 @@ struct PatientView: View {
                                 Image(systemName: "message.fill")
                             }
                             
+                            /*
                             Button {
                                 pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
                             } label: {
                                 Text("Acceder a album de \(patient.firstName)")
                                 Image(systemName: "message.fill")
                             }
+                             */
                             
                         } label: {
                             HStack {
