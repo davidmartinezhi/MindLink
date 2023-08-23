@@ -12,9 +12,9 @@
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
 		BC014F102A91801F0002140A /* AppLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC014F0F2A91801F0002140A /* AppLock.swift */; };
-		BC014F122A9192DD0002140A /* ScrollOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC014F112A9192DD0002140A /* ScrollOffset.swift */; };
 		BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
+		BC5ADD042A9597250082A5A0 /* MarkedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5ADD032A9597250082A5A0 /* MarkedScrollView.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
 		BC8F7E312A37FFBD008E97B2 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E052A37FFBD008E97B2 /* LockView.swift */; };
@@ -97,9 +97,9 @@
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker_BACKUP.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage_BACKUP.swift; sourceTree = "<group>"; };
 		BC014F0F2A91801F0002140A /* AppLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLock.swift; sourceTree = "<group>"; };
-		BC014F112A9192DD0002140A /* ScrollOffset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOffset.swift; sourceTree = "<group>"; };
 		BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOptionsView.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
+		BC5ADD032A9597250082A5A0 /* MarkedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedScrollView.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		BC8F7E052A37FFBD008E97B2 /* LockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
@@ -289,6 +289,7 @@
 				BC8F7E152A37FFBD008E97B2 /* XOverCircleView.swift */,
 				BC8F7E162A37FFBD008E97B2 /* ButtonView.swift */,
 				BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */,
+				BC5ADD032A9597250082A5A0 /* MarkedScrollView.swift */,
 			);
 			path = GenericViews;
 			sourceTree = "<group>";
@@ -315,7 +316,6 @@
 			children = (
 				BC8F7E1D2A37FFBD008E97B2 /* CustomAlert.swift */,
 				BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */,
-				BC014F112A9192DD0002140A /* ScrollOffset.swift */,
 			);
 			path = MiscModifiers;
 			sourceTree = "<group>";
@@ -662,6 +662,7 @@
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */,
 				C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */,
+				BC5ADD042A9597250082A5A0 /* MarkedScrollView.swift in Sources */,
 				BC8F7E452A37FFBD008E97B2 /* CategoryPickerView.swift in Sources */,
 				BC8F7E372A37FFBD008E97B2 /* PictogramViewModel.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
@@ -683,7 +684,6 @@
 				BC8F7E322A37FFBD008E97B2 /* SwitchView.swift in Sources */,
 				BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */,
 				BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */,
-				BC014F122A9192DD0002140A /* ScrollOffset.swift in Sources */,
 				BCB1B7112A42BBD100C01B15 /* PictogramPickerView.swift in Sources */,
 				C2207F002A1F1AF400F31578 /* Note.swift in Sources */,
 				C2BEDB672A157B72005398F9 /* User.swift in Sources */,
