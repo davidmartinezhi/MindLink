@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Patient: Hashable, Codable, Identifiable{
+struct Patient: Hashable, Codable, Identifiable {
     var id: String
     let firstName: String
     let lastName: String
@@ -18,4 +18,8 @@ struct Patient: Hashable, Codable, Identifiable{
     let image: String
     let notes: [String]
     let identificador: String
+    
+    func buildPatientTitle() -> String {
+        return firstName + " " + (lastName.first != nil ? String(lastName.first!) + "." : "")
+    }
 }
