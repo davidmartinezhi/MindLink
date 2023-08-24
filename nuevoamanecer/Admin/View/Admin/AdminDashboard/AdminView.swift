@@ -481,7 +481,7 @@ struct AdminView: View {
                                         
                                         Button {
                                             pathWrapper.pop()
-                                            pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, userId: patient.id))
+                                            pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
                                         } label: {
                                             Text("Comunicador")
                                                 .fontWeight(.bold)
