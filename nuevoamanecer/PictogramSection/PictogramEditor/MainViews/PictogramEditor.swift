@@ -10,6 +10,8 @@ import SwiftUI
 
 // Definimos el struct PictogramEditor que cumple con el protocolo View
 struct PictogramEditor: View {
+    let patient: Patient?
+    
     // Inicializamos los objetos que manejarán los pictogramas y las categorías
     @StateObject var pictoVM: PictogramViewModel
     @StateObject var catVM: CategoryViewModel
@@ -33,15 +35,18 @@ struct PictogramEditor: View {
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
 
     // Inicializador del PictogramEditor
-    init(pictoCollectionPath: String, catCollectionPath: String){
+    init(patient: Patient?){
+        self.patient = patient
+        let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id)/pictograms" : "basePictograms"
+        let catCollectionPath: String = patient != nil ? "User/\(patient!.id)/categories" : "baseCategories"
+        
         // Inicializamos los ViewModel con los paths correspondientes
-        _pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
-        _catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
+        self._pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
+        self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
     }
     
     // Cuerpo de la vista
     var body: some View {
-        
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
         let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
@@ -53,6 +58,12 @@ struct PictogramEditor: View {
                 HStack {
                     
                     SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    
+                    if patient != nil {
+                        Text(patient!.buildPatientTitle())
+                            .font(.system(size: 30))
+                            .padding(.horizontal, 25)
+                    }
                     
                     Spacer()
                     

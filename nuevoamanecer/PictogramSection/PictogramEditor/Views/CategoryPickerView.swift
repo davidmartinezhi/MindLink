@@ -11,12 +11,9 @@ struct CategoryPickerView: View {
     var categoryModels: [CategoryModel]
     @Binding var pickedCategoryId: String
     @Binding var userHasChosenCat: Bool
-    
-    @State var scrollOffset: Double = 0
-    let coordinateSpaceName: String = "CategoryPickerViewCoordSpace"
-    
+        
     var body: some View {
-        ScrollView(.horizontal){
+        MarkedScrollView(scrollDirection: .horizontal) {
             HStack(spacing: 11){
                 ForEach(categoryModels) { catModel in
                     Button {
@@ -24,7 +21,7 @@ struct CategoryPickerView: View {
                         if !userHasChosenCat {
                             userHasChosenCat = true
                         }
-                    } label: {                        
+                    } label: {
                         Text(catModel.name)
                             .frame(minWidth: 60)
                             .padding()
@@ -35,18 +32,6 @@ struct CategoryPickerView: View {
                     }
                 }
             }
-            .scrollOffset($scrollOffset, direction: .horizontal, coordinateSpaceName: coordinateSpaceName)
-        }
-        .coordinateSpace(name: coordinateSpaceName)
-        .overlay(alignment: .center) {
-            HStack {
-                Image(systemName: "arrowshape.backward.fill")
-                    .opacity(scrollOffset <= -20 ? 0.9 : 0)
-                Spacer()
-                Image(systemName: "arrowshape.right.fill")
-                    .opacity(true ? 0.9 : 0)
-            }
-            .allowsHitTesting(false)
         }
     }
 }

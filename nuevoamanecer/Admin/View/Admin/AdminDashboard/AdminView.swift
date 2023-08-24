@@ -324,6 +324,7 @@ struct AdminView: View {
                                         PictogramEditor(pictoCollectionPath: "User/\(destination.userId)/pictograms", catCollectionPath: "User/\(destination.userId)/categories")
                                     default:
                                         Album(patientId: destination.userId)
+
                                     }
                                 }
                             }
