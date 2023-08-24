@@ -29,7 +29,7 @@ struct AdminNav: View {
                     .resizable()
                     //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 55)
+                    .frame(height: 30)
                     .padding()
                 
                 Spacer()
@@ -96,7 +96,7 @@ struct AdminNav: View {
                 }
                 .frame(width: 50, height: 50)
             }
-            .padding(.horizontal, 50)
+            .padding(.horizontal, 40)
             .alert(isPresented: $showLogoutAlert) {
                 Alert(
                     title: Text("Cerrar Sesión"),
