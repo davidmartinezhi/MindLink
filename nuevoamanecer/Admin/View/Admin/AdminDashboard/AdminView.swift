@@ -328,7 +328,7 @@ struct AdminView: View {
                                 }
                             }
                             .padding(.horizontal, 50)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, 10)
                             //.padding(.vertical)
                             
                             
@@ -415,8 +415,8 @@ struct AdminView: View {
                                 Spacer()
                             }
                             .frame(maxHeight: 50)
-                            .padding(.vertical, 20)
-                            .padding(.horizontal, 70)
+                            .padding(.horizontal, 50)
+                            .padding(.bottom, 10)
                                 
                             //mostramos que no existe pacientes con los filtros seleccionados
                             if(patientsListDisplayed == nil){

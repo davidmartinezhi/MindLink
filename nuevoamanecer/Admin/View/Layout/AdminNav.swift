@@ -29,7 +29,7 @@ struct AdminNav: View {
                     .resizable()
                     //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 55)
+                    .frame(height: 30)
                     .padding()
                 
                 Spacer()
@@ -109,7 +109,7 @@ struct AdminNav: View {
             }
             
         }
-        .frame(height: 70)
+        .frame(height: 50)
         .foregroundColor(.white)
         
         /*
