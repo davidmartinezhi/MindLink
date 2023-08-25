@@ -417,7 +417,7 @@ struct AdminView: View {
                                                 }
 
                                             }
-                                            .frame(width: 250, height: 40)
+                                            .frame(width: 220, height: 40)
                                             .background(Color.white)
                                             .cornerRadius(10)
                                         }
