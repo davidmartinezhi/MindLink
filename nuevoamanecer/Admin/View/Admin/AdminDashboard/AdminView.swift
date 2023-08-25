@@ -370,7 +370,7 @@ struct AdminView: View {
                                                 cognitiveLevelFilterSelected = false
                                             }) {
                                                 HStack{
-                                                    Text("Cognición " + selectedCognitiveLevel)
+                                                    Text("Cognición " + selectedCognitiveLevel.prefix(selectedCognitiveLevel.count - 1) + "a")
                                                         .foregroundColor(.blue)
                                                     Image(systemName: "xmark.circle")
                                                         .foregroundColor(.red)
