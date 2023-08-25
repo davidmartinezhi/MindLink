@@ -20,7 +20,7 @@ struct LoginView: View {
     @State private var usuarioNoExiste: Bool = false
     @State private var showAlert: Bool = false
     @State private var showPassword: Bool = false
-    @FocusState private var inFocus: Field
+    @FocusState private var inFocus: Field?
 
     var body: some View {
         GeometryReader { geometry in
