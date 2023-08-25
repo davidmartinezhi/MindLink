@@ -370,14 +370,14 @@ struct AdminView: View {
                                                 cognitiveLevelFilterSelected = false
                                             }) {
                                                 HStack{
-                                                    Text(selectedCognitiveLevel)
-                                                        .foregroundColor(.white)
+                                                    Text("Cognición " + selectedCognitiveLevel)
+                                                        .foregroundColor(.blue)
                                                     Image(systemName: "xmark.circle")
-                                                        .foregroundColor(.white)
+                                                        .foregroundColor(.red)
                                                 }
                                             }
                                             .frame(width: 157, height: 40)
-                                            .background(Color.blue)
+                                            .background(Color.white)
                                             .cornerRadius(10)
                                         }
                                     }
@@ -410,15 +410,15 @@ struct AdminView: View {
                                                 communicationStyleFilterSelected = false
                                             }) {
                                                 HStack{
-                                                    Text(selectedCommunicationStyle)
-                                                        .foregroundColor(.white)
+                                                    Text("Comunicación " + selectedCommunicationStyle)
+                                                        .foregroundColor(.blue)
                                                     Image(systemName: "xmark.circle")
-                                                        .foregroundColor(.white)
+                                                        .foregroundColor(.red)
                                                 }
 
                                             }
-                                            .frame(width: 150, height: 40)
-                                            .background(Color.blue)
+                                            .frame(width: 250, height: 40)
+                                            .background(Color.white)
                                             .cornerRadius(10)
                                         }
                                     }
