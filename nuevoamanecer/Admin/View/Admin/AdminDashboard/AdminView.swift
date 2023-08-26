@@ -69,6 +69,13 @@ struct AdminView: View {
         communicationStyleFilterSelected = false
         cognitiveLevelFilterSelected = false
     }
+
+    private var patientsListDisplayed: [Patient]? {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
+            return filteredPatients.isEmpty ? nil : filteredPatients
+        }
+        return patients.patientsList
+    }
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
@@ -116,7 +123,7 @@ struct AdminView: View {
             return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased())
         }
     }
-    
+
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
         
@@ -171,7 +178,7 @@ struct AdminView: View {
             }
         }
     }
-    
+
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
         
@@ -224,14 +231,6 @@ struct AdminView: View {
             }
         }
         
-    }
-    
-
-    private var patientsListDisplayed: [Patient]? {
-        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
-            return filteredPatients.isEmpty ? nil : filteredPatients
-        }
-        return patients.patientsList
     }
     
     var body: some View {
@@ -342,7 +341,90 @@ struct AdminView: View {
                                 
                                 Divider()
                                 
-                                
+                                HStack {
+                                    // Nivel cognitivo
+                                    ZStack {
+                                        Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                                            if !cognitiveLevelFilterSelected {
+                                                Text("Nivel Cognitivo")
+                                                    .foregroundColor(Color.black)
+                                            }
+                                            ForEach(cognitiveLevels, id: \.self) {
+                                                Text($0)
+                                            }
+                                        }
+                                        .onChange(of: selectedCognitiveLevel, perform: { value in
+                                            performSearchByCognitiveLevel()
+                                            cognitiveLevelFilterSelected = selectedCognitiveLevel != "" && selectedCognitiveLevel != "Nivel Cognitivo"
+                                        })
+                                        .disabled(cognitiveLevelFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
+                                        .pickerStyle(.menu)
+                                        .frame(width: 157, height: 40)
+                                        .cornerRadius(10)
+
+                                        // Botón para restablecer el filtro de nivel cognitivo
+                                        if cognitiveLevelFilterSelected {
+                                            Button(action: {
+                                                selectedCognitiveLevel = ""
+                                                cognitiveLevelFilterSelected = false
+                                            }) {
+                                                HStack{
+                                                    Text("Cognición " + selectedCognitiveLevel.prefix(selectedCognitiveLevel.count - 1) + "a")
+                                                        .foregroundColor(.blue)
+                                                    Image(systemName: "xmark.circle")
+                                                        .foregroundColor(.red)
+                                                }
+                                            }
+                                            .frame(width: 157, height: 40)
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    .padding(.leading)
+
+                                    // Comunicación
+                                    ZStack {
+                                        Picker("Comunicación", selection: $selectedCommunicationStyle) {
+                                            if !communicationStyleFilterSelected {
+                                                Text("Comunicación")
+                                                    .foregroundColor(Color.black)
+                                            }
+                                            ForEach(communicationStyles, id: \.self) {
+                                                Text($0)
+                                            }
+                                        }
+                                        .onChange(of: selectedCommunicationStyle, perform: { value in
+                                            performSearchByCommunicationStyle()
+                                            communicationStyleFilterSelected = selectedCommunicationStyle != "" && selectedCommunicationStyle != "Comunicación"
+                                        })
+                                        .disabled(communicationStyleFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
+                                        .pickerStyle(.menu)
+                                        .frame(width: 150, height: 40)
+                                        .cornerRadius(10)
+
+                                        // Botón para restablecer el filtro de comunicación
+                                        if communicationStyleFilterSelected {
+                                            Button(action: {
+                                                selectedCommunicationStyle = ""
+                                                communicationStyleFilterSelected = false
+                                            }) {
+                                                HStack{
+                                                    Text("Comunicación " + selectedCommunicationStyle)
+                                                        .foregroundColor(.blue)
+                                                    Image(systemName: "xmark.circle")
+                                                        .foregroundColor(.red)
+                                                }
+
+                                            }
+                                            .frame(width: 220, height: 40)
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    .padding(.trailing)
+                                }
+
+                                /*
                                 //Nivel cognitivo
                                 Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
                                     if(!cognitiveLevelFilterSelected){
@@ -412,6 +494,8 @@ struct AdminView: View {
                                         }
                                     })
                                 }
+                                 
+                                 */
                                 Spacer()
                             }
                             .frame(maxHeight: 50)
@@ -443,6 +527,12 @@ struct AdminView: View {
                                         .padding([.leading, .trailing, .bottom, .top], 10)
                                     }
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                 }
                                 else{
                                     List{
@@ -460,6 +550,12 @@ struct AdminView: View {
                                     }
                                     //.background(Color.gray.opacity(0.1))
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                     
                                 }
                                 Spacer()
@@ -480,7 +576,6 @@ struct AdminView: View {
                                             }
                                         
                                         Button {
-                                            pathWrapper.pop()
                                             pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
                                         } label: {
                                             Text("Comunicador")
