@@ -69,6 +69,13 @@ struct AdminView: View {
         communicationStyleFilterSelected = false
         cognitiveLevelFilterSelected = false
     }
+
+    private var patientsListDisplayed: [Patient]? {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
+            return filteredPatients.isEmpty ? nil : filteredPatients
+        }
+        return patients.patientsList
+    }
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
@@ -116,7 +123,7 @@ struct AdminView: View {
             return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased())
         }
     }
-    
+
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
         
@@ -171,7 +178,7 @@ struct AdminView: View {
             }
         }
     }
-    
+
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
         
@@ -224,14 +231,6 @@ struct AdminView: View {
             }
         }
         
-    }
-    
-
-    private var patientsListDisplayed: [Patient]? {
-        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
-            return filteredPatients.isEmpty ? nil : filteredPatients
-        }
-        return patients.patientsList
     }
     
     var body: some View {
@@ -528,6 +527,12 @@ struct AdminView: View {
                                         .padding([.leading, .trailing, .bottom, .top], 10)
                                     }
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                 }
                                 else{
                                     List{
@@ -545,6 +550,12 @@ struct AdminView: View {
                                     }
                                     //.background(Color.gray.opacity(0.1))
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                     
                                 }
                                 Spacer()
@@ -565,7 +576,6 @@ struct AdminView: View {
                                             }
                                         
                                         Button {
-                                            pathWrapper.pop()
                                             pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
                                         } label: {
                                             Text("Comunicador")
