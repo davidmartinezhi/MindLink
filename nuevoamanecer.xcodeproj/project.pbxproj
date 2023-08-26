@@ -78,7 +78,6 @@
 		C29428022A15A8F000E814C9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C29428012A15A8F000E814C9 /* FirebaseFirestore */; };
 		C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29428052A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift */; };
 		C29428082A15B85500E814C9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29428072A15B85500E814C9 /* ContentView.swift */; };
-		C2A381232A997A74001F3F79 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A381222A997A74001F3F79 /* Filters.swift */; };
 		C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */; };
 		C2A8CABA2A0D9F580026DB96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */; };
 		C2A8CABD2A0D9F580026DB96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2A8CABC2A0D9F580026DB96 /* Preview Assets.xcassets */; };
@@ -164,7 +163,6 @@
 		C250AFC62A174B5F008F5699 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		C29428052A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationFirebaseDataSource.swift; sourceTree = "<group>"; };
 		C29428072A15B85500E814C9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		C2A381222A997A74001F3F79 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		C2A8CAB22A0D9F540026DB96 /* nuevoamanecer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nuevoamanecer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2A8CAB52A0D9F540026DB96 /* nuevoamanecerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nuevoamanecerApp.swift; sourceTree = "<group>"; };
 		C2A8CAB92A0D9F580026DB96 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -417,7 +415,6 @@
 			isa = PBXGroup;
 			children = (
 				C22A9A672A9432790087AF1F /* HelpersStringValidation.swift */,
-				C2A381222A997A74001F3F79 /* Filters.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -731,7 +728,6 @@
 				BC8F7E352A37FFBD008E97B2 /* DoubleCommunicator.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,
 				C22A9A682A9432790087AF1F /* HelpersStringValidation.swift in Sources */,
-				C2A381232A997A74001F3F79 /* Filters.swift in Sources */,
 				BC8F7E3E2A37FFBD008E97B2 /* PictogramEditor.swift in Sources */,
 				BC8F7E4C2A37FFBD008E97B2 /* PageModel.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
