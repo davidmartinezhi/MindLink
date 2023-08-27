@@ -28,8 +28,10 @@ struct AddNoteView: View {
                 }
                 
                 Section(header: Text("Contenido")) {
-                    TextEditor(text: $noteContent)
-                        .frame(minHeight: 200)
+                    //Dynamic expand
+                    TextField("Contenido de la nota", text: $noteContent, axis: .vertical)
+                        //.frame(minHeight: 450)
+                    
                 }
             }
             
@@ -114,6 +116,8 @@ struct AddNoteView: View {
             }
         }
         .padding()
+        .background(Color(.init(white: 0, alpha: 0.05))
+            .ignoresSafeArea())
     }
 }
 

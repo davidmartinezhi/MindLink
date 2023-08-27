@@ -34,7 +34,8 @@ struct EditNoteView: View {
                 
                 Section(header: Text("Contenido")) {
                     TextEditor(text: $noteContent)
-                        .frame(minHeight: 200)
+                        //.fixedSize(horizontal: false, vertical: true)
+                        .frame(minHeight: 450)
                 }
             }
             
@@ -115,6 +116,8 @@ struct EditNoteView: View {
             }
         }
         .padding()
+        .background(Color(.init(white: 0, alpha: 0.05))
+            .ignoresSafeArea())
         .onAppear{initializeData(note: note)}
     }
 }
