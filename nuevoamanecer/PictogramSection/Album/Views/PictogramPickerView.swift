@@ -38,7 +38,7 @@ struct PictogramPickerView: View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 HStack {
-                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30)
                     Spacer()
                 }
                 .frame(height: 40)

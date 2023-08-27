@@ -56,8 +56,7 @@ struct PictogramEditor: View {
             VStack(spacing: 0) {
                 // Barra superior con botones para eliminar y agregar pictogramas
                 HStack {
-                    
-                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    SearchBarView(searchText: $searchText, placeholder: "Buscar pictograma", searchBarWidth: geo.size.width * 0.20)
                     
                     if patient != nil {
                         Text(patient!.buildPatientTitle())

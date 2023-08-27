@@ -53,7 +53,7 @@ struct Communicator: View {
             VStack(spacing: 0) {
                 HStack {
 
-                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    SearchBarView(searchText: $searchText, placeholder: "Buscar pictograma", searchBarWidth: geo.size.width * 0.20)
                     
                     if title != nil {
                         Text(title!)
