@@ -33,7 +33,7 @@ class CategoryViewModel: ObservableObject {
         
         listenerHandle = catCollection.addSnapshotListener { snap, error in
             if let error = error {
-                // Failure. 
+                // Failure.
                 print(error.localizedDescription)
                 return
             }
@@ -75,7 +75,7 @@ class CategoryViewModel: ObservableObject {
     func getFirstCat() -> CategoryModel? {
         return self.getCats().first
     }
-        
+    
     func getCats() -> [CategoryModel] {
         return sortedCategories.getItems()
     }
@@ -89,6 +89,12 @@ class CategoryViewModel: ObservableObject {
             return sortedCategories.getItems().filter { catModel in
                 return catModel.name.lowercased().contains(cleanedNameFilter)
             }
+        }
+    }
+    
+    func getCatsWithSimilarColor(catModel: CategoryModel, range: Double = 0.2) -> [CategoryModel] {
+        return Array(self.categories.values).filter{
+            $0.color.isSimilarTo(catModel.color, range: range) && (catModel.id != nil ? $0.id! != catModel.id! : true)
         }
     }
                         
