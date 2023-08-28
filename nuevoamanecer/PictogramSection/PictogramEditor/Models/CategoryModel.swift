@@ -79,9 +79,15 @@ struct CategoryModel: Identifiable, Codable, Comparable {
 }
 
 struct CategoryColor: Codable {
-    var r: Double
-    var g: Double
-    var b: Double
+    var r: Double // 0...1
+    var g: Double // 0...1
+    var b: Double // 0...1
+    
+    init(r: Double, g: Double, b: Double){
+        self.r = CategoryColor.normalizeColorValue(r)
+        self.g = CategoryColor.normalizeColorValue(g)
+        self.b = CategoryColor.normalizeColorValue(b)
+    }
     
     func isValidCategoryColor() -> Bool {
         if r < 0 || r > 1 {
@@ -96,5 +102,25 @@ struct CategoryColor: Codable {
     
     func isEqualTo(_ catColorModel: CategoryColor) -> Bool {
         return r == catColorModel.r && g == catColorModel.g && b == catColorModel.b
+    }
+    
+    func isSimilarTo(_ catColorModel: CategoryColor, range: Double) -> Bool {
+        let _r = catColorModel.r
+        let _g = catColorModel.g
+        let _b = catColorModel.b
+        
+        if r > CategoryColor.normalizeColorValue(_r + range) || r < CategoryColor.normalizeColorValue(_r - range) {
+            return false
+        } else if g > CategoryColor.normalizeColorValue(_g + range) || g < CategoryColor.normalizeColorValue(_g - range) {
+            return false
+        } else if b > CategoryColor.normalizeColorValue(_b + range) || b < CategoryColor.normalizeColorValue(_b - range) {
+            return false
+        }
+            
+        return true
+    }
+    
+    static func normalizeColorValue(_ colorValue: Double) -> Double {
+        return colorValue > 1 ? 1 : (colorValue < 0 ? 0 : colorValue)
     }
 }

@@ -35,6 +35,8 @@ struct CategoryEditorWindowView: View {
     }
     
     var body: some View {
+        let catsWithSimilarColor: [CategoryModel] = catVM.getCatsWithSimilarColor(catModel: catModel)
+        
         GeometryReader { geo in
             VStack(alignment: .leading, spacing: 20){
                 HStack {
@@ -58,8 +60,22 @@ struct CategoryEditorWindowView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text("Color" + (catModel.color.isEqualTo(catModelCapture.color) ? "" : " *"))
-                        .font(.system(size: 20, weight: .bold))
+                    HStack(spacing: 10) {
+                        Text("Color" + (catModel.color.isEqualTo(catModelCapture.color) ? "" : " *"))
+                            .font(.system(size: 20, weight: .bold))
+                        
+                        if catsWithSimilarColor.count > 0 {
+                            HStack(spacing: 5) {
+                                let similarCatModel: CategoryModel = catsWithSimilarColor.first!
+                                Text("La categoría")
+                                Text("\(similarCatModel.name)")
+                                    .background(similarCatModel.buildColor())
+                                    .foregroundColor(ColorMaker.buildforegroundTextColor(catColor: similarCatModel.color))
+                                Text("tiene un color similar.")
+                            }
+                        }
+                    }
+                    
                     ColorPickerView(red: $catModel.color.r, green: $catModel.color.g, blue: $catModel.color.b)
                         .frame(height: 280)
                 }
@@ -85,7 +101,7 @@ struct CategoryEditorWindowView: View {
                         }
                     }
                     
-                    let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture)
+                    let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture) || catsWithSimilarColor.count > 0
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: addButtonIsDisabled){
                         DBActionInProgress = true
                         if isNewCat {

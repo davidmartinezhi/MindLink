@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct ColorMaker{
+struct ColorMaker {
     static func buildforegroundTextColor(r: Double, g: Double, b: Double) -> Color {
         let colorLuminance: Double = (r * 0.2126) + (g * 0.7152) + (b * 0.0722)
         // let contrastWithBlack: Double = (colorLuminance + 0.05) / 0.05
