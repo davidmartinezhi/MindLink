@@ -24,6 +24,7 @@ struct PictogramEditorWindowView: View {
     @ObservedObject var catVM: CategoryViewModel
     
     @Binding var pickedCategoryId: String
+    @Binding var searchText: String 
     
     @State var showErrorMessage: Bool = false
     
@@ -33,14 +34,15 @@ struct PictogramEditorWindowView: View {
     
     @State var DBActionInProgress: Bool = false
             
-    init(pictoModel: PictogramModel?, isNewPicto: Binding<Bool>, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
-        _pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
+    init(pictoModel: PictogramModel?, isNewPicto: Binding<Bool>, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self._pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
-        _isNewPicto = isNewPicto
-        _isEditingPicto = isEditingPicto
+        self._isNewPicto = isNewPicto
+        self._isEditingPicto = isEditingPicto
         self.pictoVM = pictoVM
         self.catVM = catVM
-        _pickedCategoryId = pickedCategoryId
+        self._pickedCategoryId = pickedCategoryId
+        self._searchText = searchText
     }
     
     var body: some View {
@@ -111,6 +113,7 @@ struct PictogramEditorWindowView: View {
                                     if error != nil {
                                         showErrorMessage = true
                                     } else {
+                                        searchText = ""
                                         pickedCategoryId = pictoModel.categoryId
                                         isEditingPicto = false
                                     }

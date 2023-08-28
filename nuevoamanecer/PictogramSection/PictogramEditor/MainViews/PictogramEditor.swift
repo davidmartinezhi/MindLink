@@ -159,10 +159,10 @@ struct PictogramEditor: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
-                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
-                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
             .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {

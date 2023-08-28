@@ -17,19 +17,21 @@ struct CategoryEditorWindowView: View {
     @ObservedObject var catVM: CategoryViewModel
     
     @Binding var pickedCategoryId: String
+    @Binding var searchText: String
     
     @State var showErrorMessage: Bool = false
     
     @State var DBActionInProgress: Bool = false
     
-    init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>){
-        _catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
+    init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self._catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
         self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
-        _isNewCat = isNewCat
-        _isEditingCat = isEditingCat
+        self._isNewCat = isNewCat
+        self._isEditingCat = isEditingCat
         self.pictoVM = pictoVM
         self.catVM = catVM
-        _pickedCategoryId = pickedCategoryId
+        self._pickedCategoryId = pickedCategoryId
+        self._searchText = searchText
     }
     
     var body: some View {
@@ -91,6 +93,7 @@ struct CategoryEditorWindowView: View {
                                 if error != nil {
                                     showErrorMessage = true
                                 } else {
+                                    searchText = ""
                                     pickedCategoryId = docId ?? ""
                                     isEditingCat = false
                                 }
