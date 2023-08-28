@@ -38,7 +38,7 @@ struct Album: View {
             NavigationStack {
                 VStack {
                     HStack(spacing: 15) {
-                        SearchBarView(searchText: $searchText, placeholder: "Buscar Hoja", searchBarWidth: geo.size.width * 0.2, backgroundColor: .white)
+                        SearchBarView(searchText: $searchText, placeholder: "Buscar Hoja", searchBarWidth: geo.size.width * 0.2)
                         
                         Text("Ordenar por:")
                         

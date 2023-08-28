@@ -242,23 +242,9 @@ struct AdminView: View {
                             
                             //Search bar y Boton para agregar niños
                             HStack{
-                                
-                                //Search Bar
-                                HStack{
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.gray)
-                                        .padding([.top, .bottom, .leading])
-                                    TextField("Buscar niño o grupo", text: $search)
-                                        .padding([.top, .bottom, .trailing])
-                                        .onChange(of: search, perform: performSearchByName)
-                                        
-                                }
-                                .frame(width: 250)
-                                .cornerRadius(10) // Asegúrate de que este está aquí
-                                .background(Color(.systemGray6))
-                                .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
+                                // magnifyingglass 
+                                SearchBarView(searchText: $search, placeholder: "Buscar niño o grupo", searchBarWidth: 250)
+                                    .onChange(of: search, perform: performSearchByName)
                                 
                                 Spacer()
                                 //Boton para añadir paciente

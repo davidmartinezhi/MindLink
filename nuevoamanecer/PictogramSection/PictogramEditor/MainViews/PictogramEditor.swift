@@ -18,7 +18,9 @@ struct PictogramEditor: View {
     
     // Estados de la interfaz gráfica
     @State var searchText: String = "" // Texto de búsqueda
+    @State var searchingPicto: Bool = true
     @State var pickedCategoryId: String = "" // ID de la categoría seleccionada
+    
     @State var isDeleting: Bool = false // Estado de eliminación
     @State var showDeleteAlert: Bool = false
     @State var pictoModelToDelete: PictogramModel? = nil
@@ -49,15 +51,24 @@ struct PictogramEditor: View {
     var body: some View {
         // Obtenemos la categoría actual y los pictogramas correspondientes
         let currCat: CategoryModel? = catVM.getCat(catId: pickedCategoryId)
-        let pictosInScreen: [PictogramModel] = searchText.isEmpty ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
+        let pictosInScreen: [PictogramModel] = searchText.isEmpty || !searchingPicto ? pictoVM.getPictosFromCat(catId: pickedCategoryId) :
         pictoVM.getPictosFromCat(catId: pickedCategoryId, nameFilter: searchText)
+        let catsInScreen: [CategoryModel] = searchText.isEmpty || searchingPicto ? catVM.getCats() : catVM.getCats(nameFilter: searchText)
         
         GeometryReader { geo in
             VStack(spacing: 0) {
                 // Barra superior con botones para eliminar y agregar pictogramas
                 HStack {
-                    
-                    SearchBarView(searchText: $searchText, placeholder: "Buscar Pictograma", searchBarWidth: geo.size.width * 0.30, backgroundColor: .white)
+                    PictogramSearchBarView(searchText: $searchText, searchBarWidth: geo.size.width * 0.25, searchingPicto: $searchingPicto)
+                        .onChange(of: searchText) { _ in
+                            if !searchingPicto {
+                                // Se hace el filtrado por nombre dos veces. Esto quizás se podría evitar.
+                                let catsInScreenIds: [String] = catVM.getCats(nameFilter: searchText).map {$0.id!}
+                                if !catsInScreenIds.contains(pickedCategoryId) {
+                                    pickedCategoryId = catsInScreenIds.first ?? ""
+                                }
+                            }
+                        }
                     
                     if patient != nil {
                         Text(patient!.buildPatientTitle())
@@ -112,7 +123,6 @@ struct PictogramEditor: View {
                     .foregroundColor(Color.gray)
                     
                     HStack{
-
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         //Editar categoria
                         ButtonWithImageView(text: "Editar", width: 120, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
@@ -133,7 +143,7 @@ struct PictogramEditor: View {
                     
                     Divider()
                     
-                    CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                    CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
                 .frame(height: 60)
                 .background(Color.white)
@@ -145,14 +155,14 @@ struct PictogramEditor: View {
                     .foregroundColor(currCat?.buildColor() ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                 
                 // Cuadrícula de pictogramas
-                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty)
+                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty && searchingPicto)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
-                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
-                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId)
+                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
             .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {
@@ -176,7 +186,7 @@ struct PictogramEditor: View {
         }
         // Si la categoría seleccionada es nula y no ha sido elegida por el usuario, seleccionamos la primera categoría
         .onChange(of: catVM.categories) { _ in
-             if pickedCategoryId.isEmpty || !userHasChosenCat {
+             if !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
         }

@@ -9,9 +9,8 @@ import SwiftUI
 
 struct SearchBarView: View {
     @Binding var searchText: String
-    var placeholder: String
+    let placeholder: String
     var searchBarWidth: Double
-    var backgroundColor: Color
     
     var body: some View {
         HStack {
@@ -35,14 +34,7 @@ struct SearchBarView: View {
             }
         }
         .frame(width: searchBarWidth)
-        .cornerRadius(10) // Asegúrate de que este está aquí
         .background(Color(.systemGray6))
-        .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
-        /*
-        .overlay {
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray, lineWidth: 1)
-        }
-        */
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

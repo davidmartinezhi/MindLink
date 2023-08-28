@@ -48,10 +48,8 @@ struct MarkedScrollView<Content: View>: View {
         .overlay(alignment: .center) {
             if scrollDirection == .horizontal {
                 marksHorizontal
-                    .allowsHitTesting(false)
             } else {
                 marksVertical
-                    .allowsHitTesting(false)
             }
         }
     }
@@ -61,9 +59,12 @@ struct MarkedScrollView<Content: View>: View {
             Image(systemName: "arrowshape.backward.fill")
                 .opacity(contentFrame.minX < scrollViewFrame.minX - offset ? 0.9 : 0)
             Spacer()
+                .frame(minWidth: scrollViewFrame.size.width + 5)
             Image(systemName: "arrowshape.right.fill")
                 .opacity(contentFrame.maxX > scrollViewFrame.maxX + offset ? 0.9 : 0)
         }
+        .allowsHitTesting(false)
+        .foregroundColor(.gray)
     }
     
     var marksVertical: some View {
@@ -76,5 +77,7 @@ struct MarkedScrollView<Content: View>: View {
                 .rotationEffect(.degrees(90))
                 .opacity(contentFrame.maxY > scrollViewFrame.maxY + offset ? 0.9 : 0)
         }
+        .allowsHitTesting(false)
+        .foregroundColor(.gray)
     }
 }
