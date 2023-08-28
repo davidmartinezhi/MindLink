@@ -47,6 +47,8 @@
 		BC8F7E4B2A37FFBD008E97B2 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E2C2A37FFBD008E97B2 /* Album.swift */; };
 		BC8F7E4C2A37FFBD008E97B2 /* PageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */; };
 		BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */; };
+		BC93FD9C2A9B160700853E68 /* PictogramSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */; };
+		BC93FD9F2A9B19D300853E68 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */; };
 		BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */; };
 		BCB1B7092A42BA6E00C01B15 /* PageThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */; };
 		BCB1B70B2A42BA7600C01B15 /* PageDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */; };
@@ -135,6 +137,8 @@
 		BC8F7E2C2A37FFBD008E97B2 /* Album.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageModel.swift; sourceTree = "<group>"; };
 		BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCache.swift; sourceTree = "<group>"; };
+		BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramSearchBarView.swift; sourceTree = "<group>"; };
+		BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedScrollView.swift; sourceTree = "<group>"; };
 		BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageThumbnail.swift; sourceTree = "<group>"; };
 		BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDisplay.swift; sourceTree = "<group>"; };
@@ -275,6 +279,7 @@
 		BC8F7E0D2A37FFBD008E97B2 /* PictogramEditor */ = {
 			isa = PBXGroup;
 			children = (
+				BC93FD9D2A9B19BD00853E68 /* Extensions */,
 				BC8F7E0E2A37FFBD008E97B2 /* ViewModels */,
 				BC8F7E112A37FFBD008E97B2 /* GenericViews */,
 				BC8F7E172A37FFBD008E97B2 /* MainViews */,
@@ -353,6 +358,7 @@
 				BC8F7E252A37FFBD008E97B2 /* PictogramGridView.swift */,
 				BC8F7E262A37FFBD008E97B2 /* PictogramEditorWindowView.swift */,
 				BC8F7E272A37FFBD008E97B2 /* CategoryEditorWindowView.swift */,
+				BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -394,6 +400,14 @@
 				BC8F7E2E2A37FFBD008E97B2 /* PageModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		BC93FD9D2A9B19BD00853E68 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		BCB1B7032A428AF900C01B15 /* Views */ = {
@@ -669,6 +683,7 @@
 				BC8F7E422A37FFBD008E97B2 /* ColorMaker.swift in Sources */,
 				BC8F7E472A37FFBD008E97B2 /* PictogramGridView.swift in Sources */,
 				BC8F7E412A37FFBD008E97B2 /* CustomAlert.swift in Sources */,
+				BC93FD9C2A9B160700853E68 /* PictogramSearchBarView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */,
 				BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */,
@@ -681,6 +696,7 @@
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
+				BC93FD9F2A9B19D300853E68 /* StringExtensions.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,

@@ -33,5 +33,11 @@ struct CategoryPickerView: View {
                 }
             }
         }
+        .overlay(alignment: .leading) {
+            if categoryModels.isEmpty {
+                Text("No hay categorías")
+                    .bold()
+            }
+        }
     }
 }

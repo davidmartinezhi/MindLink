@@ -79,6 +79,18 @@ class CategoryViewModel: ObservableObject {
     func getCats() -> [CategoryModel] {
         return sortedCategories.getItems()
     }
+    
+    func getCats(nameFilter: String) -> [CategoryModel] {
+        let cleanedNameFilter: String = nameFilter.cleanForSearch()
+        
+        if nameFilter.isEmpty {
+            return sortedCategories.getItems()
+        } else {
+            return sortedCategories.getItems().filter { catModel in
+                return catModel.name.lowercased().contains(cleanedNameFilter)
+            }
+        }
+    }
                         
     func addCat(name: String, color: (r: Double, g: Double, b: Double), completition: @escaping (Error?, String?)->Void) -> Void {
          let catModel: CategoryModel = CategoryModel(name: name, color: CategoryColor(r: color.r, g: color.g, b: color.b))
