@@ -240,10 +240,10 @@ struct AdminView: View {
 
                             AdminNav(authViewModel: AuthViewModel(), showAdminView: $showAdminView, showRegisterView: $showRegisterView, user: user)
                             
-                            //Search bar y Boton para agregar niños
+                            //Search bar y Boton para agregar pacientes
                             HStack{
                                 // magnifyingglass 
-                                SearchBarView(searchText: $search, placeholder: "Buscar niño o grupo", searchBarWidth: 250)
+                                SearchBarView(searchText: $search, placeholder: "Buscar paciente o grupo", searchBarWidth: 250)
                                     .onChange(of: search, perform: performSearchByName)
                                 
                                 Spacer()
@@ -256,7 +256,7 @@ struct AdminView: View {
                                             Image(systemName: "plus.circle.fill")
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
-                                            Text("Agregar Niño")
+                                            Text("Agregar Paciente")
                                                 .font(.headline)
                                         }
                                     }
@@ -496,11 +496,11 @@ struct AdminView: View {
                                         HStack{
                                             Spacer()
                                             VStack {
-                                                Text("Aún no hay niños")
+                                                Text("Aún no hay pacientes")
                                                     .font(.title2)
                                                     .foregroundColor(Color.gray)
                                                     .padding()
-                                                Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                                                Text("Los pacientes que agregues se mostrarán en esta pantalla :)")
                                                     .font(.headline)
                                                     .foregroundColor(Color.gray)
                                             }
@@ -524,7 +524,7 @@ struct AdminView: View {
                                     List{
                                         HStack{
                                             Spacer() // Espacio superior
-                                            Text("No se han encontrado niños con ese filtrado.")
+                                            Text("No se han encontrado pacientes con ese filtrado.")
                                                 .font(.title2)
                                                 .foregroundColor(Color.gray)
                                             Spacer() // Espacio inferior
