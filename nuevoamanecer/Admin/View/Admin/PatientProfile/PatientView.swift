@@ -82,347 +82,352 @@ struct PatientView: View {
     }
     
     var body: some View {
-        VStack {
-            //user header
+        GeometryReader { geometry in  // Agrega GeometryReader
+            VStack {
+                //user header
 
-                
-            HStack {
-                VStack{
-                    if(patient.image == "placeholder") {
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .padding(.trailing)
-                    } else {
-                        KFImage(URL(string: patient.image))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                            .padding(.trailing)
-                    }
-                }
-                
-                VStack(alignment: .leading) {
                     
-                    HStack{
-                        Text(patient.firstName + " " + patient.lastName)
-                            .font(.system(size: 24, weight: .bold))
+                HStack {
+                    VStack{
+                        if(patient.image == "placeholder") {
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                        } else {
+                            KFImage(URL(string: patient.image))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        
+                        HStack{
+                            Text(patient.firstName + " " + patient.lastName)
+                                .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(Color.black)
+                                .padding(.vertical, 1)
+                            
+                            Text(String(getAge(patient: patient)) + " años")
+                                .font(.system(size: 24, weight: .regular))
+                                .foregroundColor(Color.gray)
+                                .padding(.vertical, 1)
+                            
+                        }
+                        
+                        
+                        Text("Grupo: " + patient.group)
+                            .font(.system(size: 18, weight: .regular))
                             .foregroundColor(Color.black)
                             .padding(.vertical, 1)
                         
-                        Text(String(getAge(patient: patient)) + " años")
-                            .font(.system(size: 24, weight: .regular))
-                            .foregroundColor(Color.gray)
+                        // Add other patient details here
+                        Text("Nivel Cognitivo: " + patient.cognitiveLevel)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(Color.black)
                             .padding(.vertical, 1)
                         
+                        // Add other patient details here
+                        Text("Comunicación: " + patient.communicationStyle)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(Color.black)
+                            .padding(.vertical, 2)
                     }
+                    Spacer()
                     
                     
-                    Text("Grupo: " + patient.group)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 1)
                     
-                    // Add other patient details here
-                    Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 1)
-                    
-                    // Add other patient details here
-                    Text("Comunicación: " + patient.communicationStyle)
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(Color.black)
-                        .padding(.vertical, 2)
-                }
-                Spacer()
-                
-                
-                
-                VStack{
-                    
-                    HStack{
-                        Spacer()
-                        // validar que el usuario sea admin para mostrar
-                        if (users.user?.isAdmin == true) {
-                            Button(action: {
-                                // Handle settings action here
-                                showEditPatientView.toggle()
-                                
-                            }) {
-                                HStack{
-                                    Image(systemName: "gear")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                    Text("Editar Perfil")
-                                }
-                                .padding(10)
-                                .frame(width: 157, height: 40)
-                        }
-                        }
-                    }
-                    .padding(.bottom)
-                    .fixedSize(horizontal: false, vertical: true)
-                    
-                    HStack{
+                    VStack{
                         
-                        Spacer()
-                        
-                        Menu {
+                        HStack{
+                            Spacer()
                             // validar que el usuario sea admin para mostrar
                             if (users.user?.isAdmin == true) {
-                                Button {
-                                    pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, patient: patient))
-                                } label: {
-                                    Text("Editar comunicador de \(patient.firstName)")
-                                    Image(systemName: "pencil")
+                                Button(action: {
+                                    // Handle settings action here
+                                    showEditPatientView.toggle()
+                                    
+                                }) {
+                                    HStack{
+                                        Image(systemName: "gear")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        Text("Editar Perfil")
+                                    }
+                                    .padding(10)
+                                    .frame(width: 157, height: 40)
+                            }
+                            }
+                        }
+                        .padding(.bottom)
+                        .fixedSize(horizontal: false, vertical: true)
+                        
+                        HStack{
+                            
+                            Spacer()
+                            
+                            Menu {
+                                // validar que el usuario sea admin para mostrar
+                                if (users.user?.isAdmin == true) {
+                                    Button {
+                                        pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, patient: patient))
+                                    } label: {
+                                        Text("Editar comunicador de \(patient.firstName)")
+                                        Image(systemName: "pencil")
+                                    }
                                 }
-                            }
-                            
-                            Button {
-                                pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
+                                
+                                Button {
+                                    pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
+                                } label: {
+                                    Text("Acceder a comunicador de \(patient.firstName)")
+                                    Image(systemName: "message.fill")
+                                }
+                                
+                                /*
+                                Button {
+                                    pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
+                                } label: {
+                                    Text("Acceder a album de \(patient.firstName)")
+                                    Image(systemName: "message.fill")
+                                }
+                                 */
+                                
                             } label: {
-                                Text("Acceder a comunicador de \(patient.firstName)")
-                                Image(systemName: "message.fill")
+                                HStack {
+                                    Image(systemName: "ellipsis.circle")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Comunicador de \(patient.firstName)")
+                                        .font(.headline)
+                                }
+                                .padding(10)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                             }
-                            
-                            /*
-                            Button {
-                                pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
-                            } label: {
-                                Text("Acceder a album de \(patient.firstName)")
-                                Image(systemName: "message.fill")
-                            }
-                             */
-                            
-                        } label: {
-                            HStack {
-                                Image(systemName: "ellipsis.circle")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("Comunicador de \(patient.firstName)")
-                                    .font(.headline)
-                            }
-                            .padding(10)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
                         }
                     }
                 }
-            }
-            .padding(10)
-            .padding(.horizontal, 50)
-            Spacer()
-                
+                .padding(10)
+                .padding(.horizontal, 50)
+                Spacer()
+                    
 
-            //.frame(maxHeight: 210)
-            //.background(.red)
-            
-            Divider()
-            
-            //notes
-            HStack{
-            // 1/4 of the screen for the notes list
-                VStack {
-                    
-                    
-                    HStack{
-                        Spacer()
-                        Text("Expediente")
-                            .font(.system(size: 24, weight: .regular))
-                            .foregroundColor(Color.black)
-                        Spacer()
-                    }
-                    .padding(10)
-                     
-                    
-                    //Add note button
-                    HStack{
-                        Button(action: {
-                            showAddNoteView.toggle()
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Agregar Nota")
-                                
-                            }
-                        }
-                    }
-                    .padding(10)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding(.bottom, 10)
-
-                    
-                    //checamos si hay notas
-                    if(notes.notesList.count == 0){
-                        
-                        List{
-                            HStack{
-                                
-                                Spacer() // Espacio superior
-                                Text("Aquí podrás ver el orden de tus notas")
-                                    .foregroundColor(Color.gray)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Spacer() // Espacio inferior
-                                 
-                            }
-                        }
-                        .listStyle(.sidebar)
-                        
-                    }else{
-                        List(notes.notesList, id: \.id) { note in
-                            HStack{
-                                Text(note.title)
-                                    .font(.system(size: 18, weight: .light))
-                                    .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
-                                Spacer()
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
-                            .onTapGesture {
-                                selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })
-                            }
-                        }
-                        
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .listStyle(.sidebar)
-                        .padding(.top)
-                    }
-                }
-                .frame(width: UIScreen.main.bounds.width / 4)
-                .background(Color.white.opacity(0.1))
-                //.background(Color.red)
+                //.frame(maxHeight: 210)
+                //.background(.red)
                 
                 Divider()
-                // 3/4 of the screen for patient information and notes
-                VStack {
-
-                    //Checamos que existan pacientes
-                    if(notes.notesList.count == 0){
-                        List{
-                            HStack{
-                                Spacer()
-                                VStack {
-                                    Spacer()
-                                    Text("Agrega, ordena y edita las notas del expediente")
-                                        .font(.title2)
-                                        .foregroundColor(Color.black)
-                                        .multilineTextAlignment(.center)
-                                        .padding()
-                                        .fixedSize(horizontal: false, vertical: true)
-                                    Text("Deja presionada una nota para mover su order y deslizala hacía la izquierda para editarla o eliminarla")
-                                        .font(.headline)
-                                        .foregroundColor(Color.gray)
-                                        .multilineTextAlignment(.center)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .padding()
-                                    Spacer()
-                                }
-                                
-                                Spacer()
-                            }
-                            .padding(.top, 20)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .padding([.leading, .trailing, .bottom, .top], 10)
-                        }
-                        .listStyle(.inset)
-                    }else{
+                
+                //notes
+                HStack{
+                // 1/4 of the screen for the notes list
+                    VStack {
                         
-                        ScrollViewReader { proxy in
-                            List {
-                                ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                        
+                        HStack{
+                            Spacer()
+                            Text("Expediente")
+                                .font(.system(size: 24, weight: .regular))
+                                .foregroundColor(Color.black)
+                            Spacer()
+                        }
+                        .padding(10)
+                         
+                        
+                        //Add note button
+                        HStack{
+                            Button(action: {
+                                showAddNoteView.toggle()
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                    Text("Agregar Nota")
                                     
-                                    //Tarjeta paciente
-                                    NoteCardView(note: note)
-                                    .frame(minHeight: 150)
-                                    .padding([.top, .bottom], 5)
-                                    .swipeActions(edge: .trailing) {
-                                        // validar que el usuario sea admin para mostrar
-                                        if (users.user?.isAdmin == true) {
-                                            Button {
-                                                //selectedNote = note
-                                                selectedNoteIndex = index
-                                                showDeleteNoteAlert = true
-                                                
-                                            } label: {
-                                                Label("Eliminar", systemImage: "trash")
-                                            }
-                                            .tint(.red)
+                                }
+                            }
+                        }
+                        .padding(10)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.bottom, 10)
+
+                        
+                        //checamos si hay notas
+                        if(notes.notesList.count == 0){
+                            
+                            List{
+                                HStack{
+                                    
+                                    Spacer() // Espacio superior
+                                    Text("Aquí podrás ver el orden de tus notas")
+                                        .foregroundColor(Color.gray)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                    Spacer() // Espacio inferior
+                                     
+                                }
+                            }
+                            .listStyle(.sidebar)
+                            
+                        }else{
+                            List(notes.notesList, id: \.id) { note in
+                                Button(action: {}) {
+                                   
+                                    Text(note.title)
+                                        .font(.system(size: 18, weight: .light))
+                                        .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
+                                    
+                                }
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
+                                .onTapGesture {
+                                    selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })
+                                }
+                            }
+                            //.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            .listStyle(.sidebar)
+                            .padding(.top)
+                        }
+                    }
+                    //.frame(width: UIScreen.main.bounds.width / 4)
+                    .frame(width: geometry.size.width / 4)
+                    .background(Color.white.opacity(0.1))
+                    //.background(Color.red)
+                    
+                    Divider()
+                    // 3/4 of the screen for patient information and notes
+                    VStack {
+
+                        //Checamos que existan pacientes
+                        if(notes.notesList.count == 0){
+                            List{
+                                HStack{
+                                    Spacer()
+                                    VStack {
+                                        Spacer()
+                                        Text("Agrega, ordena y edita las notas del expediente")
+                                            .font(.title2)
+                                            .foregroundColor(Color.black)
+                                            .multilineTextAlignment(.center)
                                             .padding()
-                                            
-                                            Button {
-                                                // Aquí va la lógica para actualizar la nota
-                                                selectedNoteToEdit = note
-                                                showEditNoteView = true
-                                                
-                                            } label: {
-                                                Label("Editar", systemImage: "pencil")
-                                            }
-                                            .tint(.blue)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                        Text("Deja presionada una nota para mover su order y deslizala hacía la izquierda para editarla o eliminarla")
+                                            .font(.headline)
+                                            .foregroundColor(Color.gray)
+                                            .multilineTextAlignment(.center)
+                                            .fixedSize(horizontal: false, vertical: true)
                                             .padding()
-                                        }
+                                        Spacer()
                                     }
+                                    
+                                    Spacer()
                                 }
-                                .onMove(perform: moveNote)
-                                .onChange(of: selectedNoteIndex) { newIndex in
-                                    if let newIndex = newIndex {
-                                        let noteId = notes.notesList[newIndex].id
-                                        proxy.scrollTo(noteId, anchor: .top)
-                                    }
-                                }
-                                .padding(.top)
-                                .alert(isPresented: $showDeleteNoteAlert) {
-                                    Alert(title: Text("Eliminar Nota"),
-                                          message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
-                                          primaryButton: .destructive(Text("Eliminar")) {
-                                              // Confirmar eliminación
-                                              if let index = self.selectedNoteIndex {
-                                                  let noteId = notes.notesList[index].id
-                                                  notes.deleteData(noteId: noteId) { response in
-                                                      if response == "OK" {
-                                                          notes.notesList.remove(atOffsets: IndexSet(integer: index))
-                                                      } else {
-                                                          // Aquí puedes manejar el error si lo deseas
-                                                          print("Error al eliminar la nota: \(response)")
-                                                      }
-                                                  }
-                                              }
-                                              self.selectedNoteIndex = nil
-                                              //self.selectedNote = nil
-                                          },
-                                          secondaryButton: .cancel {
-                                              // Cancelar eliminación
-                                              self.selectedNoteIndex = nil
-                                              //self.selectedNote = nil
-                                          }
-                                    )
-                                }
+                                .padding(.top, 20)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .padding([.leading, .trailing, .bottom, .top], 10)
                             }
                             .listStyle(.inset)
-                        } //ScrollViewReader
+                        }else{
+                            
+                            ScrollViewReader { proxy in
+                                List {
+                                    ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                                        
+                                        //Tarjeta paciente
+                                        NoteCardView(note: note)
+                                        .frame(minHeight: 150)
+                                        .padding([.top, .bottom], 5)
+                                        .swipeActions(edge: .trailing) {
+                                            // validar que el usuario sea admin para mostrar
+                                            if (users.user?.isAdmin == true) {
+                                                Button {
+                                                    //selectedNote = note
+                                                    selectedNoteIndex = index
+                                                    showDeleteNoteAlert = true
+                                                    
+                                                } label: {
+                                                    Label("Eliminar", systemImage: "trash")
+                                                }
+                                                .tint(.red)
+                                                .padding()
+                                                
+                                                Button {
+                                                    // Aquí va la lógica para actualizar la nota
+                                                    selectedNoteToEdit = note
+                                                    showEditNoteView = true
+                                                    
+                                                } label: {
+                                                    Label("Editar", systemImage: "pencil")
+                                                }
+                                                .tint(.blue)
+                                                .padding()
+                                            }
+                                        }
+                                    }
+                                    .onMove(perform: moveNote)
+                                    .onChange(of: selectedNoteIndex) { newIndex in
+                                        if let newIndex = newIndex {
+                                            let noteId = notes.notesList[newIndex].id
+                                            proxy.scrollTo(noteId, anchor: .top)
+                                        }
+                                    }
+                                    .padding(.top)
+                                    .alert(isPresented: $showDeleteNoteAlert) {
+                                        Alert(title: Text("Eliminar Nota"),
+                                              message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
+                                              primaryButton: .destructive(Text("Eliminar")) {
+                                                  // Confirmar eliminación
+                                                  if let index = self.selectedNoteIndex {
+                                                      let noteId = notes.notesList[index].id
+                                                      notes.deleteData(noteId: noteId) { response in
+                                                          if response == "OK" {
+                                                              notes.notesList.remove(atOffsets: IndexSet(integer: index))
+                                                          } else {
+                                                              // Aquí puedes manejar el error si lo deseas
+                                                              print("Error al eliminar la nota: \(response)")
+                                                          }
+                                                      }
+                                                  }
+                                                  self.selectedNoteIndex = nil
+                                                  //self.selectedNote = nil
+                                              },
+                                              secondaryButton: .cancel {
+                                                  // Cancelar eliminación
+                                                  self.selectedNoteIndex = nil
+                                                  //self.selectedNote = nil
+                                              }
+                                        )
+                                    }
+                                }
+                                .listStyle(.inset)
+                            } //ScrollViewReader
 
+                        }
                     }
-                }            }
-            .padding([.bottom, .trailing, .leading])
-            
-        }
-        .sheet(isPresented: $showAddNoteView) {
-            AddNoteView(notes: notes, patient: patient)
-        }
-        .sheet(item: $selectedNoteToEdit){ note in
-            EditNoteView(notes: notes, note: note)
-        }
-        .sheet(isPresented: $showEditPatientView){
-            EditPatientView(patients: patients, patient: patient)
-        }
-        .sheet(isPresented: $showCommunicatorMenu){
-            CommunicatorMenuView(patient:patient)
+                    
+                }
+                .padding([.bottom, .trailing, .leading])
+                
+            }
+            .sheet(isPresented: $showAddNoteView) {
+                AddNoteView(notes: notes, patient: patient)
+            }
+            .sheet(item: $selectedNoteToEdit){ note in
+                EditNoteView(notes: notes, note: note)
+            }
+            .sheet(isPresented: $showEditPatientView){
+                EditPatientView(patients: patients, patient: patient)
+            }
+            .sheet(isPresented: $showCommunicatorMenu){
+                CommunicatorMenuView(patient:patient)
+            }
         }
         .onAppear{
             self.getPatientNotes(patientId: patient.id)
