@@ -214,7 +214,7 @@ struct PatientView: View {
                     }
                 }
             }
-            .padding(20)
+            .padding(10)
             .padding(.horizontal, 50)
             Spacer()
                 
@@ -277,12 +277,19 @@ struct PatientView: View {
                         
                     }else{
                         List(notes.notesList, id: \.id) { note in
-                            Text(note.title)
-                                .font(.system(size: 18, weight: .light))
-                                .foregroundColor(Color.black)
-                                .frame(minHeight: 50)
-                                .fixedSize(horizontal: false, vertical: true)
+                            HStack{
+                                Text(note.title)
+                                    .font(.system(size: 18, weight: .light))
+                                    .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
+                                Spacer()
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
+                            .onTapGesture {
+                                selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })
+                            }
                         }
+                        
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         .listStyle(.sidebar)
                         .padding(.top)
                     }
@@ -326,76 +333,82 @@ struct PatientView: View {
                         }
                         .listStyle(.inset)
                     }else{
-                        //Lista de pacientes
-                        List {
-                            ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
-                                
-                                //Tarjeta paciente
-                                NoteCardView(note: note)
-                                .frame(minHeight: 150)
-                                .padding([.top, .bottom], 5)
-                                .swipeActions(edge: .trailing) {
-                                    // validar que el usuario sea admin para mostrar
-                                    if (users.user?.isAdmin == true) {
-                                        Button {
-                                            //selectedNote = note
-                                            selectedNoteIndex = index
-                                            showDeleteNoteAlert = true
+                        
+                        ScrollViewReader { proxy in
+                            List {
+                                ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                                    
+                                    //Tarjeta paciente
+                                    NoteCardView(note: note)
+                                    .frame(minHeight: 150)
+                                    .padding([.top, .bottom], 5)
+                                    .swipeActions(edge: .trailing) {
+                                        // validar que el usuario sea admin para mostrar
+                                        if (users.user?.isAdmin == true) {
+                                            Button {
+                                                //selectedNote = note
+                                                selectedNoteIndex = index
+                                                showDeleteNoteAlert = true
+                                                
+                                            } label: {
+                                                Label("Eliminar", systemImage: "trash")
+                                            }
+                                            .tint(.red)
+                                            .padding()
                                             
-                                        } label: {
-                                            Label("Eliminar", systemImage: "trash")
+                                            Button {
+                                                // Aquí va la lógica para actualizar la nota
+                                                selectedNoteToEdit = note
+                                                showEditNoteView = true
+                                                
+                                            } label: {
+                                                Label("Editar", systemImage: "pencil")
+                                            }
+                                            .tint(.blue)
+                                            .padding()
                                         }
-                                        .tint(.red)
-                                        .padding()
-                                        
-                                        Button {
-                                            // Aquí va la lógica para actualizar la nota
-                                            selectedNoteToEdit = note
-                                            showEditNoteView = true
-                                            
-                                        } label: {
-                                            Label("Editar", systemImage: "pencil")
-                                        }
-                                        .tint(.blue)
-                                        .padding()
                                     }
                                 }
-                            }
-                            .onMove(perform: moveNote)
-                            .padding(.top)
-                            .alert(isPresented: $showDeleteNoteAlert) {
-                                Alert(title: Text("Eliminar Nota"),
-                                      message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
-                                      primaryButton: .destructive(Text("Eliminar")) {
-                                          // Confirmar eliminación
-                                          if let index = self.selectedNoteIndex {
-                                              let noteId = notes.notesList[index].id
-                                              notes.deleteData(noteId: noteId) { response in
-                                                  if response == "OK" {
-                                                      notes.notesList.remove(atOffsets: IndexSet(integer: index))
-                                                  } else {
-                                                      // Aquí puedes manejar el error si lo deseas
-                                                      print("Error al eliminar la nota: \(response)")
+                                .onMove(perform: moveNote)
+                                .onChange(of: selectedNoteIndex) { newIndex in
+                                    if let newIndex = newIndex {
+                                        let noteId = notes.notesList[newIndex].id
+                                        proxy.scrollTo(noteId, anchor: .top)
+                                    }
+                                }
+                                .padding(.top)
+                                .alert(isPresented: $showDeleteNoteAlert) {
+                                    Alert(title: Text("Eliminar Nota"),
+                                          message: Text("¿Estás seguro de que quieres eliminar esta nota? Esta acción no se puede deshacer."),
+                                          primaryButton: .destructive(Text("Eliminar")) {
+                                              // Confirmar eliminación
+                                              if let index = self.selectedNoteIndex {
+                                                  let noteId = notes.notesList[index].id
+                                                  notes.deleteData(noteId: noteId) { response in
+                                                      if response == "OK" {
+                                                          notes.notesList.remove(atOffsets: IndexSet(integer: index))
+                                                      } else {
+                                                          // Aquí puedes manejar el error si lo deseas
+                                                          print("Error al eliminar la nota: \(response)")
+                                                      }
                                                   }
                                               }
+                                              self.selectedNoteIndex = nil
+                                              //self.selectedNote = nil
+                                          },
+                                          secondaryButton: .cancel {
+                                              // Cancelar eliminación
+                                              self.selectedNoteIndex = nil
+                                              //self.selectedNote = nil
                                           }
-                                          self.selectedNoteIndex = nil
-                                          //self.selectedNote = nil
-                                      },
-                                      secondaryButton: .cancel {
-                                          // Cancelar eliminación
-                                          self.selectedNoteIndex = nil
-                                          //self.selectedNote = nil
-                                      }
-                                )
+                                    )
+                                }
                             }
-                        }
-                        .listStyle(.inset)
-                    }
-                    
+                            .listStyle(.inset)
+                        } //ScrollViewReader
 
-                }
-            }
+                    }
+                }            }
             .padding([.bottom, .trailing, .leading])
             
         }
