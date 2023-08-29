@@ -111,6 +111,7 @@ struct AdminNav: View {
         }
         .frame(height: 50)
         .foregroundColor(.white)
+        .padding(.top, 20)
         
         /*
         .overlay(
