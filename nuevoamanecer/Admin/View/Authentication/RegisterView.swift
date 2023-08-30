@@ -33,6 +33,8 @@ struct RegisterView: View {
                 .cornerRadius(10)
                 .padding(.bottom, 20)
                 .textContentType(.emailAddress)
+                .autocapitalization(.none)
+                .autocorrectionDisabled(true)
                 .frame(maxWidth: 600)
             
             SecureField("Contraseña", text: $password)
@@ -60,9 +62,13 @@ struct RegisterView: View {
             TextField("Nombre", text: $name)
                 .padding()
                 .background(Color(.systemGray6))
+                .textContentType(.username)
+                .autocapitalization(.none)
+                .autocorrectionDisabled(true)
                 .cornerRadius(10)
                 .padding(.bottom, 20)
                 .frame(maxWidth: 600)
+            
             
             Toggle(isOn: $isAdmin) {
                 Text("¿Es administrador?")
