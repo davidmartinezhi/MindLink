@@ -70,7 +70,7 @@ struct PatientView: View {
         for (index, note) in self.notes.notesList.enumerated() {
             // Creamos una copia de la nota para no modificar la original
             var updatedNote = note
-            updatedNote.order = index + 1
+            updatedNote.order = index - 1
             // Actualizamos la nota en la base de datos
             self.notes.updateData(note: updatedNote) { response in
                 if response != "OK" {

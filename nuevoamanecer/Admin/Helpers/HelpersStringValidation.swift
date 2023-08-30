@@ -88,3 +88,13 @@ func isValidBirthDate(birthDate: Date) -> Bool {
     return true
 }
 
+
+/*
+ input: String
+ output: String
+ description: Función para remover espacios en blanco al final de un string
+ */
+func removeTrailingWhitespace(from string: String) -> String {
+    return string.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
+}
+
