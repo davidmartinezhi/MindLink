@@ -15,4 +15,5 @@ struct Note: Hashable, Codable, Identifiable  {
     var title: String
     var text: String
     var date: Date
+    var tags: [String]
 }
