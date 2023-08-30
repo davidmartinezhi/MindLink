@@ -13,12 +13,14 @@ struct RegisterView: View {
     
     @State var email = ""
     @State var password = ""
+    @State var authPassword = ""
     @State var name = ""
     @State var isAdmin = false
     @State var confirmpassword = ""
     
     @State private var mostrarAlerta = false
     @State private var mostrarAlerta1 = false
+    @State private var showAuthAlert = true
     
     var body: some View {
         VStack {
@@ -27,12 +29,24 @@ struct RegisterView: View {
                 .fontWeight(.bold)
                 .frame(maxWidth: 600)
             
+            TextField("Nombre", text: $name)
+                .padding()
+                .background(Color(.systemGray6))
+                .textContentType(.username)
+                .autocapitalization(.none)
+                .autocorrectionDisabled(true)
+                .cornerRadius(10)
+                .padding(.bottom, 20)
+                .frame(maxWidth: 600)
+            
             TextField("Correo electrónico", text: $email)
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .padding(.bottom, 20)
                 .textContentType(.emailAddress)
+                .autocapitalization(.none)
+                .autocorrectionDisabled(true)
                 .frame(maxWidth: 600)
             
             SecureField("Contraseña", text: $password)
@@ -57,12 +71,6 @@ struct RegisterView: View {
                 .textContentType(.password)
                 .frame(maxWidth: 600)
             
-            TextField("Nombre", text: $name)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 20)
-                .frame(maxWidth: 600)
             
             Toggle(isOn: $isAdmin) {
                 Text("¿Es administrador?")
@@ -110,6 +118,19 @@ struct RegisterView: View {
         }
         .padding()
         .padding(.horizontal, 70)
+        .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
+            TextField("Contraseña", text: $authPassword)
+
+            
+            Button("Login", action: {
+                if(authPassword != "hola"){
+                    dismiss()
+                }else{
+                    print("hola")
+                }
+            })
+            Button("Cancel", role: .cancel, action: { dismiss() })
+        })
     }
 }
 

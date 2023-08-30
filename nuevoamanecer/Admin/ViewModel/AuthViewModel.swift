@@ -8,8 +8,10 @@ class AuthViewModel: ObservableObject {
 
     // Definición de dos variables publicadas que actualizarán la vista cuando cambien.
     @Published var errorMessage : String? = nil // Un mensaje de error que se mostrará en la interfaz de usuario.
+    @Published var errorLogin : Bool = false   // un mensaje de error se mostrarra cundo no se puede verificar las credenciales
     @Published var user: User? // Un objeto de usuario opcional, que contendrá los datos del usuario autenticado.
-
+    @Published var validar : Bool = false
+    
     // El inicializador llama a la función fetchCurrentUser cuando se crea una instancia de AuthViewModel.
     init(){
         fetchCurrentUser()
@@ -59,6 +61,7 @@ class AuthViewModel: ObservableObject {
             if let err = err {
                 print("Failed to login", err)
                 self.errorMessage = "Failed to login user: \(err)"
+                self.errorLogin = true
                 return
             }
             print("Successfully logged in as user: \(result?.user.uid ?? "")")
@@ -193,6 +196,19 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    func autenticar (email: String, password: String){
+        Auth.auth().signIn(withEmail: email, password: password) { result, err in
+            if let err = err {
+                print(err)
+                return
+            }
+            print("BIEN")
+            self.validar = true
+            print(self.validar)
+            return 
+        }
+    }
+    
     
     func logout() {
         do {
@@ -200,6 +216,7 @@ class AuthViewModel: ObservableObject {
             // manejar acciones post-cierre de sesión aquí
             // como redirigir al usuario a la vista de inicio de sesión
             user = nil
+            print("CERRO SECION")
         } catch let signOutError as NSError {
             print("Error signing out: %@", signOutError)
         }

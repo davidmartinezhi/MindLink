@@ -102,7 +102,7 @@ struct AdminNav: View {
                     title: Text("Cerrar Sesión"),
                     message: Text("¿Estás seguro que quieres cerrar la sesión?"),
                     primaryButton: .destructive(Text("Cerrar sesión"), action: {
-                       authViewModel.logout()
+                        authViewModel.logout()
                     }),
                     secondaryButton: .cancel()
                 )

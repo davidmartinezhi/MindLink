@@ -17,8 +17,10 @@ struct AdminMenuView: View {
     @State private var name: String
     @State private var email: String
     @State private var password = ""
+    @State var authPassword = ""
     @State private var confirmpassword = ""
     @State private var showingAlert = false
+    @State private var showAuthAlert = true
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
@@ -118,8 +120,13 @@ struct AdminMenuView: View {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
                             .textContentType(.username)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
+                        
                         TextField("Email", text: $email)
                             .textContentType(.emailAddress)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
                         SecureField("Nueva contraseña", text: $password)
                             .textInputAutocapitalization(.never)
                         .keyboardType(.asciiCapable)
@@ -227,6 +234,21 @@ struct AdminMenuView: View {
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
         }
+        .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
+            TextField("Contraseña", text: $authPassword)
+                .autocorrectionDisabled(true)
+            
+            Button("Okay", action: {
+                authViewModel.autenticar(email: email, password: authPassword)
+                print(authViewModel.validar)
+                if(authViewModel.validar != true){
+                    dismiss()
+                }else{
+                    
+                }
+            })
+            Button("Cancel", role: .cancel, action: { dismiss() })
+        })
         .alert(alertTitle, isPresented: $showingAlert){
             Button("OK"){}
         } message: {
