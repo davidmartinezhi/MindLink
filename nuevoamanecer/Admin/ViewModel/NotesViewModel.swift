@@ -26,7 +26,7 @@ class NotesViewModel: ObservableObject{
         let docRef = db.collection("Note").document()
         
         
-        docRef.setData(["id": note.id, "patientId": note.patientId, "order": notesList.count + 1, "title": note.title, "text": note.text, "date": note.date]) { err in
+        docRef.setData(["id": note.id, "patientId": note.patientId, "order": (notesList.count * -1) - 1, "title": note.title, "text": note.text, "date": note.date]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
