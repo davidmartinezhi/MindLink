@@ -118,8 +118,13 @@ struct AdminMenuView: View {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
                             .textContentType(.username)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
+                        
                         TextField("Email", text: $email)
                             .textContentType(.emailAddress)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
                         SecureField("Nueva contraseña", text: $password)
                             .textInputAutocapitalization(.never)
                         .keyboardType(.asciiCapable)
