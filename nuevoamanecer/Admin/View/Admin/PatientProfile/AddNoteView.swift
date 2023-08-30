@@ -70,7 +70,7 @@ struct AddNoteView: View {
                     }
                     else {
                         isSaving = true
-                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: patient.notes.count + 1, title: noteTitle, text: noteContent, date: Date())
+                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date())
                         
                         notes.addData(patient: patient, note: newNote) { response in
                             if response == "OK" {
