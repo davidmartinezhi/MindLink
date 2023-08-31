@@ -118,8 +118,20 @@ struct Communicator: View {
                     .frame(height: 20.0, alignment: .bottom)
                     .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                 
-                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty && searchingPicto)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                if catsInScreen.count == 0 {
+                    Text("No hay pictogramas")
+                        .font(.system(size: 25, weight: .bold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                } else if pictosInScreen.count == 0 && !searchText.isEmpty {
+                    Text("Sin resultados")
+                        .font(.system(size: 25, weight: .bold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                } else {
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
         .onChange(of: catVM.categories) { _ in

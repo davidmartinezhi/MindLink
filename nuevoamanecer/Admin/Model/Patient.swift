@@ -20,6 +20,6 @@ struct Patient: Hashable, Codable, Identifiable {
     let identificador: String
     
     func buildPatientTitle() -> String {
-        return firstName + " " + (lastName.first != nil ? String(lastName.first!) + "." : "")
+        return firstName + " " + lastName.prefix(upTo: lastName.firstIndex(of: " ") ?? lastName.endIndex)
     }
 }

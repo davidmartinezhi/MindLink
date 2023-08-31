@@ -17,7 +17,7 @@ func buildImageName(catName: String, pictoName: String) -> String {
 struct PictogramEditorWindowView: View {
     @State var pictoModel: PictogramModel
     let pictoModelCapture: PictogramModel
-    @Binding var isNewPicto: Bool
+    let isNewPicto: Bool
     @Binding var isEditingPicto: Bool
     
     @ObservedObject var pictoVM: PictogramViewModel
@@ -34,10 +34,10 @@ struct PictogramEditorWindowView: View {
     
     @State var DBActionInProgress: Bool = false
             
-    init(pictoModel: PictogramModel?, isNewPicto: Binding<Bool>, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+    init(pictoModel: PictogramModel?, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self.isNewPicto = pictoModel == nil
         self._pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
         self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
-        self._isNewPicto = isNewPicto
         self._isEditingPicto = isEditingPicto
         self.pictoVM = pictoVM
         self.catVM = catVM
@@ -81,14 +81,16 @@ struct PictogramEditorWindowView: View {
                             .cornerRadius(10)
                         }
                         
-                        Text("Categoría" + (pictoModel.categoryId == pictoModelCapture.categoryId ? "" : "*"))
-                            .font(.system(size: 20, weight: .bold))
-                        DropDownCategoryPicker(categoryModels: catVM.getCats(), pickedCategoryId: $pictoModel.categoryId, pickedCatModel: catVM.getCat(catId: pictoModel.categoryId), itemWidth: geo.size.width * 0.3)
+                        if !isNewPicto {
+                            Text("Categoría" + (pictoModel.categoryId == pictoModelCapture.categoryId ? "" : "*"))
+                                .font(.system(size: 20, weight: .bold))
+                            
+                            DropDownCategoryPicker(categoryModels: catVM.getCats(), pickedCategoryId: $pictoModel.categoryId, pickedCatModel: catVM.getCat(catId: pictoModel.categoryId), itemWidth: geo.size.width * 0.3)
+                        }
                     }
                 }
                 
                 HStack {
-                    
                     //Cancel
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
                         isEditingPicto = false
