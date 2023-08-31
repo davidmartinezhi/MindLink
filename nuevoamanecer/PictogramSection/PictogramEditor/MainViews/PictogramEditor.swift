@@ -24,8 +24,6 @@ struct PictogramEditor: View {
     @State var isDeleting: Bool = false // Estado de eliminación
     @State var showDeleteAlert: Bool = false
     @State var pictoModelToDelete: PictogramModel? = nil
-    @State var isNewPicto: Bool = false // Si se está creando un nuevo pictograma
-    @State var isNewCat: Bool = false // Si se está creando una nueva categoría
     @State var pictoBeingEdited: PictogramModel? = nil // Pictograma que se está editando
     @State var catBeingEdited: CategoryModel? = nil // Categoría que se está editando
     @State var isEditingPicto: Bool = false // Si se está editando un pictograma
@@ -91,24 +89,6 @@ struct PictogramEditor: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
                     .allowsHitTesting(pictosInScreen.count > 0)
-                    
-                    let noCategories: Bool = catVM.getCats().count == 0
-                    Button(action: {
-                        isNewPicto = true
-                        pictoBeingEdited = nil
-                        isEditingPicto = true
-                    }){
-                        HStack{
-                            Text(noCategories ?  "Crea una categoria" : "Agregar Pictograma")
-                                .font(.headline)
-                        }
-                    }
-                    .padding(10)
-                    .background(noCategories ? Color.gray : Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .allowsHitTesting(!noCategories)
-                    
                 }
                 .frame(height: 40)
                 .background(Color.white)
@@ -126,14 +106,12 @@ struct PictogramEditor: View {
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         //Editar categoria
                         ButtonWithImageView(text: "Editar", width: 120, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
-                            isNewCat = false
                             catBeingEdited = catVM.getCat(catId: pickedCategoryId)
                             isEditingCat = true
                         }
                         
                         //Agregar categoria
                         ButtonWithImageView(text: "Agregar", width: 120, systemNameImage: "plus", imagePosition: .left, imagePadding: 2){
-                            isNewCat = true
                             catBeingEdited = nil
                             isEditingCat = true
                         }
@@ -155,14 +133,29 @@ struct PictogramEditor: View {
                     .foregroundColor(currCat?.buildColor() ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                 
                 // Cuadrícula de pictogramas
-                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty && searchingPicto)
+                if catsInScreen.count == 0 {
+                    Text("No hay pictogramas")
+                        .font(.system(size: 25, weight: .bold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                } else if pictosInScreen.count == 0 && !searchText.isEmpty {
+                    Text("Sin resultados")
+                        .font(.system(size: 25, weight: .bold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                } else {
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165) {
+                        pictoBeingEdited = nil
+                        isEditingPicto = true
+                    }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
             .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
-                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isNewPicto: $isNewPicto, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
+                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
-                CategoryEditorWindowView(catModel: catBeingEdited, isNewCat: $isNewCat, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
+                CategoryEditorWindowView(catModel: catBeingEdited, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
             .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {
@@ -203,7 +196,6 @@ struct PictogramEditor: View {
                         pictoModelToDelete = pictoModel
                         showDeleteAlert = true
                     } else {
-                        isNewPicto = false
                         pictoBeingEdited = pictoModel
                         isEditingPicto = true
                     }

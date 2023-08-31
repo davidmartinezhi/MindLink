@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryEditorWindowView: View {
     @State var catModel: CategoryModel
     let catModelCapture: CategoryModel
-    @Binding var isNewCat: Bool
+    let isNewCat: Bool
     @Binding var isEditingCat: Bool
     
     @ObservedObject var pictoVM: PictogramViewModel
@@ -23,10 +23,10 @@ struct CategoryEditorWindowView: View {
     
     @State var DBActionInProgress: Bool = false
     
-    init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+    init(catModel: CategoryModel?, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self.isNewCat = catModel == nil 
         self._catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
         self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
-        self._isNewCat = isNewCat
         self._isEditingCat = isEditingCat
         self.pictoVM = pictoVM
         self.catVM = catVM

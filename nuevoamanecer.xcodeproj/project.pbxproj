@@ -61,6 +61,7 @@
 		BCD0B78A2A457BDD00E83CA6 /* PictogramPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */; };
 		BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */; };
 		BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */; };
+		BCEA4D6D2AA02717000C1517 /* PictogramGridArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEA4D6C2AA02717000C1517 /* PictogramGridArrowView.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -151,6 +152,7 @@
 		BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramPlaceholderView.swift; sourceTree = "<group>"; };
 		BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoublePictogramPickerView.swift; sourceTree = "<group>"; };
 		BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramScaleModifierView.swift; sourceTree = "<group>"; };
+		BCEA4D6C2AA02717000C1517 /* PictogramGridArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramGridArrowView.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				BC8F7E262A37FFBD008E97B2 /* PictogramEditorWindowView.swift */,
 				BC8F7E272A37FFBD008E97B2 /* CategoryEditorWindowView.swift */,
 				BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */,
+				BCEA4D6C2AA02717000C1517 /* PictogramGridArrowView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -750,6 +753,7 @@
 				C22ECD452A33E32200DF8A06 /* CommunicatorMenuView.swift in Sources */,
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 				BC8F7E462A37FFBD008E97B2 /* DropDownCategoryPicker.swift in Sources */,
+				BCEA4D6D2AA02717000C1517 /* PictogramGridArrowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
