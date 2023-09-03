@@ -73,7 +73,7 @@ struct CategoryModel: Identifiable, Codable, Comparable {
         return lhs.name.lowercased() >= rhs.name.lowercased()
     }
     
-    static func defaultCategory() -> CategoryModel {
+    static func newEmptyCategory() -> CategoryModel {
         return CategoryModel(name: "", color: CategoryColor(r: 0.9, g: 0.9, b: 0.9))
     }
 }

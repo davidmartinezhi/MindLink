@@ -20,16 +20,13 @@ struct PictogramEditor: View {
     @State var searchText: String = "" // Texto de búsqueda
     @State var searchingPicto: Bool = true
     @State var pickedCategoryId: String = "" // ID de la categoría seleccionada
+    @State var userHasChosenCat: Bool = false // Si el usuario ha seleccionado una categoría
     
-    @State var isDeleting: Bool = false // Estado de eliminación
-    @State var showDeleteAlert: Bool = false
-    @State var pictoModelToDelete: PictogramModel? = nil
-    @State var pictoBeingEdited: PictogramModel? = nil // Pictograma que se está editando
-    @State var catBeingEdited: CategoryModel? = nil // Categoría que se está editando
+    @State var pictoBeingEdited: PictogramModel = PictogramModel.newEmptyPictogram() // Pictograma que se está editando
+    @State var catBeingEdited: CategoryModel = CategoryModel.newEmptyCategory() // Categoría que se está editando
     @State var isEditingPicto: Bool = false // Si se está editando un pictograma
     @State var isEditingCat: Bool = false // Si se está editando una categoría
     @State var showErrorMessage: Bool = false // Si se muestra un mensaje de error
-    @State var userHasChosenCat: Bool = false // Si el usuario ha seleccionado una categoría
     
     // Handler para las imágenes en Firebase
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
@@ -75,20 +72,6 @@ struct PictogramEditor: View {
                     }
                     
                     Spacer()
-                    
-                    Button(action: {
-                        isDeleting.toggle()
-                    }){
-                        HStack{
-                            Text(isDeleting ? "Cancelar" : "Eliminar Pictograma")
-                                .font(.headline)
-                        }
-                    }
-                    .padding(10)
-                    .background(isDeleting || pictosInScreen.count == 0 ? .gray : .red)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .allowsHitTesting(pictosInScreen.count > 0)
                 }
                 .frame(height: 40)
                 .background(Color.white)
@@ -106,13 +89,13 @@ struct PictogramEditor: View {
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         //Editar categoria
                         ButtonWithImageView(text: "Editar", width: 120, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
-                            catBeingEdited = catVM.getCat(catId: pickedCategoryId)
+                            catBeingEdited = catVM.getCat(catId: pickedCategoryId) ?? CategoryModel.newEmptyCategory()
                             isEditingCat = true
                         }
                         
                         //Agregar categoria
                         ButtonWithImageView(text: "Agregar", width: 120, systemNameImage: "plus", imagePosition: .left, imagePadding: 2){
-                            catBeingEdited = nil
+                            catBeingEdited = CategoryModel.newEmptyCategory()
                             isEditingCat = true
                         }
                     }
@@ -134,55 +117,33 @@ struct PictogramEditor: View {
                 
                 // Cuadrícula de pictogramas
                 if catsInScreen.count == 0 {
-                    Text("No hay pictogramas")
-                        .font(.system(size: 25, weight: .bold))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(.white)
-                } else if pictosInScreen.count == 0 && !searchText.isEmpty {
+                    Color.white
+                } else if pictosInScreen.count == 0 && !searchText.isEmpty && searchingPicto {
                     Text("Sin resultados")
                         .font(.system(size: 25, weight: .bold))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(.white)
                 } else {
                     PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165) {
-                        pictoBeingEdited = nil
+                        pictoBeingEdited = PictogramModel.newEmptyPictogram(catId: pickedCategoryId)
                         isEditingPicto = true
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
             .sheet(isPresented: $isEditingPicto) { [pictoBeingEdited] in
-                PictogramEditorWindowView(pictoModel: pictoBeingEdited, isEditingPicto: $isEditingPicto, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
+                PictogramEditorWindowView(pictoModel: pictoBeingEdited, pictoVM: pictoVM, catVM: catVM)
             }
             .sheet(isPresented: $isEditingCat) { [catBeingEdited] in
-                CategoryEditorWindowView(catModel: catBeingEdited, isEditingCat: $isEditingCat, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
+                CategoryEditorWindowView(catModel: catBeingEdited, pictoVM: pictoVM, catVM: catVM, pickedCategoryId: $pickedCategoryId, searchText: $searchText)
             }
             .customAlert(title: "Error", message: "La operación no pudo ser realizada", isPresented: $showErrorMessage) // Alerta de error
-            .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $showDeleteAlert) {
-                if pictoModelToDelete != nil {
-                    Task {
-                        if !pictoModelToDelete!.imageUrl.isEmpty {
-                            _  = await imageHandler.deleteImage(donwloadUrl: pictoModelToDelete!.imageUrl)
-                        }
-                        pictoVM.removePicto(pictoId: pictoModelToDelete!.id!) { error in
-                            if error != nil {
-                                showErrorMessage = true
-                            } else {
-                                isDeleting = false
-                            }
-                        }
-                    }
-                } else {
-                    // El pictograma a eliminar está vacío. 
-                }
-            }
         }
-        // Si la categoría seleccionada es nula y no ha sido elegida por el usuario, seleccionamos la primera categoría
         .onChange(of: catVM.categories) { _ in
              if !userHasChosenCat {
                  pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
              }
-        }
+         }
     }
     
     // Función que construye los botones de los pictogramas
@@ -192,22 +153,17 @@ struct PictogramEditor: View {
         for pictoModel in pictoModels {
             pictoButtons.append(
                 Button(action: {
-                    if isDeleting == true {
-                        pictoModelToDelete = pictoModel
-                        showDeleteAlert = true
-                    } else {
-                        pictoBeingEdited = pictoModel
-                        isEditingPicto = true
-                    }
+                    pictoBeingEdited = pictoModel
+                    isEditingPicto = true
                 }, label: {
                     PictogramView(pictoModel: pictoModel,
                                   catModel: catVM.getCat(catId: pictoModel.categoryId)!,
                                   displayName: true,
                                   displayCatColor: false,
-                                  overlayImage: isDeleting ? Image(systemName: "xmark.circle") : Image(systemName: "pencil"),
+                                  overlayImage: Image(systemName: "pencil"),
                                   overlayImageWidth: 0.2,
-                                  overlayImageColor: isDeleting ? .red : .gray,
-                                  overlyImageOpacity: isDeleting ? 1 : 0.2)
+                                  overlayImageColor: .gray,
+                                  overlyImageOpacity: 0.2)
                 })
             )
         }

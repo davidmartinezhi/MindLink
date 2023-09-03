@@ -11,7 +11,6 @@ struct CategoryEditorWindowView: View {
     @State var catModel: CategoryModel
     let catModelCapture: CategoryModel
     let isNewCat: Bool
-    @Binding var isEditingCat: Bool
     
     @ObservedObject var pictoVM: PictogramViewModel
     @ObservedObject var catVM: CategoryViewModel
@@ -23,11 +22,12 @@ struct CategoryEditorWindowView: View {
     
     @State var DBActionInProgress: Bool = false
     
-    init(catModel: CategoryModel?, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
-        self.isNewCat = catModel == nil 
-        self._catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
-        self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
-        self._isEditingCat = isEditingCat
+    @Environment(\.dismiss) var dismiss
+    
+    init(catModel: CategoryModel, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self.isNewCat = catModel.id == nil
+        self._catModel = State(initialValue: catModel)
+        self.catModelCapture = catModel
         self.pictoVM = pictoVM
         self.catVM = catVM
         self._pickedCategoryId = pickedCategoryId
@@ -84,7 +84,7 @@ struct CategoryEditorWindowView: View {
                     Spacer()
                     
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
-                        isEditingCat = false
+                        dismiss()
                     }
                                         
                     if !isNewCat {
@@ -95,7 +95,7 @@ struct CategoryEditorWindowView: View {
                                     showErrorMessage = true
                                 } else {
                                     pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
-                                    isEditingCat = false
+                                    dismiss()
                                 }
                             }
                         }
@@ -111,7 +111,7 @@ struct CategoryEditorWindowView: View {
                                 } else {
                                     searchText = ""
                                     pickedCategoryId = docId ?? ""
-                                    isEditingCat = false
+                                    dismiss()
                                 }
                             }
                         } else {
@@ -119,7 +119,7 @@ struct CategoryEditorWindowView: View {
                                 if error != nil {
                                     showErrorMessage = true
                                 } else {
-                                    isEditingCat = false
+                                    dismiss()
                                 }
                             }
                         }

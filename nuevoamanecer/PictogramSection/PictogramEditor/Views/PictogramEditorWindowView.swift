@@ -18,14 +18,11 @@ struct PictogramEditorWindowView: View {
     @State var pictoModel: PictogramModel
     let pictoModelCapture: PictogramModel
     let isNewPicto: Bool
-    @Binding var isEditingPicto: Bool
+    @State var isDeletingPicto: Bool = false
     
     @ObservedObject var pictoVM: PictogramViewModel
     @ObservedObject var catVM: CategoryViewModel
-    
-    @Binding var pickedCategoryId: String
-    @Binding var searchText: String 
-    
+        
     @State var showErrorMessage: Bool = false
     
     @State private var showImagePicker: Bool = false
@@ -33,16 +30,15 @@ struct PictogramEditorWindowView: View {
     var imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
     
     @State var DBActionInProgress: Bool = false
+    
+    @Environment(\.dismiss) var dismiss
             
-    init(pictoModel: PictogramModel?, isEditingPicto: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
-        self.isNewPicto = pictoModel == nil
-        self._pictoModel = State(initialValue: pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue))
-        self.pictoModelCapture = pictoModel ?? PictogramModel.defaultPictogram(catId: pickedCategoryId.wrappedValue)
-        self._isEditingPicto = isEditingPicto
+    init(pictoModel: PictogramModel, pictoVM: PictogramViewModel, catVM: CategoryViewModel){
+        self.isNewPicto = pictoModel.id == nil
+        self._pictoModel = State(initialValue: pictoModel)
+        self.pictoModelCapture = pictoModel
         self.pictoVM = pictoVM
         self.catVM = catVM
-        self._pickedCategoryId = pickedCategoryId
-        self._searchText = searchText
     }
     
     var body: some View {
@@ -54,8 +50,21 @@ struct PictogramEditorWindowView: View {
                     .font(.system(size: 35, weight: .bold))
 
                 HStack(spacing: 30) {
-                    PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.defaultCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
+                    PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.newEmptyCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
                         .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
+                        .overlay(alignment: .topLeading) {
+                            if !isNewPicto {
+                                Image(systemName: "trash.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 35)
+                                    .padding(25)
+                                    .foregroundColor(.red)
+                                    .onTapGesture {
+                                        isDeletingPicto = true
+                                    }
+                            }
+                        }
                                         
                     VStack(alignment: .leading) {
                         Text("Nombre" + (pictoModel.name == pictoModelCapture.name ? "" : "*"))
@@ -93,7 +102,7 @@ struct PictogramEditorWindowView: View {
                 HStack {
                     //Cancel
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
-                        isEditingPicto = false
+                        dismiss()
                     }
                     
                     // Save
@@ -115,9 +124,7 @@ struct PictogramEditorWindowView: View {
                                     if error != nil {
                                         showErrorMessage = true
                                     } else {
-                                        searchText = ""
-                                        pickedCategoryId = pictoModel.categoryId
-                                        isEditingPicto = false
+                                        dismiss()
                                     }
                                 }
                             } else {
@@ -125,7 +132,7 @@ struct PictogramEditorWindowView: View {
                                     if error != nil {
                                         showErrorMessage = true
                                     } else {
-                                        isEditingPicto = false
+                                        dismiss()
                                     }
                                 }
                             }
@@ -136,9 +143,18 @@ struct PictogramEditorWindowView: View {
             }
             .padding()
             .frame(width: geo.size.width, height: geo.size.height)
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
             .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
                 ImagePicker(image: $temporaryUIImage)
+            }
+        }
+        .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
+        .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre", isPresented: $isDeletingPicto) {
+            pictoVM.removePicto(pictoId: pictoModel.id!) { error in
+                if error != nil {
+                    showErrorMessage = true
+                } else {
+                    dismiss()
+                }
             }
         }
     }

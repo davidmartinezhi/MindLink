@@ -18,14 +18,13 @@ struct Communicator: View {
     @State var searchText: String = ""
     @State var searchingPicto: Bool = true
     @State var pickedCategoryId: String = ""
+    @State var userHasChosenCat: Bool = false
     
     @State var isConfiguring = false
     @Binding var voiceGender: String
     @Binding var talkingSpeed: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
-    @State var userHasChosenCat: Bool = false
-        
     var showSwitchView: Bool
     @Binding var onLeftOfSwitch: Bool
     
@@ -119,11 +118,8 @@ struct Communicator: View {
                     .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                 
                 if catsInScreen.count == 0 {
-                    Text("No hay pictogramas")
-                        .font(.system(size: 25, weight: .bold))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(.white)
-                } else if pictosInScreen.count == 0 && !searchText.isEmpty {
+                    Color.white
+                } else if pictosInScreen.count == 0 && !searchText.isEmpty && searchingPicto {
                     Text("Sin resultados")
                         .font(.system(size: 25, weight: .bold))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
