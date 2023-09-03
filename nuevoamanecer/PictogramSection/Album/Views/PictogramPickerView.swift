@@ -70,7 +70,7 @@ struct PictogramPickerView: View {
                     Divider()
 
                     HStack{
-                        CategoryPickerView(categoryModels: catVM.getCats(), pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
+                        // CategoryPickerView(categoryModels: catVM.getCats(), userPickedCategoryId: $pickedCategoryId, defaultPickedCategoryId: picked)
                     }
                     .background(Color.white)
                     .padding([.leading, .top, .bottom])
