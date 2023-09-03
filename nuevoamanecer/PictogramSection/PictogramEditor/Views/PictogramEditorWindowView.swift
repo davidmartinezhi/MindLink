@@ -46,25 +46,26 @@ struct PictogramEditorWindowView: View {
         
         GeometryReader { geo in
             VStack(spacing: 30) {
-                Text(isNewPicto ? "Nuevo Pictograma" : pictoModelCapture.name)
-                    .font(.system(size: 35, weight: .bold))
+                HStack {
+                    Spacer()
+                    
+                    Text(isNewPicto ? "Nuevo Pictograma" : pictoModelCapture.name)
+                        .font(.system(size: 35, weight: .bold))
+                    
+                    Spacer()
+                }
+                .overlay(alignment: .leading) {
+                    if !isNewPicto {
+                        ButtonWithImageView(text: "Eliminar", systemNameImage: "trash", background: .red) {
+                            isDeletingPicto = true
+                        }
+                    }
+                    
+                }
 
                 HStack(spacing: 30) {
                     PictogramView(pictoModel: $pictoModel.wrappedValue, catModel: currCat ?? CategoryModel.newEmptyCategory(),  displayName: true, displayCatColor: true, temporaryUIImage: temporaryUIImage)
                         .frame(width: geo.size.width * 0.4, height: geo.size.width * 0.4)
-                        .overlay(alignment: .topLeading) {
-                            if !isNewPicto {
-                                Image(systemName: "trash.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 35)
-                                    .padding(25)
-                                    .foregroundColor(.red)
-                                    .onTapGesture {
-                                        isDeletingPicto = true
-                                    }
-                            }
-                        }
                                         
                     VStack(alignment: .leading) {
                         Text("Nombre" + (pictoModel.name == pictoModelCapture.name ? "" : "*"))
@@ -141,14 +142,15 @@ struct PictogramEditorWindowView: View {
                     .allowsHitTesting(!DBActionInProgress)
                 }
             }
-            .padding()
+            .padding(.horizontal, 70)
+            .padding(.vertical, 50)
             .frame(width: geo.size.width, height: geo.size.height)
             .fullScreenCover(isPresented: $showImagePicker, onDismiss: nil) {
                 ImagePicker(image: $temporaryUIImage)
             }
         }
         .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage) // Definir error
-        .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre", isPresented: $isDeletingPicto) {
+        .customConfirmAlert(title: "Confirmar Eliminación", message: "El pictograma será eliminado para siempre.", isPresented: $isDeletingPicto) {
             pictoVM.removePicto(pictoId: pictoModel.id!) { error in
                 if error != nil {
                     showErrorMessage = true
