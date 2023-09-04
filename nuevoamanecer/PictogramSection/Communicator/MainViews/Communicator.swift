@@ -89,7 +89,7 @@ struct Communicator: View {
                 .padding(.vertical)
                 .padding(.horizontal, 70)
                 
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Text("Categorias")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color.gray)
@@ -99,18 +99,11 @@ struct Communicator: View {
                     }
                     
                     Divider()
-
-                    HStack{
-                        CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                    }
-                    .background(Color.white)
-                    .padding([.leading, .top, .bottom])
                     
-                    Spacer()
+                    CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
-                .frame(height: 60)
+                .frame(height: 80)
                 .background(Color.white)
-                .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                 
                 Rectangle()

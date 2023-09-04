@@ -79,13 +79,13 @@ struct PictogramEditor: View {
                 .padding(.horizontal, 70)
                 
                 // Barra de búsqueda, selector de categoría y botones para editar y agregar categorías
-                HStack(spacing: 15) {
+                HStack(spacing: 15){
                     
                     Text("Categorias")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color.gray)
                     
-                    HStack{
+                    HStack {
                         let editCatButtonisDisabled: Bool = pickedCategoryId.isEmpty || catVM.getCat(catId: pickedCategoryId) == nil
                         //Editar categoria
                         ButtonWithImageView(text: "Editar", width: 120, systemNameImage: "pencil", imagePosition: .left, imagePadding: 2, isDisabled: editCatButtonisDisabled){
@@ -106,9 +106,8 @@ struct PictogramEditor: View {
                     
                     CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
-                .frame(height: 60)
+                .frame(height: 80)
                 .background(Color.white)
-                .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                
                 Rectangle()

@@ -28,20 +28,26 @@ struct CategoryModel: Identifiable, Codable, Comparable {
     }
     
     func buildColor(colorShift: Double) -> Color {
-        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
-        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
-        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+        var rShifted: Double = color.r + colorShift
+        var gShifted: Double = color.g + colorShift
+        var bShifted: Double = color.b + colorShift
+        rShifted = rShifted > 1 ? 1 : (rShifted < 0 ? 0 : rShifted)
+        gShifted = gShifted > 1 ? 1 : (gShifted < 0 ? 0 : gShifted)
+        bShifted = bShifted > 1 ? 1 : (bShifted < 0 ? 0 : bShifted)
 
-        return Color(red: rShift, green: gShift, blue: bShift)
+        return Color(red: rShifted, green: gShifted, blue: bShifted)
     }
     
     func buildColorCatColor(colorShift: Double) -> CategoryColor {
-        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
-        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
-        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+        var rShifted: Double = color.r + colorShift
+        var gShifted: Double = color.g + colorShift
+        var bShifted: Double = color.b + colorShift
+        rShifted = rShifted > 1 ? 1 : (rShifted < 0 ? 0 : rShifted)
+        gShifted = gShifted > 1 ? 1 : (gShifted < 0 ? 0 : gShifted)
+        bShifted = bShifted > 1 ? 1 : (bShifted < 0 ? 0 : bShifted)
 
         
-        return CategoryColor(r: rShift, g: gShift, b: bShift)
+        return CategoryColor(r: rShifted, g: gShifted, b: bShifted)
     }
     
     // isEqualTo: determina si dos instancias de CategoryModel son iguales, sin considerar sus ids. 
