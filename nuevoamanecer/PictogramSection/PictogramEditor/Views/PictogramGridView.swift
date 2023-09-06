@@ -7,55 +7,17 @@
 
 import SwiftUI
 
-struct PictogramGridArrowView: View {
-    var systemName: String
-    var isDisabled: Bool
-    var arrowAction: () -> Void
-    
-    let colors: [String:Color] = [
-        "disabledArrow": Color(red: 0.92, green: 0.92, blue: 0.92),
-        // "disabledArrow": Color(red: 0.5, green: 0.5, blue: 0.5),
-        "disabledBackground": Color(red: 0.97, green: 0.97, blue: 0.97),
-        "arrow": Color(red: 0.68, green: 0.68, blue: 0.68),
-        "background": Color(red: 0.78, green: 0.78, blue: 0.78)
-    ]
-    
-    var body: some View {
-        GeometryReader { geo in
-            VStack {
-                Spacer()
-                
-                Button(action: {
-                    arrowAction()
-                }) {
-                    VStack {
-                        Image(systemName: systemName)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(10)
-                            .foregroundColor(isDisabled ? colors["disabledArrow"] : colors["arrow"])
-                    }
-                    .frame(width: geo.size.width * 0.7, height: geo.size.height * 0.6)
-                    .background(isDisabled ? colors["disabledBackground"] : colors["background"])
-                    .cornerRadius(30)
-                }
-                .allowsHitTesting(!isDisabled)
-                
-                Spacer()
-            }
-            .frame(width: geo.size.width, height: geo.size.height)
-        }
-    }
-}
-
 struct PictogramGridView: View {
     let pictograms: [Button<PictogramView>]
     let pictoWidth: CGFloat
     let pictoHeight: CGFloat
-    let isBeingFiltered: Bool
+    var handlePictogramAddition: (() -> Void)? = nil
+    
     @State private var currPage: Int = 1
     
     var body: some View {
+        let editingPictograms: Bool = handlePictogramAddition != nil
+        
         GeometryReader { geo in
             let gridWidth: CGFloat = geo.size.width * (geo.size.height > geo.size.width ? 0.7 : 0.8)
             let gridHeight: CGFloat = geo.size.height * 0.95
@@ -80,12 +42,18 @@ struct PictogramGridView: View {
                     Spacer()
                     
                     Grid(horizontalSpacing: 25, verticalSpacing: 25) {
-                        ForEach(1...numRows, id: \.self){ row in
+                        ForEach(1...numRows, id: \.self){ rowNum in
                             GridRow {
-                                ForEach(1...numColumns, id: \.self) { col in
-                                    let gridItemNumber: Int = (col + ((row - 1) * numColumns))
-                                    let pictoIndex: Int = ((gridItemNumber - 1) + ((realCurrPage(numPages: numPages) - 1) * numGridItems))
-                                    if pictoIndex < pictograms.count {
+                                ForEach(1...numColumns, id: \.self) { colNum in
+                                    let gridItemNumber: Int = (colNum + ((rowNum - 1) * numColumns))
+                                    let pictoIndex: Int = ((gridItemNumber - 1) + ((realCurrPage(numPages: numPages) - 1) * numGridItems)) - (editingPictograms ? 1 : 0)
+                                    
+                                    if editingPictograms && rowNum == 1 && colNum == 1 {
+                                        AddPictogramButton(width: pictoWidth, height: pictoHeight)
+                                            .onTapGesture {
+                                                handlePictogramAddition!()
+                                            }
+                                    } else if pictoIndex < pictograms.count {
                                         pictograms[pictoIndex]
                                             .frame(width: pictoWidth, height: pictoHeight)
                                     } else {
@@ -99,15 +67,6 @@ struct PictogramGridView: View {
                         }
                     }
                     .frame(width: gridWidth, height: gridHeight)
-                    .overlay(alignment: .center) {
-                        if pictograms.count == 0 {
-                            Text(isBeingFiltered ? "Sin resultados" : "No hay pictogramas")
-                                .font(.system(size: 25, weight: .bold))
-                                .frame(width: gridWidth, height: gridHeight)
-                                .background(.white)
-                                .cornerRadius(10)
-                        }
-                    }
                     
                     Spacer()
                 }
@@ -134,5 +93,21 @@ struct PictogramGridView: View {
     
     private func ceiling(_ a: Int, _ b: Int) -> Int {
         return Int(ceil(Double(a) / Double(b)))
+    }
+}
+
+struct AddPictogramButton: View {
+    let width: CGFloat
+    let height: CGFloat
+    
+    var body: some View {
+        VStack {
+            Image(systemName: "plus")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            Text("Nuevo Pictograma")
+        }
+        .foregroundColor(.blue)
+        .frame(width: width, height: height)
     }
 }

@@ -57,5 +57,10 @@ struct PictogramSearchBarView: View {
         .frame(width: searchBarWidth)
         .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(alignment: .center) {
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(!searchText.isEmpty ? Color.blue : Color(.systemGray6), lineWidth: 3)
+                .foregroundColor(.clear)
+        }
     }
 }

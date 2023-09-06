@@ -10,8 +10,8 @@ import SwiftUI
 struct CategoryEditorWindowView: View {
     @State var catModel: CategoryModel
     let catModelCapture: CategoryModel
-    @Binding var isNewCat: Bool
-    @Binding var isEditingCat: Bool
+    let isNewCat: Bool
+    @State var isDeletingCat: Bool = false
     
     @ObservedObject var pictoVM: PictogramViewModel
     @ObservedObject var catVM: CategoryViewModel
@@ -23,11 +23,12 @@ struct CategoryEditorWindowView: View {
     
     @State var DBActionInProgress: Bool = false
     
-    init(catModel: CategoryModel?, isNewCat: Binding<Bool>, isEditingCat: Binding<Bool>, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
-        self._catModel = State(initialValue: catModel ?? CategoryModel.defaultCategory())
-        self.catModelCapture = catModel ?? CategoryModel.defaultCategory()
-        self._isNewCat = isNewCat
-        self._isEditingCat = isEditingCat
+    @Environment(\.dismiss) var dismiss
+    
+    init(catModel: CategoryModel, pictoVM: PictogramViewModel, catVM: CategoryViewModel, pickedCategoryId: Binding<String>, searchText: Binding<String>){
+        self.isNewCat = catModel.id == nil
+        self._catModel = State(initialValue: catModel)
+        self.catModelCapture = catModel
         self.pictoVM = pictoVM
         self.catVM = catVM
         self._pickedCategoryId = pickedCategoryId
@@ -50,6 +51,14 @@ struct CategoryEditorWindowView: View {
                         .cornerRadius(10)
                     
                     Spacer()
+                }
+                .overlay(alignment: .leading) {
+                    if !isNewCat {
+                        let ovColor: Color = Color(red: 0.5, green: 0, blue: 0)
+                        LongPressButtonWithImage(text: "Eliminar", width: 110, background: .red, overlayedBackground: ovColor, systemNameImage: "trash") {
+                            isDeletingCat = true 
+                        }
+                    }
                 }
                 
                 VStack(alignment: .leading) {
@@ -84,23 +93,9 @@ struct CategoryEditorWindowView: View {
                     Spacer()
                     
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
-                        isEditingCat = false
+                        dismiss()
                     }
                                         
-                    if !isNewCat {
-                        let removeButtonIsDisabled: Bool = catModel.name != catModelCapture.name || pictoVM.getNumPictosInCat(catId: catModel.id ?? "") > 0
-                        ButtonWithImageView(text: "Eliminar", systemNameImage: "trash", background: .red, isDisabled: removeButtonIsDisabled){
-                            catVM.removeCat(catId: catModel.id!){ error in
-                                if error != nil  {
-                                    showErrorMessage = true
-                                } else {
-                                    pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
-                                    isEditingCat = false
-                                }
-                            }
-                        }
-                    }
-                    
                     let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture) || catsWithSimilarColor.count > 0
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: addButtonIsDisabled){
                         DBActionInProgress = true
@@ -111,7 +106,7 @@ struct CategoryEditorWindowView: View {
                                 } else {
                                     searchText = ""
                                     pickedCategoryId = docId ?? ""
-                                    isEditingCat = false
+                                    dismiss()
                                 }
                             }
                         } else {
@@ -119,7 +114,7 @@ struct CategoryEditorWindowView: View {
                                 if error != nil {
                                     showErrorMessage = true
                                 } else {
-                                    isEditingCat = false
+                                    dismiss()
                                 }
                             }
                         }
@@ -133,7 +128,33 @@ struct CategoryEditorWindowView: View {
             .padding(.vertical, 50)
             .frame(width: geo.size.width, height: geo.size.height)
             .background(.white)
-            .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage)
+        }
+        .customAlert(title: "Error", message: "Error", isPresented: $showErrorMessage)
+        .customConfirmAlert(title: "Confirmar Eliminación", message: "La categoría y sus pictogramas serán eliminados para siempre.", isPresented: $isDeletingCat) {
+            var pictoDeletionSucceeded: Bool = true
+            
+            if pictoVM.getNumPictosInCat(catId: catModel.id!) > 0 {
+                pictoVM.removeAllPictosFrom(catId: catModel.id!) { error in
+                    if error != nil {
+                        // Los pictogramas de la categoría a eliminar no fueron eliminados.
+                        pictoDeletionSucceeded = false
+                    }
+                }
+            }
+                
+            if pictoDeletionSucceeded {
+                catVM.removeCat(catId: catModel.id!) { error in
+                    if error != nil {
+                        // Los pictogramas de la categoría fueron eliminados, pero la categoría en sí no.
+                        showErrorMessage = true
+                    } else {
+                        pickedCategoryId = catVM.getFirstCat()?.id! ?? ""
+                        dismiss()
+                    }
+                }
+            } else {
+                showErrorMessage = true 
+            }
         }
     }
 }

@@ -53,7 +53,7 @@ struct PictogramModel: Identifiable, Codable, Comparable {
         return lhs.name.lowercased() >= rhs.name.lowercased()
     }
     
-    static func defaultPictogram(catId: String? = nil) -> PictogramModel {
+    static func newEmptyPictogram(catId: String? = nil) -> PictogramModel {
         return PictogramModel(
             name: "",
             imageUrl: "",
