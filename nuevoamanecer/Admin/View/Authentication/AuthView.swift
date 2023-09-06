@@ -26,7 +26,7 @@ struct AuthView: View {
                                 .frame(height:300)
                                 .padding([.leading, .trailing, .top])
                             
-                            Text("Creando conexiones para facilitar la comunicación entre terapeutas y niños.")
+                            Text("Creando conexiones para facilitar la comunicación entre terapeutas y pacientes")
                                 .font(.title)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 80)
@@ -43,7 +43,8 @@ struct AuthView: View {
                         Color.white
                             .ignoresSafeArea()
                         VStack(spacing: 20) {
-                            Text("Accede a tu cuenta para ver a tus niños")
+                            
+                            Text("Accede a tu cuenta para ver a tus pacientes")
                                 .font(.title)
                                 .fontWeight(.regular)
                                 .multilineTextAlignment(.center)
