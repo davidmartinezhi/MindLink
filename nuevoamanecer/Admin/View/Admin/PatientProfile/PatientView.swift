@@ -96,27 +96,42 @@ struct PatientView: View {
     
     func moveNoteAlt2(from source: IndexSet, to destination: Int) {
         // Obtener el índice de origen y la nota que se va a mover
+
         guard let sourceIdx = source.first else { return }
-        let movingNote = notes.notesList[sourceIdx]
+        let movingNote = self.notes.notesList[sourceIdx]
+        
+        guard let destinationIdx = self.notes.notesList.firstIndex(where: { $0.id == self.filteredNotes[destination].id }) else {
+            print("Nota de destino no encontrada en notesList.")
+            return
+        }
         
         // Caso 1: Si el índice de destino es menor que el de origen
-        if destination < sourceIdx {
-            for i in (0...destination).reversed() {
-
-                notes.notesList[i] = notes.notesList[i + 1]
+        if destinationIdx < sourceIdx {
+            var start = 0
+            if(destinationIdx > start){start = destinationIdx}
+            
+            for i in (start...sourceIdx).reversed() {
+                self.notes.notesList[i] = self.notes.notesList[i - 1]
             }
             
-            notes.notesList[destination] = movingNote
+            self.notes.notesList[start] = movingNote
         }
         
         // Caso 2: Si el índice de destino es mayor que el de origen
-        if destination > sourceIdx {
-            for i in 1...destination {
-                notes.notesList[i] = notes.notesList[i - 1]
+        if destinationIdx > sourceIdx {
+            var end = self.notes.notesList.count-1
+            if(destinationIdx < self.notes.notesList.count-1){
+                end = destinationIdx
+            }
+            for i in sourceIdx...end {
+                self.notes.notesList[i] = self.notes.notesList[i + 1]
+                //[1,2,4,4,5,6]
             }
             
-            notes.notesList[destination] = movingNote
+            self.notes.notesList[end] = movingNote
         }
+        
+        self.filteredNotes = self.notes.notesList
         
         // Actualizar el orden en las notas
         for (index, var note) in notes.notesList.enumerated() {
