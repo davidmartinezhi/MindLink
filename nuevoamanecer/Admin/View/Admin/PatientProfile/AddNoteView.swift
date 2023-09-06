@@ -11,6 +11,9 @@ import SwiftUI
 struct AddNoteView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var notes: NotesViewModel
+    @Binding var filteredNotes: [Note]
+    @Binding var search: String
+
     var patient: Patient
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
@@ -70,7 +73,7 @@ struct AddNoteView: View {
                     }
                     else {
                         isSaving = true
-                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date())
+                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date(), tags: [])
                         
                         notes.addData(patient: patient, note: newNote) { response in
                             if response == "OK" {
@@ -78,15 +81,17 @@ struct AddNoteView: View {
                                 self.alertMessage = "La nota ha sido guardada con éxito."
                                 self.showingAlert = false
                                 
+                                search = ""
+                                
                                 Task{
                                     if let notesList = await notes.getDataById(patientId: patient.id){
                                         DispatchQueue.main.async{
                                             self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                                            self.filteredNotes = self.notes.notesList
                                             dismiss()
                                         }
                                     }
                                 }
-                                
                             } else {
                                 self.alertTitle = "Error"
                                 self.alertMessage = response
@@ -119,6 +124,15 @@ struct AddNoteView: View {
 
 struct AddNoteView_Previews: PreviewProvider {
     static var previews: some View {
-        AddNoteView(notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
+        PreviewWrapper()
+    }
+    
+    struct PreviewWrapper: View {
+        @State(initialValue: []) var previewFilteredNotes: [Note]
+        @State(initialValue: "") var previewSearch: String  // Nueva propiedad
+        
+        var body: some View {
+            AddNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, search: $previewSearch, patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
+        }
     }
 }

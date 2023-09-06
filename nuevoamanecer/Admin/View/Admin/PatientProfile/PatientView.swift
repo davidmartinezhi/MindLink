@@ -20,7 +20,9 @@ struct PatientView: View {
     
     //patient
     let patient: Patient
-    
+    @State var search: String = ""
+    @State private var filteredNotes: [Note] = []
+
     
     //showViews
     @State var showAddNoteView = false
@@ -56,15 +58,214 @@ struct PatientView: View {
             if let notesList = await notes.getDataById(patientId: patient.id){
                 DispatchQueue.main.async{
                     self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                    self.filteredNotes = self.notes.notesList
                 }
             }
         }
     }
     
+    /*
+    func moveNote(from source: IndexSet, to destination: Int) {
+        
+        
+        // Realiza el movimiento de las notas
+        self.notes.notesList.move(fromOffsets: source, toOffset: destination)
+        self.filteredNotes.move(fromOffsets: source, toOffset: destination)
+
+        // Actualizar el orden de las notas en la base de datos
+        for (index, note) in self.notes.notesList.enumerated() {
+            // Creamos una copia de la nota para no modificar la original
+            var updatedNote = note
+            updatedNote.order = index
+            // Actualizamos la nota en la base de datos
+            self.notes.updateData(note: updatedNote) { response in
+                if response != "OK" {
+                    // Aquí puedes manejar el error si lo deseas
+                    print("Error al actualizar la nota \(updatedNote.id): \(response)")
+                }
+            }
+        }
+        
+        self.filteredNotes = self.notes.notesList
+        
+        // Vuelve a aplicar el filtro si es necesario
+        if !search.isEmpty {
+            performSearchByText(key: search)
+        }
+    }*/
     
+    func moveNoteAlt2(from source: IndexSet, to destination: Int) {
+        // Obtener el índice de origen y la nota que se va a mover
+        guard let sourceIdx = source.first else { return }
+        let movingNote = notes.notesList[sourceIdx]
+        
+        // Caso 1: Si el índice de destino es menor que el de origen
+        if destination < sourceIdx {
+            for i in (0...destination).reversed() {
+
+                notes.notesList[i] = notes.notesList[i + 1]
+            }
+            
+            notes.notesList[destination] = movingNote
+        }
+        
+        // Caso 2: Si el índice de destino es mayor que el de origen
+        if destination > sourceIdx {
+            for i in 1...destination {
+                notes.notesList[i] = notes.notesList[i - 1]
+            }
+            
+            notes.notesList[destination] = movingNote
+        }
+        
+        // Actualizar el orden en las notas
+        for (index, var note) in notes.notesList.enumerated() {
+            note.order = index
+            self.notes.updateData(note: note) { response in
+                if response != "OK" {
+                    print("Error al actualizar la nota \(note.id): \(response)")
+                }
+            }
+        }
+        
+        if !self.search.isEmpty {
+            self.performSearchByText(key: self.search)
+        }
+        
+    }
+
+
+
+    
+    // Función para mover una nota de una posición a otra
+    func moveNoteAlt(from source: IndexSet, to destination: Int) {
+        /*
+         Puede servir el crear un algoritmo para que se recorran, hacer manual la nueva asignación de notas
+         [id1, id2, id3, id4]
+         quiero mover id2 al 4
+         [id1,id3, id4, id2] todos los numeros antes del destination fueron recorridos 1 hacía la derecha
+         
+         [id1, id2, id3, id4]
+         quiero mover id3 al 1
+         [id3, id2, id1, id4] todos los numeros antes del destination deben de recorrerse 1 hacia la izquierda
+         
+         si el destination idx es menor al source idx, en ese caso todas las notas a la derecha de destination (incluido) en el array serán recorridos i+1 y se coloca en destination el source
+         si el destination idx es mayor al source idx, en ese caso todos las notas a la izquierda de destination (incluido) en el array se recorren i-1 y se coloca en destination el source
+         
+         
+         También para editar usuario puede funcionar el crear una función que actualice toda la lista despues
+         y vuelva a aplicar filtro
+         
+         Igual para añadir usuario
+         
+         */
+        
+        
+        // Si hay un filtro aplicado, actualizamos el orden en la lista original.
+        if (search != ""){
+            
+            // Obtenemos la nota de origen y destino en la lista filtrada
+            let sourceNote = self.filteredNotes[source.first!]
+            let adjustedDestination = min(destination, self.filteredNotes.count - 1)
+            let destinationNote = self.filteredNotes[adjustedDestination]
+            
+            // Buscamos los índices de las notas de origen y destino en la lista original
+            if let sourceIndex = self.notes.notesList.firstIndex(where: { $0.id == sourceNote.id }),
+               let destinationIndex = self.notes.notesList.firstIndex(where: { $0.id == destinationNote.id }) {
+                
+                // Creamos una copia de la nota que se moverá y actualizamos su orden
+                var movedNote = self.notes.notesList[sourceIndex]
+                movedNote.order = destinationIndex
+                
+                // Actualizamos la nota en la lista original
+                self.notes.notesList[sourceIndex] = movedNote
+                
+                // Recorremos todas las notas para actualizar su orden
+                for (index, note) in self.notes.notesList.enumerated() {
+                    var updatedNote = note
+                    // Si la nota no es la que se movió, actualizamos su orden
+                    if updatedNote.id != movedNote.id {
+                        updatedNote.order = index
+                    }
+                    // Actualizamos la nota en la base de datos
+                    self.notes.updateData(note: updatedNote) { response in
+                        if response != "OK" {
+                            // Manejo de errores
+                            print("Error al actualizar la nota \(updatedNote.id): \(response)")
+                        }
+                    }
+                }
+                
+                self.filteredNotes = self.notes.notesList
+                
+            }
+        }else {
+            // Si no hay un filtro aplicado, el comportamiento es el mismo que antes.
+            self.notes.notesList.move(fromOffsets: source, toOffset: destination)
+            self.filteredNotes.move(fromOffsets: source, toOffset: destination)
+
+            for (index, note) in self.notes.notesList.enumerated() {
+                var updatedNote = note
+                updatedNote.order = index
+                self.notes.updateData(note: updatedNote) { response in
+                    if response != "OK" {
+                        print("Error al actualizar la nota \(updatedNote.id): \(response)")
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    
+    func moveNote(from source: IndexSet, to destination: Int) {
+        // Primero, sincronizamos la lista de notas filtradas con la lista de notas original.
+        self.filteredNotes = self.notes.notesList
+        
+        // Realizamos el movimiento de las notas en la lista original.
+        self.notes.notesList.move(fromOffsets: source, toOffset: destination)
+        
+        // Realizamos el movimiento de las notas en la lista filtrada.
+        self.filteredNotes.move(fromOffsets: source, toOffset: destination)
+        
+        // Recorremos la lista de notas original para actualizar el orden en la base de datos.
+        for (index, note) in self.notes.notesList.enumerated() {
+            // Creamos una copia de la nota para no modificar la original.
+            var updatedNote = note
+            
+            // Actualizamos el campo 'order' de la nota con su nuevo índice.
+            updatedNote.order = index
+            
+            // Actualizamos la nota en la base de datos.
+            self.notes.updateData(note: updatedNote) { response in
+                // Verificamos si la actualización fue exitosa.
+                if response != "OK" {
+                    // Si hay un error, lo imprimimos en la consola.
+                    print("Error al actualizar la nota \(updatedNote.id): \(response)")
+                }
+            }
+        }
+        
+        // Si hay un texto de búsqueda (filtro) aplicado, volvemos a aplicar el filtro.
+        if !search.isEmpty {
+            performSearchByText(key: search)
+        }
+    }
+
+
+
+    
+    /*
     //Move notes and save order in database
     func moveNote(from source: IndexSet, to destination: Int) {
+        
         self.notes.notesList.move(fromOffsets: source, toOffset: destination)
+        //self.filteredNotes.move(fromOffsets: source, toOffset: destination)
+        //self.notesListDisplayed.move(fromOffsets: source, toOffset: destination)
+        
+
 
         // Actualizar el orden de las notas en la base de datos
         for (index, note) in self.notes.notesList.enumerated() {
@@ -79,7 +280,39 @@ struct PatientView: View {
                 }
             }
         }
+        
+        // Reaplicar el filtro
+        performSearchByText(key: search)
     }
+     */
+    
+    private func performSearchByText(key: String) {
+        // Si el filtro de búsqueda está vacío, regresa todas las notas
+        if(search == ""){
+            filteredNotes = notes.notesList
+        }
+        
+        let searchingWithFilters = notes.notesList
+        
+        // Si hay un filtro de búsqueda, regresa las notas filtradas
+        filteredNotes = searchingWithFilters.filter { note in
+            // Convierte el título y el contenido de la nota a minúsculas
+            let titleLowercased = note.title.lowercased()
+            let textLowercased = note.text.lowercased()
+            
+            // Convierte la búsqueda a minúsculas
+            let keyLowercased = key.lowercased()
+
+            // Busca la cadena de búsqueda en el título y el contenido
+            let titleMatch = titleLowercased.hasPrefix(keyLowercased)
+            let textMatch = textLowercased.contains(keyLowercased)
+
+            return titleMatch || textMatch
+        }
+        
+        //return filteredNotes.isEmpty ? nil : filteredNotes
+    }
+    
     
     var body: some View {
         GeometryReader { geometry in  // Agrega GeometryReader
@@ -251,13 +484,18 @@ struct PatientView: View {
                                     Text("Agregar Nota")
                                     
                                 }
+                                .frame(width: geometry.size.width / 6)
                             }
                         }
-                        .padding(10)
+                        .padding(.vertical, 15)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.bottom, 10)
+                        
+                        
+                        SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
+                            .onChange(of: search, perform: performSearchByText)
 
                         
                         //checamos si hay notas
@@ -277,7 +515,7 @@ struct PatientView: View {
                             .listStyle(.sidebar)
                             
                         }else{
-                            List(notes.notesList, id: \.id) { note in
+                            List(filteredNotes, id: \.id) { note in
                                 Button(action: {}) {
                                    
                                     Text(note.title)
@@ -338,7 +576,7 @@ struct PatientView: View {
                             
                             ScrollViewReader { proxy in
                                 List {
-                                    ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                                    ForEach(Array(filteredNotes.enumerated()), id: \.element.id) { index, note in
                                         
                                         //Tarjeta paciente
                                         NoteCardView(note: note)
@@ -359,7 +597,6 @@ struct PatientView: View {
                                                 .padding()
                                                 
                                                 Button {
-                                                    // Aquí va la lógica para actualizar la nota
                                                     selectedNoteToEdit = note
                                                     showEditNoteView = true
                                                     
@@ -370,8 +607,18 @@ struct PatientView: View {
                                                 .padding()
                                             }
                                         }
+                                        /*
+                                        .onDrag {
+                                            // Elimina el filtro cuando el usuario comienza a arrastrar
+                                            search = ""
+                                            performSearchByText(key: search)
+                                            //self.filteredNotes = self.notes.notesList
+                                            return NSItemProvider(object: note.title as NSString)
+                                        }
+                                         */
+                                         
                                     }
-                                    .onMove(perform: moveNote)
+                                    .onMove(perform: moveNoteAlt2)
                                     .onChange(of: selectedNoteIndex) { newIndex in
                                         if let newIndex = newIndex {
                                             let noteId = notes.notesList[newIndex].id
@@ -386,9 +633,21 @@ struct PatientView: View {
                                                   // Confirmar eliminación
                                                   if let index = self.selectedNoteIndex {
                                                       let noteId = notes.notesList[index].id
+                                                      let patientId = notes.notesList[index].patientId
+                                                      
                                                       notes.deleteData(noteId: noteId) { response in
                                                           if response == "OK" {
+                                                              search = ""
                                                               notes.notesList.remove(atOffsets: IndexSet(integer: index))
+                                                              filteredNotes.remove(atOffsets: IndexSet(integer: index))
+                                                              Task{
+                                                                  if let notesList = await notes.getDataById(patientId: patientId){
+                                                                      DispatchQueue.main.async{
+                                                                          self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                                                                          self.filteredNotes = self.notes.notesList
+                                                                      }
+                                                                  }
+                                                              }
                                                           } else {
                                                               // Aquí puedes manejar el error si lo deseas
                                                               print("Error al eliminar la nota: \(response)")
@@ -408,7 +667,6 @@ struct PatientView: View {
                                 }
                                 .listStyle(.inset)
                             } //ScrollViewReader
-
                         }
                     }
                     
@@ -417,10 +675,10 @@ struct PatientView: View {
                 
             }
             .sheet(isPresented: $showAddNoteView) {
-                AddNoteView(notes: notes, patient: patient)
+                AddNoteView(notes: notes, filteredNotes: $filteredNotes, search: $search, patient: patient)
             }
             .sheet(item: $selectedNoteToEdit){ note in
-                EditNoteView(notes: notes, note: note)
+                EditNoteView(notes: notes, filteredNotes: $filteredNotes, note: note, search: $search)
             }
             .sheet(isPresented: $showEditPatientView){
                 EditPatientView(patients: patients, patient: patient)
