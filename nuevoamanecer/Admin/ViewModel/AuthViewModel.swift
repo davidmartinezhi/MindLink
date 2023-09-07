@@ -10,7 +10,8 @@ class AuthViewModel: ObservableObject {
     @Published var errorMessage : String? = nil // Un mensaje de error que se mostrará en la interfaz de usuario.
     @Published var errorLogin : Bool = false   // un mensaje de error se mostrarra cundo no se puede verificar las credenciales
     @Published var user: User? // Un objeto de usuario opcional, que contendrá los datos del usuario autenticado.
-
+    @Published var validar : Bool = false
+    
     // El inicializador llama a la función fetchCurrentUser cuando se crea una instancia de AuthViewModel.
     init(){
         fetchCurrentUser()
@@ -70,16 +71,20 @@ class AuthViewModel: ObservableObject {
     }
     
     
-    func createNewAccount(email: String, password: String, name: String, isAdmin: Bool) {
+    func createNewAccount(email: String, password: String, name: String, isAdmin: Bool, adminEmail: String, adminPassword: String) {
         Auth.auth().createUser(withEmail: email, password: password) { result, err in
             if let err = err {
                 print("Failed to create account", err)
                 self.errorMessage = "Failed to create user: \(err)"
                 return
+            } else {
+                guard let uid = result?.user.uid else { return }
+                print("Successfully created user: \(uid.self)")
+                self.storeUserInformation(id: uid, name: name, email: email, isAdmin: isAdmin, image: "")
+                try! Auth.auth().signOut()
+                
+                self.loginUser(email: adminEmail, password: adminPassword)
             }
-            guard let uid = result?.user.uid else { return }
-            print("Successfully created user: \(uid.self)")
-            self.storeUserInformation(id: uid, name: name, email: email, isAdmin: isAdmin, image: "")
         }
     }
     
@@ -192,6 +197,18 @@ class AuthViewModel: ObservableObject {
             }else {
                 print("se actualizo la contraseña")
             }
+        }
+    }
+    
+    func autenticar (email: String, password: String) async {
+        do{
+            let authAdmin = try await Auth.auth().signIn(withEmail: email, password: password)
+            print("BIEN")
+            self.validar = true
+            print(self.validar)
+            return
+        }catch {
+            print("Error")
         }
     }
     

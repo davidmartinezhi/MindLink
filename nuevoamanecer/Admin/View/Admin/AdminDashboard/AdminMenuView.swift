@@ -17,8 +17,10 @@ struct AdminMenuView: View {
     @State private var name: String
     @State private var email: String
     @State private var password = ""
+    @State var authPassword = ""
     @State private var confirmpassword = ""
     @State private var showingAlert = false
+    @State private var showAuthAlert = true
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
@@ -277,6 +279,24 @@ struct AdminMenuView: View {
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
             ImagePicker(image: $upload_image)
         }
+        .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
+            TextField("Contraseña", text: $authPassword)
+                .autocorrectionDisabled(true)
+            
+            Button("Okay", action: {
+                Task {
+                    await self.authViewModel.autenticar(email: email, password: authPassword)
+                    print(self.authViewModel.validar)
+                    
+                    if(self.authViewModel.validar != true){
+                        dismiss()
+                    }else{
+                        self.authViewModel.validar.toggle()
+                    }
+                }
+            })
+            Button("Cancel", role: .cancel, action: { dismiss() })
+        })
         .alert(alertTitle, isPresented: $showingAlert){
             Button("OK"){}
         } message: {
