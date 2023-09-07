@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct RegisterView: View {
+    enum Field : Hashable {
+        case plain
+        case secure
+    }
+    
     @Environment(\.dismiss) var dismiss
     @ObservedObject var authViewModel: AuthViewModel
     
@@ -19,6 +24,11 @@ struct RegisterView: View {
     
     @State private var mostrarAlerta = false
     @State private var mostrarAlerta1 = false
+    
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
+    @FocusState private var inFocus: Field?
+    @FocusState private var inFocusConfirm: Field?
     
     var body: some View {
         VStack {
@@ -37,27 +47,77 @@ struct RegisterView: View {
                 .autocorrectionDisabled(true)
                 .frame(maxWidth: 600)
             
-            SecureField("Contraseña", text: $password)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 20)
-                .textInputAutocapitalization(.never)
-                .keyboardType(.asciiCapable)
-                .autocorrectionDisabled(true)
-                .textContentType(.newPassword)
-                .frame(maxWidth: 600)
+            ZStack (alignment: .trailing) {
+                if showPassword {
+                    TextField("Contraseña", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.bottom, 20)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.asciiCapable)
+                    .autocorrectionDisabled(true)
+                    .textContentType(.newPassword)
+                    .frame(maxWidth: 600)
+                    .focused($inFocus, equals: .plain)
+                } else {
+                    SecureField("Contraseña", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.bottom, 20)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.asciiCapable)
+                    .autocorrectionDisabled(true)
+                    .textContentType(.newPassword)
+                    .frame(maxWidth: 600)
+                    .focused($inFocus, equals: .secure)
+                }
+                Button() {
+                    showPassword.toggle()
+                    inFocus = showPassword ? .plain : .secure
+                } label: {
+                    Image(systemName: showPassword ? "eye" : "eye.slash")
+                    .padding(.bottom)
+                    .padding(.trailing)
+                }
+            }
             
-            SecureField("Confrimar Contraseña", text: $confirmpassword)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 20)
-                .textInputAutocapitalization(.never)
-                .keyboardType(.asciiCapable)
-                .autocorrectionDisabled(true)
-                .textContentType(.password)
-                .frame(maxWidth: 600)
+            ZStack (alignment: .trailing) {
+                if showConfirmPassword {
+                    TextField("Confrimar Contraseña", text: $confirmpassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(10)
+                    .padding(.bottom, 20)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.asciiCapable)
+                    .autocorrectionDisabled(true)
+                    .textContentType(.newPassword)
+                    .frame(maxWidth: 600)
+                    .focused($inFocusConfirm, equals: .plain)
+                } else {
+                    SecureField("Confrimar Contraseña", text: $confirmpassword)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.asciiCapable)
+                        .autocorrectionDisabled(true)
+                        .textContentType(.password)
+                        .frame(maxWidth: 600)
+                        .focused($inFocusConfirm, equals: .secure)
+                }
+                Button() {
+                    showConfirmPassword.toggle()
+                    inFocusConfirm = showConfirmPassword ? .plain : .secure
+                } label: {
+                    Image(systemName: showConfirmPassword ? "eye" : "eye.slash")
+                    .padding(.bottom)
+                    .padding(.trailing)
+                }
+            }
             
             TextField("Nombre", text: $name)
                 .padding()

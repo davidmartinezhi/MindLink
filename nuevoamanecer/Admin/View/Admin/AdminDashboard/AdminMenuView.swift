@@ -29,6 +29,16 @@ struct AdminMenuView: View {
     @State private var uploadData: Bool = false
     @State private var imageURL = URL(string: "")
     @State private var storage = FirebaseAlmacenamiento()
+    
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
+    @FocusState private var inFocus: Field?
+    @FocusState private var inFocusConfirm: Field?
+    
+    enum Field : Hashable {
+        case plain
+        case secure
+    }
 
     init(authViewModel: AuthViewModel, user: User) {
         self.authViewModel = authViewModel
@@ -120,22 +130,57 @@ struct AdminMenuView: View {
                             .textContentType(.username)
                             .autocapitalization(.none)
                             .autocorrectionDisabled(true)
-                        
                         TextField("Email", text: $email)
                             .textContentType(.emailAddress)
-                            .autocapitalization(.none)
-                            .autocorrectionDisabled(true)
-                        SecureField("Nueva contraseña", text: $password)
-                            .textInputAutocapitalization(.never)
-                        .keyboardType(.asciiCapable)
-                        .autocorrectionDisabled(true)
-                        .textContentType(.newPassword)
+                        ZStack (alignment: .trailing) {
+                            if showPassword {
+                                TextField("Nueva contraseña", text: $password)
+                                  .textInputAutocapitalization(.never)
+                                  .keyboardType(.asciiCapable)
+                                  .autocorrectionDisabled(true)
+                                  .textContentType(.newPassword)
+                                  .focused($inFocus, equals: .plain)
+                            } else {    
+                                SecureField("Nueva contraseña", text: $password)
+                                    .textInputAutocapitalization(.never)
+                                    .keyboardType(.asciiCapable)
+                                    .autocorrectionDisabled(true)
+                                    .textContentType(.newPassword)
+                                    .focused($inFocus, equals: .secure)
+                            }
+                            Button() {
+                                showPassword.toggle()
+                                inFocus = showPassword ? .plain : .secure
+                            } label: {
+                                Image(systemName: showPassword ? "eye" : "eye.slash")
+                            }
+                        }
                         if (password != ""){
-                            SecureField("confirmar contraseña", text: $confirmpassword)
-                                .textInputAutocapitalization(.never)
-                            .keyboardType(.asciiCapable)
-                            .autocorrectionDisabled(true)
-                            .textContentType(.newPassword)
+                            ZStack (alignment: .trailing) {
+                                if showConfirmPassword {
+                                    TextField("Confrimar contraseña", text: $confirmpassword)
+                                        .textInputAutocapitalization(.never)
+                                        .keyboardType(.asciiCapable)
+                                        .autocorrectionDisabled(true)
+                                        .textContentType(.password)
+                                        .focused($inFocusConfirm, equals: .plain)
+                                } else {
+                                    SecureField("Confrimar contraseña", text: $confirmpassword)
+                                        .textInputAutocapitalization(.never)
+                                        .keyboardType(.asciiCapable)
+                                        .autocorrectionDisabled(true)
+                                        .textContentType(.password)
+                                        .focused($inFocusConfirm, equals: .secure)
+                                }
+                                Button() {
+                                    showConfirmPassword.toggle()
+                                    inFocusConfirm = showConfirmPassword ? .plain : .secure
+                                } label: {
+                                    Image(systemName: showConfirmPassword ? "eye" : "eye.slash")
+                                        //.padding(.bottom)
+                                        //.padding(.trailing)
+                                }
+                            }
                         }
                     }
                 }
