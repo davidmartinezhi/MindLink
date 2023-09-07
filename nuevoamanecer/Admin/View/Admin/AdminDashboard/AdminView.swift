@@ -597,7 +597,7 @@ struct AdminView: View {
                 AdminMenuView(authViewModel: authViewModel, user: user)
             }
             .sheet(isPresented: $showRegisterView){
-                RegisterView(authViewModel: authViewModel)
+                RegisterView(authViewModel: authViewModel, user: user)
             }
             .environmentObject(pathWrapper)
         }
