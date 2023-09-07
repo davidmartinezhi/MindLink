@@ -35,6 +35,8 @@ struct LoginView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .padding(.bottom, 20)
+                    .textContentType(.emailAddress)
+                    .autocorrectionDisabled(true)
                     .autocapitalization(.none) // para evitar errores de correo electrónico en mayúsculas
 
                 ZStack (alignment: .trailing) {
@@ -70,12 +72,10 @@ struct LoginView: View {
                 }
                 Button(action: {
                     Task {
-                        if(email != "" && password != "") {
-                            authViewModel.loginUser(email: email, password: password)
-                            
-                            if(authViewModel.errorMessage != nil) {
-                                showAlert.toggle()
-                            }
+                        authViewModel.loginUser(email: email, password: password)
+                        
+                        if(authViewModel.errorLogin != false) {
+                            showAlert.toggle()
                         }
                     }
                 }) {
@@ -89,21 +89,12 @@ struct LoginView: View {
                 }
                 .disabled(email.isEmpty || password.isEmpty)
                 .padding(.horizontal)
-                .alert("Error", isPresented: $showAlert){
-                    Button("Ok") {}
+                .alert("Verifique su correo y contraseña", isPresented: $showAlert){
+                    Button(action: {authViewModel.errorLogin.toggle()}) {Text("Ok") }
                 }
-                /*
-            message: {
-                Text(authViewModel.errorMessage!)
-            }
-               */
-                /*
-                if let messageError = authViewModel.errorMessage {
-                    Text(messageError)
-                        .foregroundColor(.red)
-                        .padding(.top, 20)
+                message: {
+                    Text("Puede que su correo o contraseña sean erroneos")
                 }
-                 */
             }
             .frame(maxWidth: min(500, geometry.size.width), alignment: .center)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

@@ -128,23 +128,25 @@ struct AdminMenuView: View {
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
                             .textContentType(.username)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
                         TextField("Email", text: $email)
                             .textContentType(.emailAddress)
                         ZStack (alignment: .trailing) {
                             if showPassword {
-                                TextField("Contraseña", text: $password)
-                                .textInputAutocapitalization(.never)
-                                .keyboardType(.asciiCapable)
-                                .autocorrectionDisabled(true)
-                                .textContentType(.newPassword)
-                                .focused($inFocus, equals: .plain)
-                            } else {
+                                TextField("Nueva contraseña", text: $password)
+                                  .textInputAutocapitalization(.never)
+                                  .keyboardType(.asciiCapable)
+                                  .autocorrectionDisabled(true)
+                                  .textContentType(.newPassword)
+                                  .focused($inFocus, equals: .plain)
+                            } else {    
                                 SecureField("Nueva contraseña", text: $password)
-                                .textInputAutocapitalization(.never)
-                                .keyboardType(.asciiCapable)
-                                .autocorrectionDisabled(true)
-                                .textContentType(.newPassword)
-                                .focused($inFocus, equals: .secure)
+                                    .textInputAutocapitalization(.never)
+                                    .keyboardType(.asciiCapable)
+                                    .autocorrectionDisabled(true)
+                                    .textContentType(.newPassword)
+                                    .focused($inFocus, equals: .secure)
                             }
                             Button() {
                                 showPassword.toggle()
@@ -160,7 +162,7 @@ struct AdminMenuView: View {
                                         .textInputAutocapitalization(.never)
                                         .keyboardType(.asciiCapable)
                                         .autocorrectionDisabled(true)
-                                        .textContentType(.newPassword)
+                                        .textContentType(.password)
                                         .focused($inFocusConfirm, equals: .plain)
                                 } else {
                                     SecureField("Confrimar contraseña", text: $confirmpassword)
@@ -179,7 +181,6 @@ struct AdminMenuView: View {
                                         //.padding(.trailing)
                                 }
                             }
-                            
                         }
                     }
                 }

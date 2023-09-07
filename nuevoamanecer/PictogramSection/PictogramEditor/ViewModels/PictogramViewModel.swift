@@ -15,7 +15,7 @@ enum PictoError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .doesNotExist:
-            return NSLocalizedString("Error: el pictograma a editar no existe", comment: "")
+            return NSLocalizedString("Error: el pictograma o la categoría no existe", comment: "")
         }
     }
 }
@@ -101,16 +101,16 @@ class PictogramViewModel: ObservableObject {
     // getPictosFromCat: returns an array of PictogramModels whose category has as id 'catId'.
     // The corresponding models are then filtered by name, taking only those that contain 'nameFilter'.
     func getPictosFromCat(catId: String, nameFilter: String) -> [PictogramModel] {
-        let nameFilterLowered: String = nameFilter.lowercased().trimmingCharacters(in: .whitespaces)
+        let cleanedNameFilter: String = nameFilter.cleanForSearch()
                 
         if self.categoryMap[catId] != nil {
             let pictoModels: [PictogramModel] = self.categoryMap[catId]!.getItems()
             
-            if nameFilterLowered.isEmpty {
+            if cleanedNameFilter.isEmpty {
                 return pictoModels
             } else {
                 return pictoModels.filter {
-                    $0.name.lowercased().contains(nameFilterLowered)
+                    $0.name.lowercased().contains(cleanedNameFilter)
                 }
             }
         }
@@ -170,6 +170,22 @@ class PictogramViewModel: ObservableObject {
                 // Success.
                 completition(nil)
             }
+        }
+    }
+    
+    func removeAllPictosFrom(catId: String, completition: @escaping (Error?)->Void) -> Void {
+        if categoryMap[catId] != nil {
+            let batch: WriteBatch = Firestore.firestore().batch()
+            
+            for pictoModel: PictogramModel in categoryMap[catId]!.getItems() {
+                batch.deleteDocument(pictoCollection.document(pictoModel.id!))
+            }
+            
+            batch.commit() { error in
+                completition(error)
+            }
+        } else {
+            completition(PictoError.doesNotExist)
         }
     }
     

@@ -18,19 +18,36 @@ struct CategoryPickerView: View {
                 ForEach(categoryModels) { catModel in
                     Button {
                         pickedCategoryId = catModel.id!
+                        
                         if !userHasChosenCat {
                             userHasChosenCat = true
                         }
                     } label: {
-                        Text(catModel.name)
-                            .frame(minWidth: 60)
-                            .padding()
-                            .bold()
-                            .foregroundColor(pickedCategoryId == catModel.id! ? ColorMaker.buildforegroundTextColor(catColor: catModel.color) : .black)
-                            .background(pickedCategoryId == catModel.id! ? catModel.buildColor() : .white)
-                            .cornerRadius(10)
+                        ZStack(alignment: .top) {
+                            Text(catModel.name)
+                                .frame(minWidth: 60)
+                                .padding()
+                                .bold()
+                                .foregroundColor(ColorMaker.buildforegroundTextColor(catColor: catModel.color))
+                                .background(catModel.buildColor())
+                                .overlay(alignment: .top) {
+                                    Rectangle()
+                                        .foregroundColor(catModel.buildColor(colorShift: -0.15))
+                                        .frame(height: 4)
+                                        .opacity(catModel.id! == pickedCategoryId ? 1 : 0)
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        .offset(y: catModel.id! == pickedCategoryId ? 20  : 0)
                     }
                 }
+            }
+            .frame(maxHeight: .infinity)
+        }
+        .overlay(alignment: .leading) {
+            if categoryModels.isEmpty {
+                Text("No hay categorías")
+                    .bold()
             }
         }
     }

@@ -59,7 +59,7 @@ struct AddPatientView: View {
         
         VStack{
             
-            //Imagen del niño
+            //Imagen del paciente
             VStack{
                 Button() {
                     shouldShowImagePicker.toggle()

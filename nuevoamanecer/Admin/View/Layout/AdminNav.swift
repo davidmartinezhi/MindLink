@@ -29,7 +29,7 @@ struct AdminNav: View {
                     .resizable()
                     //.renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 55)
+                    .frame(height: 30)
                     .padding()
                 
                 Spacer()
@@ -102,15 +102,16 @@ struct AdminNav: View {
                     title: Text("Cerrar Sesión"),
                     message: Text("¿Estás seguro que quieres cerrar la sesión?"),
                     primaryButton: .destructive(Text("Cerrar sesión"), action: {
-                       authViewModel.logout()
+                        authViewModel.logout()
                     }),
                     secondaryButton: .cancel()
                 )
             }
             
         }
-        .frame(height: 70)
+        .frame(height: 50)
         .foregroundColor(.white)
+        .padding(.top, 20)
         
         /*
         .overlay(

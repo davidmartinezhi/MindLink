@@ -28,20 +28,26 @@ struct CategoryModel: Identifiable, Codable, Comparable {
     }
     
     func buildColor(colorShift: Double) -> Color {
-        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
-        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
-        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+        var rShifted: Double = color.r + colorShift
+        var gShifted: Double = color.g + colorShift
+        var bShifted: Double = color.b + colorShift
+        rShifted = rShifted > 1 ? 1 : (rShifted < 0 ? 0 : rShifted)
+        gShifted = gShifted > 1 ? 1 : (gShifted < 0 ? 0 : gShifted)
+        bShifted = bShifted > 1 ? 1 : (bShifted < 0 ? 0 : bShifted)
 
-        return Color(red: rShift, green: gShift, blue: bShift)
+        return Color(red: rShifted, green: gShifted, blue: bShifted)
     }
     
     func buildColorCatColor(colorShift: Double) -> CategoryColor {
-        let rShift: Double = color.r + colorShift < 0 ? 0 : color.r + colorShift
-        let gShift: Double = color.g + colorShift < 0 ? 0 : color.g + colorShift
-        let bShift: Double = color.b + colorShift < 0 ? 0 : color.b + colorShift
+        var rShifted: Double = color.r + colorShift
+        var gShifted: Double = color.g + colorShift
+        var bShifted: Double = color.b + colorShift
+        rShifted = rShifted > 1 ? 1 : (rShifted < 0 ? 0 : rShifted)
+        gShifted = gShifted > 1 ? 1 : (gShifted < 0 ? 0 : gShifted)
+        bShifted = bShifted > 1 ? 1 : (bShifted < 0 ? 0 : bShifted)
 
         
-        return CategoryColor(r: rShift, g: gShift, b: bShift)
+        return CategoryColor(r: rShifted, g: gShifted, b: bShifted)
     }
     
     // isEqualTo: determina si dos instancias de CategoryModel son iguales, sin considerar sus ids. 
@@ -73,15 +79,21 @@ struct CategoryModel: Identifiable, Codable, Comparable {
         return lhs.name.lowercased() >= rhs.name.lowercased()
     }
     
-    static func defaultCategory() -> CategoryModel {
+    static func newEmptyCategory() -> CategoryModel {
         return CategoryModel(name: "", color: CategoryColor(r: 0.9, g: 0.9, b: 0.9))
     }
 }
 
 struct CategoryColor: Codable {
-    var r: Double
-    var g: Double
-    var b: Double
+    var r: Double // 0...1
+    var g: Double // 0...1
+    var b: Double // 0...1
+    
+    init(r: Double, g: Double, b: Double){
+        self.r = CategoryColor.normalizeColorValue(r)
+        self.g = CategoryColor.normalizeColorValue(g)
+        self.b = CategoryColor.normalizeColorValue(b)
+    }
     
     func isValidCategoryColor() -> Bool {
         if r < 0 || r > 1 {
@@ -96,5 +108,25 @@ struct CategoryColor: Codable {
     
     func isEqualTo(_ catColorModel: CategoryColor) -> Bool {
         return r == catColorModel.r && g == catColorModel.g && b == catColorModel.b
+    }
+    
+    func isSimilarTo(_ catColorModel: CategoryColor, range: Double) -> Bool {
+        let _r = catColorModel.r
+        let _g = catColorModel.g
+        let _b = catColorModel.b
+        
+        if r > CategoryColor.normalizeColorValue(_r + range) || r < CategoryColor.normalizeColorValue(_r - range) {
+            return false
+        } else if g > CategoryColor.normalizeColorValue(_g + range) || g < CategoryColor.normalizeColorValue(_g - range) {
+            return false
+        } else if b > CategoryColor.normalizeColorValue(_b + range) || b < CategoryColor.normalizeColorValue(_b - range) {
+            return false
+        }
+            
+        return true
+    }
+    
+    static func normalizeColorValue(_ colorValue: Double) -> Double {
+        return colorValue > 1 ? 1 : (colorValue < 0 ? 0 : colorValue)
     }
 }

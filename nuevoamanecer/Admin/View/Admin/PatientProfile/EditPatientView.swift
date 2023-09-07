@@ -138,12 +138,11 @@ struct EditPatientView: View {
                                         .frame(width: 128, height: 128)
                                         .cornerRadius(128)
                                         .padding(.horizontal, 20)
-                                    /* # Creo que es mejor quitar el lapiz azul cuando ya hay una foto de perfil #
+
                                     Image(systemName: "pencil.circle.fill")
-                                        .font(.system(size: 40))
-                                        .offset(x: 40, y: 40)
+                                        .font(.system(size: 25))
+                                        .offset(x: 53, y: 50)
                                         .foregroundColor(.blue)
-                                     */
                                 }
                                 .padding(.horizontal, 20)
                             }

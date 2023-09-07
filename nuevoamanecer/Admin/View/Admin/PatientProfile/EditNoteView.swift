@@ -76,8 +76,8 @@ struct EditNoteView: View {
                     }
                     else {
                         //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
-                        self.note.title = noteTitle
-                        self.note.text = noteContent
+                        self.note.title = removeTrailingWhitespace(from: noteTitle)
+                        self.note.text = removeTrailingWhitespace(from: noteContent)
                         
                         notes.updateData(note: note){ error in
                             if error != "OK" {

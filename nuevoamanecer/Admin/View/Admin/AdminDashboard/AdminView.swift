@@ -69,6 +69,13 @@ struct AdminView: View {
         communicationStyleFilterSelected = false
         cognitiveLevelFilterSelected = false
     }
+
+    private var patientsListDisplayed: [Patient]? {
+        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
+            return filteredPatients.isEmpty ? nil : filteredPatients
+        }
+        return patients.patientsList
+    }
     
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
@@ -116,7 +123,7 @@ struct AdminView: View {
             return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased())
         }
     }
-    
+
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
         
@@ -171,7 +178,7 @@ struct AdminView: View {
             }
         }
     }
-    
+
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
         
@@ -226,20 +233,6 @@ struct AdminView: View {
         
     }
     
-    //Lista de pacientes mostrada al usuario
-    /*
-    private var patientsListDisplayed: [Patient] {
-        filteredPatients.isEmpty ? patients.patientsList : filteredPatients
-    }
-     */
-    
-    private var patientsListDisplayed: [Patient]? {
-        if communicationStyleFilterSelected || cognitiveLevelFilterSelected || search != "" {
-            return filteredPatients.isEmpty ? nil : filteredPatients
-        }
-        return patients.patientsList
-    }
-    
     var body: some View {
         VStack{
             NavigationStack(path: $pathWrapper.path){
@@ -247,25 +240,11 @@ struct AdminView: View {
 
                             AdminNav(authViewModel: AuthViewModel(), showAdminView: $showAdminView, showRegisterView: $showRegisterView, user: user)
                             
-                            //Search bar y Boton para agregar niños
+                            //Search bar y Boton para agregar pacientes
                             HStack{
-                                
-                                //Search Bar
-                                HStack{
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                        .foregroundColor(Color.gray)
-                                        .padding([.top, .bottom, .leading])
-                                    TextField("Buscar niño o grupo", text: $search)
-                                        .padding([.top, .bottom, .trailing])
-                                        .onChange(of: search, perform: performSearchByName)
-                                        
-                                }
-                                .frame(width: 250)
-                                .cornerRadius(10) // Asegúrate de que este está aquí
-                                .background(Color(.systemGray6))
-                                .clipShape(RoundedRectangle(cornerRadius: 10)) // Añade esta línea
+                                // magnifyingglass 
+                                SearchBarView(searchText: $search, placeholder: "Buscar paciente o grupo", searchBarWidth: 250)
+                                    .onChange(of: search, perform: performSearchByName)
                                 
                                 Spacer()
                                 //Boton para añadir paciente
@@ -277,7 +256,7 @@ struct AdminView: View {
                                             Image(systemName: "plus.circle.fill")
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
-                                            Text("Agregar Niño")
+                                            Text("Agregar Paciente")
                                                 .font(.headline)
                                         }
                                     }
@@ -322,21 +301,19 @@ struct AdminView: View {
                                     .navigationDestination(for: NavigationDestination.self) { destination in
                                         switch destination.viewType {
                                         case .singleCommunicator:
-                                            SingleCommunicator(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
+                                            SingleCommunicator(patient: nil)
                                         case .doubleCommunicator:
-                                            DoubleCommunicator(pictoCollectionPath1: "basePictograms", catCollectionPath1: "baseCategories", pictoCollectionPath2: "User/\(destination.userId)/pictograms", catCollectionPath2: "User/\(destination.userId)/categories")
+                                            DoubleCommunicator(patient: destination.patient!)
                                         case .basePictogramEditor:
-                                            PictogramEditor(pictoCollectionPath: "basePictograms", catCollectionPath: "baseCategories")
-                                        case .userPictogramEditor:
-                                            PictogramEditor(pictoCollectionPath: "User/\(destination.userId)/pictograms", catCollectionPath: "User/\(destination.userId)/categories")
-                                        default:
-                                            Album(patientId: destination.userId)
+                                            PictogramEditor(patient: nil)
+                                        default: // .userPictogramEditor
+                                            PictogramEditor(patient: destination.patient)
                                         }
                                     }
                                 }
                             }
                             .padding(.horizontal, 50)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, 10)
                             //.padding(.vertical)
                             
                             
@@ -350,7 +327,90 @@ struct AdminView: View {
                                 
                                 Divider()
                                 
-                                
+                                HStack {
+                                    // Nivel cognitivo
+                                    ZStack {
+                                        Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
+                                            if !cognitiveLevelFilterSelected {
+                                                Text("Nivel Cognitivo")
+                                                    .foregroundColor(Color.black)
+                                            }
+                                            ForEach(cognitiveLevels, id: \.self) {
+                                                Text($0)
+                                            }
+                                        }
+                                        .onChange(of: selectedCognitiveLevel, perform: { value in
+                                            performSearchByCognitiveLevel()
+                                            cognitiveLevelFilterSelected = selectedCognitiveLevel != "" && selectedCognitiveLevel != "Nivel Cognitivo"
+                                        })
+                                        .disabled(cognitiveLevelFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
+                                        .pickerStyle(.menu)
+                                        .frame(width: 157, height: 40)
+                                        .cornerRadius(10)
+
+                                        // Botón para restablecer el filtro de nivel cognitivo
+                                        if cognitiveLevelFilterSelected {
+                                            Button(action: {
+                                                selectedCognitiveLevel = ""
+                                                cognitiveLevelFilterSelected = false
+                                            }) {
+                                                HStack{
+                                                    Text("Cognición " + selectedCognitiveLevel.prefix(selectedCognitiveLevel.count - 1) + "a")
+                                                        .foregroundColor(.blue)
+                                                    Image(systemName: "xmark.circle")
+                                                        .foregroundColor(.red)
+                                                }
+                                            }
+                                            .frame(width: 157, height: 40)
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    .padding(.leading)
+
+                                    // Comunicación
+                                    ZStack {
+                                        Picker("Comunicación", selection: $selectedCommunicationStyle) {
+                                            if !communicationStyleFilterSelected {
+                                                Text("Comunicación")
+                                                    .foregroundColor(Color.black)
+                                            }
+                                            ForEach(communicationStyles, id: \.self) {
+                                                Text($0)
+                                            }
+                                        }
+                                        .onChange(of: selectedCommunicationStyle, perform: { value in
+                                            performSearchByCommunicationStyle()
+                                            communicationStyleFilterSelected = selectedCommunicationStyle != "" && selectedCommunicationStyle != "Comunicación"
+                                        })
+                                        .disabled(communicationStyleFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
+                                        .pickerStyle(.menu)
+                                        .frame(width: 150, height: 40)
+                                        .cornerRadius(10)
+
+                                        // Botón para restablecer el filtro de comunicación
+                                        if communicationStyleFilterSelected {
+                                            Button(action: {
+                                                selectedCommunicationStyle = ""
+                                                communicationStyleFilterSelected = false
+                                            }) {
+                                                HStack{
+                                                    Text("Comunicación " + selectedCommunicationStyle)
+                                                        .foregroundColor(.blue)
+                                                    Image(systemName: "xmark.circle")
+                                                        .foregroundColor(.red)
+                                                }
+
+                                            }
+                                            .frame(width: 220, height: 40)
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                        }
+                                    }
+                                    .padding(.trailing)
+                                }
+
+                                /*
                                 //Nivel cognitivo
                                 Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
                                     if(!cognitiveLevelFilterSelected){
@@ -420,17 +480,15 @@ struct AdminView: View {
                                         }
                                     })
                                 }
+                                 
+                                 */
                                 Spacer()
                             }
                             .frame(maxHeight: 50)
-                            .padding(.vertical, 20)
-                            .padding(.horizontal, 70)
-
-                            
-
+                            .padding(.horizontal, 50)
+                            .padding(.bottom, 10)
                                 
-                            //mostramos que no hay pacientes con los filtros seleccionados
-                            
+                            //mostramos que no existe pacientes con los filtros seleccionados
                             if(patientsListDisplayed == nil){
                                 
                                 if(patients.patientsList.count == 0){
@@ -438,11 +496,11 @@ struct AdminView: View {
                                         HStack{
                                             Spacer()
                                             VStack {
-                                                Text("Aún no hay niños")
+                                                Text("Aún no hay pacientes")
                                                     .font(.title2)
                                                     .foregroundColor(Color.gray)
                                                     .padding()
-                                                Text("Los niños que agregues se mostrarán en esta pantalla :)")
+                                                Text("Los pacientes que agregues se mostrarán en esta pantalla :)")
                                                     .font(.headline)
                                                     .foregroundColor(Color.gray)
                                             }
@@ -455,12 +513,18 @@ struct AdminView: View {
                                         .padding([.leading, .trailing, .bottom, .top], 10)
                                     }
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                 }
                                 else{
                                     List{
                                         HStack{
                                             Spacer() // Espacio superior
-                                            Text("No se han encontrado niños con ese filtrado.")
+                                            Text("No se han encontrado pacientes con ese filtrado.")
                                                 .font(.title2)
                                                 .foregroundColor(Color.gray)
                                             Spacer() // Espacio inferior
@@ -472,6 +536,12 @@ struct AdminView: View {
                                     }
                                     //.background(Color.gray.opacity(0.1))
                                     .listStyle(.automatic)
+                                    .onChange(of: patients.patientsList, perform: {value in
+                                        resetSearchFilters()
+                                    })
+                                    .sheet(isPresented: $showAddPatient) {
+                                        AddPatientView(patients:patients)
+                                    }
                                     
                                 }
                                 Spacer()
@@ -479,17 +549,31 @@ struct AdminView: View {
                             else{
                                 //mostramos lista de pacientes
                                 List(patientsListDisplayed ?? patients.patientsList, id:\.id){ patient in
-                                    NavigationLink(value: patient){
+                                    
+                                    ZStack(alignment: .trailing) {
                                         PatientCardView(patient: patient)
                                             .padding()
                                             .background(Color.white)
                                             .cornerRadius(10)
-                                            //.shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
                                             .padding([.leading, .trailing, .bottom], 10)
-                                            //.background(NavigationLink("", destination: PatientView(patients: patients, notes: notes, patient:patient)).opacity(0))
+                                            .contentShape(Rectangle()) // Importante para detectar toques en toda el área
+                                            .onTapGesture {
+                                                pathWrapper.push(data: patient)
+                                            }
+                                        
+                                        Button {
+                                            pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
+                                        } label: {
+                                            Text("Comunicador")
+                                                .fontWeight(.bold)
+                                                .padding(10)
+                                                .padding([.leading, .trailing], 15)
+                                                .background(Color.green)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
+                                        }
+                                        .padding(.trailing, 20)
                                     }
-                                    
-
                                 }
                                 .navigationDestination(for: Patient.self, destination: { patient in
                                     PatientView(patients: patients, notes: notes, patient: patient)
