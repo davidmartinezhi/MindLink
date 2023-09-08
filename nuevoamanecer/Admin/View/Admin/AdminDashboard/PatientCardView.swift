@@ -55,27 +55,27 @@ struct PatientCardView: View {
                         
                         Text(String(getAge(patient: patient)) + " años" )
                             .font(.headline)
-                           .foregroundColor(Color.gray)
+                            .foregroundColor(Color.gray)
                            .padding(.vertical, 1)
                     }
 
                     
                     VStack(alignment: .leading){
                         Text("Grupo: " + patient.group)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                         
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                         
                         Text("Comunicación: " + patient.communicationStyle)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                     }
