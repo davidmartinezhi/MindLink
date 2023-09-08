@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Note: Hashable, Codable, Identifiable  {
+struct Note: Hashable, Codable, Identifiable, Equatable {
     //var id: ObjectIdentifier
     let id: String
     let patientId: String
@@ -15,4 +15,9 @@ struct Note: Hashable, Codable, Identifiable  {
     var title: String
     var text: String
     var date: Date
+    var tags: [String]
+    
+    static func == (lhs: Note, rhs: Note) -> Bool {
+            return lhs.id == rhs.id
+    }
 }

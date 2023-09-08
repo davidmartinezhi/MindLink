@@ -26,7 +26,7 @@ class NotesViewModel: ObservableObject{
         let docRef = db.collection("Note").document()
         
         
-        docRef.setData(["id": note.id, "patientId": note.patientId, "order": (notesList.count * -1) - 1, "title": note.title, "text": note.text, "date": note.date]) { err in
+        docRef.setData(["id": note.id, "patientId": note.patientId, "order": (notesList.count * -1) - 1, "title": note.title, "text": note.text, "date": note.date, "tags":note.tags]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
@@ -61,9 +61,10 @@ class NotesViewModel: ObservableObject{
                 let text = data["text"] as? String ?? ""
                 let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
                 //let id = data["id"] as? String ?? UUID().uuidString
+                let tags = data["tags"] as? [String] ?? []
                 let id = document.documentID
                 
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date)
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tags: tags)
                 notes.append(note)
             }
             
@@ -96,9 +97,9 @@ class NotesViewModel: ObservableObject{
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
                 let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
+                let tags = data["tags"] as? [String] ?? []
                 
-                
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date)
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tags: tags)
                 notes.append(note)
             }
 
@@ -120,7 +121,8 @@ class NotesViewModel: ObservableObject{
             "patientId": note.patientId,
             "order": note.order,
             "title": note.title,
-            "text": note.text
+            "text": note.text,
+            "tags": note.tags
         ]) { err in
             if let err = err {
                 completion(err.localizedDescription)
@@ -129,7 +131,7 @@ class NotesViewModel: ObservableObject{
             }
         }
     }
-    
+        
     // Eliminación de nota
     func deleteData(noteId: String, completion: @escaping (String) -> Void) {
         let noteRef = db.collection("Note").document(noteId)
@@ -145,19 +147,19 @@ class NotesViewModel: ObservableObject{
 
     
     // Actualización de documento de paciente
-        private func updatePatientDocument(patient: Patient, note: Note, completion: @escaping (String) -> Void) {
-            let patientRef = db.collection("Patient").document(patient.id)
-            var patientNotes = patient.notes
-            patientNotes.append(note.id)
+    private func updatePatientDocument(patient: Patient, note: Note, completion: @escaping (String) -> Void) {
+        let patientRef = db.collection("Patient").document(patient.id)
+        var patientNotes = patient.notes
+        patientNotes.append(note.id)
             
-            patientRef.updateData([
-                "notes": patientNotes
-            ]) { err in
-                if let err = err {
-                    completion(err.localizedDescription)
-                } else {
-                    completion("OK")
-                }
+        patientRef.updateData([
+            "notes": patientNotes
+        ]) { err in
+            if let err = err {
+                completion(err.localizedDescription)
+            } else {
+                completion("OK")
             }
         }
+    }
 }

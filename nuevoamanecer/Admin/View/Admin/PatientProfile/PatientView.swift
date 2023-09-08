@@ -8,8 +8,6 @@
 import SwiftUI
 import Kingfisher
 
-
-
 struct PatientView: View {
     
     //ViewModels
@@ -20,7 +18,9 @@ struct PatientView: View {
     
     //patient
     let patient: Patient
-    
+    @State var search: String = ""
+    @State private var filteredNotes: [Note] = []
+
     
     //showViews
     @State var showAddNoteView = false
@@ -56,30 +56,61 @@ struct PatientView: View {
             if let notesList = await notes.getDataById(patientId: patient.id){
                 DispatchQueue.main.async{
                     self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                    self.filteredNotes = self.notes.notesList
                 }
             }
         }
     }
     
     
-    //Move notes and save order in database
-    func moveNote(from source: IndexSet, to destination: Int) {
-        self.notes.notesList.move(fromOffsets: source, toOffset: destination)
+    func moveNote(from source: IndexSet, to destinationIdx: Int) {
+        guard let sourceIdx: Int = source.first else { return }
+        let adjustDestination: Bool = destinationIdx > sourceIdx
+                
+        notes.notesList.moveItem(from: notes.notesList.firstIndex(of: filteredNotes[sourceIdx])!,
+                                 to: notes.notesList.firstIndex(of: filteredNotes[destinationIdx - (adjustDestination ? 1 : 0)])!)
+        filteredNotes.moveItem(from: sourceIdx, to: destinationIdx - (adjustDestination ? 1 : 0))
 
-        // Actualizar el orden de las notas en la base de datos
-        for (index, note) in self.notes.notesList.enumerated() {
-            // Creamos una copia de la nota para no modificar la original
-            var updatedNote = note
-            updatedNote.order = index - 1
-            // Actualizamos la nota en la base de datos
-            self.notes.updateData(note: updatedNote) { response in
-                if response != "OK" {
-                    // Aquí puedes manejar el error si lo deseas
-                    print("Error al actualizar la nota \(updatedNote.id): \(response)")
+        // Considerar: el valor de 'order' de los elementos de filteredNotes no es actualizado.
+        for i in 0..<notes.notesList.count {
+            if notes.notesList[i].order != i {
+                notes.notesList[i].order = i
+                self.notes.updateData(note: notes.notesList[i]) { response in // utilizar batches
+                    if response != "OK" {
+                        print("Error al actualizar la nota \(notes.notesList[i].id): \(response)")
+                    }
                 }
             }
         }
     }
+    
+    private func performSearchByText(key: String) {
+        // Si el filtro de búsqueda está vacío, regresa todas las notas
+        if(search == ""){
+            filteredNotes = notes.notesList
+        }
+        
+        let searchingWithFilters = notes.notesList
+        
+        // Si hay un filtro de búsqueda, regresa las notas filtradas
+        filteredNotes = searchingWithFilters.filter { note in
+            // Convierte el título y el contenido de la nota a minúsculas
+            let titleLowercased = note.title.lowercased()
+            let textLowercased = note.text.lowercased()
+            
+            // Convierte la búsqueda a minúsculas
+            let keyLowercased = key.lowercased()
+
+            // Busca la cadena de búsqueda en el título y el contenido
+            let titleMatch = titleLowercased.hasPrefix(keyLowercased)
+            let textMatch = textLowercased.contains(keyLowercased)
+
+            return titleMatch || textMatch
+        }
+        
+        //return filteredNotes.isEmpty ? nil : filteredNotes
+    }
+    
     
     var body: some View {
         GeometryReader { geometry in  // Agrega GeometryReader
@@ -255,13 +286,18 @@ struct PatientView: View {
                                     Image(systemName: "plus.circle.fill")
                                     Text("Agregar Nota")
                                 }
+                                .frame(width: geometry.size.width / 6)
                             }
                         }
-                        .padding(10)
+                        .padding(.vertical, 15)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.bottom, 10)
+                        
+                        
+                        SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
+                            .onChange(of: search, perform: performSearchByText)
 
                         
                         //checamos si hay notas
@@ -281,7 +317,7 @@ struct PatientView: View {
                             .listStyle(.sidebar)
                             
                         }else{
-                            List(notes.notesList, id: \.id) { note in
+                            List(filteredNotes, id: \.id) { note in
                                 Button(action: {}) {
                                    
                                     Text(note.title)
@@ -342,7 +378,7 @@ struct PatientView: View {
                             
                             ScrollViewReader { proxy in
                                 List {
-                                    ForEach(Array(notes.notesList.enumerated()), id: \.element.id) { index, note in
+                                    ForEach(Array(filteredNotes.enumerated()), id: \.element.id) { index, note in
                                         
                                         //Tarjeta paciente
                                         NoteCardView(note: note)
@@ -363,7 +399,6 @@ struct PatientView: View {
                                                 .padding()
                                                 
                                                 Button {
-                                                    // Aquí va la lógica para actualizar la nota
                                                     selectedNoteToEdit = note
                                                     showEditNoteView = true
                                                     
@@ -390,9 +425,21 @@ struct PatientView: View {
                                                   // Confirmar eliminación
                                                   if let index = self.selectedNoteIndex {
                                                       let noteId = notes.notesList[index].id
+                                                      let patientId = notes.notesList[index].patientId
+                                                      
                                                       notes.deleteData(noteId: noteId) { response in
                                                           if response == "OK" {
+                                                              search = ""
                                                               notes.notesList.remove(atOffsets: IndexSet(integer: index))
+                                                              filteredNotes.remove(atOffsets: IndexSet(integer: index))
+                                                              Task{
+                                                                  if let notesList = await notes.getDataById(patientId: patientId){
+                                                                      DispatchQueue.main.async{
+                                                                          self.notes.notesList = notesList.sorted { $0.order < $1.order }
+                                                                          self.filteredNotes = self.notes.notesList
+                                                                      }
+                                                                  }
+                                                              }
                                                           } else {
                                                               // Aquí puedes manejar el error si lo deseas
                                                               print("Error al eliminar la nota: \(response)")
@@ -412,7 +459,6 @@ struct PatientView: View {
                                 }
                                 .listStyle(.inset)
                             } //ScrollViewReader
-
                         }
                     }
                     
@@ -421,10 +467,10 @@ struct PatientView: View {
                 
             }
             .sheet(isPresented: $showAddNoteView) {
-                AddNoteView(notes: notes, patient: patient)
+                AddNoteView(notes: notes, filteredNotes: $filteredNotes, search: $search, patient: patient)
             }
             .sheet(item: $selectedNoteToEdit){ note in
-                EditNoteView(notes: notes, note: note)
+                EditNoteView(notes: notes, filteredNotes: $filteredNotes, note: note, search: $search)
             }
             .sheet(isPresented: $showEditPatientView){
                 EditPatientView(patients: patients, patient: patient)

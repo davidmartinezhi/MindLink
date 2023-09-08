@@ -10,7 +10,9 @@ import SwiftUI
 struct EditNoteView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var notes: NotesViewModel
+    @Binding var filteredNotes: [Note]  // Nueva propiedad
     @State var note: Note
+    @Binding var search: String
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
     @State private var showingAlert = false
@@ -79,19 +81,22 @@ struct EditNoteView: View {
                         self.note.title = removeTrailingWhitespace(from: noteTitle)
                         self.note.text = removeTrailingWhitespace(from: noteContent)
                         
-                        notes.updateData(note: note){ error in
+                        self.notes.updateData(note: note){ error in
                             if error != "OK" {
                                 print(error)
                             }
                             else{
+                                search = ""
+                                print("Updated")
                                 Task{
-                                    if let notesList = await notes.getDataById(patientId: note.patientId){
+                                    if let notesList = await self.notes.getDataById(patientId: note.patientId){
                                         DispatchQueue.main.async{
                                             self.notes.notesList = notesList.sorted { $0.order < $1.order }
-                                            dismiss()
+                                            self.filteredNotes = notesList.sorted { $0.order < $1.order }
                                         }
                                     }
                                 }
+                                dismiss()
                             }
                         }
                     }
@@ -118,8 +123,18 @@ struct EditNoteView: View {
         .onAppear{initializeData(note: note)}
     }
 }
+
 struct EditNoteView_Previews: PreviewProvider {
     static var previews: some View {
-        EditNoteView(notes: NotesViewModel(), note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date()))
+        PreviewWrapper()
+    }
+    
+    struct PreviewWrapper: View {
+        @State(initialValue: []) var previewFilteredNotes: [Note]  // Nueva propiedad
+        @State(initialValue: "") var previewSearch: String  // Nueva propiedad
+
+        var body: some View {
+            EditNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tags: []), search: $previewSearch)
+        }
     }
 }
