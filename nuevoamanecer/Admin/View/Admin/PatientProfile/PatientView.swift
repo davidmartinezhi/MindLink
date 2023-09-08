@@ -127,20 +127,20 @@ struct PatientView: View {
                         
                         
                         Text("Grupo: " + patient.group)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Comunicación: " + patient.communicationStyle)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 2)
                     }
                     Spacer()
@@ -254,7 +254,6 @@ struct PatientView: View {
                                 HStack {
                                     Image(systemName: "plus.circle.fill")
                                     Text("Agregar Nota")
-                                    
                                 }
                             }
                         }

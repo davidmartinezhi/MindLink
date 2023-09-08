@@ -257,7 +257,6 @@ struct AdminView: View {
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
                                             Text("Agregar Paciente")
-                                                .font(.headline)
                                         }
                                     }
                                     .padding(10)
@@ -291,7 +290,6 @@ struct AdminView: View {
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
                                             Text("Comunicador base")
-                                                .font(.headline)
                                         }
                                         .padding(10)
                                         .background(Color.blue)
@@ -565,7 +563,6 @@ struct AdminView: View {
                                             pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
                                         } label: {
                                             Text("Comunicador")
-                                                .fontWeight(.bold)
                                                 .padding(10)
                                                 .padding([.leading, .trailing], 15)
                                                 .background(Color.green)
