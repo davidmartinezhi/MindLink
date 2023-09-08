@@ -81,22 +81,22 @@ struct EditNoteView: View {
                         self.note.title = removeTrailingWhitespace(from: noteTitle)
                         self.note.text = removeTrailingWhitespace(from: noteContent)
                         
-                        notes.updateData(note: note){ error in
+                        self.notes.updateData(note: note){ error in
                             if error != "OK" {
                                 print(error)
                             }
                             else{
                                 search = ""
+                                print("Updated")
                                 Task{
-                                    if let notesList = await notes.getDataById(patientId: note.patientId){
+                                    if let notesList = await self.notes.getDataById(patientId: note.patientId){
                                         DispatchQueue.main.async{
                                             self.notes.notesList = notesList.sorted { $0.order < $1.order }
-                                            self.filteredNotes = self.notes.notesList  // Actualizar filteredNotes
-
-                                            dismiss()
+                                            self.filteredNotes = notesList.sorted { $0.order < $1.order }
                                         }
                                     }
                                 }
+                                dismiss()
                             }
                         }
                     }
