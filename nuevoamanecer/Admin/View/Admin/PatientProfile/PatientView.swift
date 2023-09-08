@@ -8,8 +8,6 @@
 import SwiftUI
 import Kingfisher
 
-
-
 struct PatientView: View {
     
     //ViewModels
@@ -93,6 +91,27 @@ struct PatientView: View {
             performSearchByText(key: search)
         }
     }*/
+    
+    func moveNoteAlt3(from source: IndexSet, to destinationIdx: Int) {        
+        guard let sourceIdx: Int = source.first else { return }
+        let adjustDestination: Bool = destinationIdx > sourceIdx
+                
+        notes.notesList.moveItem(from: notes.notesList.firstIndex(of: filteredNotes[sourceIdx])!,
+                                 to: notes.notesList.firstIndex(of: filteredNotes[destinationIdx - (adjustDestination ? 1 : 0)])!)
+        filteredNotes.moveItem(from: sourceIdx, to: destinationIdx - (adjustDestination ? 1 : 0))
+
+        // Considerar: el valor de 'order' de los elementos de filteredNotes no es actualizado.
+        for i in 0..<notes.notesList.count {
+            if notes.notesList[i].order != i {
+                notes.notesList[i].order = i
+                self.notes.updateData(note: notes.notesList[i]) { response in // utilizar batches
+                    if response != "OK" {
+                        print("Error al actualizar la nota \(notes.notesList[i].id): \(response)")
+                    }
+                }
+            }
+        }
+    }
     
     func moveNoteAlt2(from source: IndexSet, to destination: Int) {
         // Obtener el índice de origen y la nota que se va a mover
@@ -633,7 +652,7 @@ struct PatientView: View {
                                          */
                                          
                                     }
-                                    .onMove(perform: moveNoteAlt2)
+                                    .onMove(perform: moveNoteAlt3)
                                     .onChange(of: selectedNoteIndex) { newIndex in
                                         if let newIndex = newIndex {
                                             let noteId = notes.notesList[newIndex].id

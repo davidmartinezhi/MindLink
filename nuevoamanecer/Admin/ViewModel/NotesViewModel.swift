@@ -131,7 +131,7 @@ class NotesViewModel: ObservableObject{
             }
         }
     }
-    
+        
     // Eliminación de nota
     func deleteData(noteId: String, completion: @escaping (String) -> Void) {
         let noteRef = db.collection("Note").document(noteId)
