@@ -257,7 +257,6 @@ struct AdminView: View {
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
                                             Text("Agregar Paciente")
-                                                .font(.headline)
                                         }
                                     }
                                     .padding(10)
@@ -287,11 +286,10 @@ struct AdminView: View {
                                         }
                                     } label: {
                                         HStack {
-                                            Image(systemName: "ellipsis.circle")
+                                            Image(systemName: "ellipsis.circle.fill")
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
                                             Text("Comunicador base")
-                                                .font(.headline)
                                         }
                                         .padding(10)
                                         .background(Color.blue)
@@ -565,7 +563,6 @@ struct AdminView: View {
                                             pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
                                         } label: {
                                             Text("Comunicador")
-                                                .fontWeight(.bold)
                                                 .padding(10)
                                                 .padding([.leading, .trailing], 15)
                                                 .background(Color.green)
@@ -597,7 +594,7 @@ struct AdminView: View {
                 AdminMenuView(authViewModel: authViewModel, user: user)
             }
             .sheet(isPresented: $showRegisterView){
-                RegisterView(authViewModel: authViewModel)
+                RegisterView(authViewModel: authViewModel, user: user)
             }
             .environmentObject(pathWrapper)
         }

@@ -78,94 +78,100 @@ struct EditPatientView: View {
           VStack{
               // Vista para eliminar al paciente
               DeletePatientView(patients:patients, patient: patient)
-
-              // Contenedor para la imagen del paciente
-            VStack{
-                
-                VStack{
-                    Menu {
-                        Button(action: {
-                            shouldShowImagePicker.toggle()
-                            deletedImage = false
-                            
-                        }, label: {
-                            Text("Seleccionar Imagen")
-                        })
-                        Button(action: {
-                            if (patient.image == "placeholder" || deletedImage) {
-                                showAlertNoImage.toggle()
-                            } else {
-                                deletedImage = true
-                            }
-                        }, label: {
-                            Text("Eliminar Imagen")
-                        })
-                    } label: {
-                        
-                        //Imagen recien cargada
-                        if let displayImage = self.upload_image {
-                            Image(uiImage: displayImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 128, height: 128)
-                                .cornerRadius(128)
-                                .padding(.horizontal, 20)
-                        } else {
-                            
-                            //No imagen
-                            if(patient.image == "placeholder" || deletedImage) {
-                                ZStack{
-                                    Image(systemName: "person.circle")
-                                        .font(.system(size: 100))
-                                    //.foregroundColor(Color(.label))
-                                        .foregroundColor(.gray)
-                                    
-                                    Image(systemName: "plus.circle.fill")
-                                        .font(.system(size: 25))
-                                        .offset(x: 35, y: 40)
-                                        .foregroundColor(.blue)
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                            
-                            //Imagen previamente subida
-                            else{
-                                
-                                ZStack{
-                                    KFImage(URL(string: patient.image))
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 128, height: 128)
-                                        .cornerRadius(128)
-                                        .padding(.horizontal, 20)
-
-                                    Image(systemName: "pencil.circle.fill")
-                                        .font(.system(size: 25))
-                                        .offset(x: 53, y: 50)
-                                        .foregroundColor(.blue)
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                        }
-                    }
-                    //Spacer()
-                }
-                .frame(maxHeight: 130)
-                
-            }
-            .alert("Error", isPresented: $showAlertNoImage){
-                Button("Ok") {}
-            }
-        message: {
-            Text("Este perfil no cuenta con imagen")
-        }
-                
-                
-            
-            
             //Form
             VStack{
                 Form {
+                    Section(header: Text("Foto del paciente")) {
+                        HStack{
+                            Spacer()
+                            Menu {
+                                Button(action: {
+                                    shouldShowImagePicker.toggle()
+                                    deletedImage = false
+                                    
+                                }, label: {
+                                    Text("Seleccionar Imagen")
+                                })
+                                Button(action: {
+                                    if (patient.image == "placeholder" || deletedImage) {
+                                        showAlertNoImage.toggle()
+                                    } else {
+                                        deletedImage = true
+                                    }
+                                }, label: {
+                                    Text("Eliminar Imagen")
+                                })
+                            } label: {
+                                
+                                //Imagen recien cargada
+                                if let displayImage = self.upload_image {
+
+                                    ZStack{
+                                        Image(uiImage: displayImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 128, height: 128)
+                                            .cornerRadius(128)
+                                            .padding(.horizontal, 20)
+                                        
+                                        Image(systemName: "photo.on.rectangle.fill")
+                                            .font(.system(size: 25))
+                                            .offset(x: 53, y: 50)
+                                            //.foregroundColor(.white)
+                                    }
+                                    .padding(.horizontal, 20)
+                                } else {
+                                    
+                                    //No imagen
+                                    if(patient.image == "placeholder" || deletedImage) {
+                                        ZStack{
+                                            Text(patient.firstName.prefix(1) + patient.lastName.prefix(1))
+                                                .textCase(.uppercase)
+                                                .font(.title)
+                                                .fontWeight(.bold)
+                                                .frame(width: 128, height: 128)
+                                                .background(Color(.systemGray3))
+                                                .foregroundColor(.white)
+                                                .clipShape(Circle())
+                                                .padding(.trailing)
+                                            
+                                            Image(systemName: "photo.on.rectangle.fill")
+                                                .font(.system(size: 25))
+                                                .offset(x: 53, y: 50)
+                                                //.foregroundColor(.white)
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                                    
+                                    //Imagen previamente subida
+                                    else{
+                                        
+                                        ZStack{
+                                            KFImage(URL(string: patient.image))
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 128, height: 128)
+                                                .cornerRadius(128)
+                                                .padding(.horizontal, 20)
+
+                                            Image(systemName: "photo.on.rectangle.fill")
+                                                .font(.system(size: 25))
+                                                .offset(x: 53, y: 50)
+                                                .foregroundColor(.blue)
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                                }
+                            }
+                            Spacer()
+                        }
+                        .alert("Error", isPresented: $showAlertNoImage){
+                            Button("Ok") {}
+                        }
+                        message: {
+                            Text("Este perfil no cuenta con imagen")
+                        }
+                    }
                     Section(header: Text("Información del Paciente")) {
                         TextField("Primer Nombre", text: $firstName)
                         TextField("Apellidos", text: $lastName)

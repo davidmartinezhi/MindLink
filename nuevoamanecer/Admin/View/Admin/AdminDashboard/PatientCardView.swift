@@ -27,10 +27,13 @@ struct PatientCardView: View {
         VStack(alignment: .leading) {
             HStack {
                 if(patient.image == "placeholder") {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .scaledToFill()
+                    Text(patient.firstName.prefix(1) + patient.lastName.prefix(1))
+                        .textCase(.uppercase)
+                        .font(.title)
+                        .fontWeight(.bold)
                         .frame(width: 100, height: 100)
+                        .background(Color(.systemGray3))
+                        .foregroundColor(.white)
                         .clipShape(Circle())
                         .padding(.trailing)
                 } else {
@@ -52,27 +55,27 @@ struct PatientCardView: View {
                         
                         Text(String(getAge(patient: patient)) + " años" )
                             .font(.headline)
-                           .foregroundColor(Color.gray)
+                            .foregroundColor(Color.gray)
                            .padding(.vertical, 1)
                     }
 
                     
                     VStack(alignment: .leading){
                         Text("Grupo: " + patient.group)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                         
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                         
                         Text("Comunicación: " + patient.communicationStyle)
-                            .font(.headline)
-                            .foregroundColor(Color.gray)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.trailing)
                             .padding(.vertical,1)
                     }

@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct LoginView: View {
+    enum Field : Hashable {
+        case plain
+        case secure
+    }
+    
     @ObservedObject var authViewModel: AuthViewModel
     @State var email = ""
     @State var password = ""
     @State private var contraseñaIncorrecta: Bool = false
     @State private var usuarioNoExiste: Bool = false
     @State private var showAlert: Bool = false
+    @State private var showPassword: Bool = false
+    @FocusState private var inFocus: Field?
 
     var body: some View {
         GeometryReader { geometry in
@@ -31,16 +38,38 @@ struct LoginView: View {
                     .textContentType(.emailAddress)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none) // para evitar errores de correo electrónico en mayúsculas
-                
-                SecureField("Contraseña", text: $password)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.bottom, 20)
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.asciiCapable)
-                    .autocorrectionDisabled(true)
-                
+
+                ZStack (alignment: .trailing) {
+                    if showPassword {
+                        TextField("Contraseña", text: $password)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.asciiCapable)
+                        .autocorrectionDisabled(true)
+                        .focused($inFocus, equals: .plain)
+                    } else {
+                        SecureField("Contraseña", text: $password)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .padding(.bottom, 20)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.asciiCapable)
+                        .autocorrectionDisabled(true)
+                        .focused($inFocus, equals: .secure)
+                    }
+                    Button() {
+                        showPassword.toggle()
+                        inFocus = showPassword ? .plain : .secure
+                    } label: {
+                        Image(systemName: showPassword ? "eye" : "eye.slash")
+                        .padding(.bottom)
+                        .padding(.trailing)
+                    }
+                }
                 Button(action: {
                     Task {
                         authViewModel.loginUser(email: email, password: password)

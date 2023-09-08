@@ -18,14 +18,13 @@ struct Communicator: View {
     @State var searchText: String = ""
     @State var searchingPicto: Bool = true
     @State var pickedCategoryId: String = ""
+    @State var userHasChosenCat: Bool = false
     
     @State var isConfiguring = false
     @Binding var voiceGender: String
     @Binding var talkingSpeed: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
-    @State var userHasChosenCat: Bool = false
-        
     var showSwitchView: Bool
     @Binding var onLeftOfSwitch: Bool
     
@@ -90,7 +89,7 @@ struct Communicator: View {
                 .padding(.vertical)
                 .padding(.horizontal, 70)
                 
-                HStack(spacing: 15) {
+                HStack(spacing: 20) {
                     Text("Categorias")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color.gray)
@@ -100,26 +99,28 @@ struct Communicator: View {
                     }
                     
                     Divider()
-
-                    HStack{
-                        CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
-                    }
-                    .background(Color.white)
-                    .padding([.leading, .top, .bottom])
                     
-                    Spacer()
+                    CategoryPickerView(categoryModels: catsInScreen, pickedCategoryId: $pickedCategoryId, userHasChosenCat: $userHasChosenCat)
                 }
-                .frame(height: 60)
+                .frame(height: 80)
                 .background(Color.white)
-                .padding(.vertical, 20)
                 .padding(.horizontal, 70)
                 
                 Rectangle()
                     .frame(height: 20.0, alignment: .bottom)
                     .foregroundColor(currCatColor ?? Color(red: 0.9, green: 0.9, blue: 0.9))
                 
-                PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165, isBeingFiltered: !searchText.isEmpty && searchingPicto)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                if catsInScreen.count == 0 {
+                    Color.white
+                } else if pictosInScreen.count == 0 && !searchText.isEmpty && searchingPicto {
+                    Text("Sin resultados")
+                        .font(.system(size: 25, weight: .bold))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.white)
+                } else {
+                    PictogramGridView(pictograms: buildPictoViewButtons(pictosInScreen), pictoWidth: 165, pictoHeight: 165)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
         .onChange(of: catVM.categories) { _ in

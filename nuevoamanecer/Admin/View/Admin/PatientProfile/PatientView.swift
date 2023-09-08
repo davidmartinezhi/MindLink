@@ -121,12 +121,16 @@ struct PatientView: View {
                 HStack {
                     VStack{
                         if(patient.image == "placeholder") {
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .scaledToFill()
+                            Text(patient.firstName.prefix(1) + patient.lastName.prefix(1))
+                                .textCase(.uppercase)
+                                .font(.title)
+                                .fontWeight(.bold)
                                 .frame(width: 100, height: 100)
+                                .background(Color(.systemGray3))
+                                .foregroundColor(.white)
                                 .clipShape(Circle())
                                 .padding(.trailing)
+
                         } else {
                             KFImage(URL(string: patient.image))
                                 .resizable()
@@ -146,7 +150,7 @@ struct PatientView: View {
                                 .padding(.vertical, 1)
                             
                             Text(String(getAge(patient: patient)) + " años")
-                                .font(.system(size: 24, weight: .regular))
+                                .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.vertical, 1)
                             
@@ -154,20 +158,20 @@ struct PatientView: View {
                         
                         
                         Text("Grupo: " + patient.group)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Comunicación: " + patient.communicationStyle)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.subheadline)
+                            //.foregroundColor(Color.gray)
                             .padding(.vertical, 2)
                     }
                     Spacer()
@@ -232,14 +236,14 @@ struct PatientView: View {
                                 
                             } label: {
                                 HStack {
-                                    Image(systemName: "ellipsis.circle")
+                                    Image(systemName: "ellipsis.circle.fill")
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                     Text("Comunicador de \(patient.firstName)")
                                         .font(.headline)
                                 }
                                 .padding(10)
-                                .background(Color.blue)
+                                .background(Color.green)
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                             }
@@ -248,6 +252,7 @@ struct PatientView: View {
                 }
                 .padding(10)
                 .padding(.horizontal, 50)
+                .padding(.bottom, 20)
                 Spacer()
                     
 
@@ -280,7 +285,6 @@ struct PatientView: View {
                                 HStack {
                                     Image(systemName: "plus.circle.fill")
                                     Text("Agregar Nota")
-                                    
                                 }
                                 .frame(width: geometry.size.width / 6)
                             }
@@ -405,16 +409,6 @@ struct PatientView: View {
                                                 .padding()
                                             }
                                         }
-                                        /*
-                                        .onDrag {
-                                            // Elimina el filtro cuando el usuario comienza a arrastrar
-                                            search = ""
-                                            performSearchByText(key: search)
-                                            //self.filteredNotes = self.notes.notesList
-                                            return NSItemProvider(object: note.title as NSString)
-                                        }
-                                         */
-                                         
                                     }
                                     .onMove(perform: moveNote)
                                     .onChange(of: selectedNoteIndex) { newIndex in

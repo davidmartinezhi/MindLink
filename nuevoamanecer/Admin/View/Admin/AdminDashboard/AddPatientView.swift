@@ -59,44 +59,49 @@ struct AddPatientView: View {
         
         VStack{
             
-            //Imagen del paciente
-            VStack{
-                Button() {
-                    shouldShowImagePicker.toggle()
-                } label: {
-                    if let displayImage = self.upload_image {
-                        Image(uiImage: displayImage)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 128, height: 128)
-                            .cornerRadius(128)
-                            .padding(.horizontal, 20)
-                    } else {
-                        ZStack {
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 100))
-                                //.foregroundColor(Color(.label))
-                                .foregroundColor(.gray)
-                                
-
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 25))
-                                .offset(x: 35, y: 40)
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.horizontal, 20)
-                        
-                    }
-                }
-                //Spacer()
-            }
-            .frame(maxHeight: 150)
-            //.padding(.top, 50)
-            
-            
             //Form
             VStack{
                 Form {
+                    Section(header: Text("Foto del paciente")) {
+                        HStack{
+                            Spacer()
+                            Button() {
+                                shouldShowImagePicker.toggle()
+                            } label: {
+                                if let displayImage = self.upload_image {
+
+                                    ZStack {
+                                        Image(uiImage: displayImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 128, height: 128)
+                                            .cornerRadius(128)
+                                            .padding(.horizontal, 20)
+                                            
+
+                                        Image(systemName: "photo.on.rectangle.fill")
+                                            .font(.system(size: 25))
+                                            .offset(x: 45, y: 50)
+                                    }
+                                    .padding(.horizontal, 20)
+                                } else {
+                                    ZStack {
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .font(.system(size: 128))
+                                            .foregroundColor(Color(.systemGray2))
+                                            
+
+                                        Image(systemName: "photo.on.rectangle.fill")
+                                            .font(.system(size: 25))
+                                            .offset(x: 45, y: 50)
+                                    }
+                                    .padding(.horizontal, 20)
+                                    
+                                }
+                            }
+                            Spacer()
+                        }
+                    }
                     Section(header: Text("Información del Paciente")) {
                         TextField("Primer Nombre", text: $firstName)
                         TextField("Apellidos", text: $lastName)
