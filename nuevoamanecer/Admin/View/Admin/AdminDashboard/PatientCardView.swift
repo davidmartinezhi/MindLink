@@ -55,7 +55,7 @@ struct PatientCardView: View {
                         
                         Text(String(getAge(patient: patient)) + " años" )
                             .font(.headline)
-                           .foregroundColor(Color.gray)
+                            .foregroundColor(Color.gray)
                            .padding(.vertical, 1)
                     }
 

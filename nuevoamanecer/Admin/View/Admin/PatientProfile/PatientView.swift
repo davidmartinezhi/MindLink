@@ -119,7 +119,7 @@ struct PatientView: View {
                                 .padding(.vertical, 1)
                             
                             Text(String(getAge(patient: patient)) + " años")
-                                .font(.system(size: 24, weight: .regular))
+                                .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.vertical, 1)
                             
@@ -127,20 +127,20 @@ struct PatientView: View {
                         
                         
                         Text("Grupo: " + patient.group)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.headline)
+                            .foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Nivel Cognitivo: " + patient.cognitiveLevel)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.headline)
+                            .foregroundColor(Color.gray)
                             .padding(.vertical, 1)
                         
                         // Add other patient details here
                         Text("Comunicación: " + patient.communicationStyle)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundColor(Color.black)
+                            .font(.headline)
+                            .foregroundColor(Color.gray)
                             .padding(.vertical, 2)
                     }
                     Spacer()
@@ -212,7 +212,7 @@ struct PatientView: View {
                                         .font(.headline)
                                 }
                                 .padding(10)
-                                .background(Color.blue)
+                                .background(Color.green)
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                             }
@@ -221,6 +221,7 @@ struct PatientView: View {
                 }
                 .padding(10)
                 .padding(.horizontal, 50)
+                .padding(.bottom, 20)
                 Spacer()
                     
 
