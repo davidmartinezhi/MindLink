@@ -205,7 +205,7 @@ struct PatientView: View {
                                 
                             } label: {
                                 HStack {
-                                    Image(systemName: "ellipsis.circle")
+                                    Image(systemName: "ellipsis.circle.fill")
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                     Text("Comunicador de \(patient.firstName)")
