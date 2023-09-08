@@ -27,10 +27,13 @@ struct PatientCardView: View {
         VStack(alignment: .leading) {
             HStack {
                 if(patient.image == "placeholder") {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .scaledToFill()
+                    Text(patient.firstName.prefix(1) + patient.lastName.prefix(1))
+                        .textCase(.uppercase)
+                        .font(.title)
+                        .fontWeight(.bold)
                         .frame(width: 100, height: 100)
+                        .background(Color(.systemGray3))
+                        .foregroundColor(.white)
                         .clipShape(Circle())
                         .padding(.trailing)
                 } else {
