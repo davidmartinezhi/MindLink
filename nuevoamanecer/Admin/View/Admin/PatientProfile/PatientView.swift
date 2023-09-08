@@ -192,9 +192,11 @@ struct PatientView: View {
                                     HStack{
                                         Image(systemName: "gear")
                                             .resizable()
+                                            .foregroundColor(.blue)
                                             .frame(width: 20, height: 20)
                                         Text("Editar Perfil")
                                     }
+                                    .foregroundColor(.blue)
                                     .padding(10)
                                     .frame(width: 157, height: 40)
                             }
@@ -236,7 +238,7 @@ struct PatientView: View {
                                 
                             } label: {
                                 HStack {
-                                    Image(systemName: "ellipsis.circle.fill")
+                                    Image(systemName: "message.fill")
                                         .resizable()
                                         .frame(width: 20, height: 20)
                                     Text("Comunicador de \(patient.firstName)")

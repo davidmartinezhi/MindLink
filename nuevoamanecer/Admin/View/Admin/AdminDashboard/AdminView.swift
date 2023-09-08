@@ -286,7 +286,7 @@ struct AdminView: View {
                                         }
                                     } label: {
                                         HStack {
-                                            Image(systemName: "ellipsis.circle.fill")
+                                            Image(systemName: "message.fill")
                                                 .resizable()
                                                 .frame(width: 20, height: 20)
                                             Text("Comunicador base")
