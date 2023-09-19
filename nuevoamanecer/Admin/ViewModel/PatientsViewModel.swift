@@ -67,6 +67,8 @@ class PatientsViewModel: ObservableObject{
                 patients.append(patient)
             }
             
+            patients.sort { $0.firstName.lowercased() < $1.firstName.lowercased() }
+            
             return patients
             
         }
