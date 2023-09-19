@@ -298,6 +298,7 @@ struct PatientView: View {
                         
                         SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
                             .onChange(of: search, perform: performSearchByText)
+                            .padding(.bottom, 10)
 
                         
                         //checamos si hay notas
@@ -317,17 +318,16 @@ struct PatientView: View {
                             .listStyle(.sidebar)
                             
                         }else{
+                            
                             List(filteredNotes, id: \.id) { note in
-                                Button(action: {}) {
-                                   
+                                
+                                Button(action:{selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })}){
                                     Text(note.title)
                                         .font(.system(size: 18, weight: .light))
                                         .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
-                                    
-                                }
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
-                                .onTapGesture {
-                                    selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })
+                                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
+                                        //.frame(width: geometry.size.width / 5, alignment: .leading)
+
                                 }
                             }
                             //.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
