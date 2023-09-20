@@ -48,7 +48,7 @@ class AuthViewModel: ObservableObject {
             let email = data["email"] as? String ?? ""
             let name = data["name"] as? String ?? ""
             let isAdmin = data["isAdmin"] as? Bool ?? false
-            let image = data["image"] as? String ?? ""
+            let image = data["image"] as? String ?? "placeholder"
 
             // Crea un nuevo objeto User con los datos recuperados y lo asigna a la variable de usuario publicada. Esto desencadenará una actualización en cualquier vista que esté observando esta variable.
             self.user = User(id: id, name: name, email: email, isAdmin: isAdmin, image: image)
@@ -113,7 +113,7 @@ class AuthViewModel: ObservableObject {
     }
     
     private func storeUserInformation(id: String, name: String, email: String, isAdmin: Bool, image: String) {
-        let userData = ["name": name, "email": email, "isAdmin": isAdmin, "id": id, "image": image] as [String : Any]
+        let userData = ["name": name, "email": email, "isAdmin": isAdmin, "id": id, "image": "placeholder"] as [String : Any]
         Firestore.firestore().collection("User").document(id).setData(userData) { err in
             if let err = err {
                 print(err)

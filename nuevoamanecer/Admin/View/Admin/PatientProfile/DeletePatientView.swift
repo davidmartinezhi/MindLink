@@ -41,7 +41,7 @@ struct DeletePatientView: View {
                       primaryButton: .destructive(Text("Eliminar")) {
                         // Aquí va la lógica para eliminar al paciente
                     Task{
-                        storage.deleteFile(name: patient.lastName + patient.firstName + "profile_picture")
+                        storage.deleteFile(name: "Fotos_perfil/" + patient.identificador + "profile_picture")
                         await patients.deleteData(patient: patient){ error in
                             if error != "OK"{
                                 print(error)
@@ -61,7 +61,6 @@ struct DeletePatientView: View {
 
                       },
                       secondaryButton: .cancel())
-                     
             }
             Spacer()
         }
