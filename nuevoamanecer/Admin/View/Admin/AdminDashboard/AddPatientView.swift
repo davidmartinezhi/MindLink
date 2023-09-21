@@ -40,7 +40,8 @@ struct AddPatientView: View {
     @State private var imageURL = URL(string: "")
     @State private var uploadPatient: Bool = false
     @State var isSaving: Bool = false
-    
+    @State private var deletedImage: Bool = false
+    @State private var showAlertNoImage: Bool = false
 
     // Función para cargar la imagen del paciente desde Firebase
     func loadImageFromFirebase(name: String) {
@@ -65,38 +66,76 @@ struct AddPatientView: View {
                     Section(header: Text("Foto del paciente")) {
                         HStack{
                             Spacer()
-                            Button() {
-                                shouldShowImagePicker.toggle()
+                            Menu {
+                                Button(action: {
+                                    shouldShowImagePicker.toggle()
+                                    deletedImage = false
+                                    
+                                }, label: {
+                                    Text("Seleccionar Imagen")
+                                })
+                                Button(action: {
+                                    if (upload_image == nil || deletedImage) {
+                                        showAlertNoImage.toggle()
+                                    } else {
+                                        deletedImage = true
+                                        upload_image = nil
+                                    }
+                                }, label: {
+                                    Text("Eliminar Imagen")
+                                })
                             } label: {
+                                //Imagen recien cargada
                                 if let displayImage = self.upload_image {
-
-                                    ZStack {
+                                    
+                                    ZStack{
                                         Image(uiImage: displayImage)
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 128, height: 128)
                                             .cornerRadius(128)
                                             .padding(.horizontal, 20)
-                                            
-
+                                        
                                         Image(systemName: "photo.on.rectangle.fill")
                                             .font(.system(size: 25))
-                                            .offset(x: 45, y: 50)
+                                            .offset(x: 53, y: 50)
+                                        //.foregroundColor(.white)
                                     }
                                     .padding(.horizontal, 20)
                                 } else {
-                                    ZStack {
-                                        Image(systemName: "person.crop.circle.fill")
-                                            .font(.system(size: 128))
-                                            .foregroundColor(Color(.systemGray2))
-                                            
-
-                                        Image(systemName: "photo.on.rectangle.fill")
-                                            .font(.system(size: 25))
-                                            .offset(x: 45, y: 50)
-                                    }
-                                    .padding(.horizontal, 20)
                                     
+                                    //No imagen
+                                    if(upload_image == nil || deletedImage) {
+                                        ZStack {
+                                            Image(systemName: "person.crop.circle.fill")
+                                                .font(.system(size: 128))
+                                                .foregroundColor(Color(.systemGray2))
+                                                
+
+                                            Image(systemName: "photo.on.rectangle.fill")
+                                                .font(.system(size: 25))
+                                                .offset(x: 45, y: 50)
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
+                                    
+                                    //Imagen previamente subida
+                                    else{
+                                        ZStack{
+                                            Image(uiImage: upload_image!)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 128, height: 128)
+                                                .cornerRadius(128)
+                                                .padding(.horizontal, 20)
+                                            
+                                            Image(systemName: "photo.on.rectangle.fill")
+                                                .font(.system(size: 25))
+                                                .offset(x: 53, y: 50)
+                                                .foregroundColor(.blue)
+                                        }
+                                        .padding(.horizontal, 20)
+                                    }
                                 }
                             }
                             Spacer()
