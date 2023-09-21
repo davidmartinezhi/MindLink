@@ -34,6 +34,8 @@ struct AdminMenuView: View {
     
     @State private var showPassword: Bool = false
     @State private var showConfirmPassword: Bool = false
+    @State private var emailConfirm: String = ""
+    @State private var emailValidation: String = ""
     @FocusState private var inFocus: Field?
     @FocusState private var inFocusConfirm: Field?
     
@@ -64,7 +66,6 @@ struct AdminMenuView: View {
     var body: some View {
         VStack {
             VStack {
-                
                 //Imagen del usuario
                 VStack{
                     Button() {
@@ -124,7 +125,6 @@ struct AdminMenuView: View {
                     .foregroundColor(.gray)
             }
             .frame(maxHeight: 150)
-            
             VStack{
                 Form {
                     Section(header: Text("Información")) {
@@ -132,8 +132,17 @@ struct AdminMenuView: View {
                             .textContentType(.username)
                             .autocapitalization(.none)
                             .autocorrectionDisabled(true)
-                        TextField("Email", text: $email)
-                            .textContentType(.emailAddress)
+                        if (email == emailConfirm) {
+                            TextField("Email", text: $email)
+                                .textContentType(.emailAddress)
+                        } else {
+                            TextField("Email", text: $email)
+                                .textContentType(.emailAddress)
+                            TextField("Confirmar Email", text: $emailValidation)
+                                .textContentType(.emailAddress)
+                            Spacer()
+                        }
+
                         ZStack (alignment: .trailing) {
                             if showPassword {
                                 TextField("Nueva contraseña", text: $password)
@@ -142,7 +151,7 @@ struct AdminMenuView: View {
                                   .autocorrectionDisabled(true)
                                   .textContentType(.newPassword)
                                   .focused($inFocus, equals: .plain)
-                            } else {    
+                            } else {
                                 SecureField("Nueva contraseña", text: $password)
                                     .textInputAutocapitalization(.never)
                                     .keyboardType(.asciiCapable)
@@ -157,6 +166,7 @@ struct AdminMenuView: View {
                                 Image(systemName: showPassword ? "eye" : "eye.slash")
                             }
                         }
+                        //
                         if (password != ""){
                             ZStack (alignment: .trailing) {
                                 if showConfirmPassword {
@@ -184,6 +194,7 @@ struct AdminMenuView: View {
                                 }
                             }
                         }
+                        //
                     }
                 }
             }
@@ -230,9 +241,14 @@ struct AdminMenuView: View {
                                         self.alertTitle = "Contraseña Invalida"
                                         self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
                                         self.showingAlert = true
-                                    } else{
-                                        uploadData.toggle()
-                                        dismiss()
+                                    } else if (email != emailConfirm) {
+                                        if (email == emailValidation) {
+                                            uploadData.toggle()
+                                            dismiss()
+                                        } else {
+                                            self.alertTitle = "Correo electronico no coincide"
+                                            self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                        }
                                     }
                                 }
                             }
@@ -250,9 +266,14 @@ struct AdminMenuView: View {
                                 self.alertTitle = "Contraseña Invalida"
                                 self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
                                 self.showingAlert = true
-                            } else{
-                                uploadData.toggle()
-                                dismiss()
+                            } else if (email != emailConfirm) {
+                                if (email == emailValidation) {
+                                    uploadData.toggle()
+                                    dismiss()
+                                } else {
+                                    self.alertTitle = "Correo electronico no coincide"
+                                    self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                }
                             }
                         }
                     }) {
@@ -304,6 +325,7 @@ struct AdminMenuView: View {
         }
         .onAppear{
             loadImageFromFirebase(name: "Fotos_perfil/" + user.id + "admin_profile_picture.jpg")
+            emailConfirm = email
         }
         .onDisappear{
             if(uploadData) {
