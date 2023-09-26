@@ -14,9 +14,12 @@
 		BC014F102A91801F0002140A /* AppLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC014F0F2A91801F0002140A /* AppLock.swift */; };
 		BC1132522A95466C0080F294 /* NavigationPathWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */; };
 		BC1132542A954E380080F294 /* NavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132532A954E380080F294 /* NavigationDestination.swift */; };
+		BC1207722ABFF70E0098A527 /* UserWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1207712ABFF70E0098A527 /* UserWrapper.swift */; };
 		BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */; };
+		BC3B46B82ABE712F0034BDA9 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */; };
+		BC3B46BA2ABF9E000034BDA9 /* AdminStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B46B92ABF9E000034BDA9 /* AdminStringExtensions.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
-		BC884A762AAACC7000E83553 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC884A752AAACC7000E83553 /* ArrayExtensions.swift */; };
+		BC884A762AAACC7000E83553 /* AdminArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
 		BC8F7E312A37FFBD008E97B2 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E052A37FFBD008E97B2 /* LockView.swift */; };
@@ -50,7 +53,7 @@
 		BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */; };
 		BC91CB232AA445300078C780 /* LongPressButtonWithImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC91CB222AA445300078C780 /* LongPressButtonWithImageView.swift */; };
 		BC93FD9C2A9B160700853E68 /* PictogramSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */; };
-		BC93FD9F2A9B19D300853E68 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */; };
+		BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9E2A9B19D300853E68 /* PictogramStringExtensions.swift */; };
 		BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */; };
 		BCB1B7092A42BA6E00C01B15 /* PageThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */; };
 		BCB1B70B2A42BA7600C01B15 /* PageDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */; };
@@ -107,9 +110,12 @@
 		BC014F0F2A91801F0002140A /* AppLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLock.swift; sourceTree = "<group>"; };
 		BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPathWrapper.swift; sourceTree = "<group>"; };
 		BC1132532A954E380080F294 /* NavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestination.swift; sourceTree = "<group>"; };
+		BC1207712ABFF70E0098A527 /* UserWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWrapper.swift; sourceTree = "<group>"; };
 		BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOptionsView.swift; sourceTree = "<group>"; };
+		BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		BC3B46B92ABF9E000034BDA9 /* AdminStringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminStringExtensions.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
-		BC884A752AAACC7000E83553 /* ArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminArrayExtensions.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
 		BC8F7E052A37FFBD008E97B2 /* LockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
@@ -143,7 +149,7 @@
 		BC8FE0A02A736A8100BE7ABC /* BoardCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCache.swift; sourceTree = "<group>"; };
 		BC91CB222AA445300078C780 /* LongPressButtonWithImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressButtonWithImageView.swift; sourceTree = "<group>"; };
 		BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramSearchBarView.swift; sourceTree = "<group>"; };
-		BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		BC93FD9E2A9B19D300853E68 /* PictogramStringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramStringExtensions.swift; sourceTree = "<group>"; };
 		BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedScrollView.swift; sourceTree = "<group>"; };
 		BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageThumbnail.swift; sourceTree = "<group>"; };
 		BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDisplay.swift; sourceTree = "<group>"; };
@@ -221,6 +227,7 @@
 			children = (
 				BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */,
 				BC1132532A954E380080F294 /* NavigationDestination.swift */,
+				BC1207712ABFF70E0098A527 /* UserWrapper.swift */,
 			);
 			path = MiscStructures;
 			sourceTree = "<group>";
@@ -228,7 +235,8 @@
 		BC884A742AAACC5F00E83553 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BC884A752AAACC7000E83553 /* ArrayExtensions.swift */,
+				BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */,
+				BC3B46B92ABF9E000034BDA9 /* AdminStringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -421,7 +429,7 @@
 		BC93FD9D2A9B19BD00853E68 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BC93FD9E2A9B19D300853E68 /* StringExtensions.swift */,
+				BC93FD9E2A9B19D300853E68 /* PictogramStringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -581,6 +589,7 @@
 				C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */,
 				C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */,
 				C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */,
+				BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -714,7 +723,7 @@
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
-				BC93FD9F2A9B19D300853E68 /* StringExtensions.swift in Sources */,
+				BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
@@ -741,11 +750,12 @@
 				BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */,
 				BC8F7E482A37FFBD008E97B2 /* PictogramEditorWindowView.swift in Sources */,
 				BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */,
+				BC1207722ABFF70E0098A527 /* UserWrapper.swift in Sources */,
 				BC1132542A954E380080F294 /* NavigationDestination.swift in Sources */,
 				BC8F7E322A37FFBD008E97B2 /* SwitchView.swift in Sources */,
 				BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */,
 				BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */,
-				BC884A762AAACC7000E83553 /* ArrayExtensions.swift in Sources */,
+				BC884A762AAACC7000E83553 /* AdminArrayExtensions.swift in Sources */,
 				BCB1B7112A42BBD100C01B15 /* PictogramPickerView.swift in Sources */,
 				C2207F002A1F1AF400F31578 /* Note.swift in Sources */,
 				C2BEDB672A157B72005398F9 /* User.swift in Sources */,
@@ -756,6 +766,7 @@
 				BC8F7E3A2A37FFBD008E97B2 /* TextFieldView.swift in Sources */,
 				BC014F102A91801F0002140A /* AppLock.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
+				BC3B46B82ABE712F0034BDA9 /* UserViewModel.swift in Sources */,
 				BC8F7E312A37FFBD008E97B2 /* LockView.swift in Sources */,
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift in Sources */,
 				BC8F7E4B2A37FFBD008E97B2 /* Album.swift in Sources */,
@@ -766,6 +777,7 @@
 				BC8F7E3E2A37FFBD008E97B2 /* PictogramEditor.swift in Sources */,
 				BC8F7E4C2A37FFBD008E97B2 /* PageModel.swift in Sources */,
 				C2207F082A252D2900F31578 /* DeletePatientView.swift in Sources */,
+				BC3B46BA2ABF9E000034BDA9 /* AdminStringExtensions.swift in Sources */,
 				C22ECD452A33E32200DF8A06 /* CommunicatorMenuView.swift in Sources */,
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 				BC8F7E462A37FFBD008E97B2 /* DropDownCategoryPicker.swift in Sources */,

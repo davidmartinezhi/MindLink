@@ -11,9 +11,10 @@ import FirebaseStorage
 
 struct AdminMenuView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var authViewModel: AuthViewModel
-    
+    @EnvironmentObject var authVM: AuthViewModel
+    var userVM: UserViewModel = UserViewModel()
     var user: User
+    
     @State private var name: String
     @State private var email: String
     @State private var password = ""
@@ -26,7 +27,7 @@ struct AdminMenuView: View {
     
     @State private var showLogoutAlert = false
     
-    @State private var upload_image: UIImage?
+    @State private var uploaded_image: UIImage?
     @State private var shouldShowImagePicker: Bool = false
     @State private var uploadData: Bool = false
     @State private var imageURL = URL(string: "")
@@ -44,23 +45,10 @@ struct AdminMenuView: View {
         case secure
     }
 
-    init(authViewModel: AuthViewModel, user: User) {
-        self.authViewModel = authViewModel
+    init(user: User) {
         self.user = user
         _name = State(initialValue: user.name)
         _email = State(initialValue: user.email)
-    }
-    
-    func loadImageFromFirebase(name:String) {
-        let storageRef = Storage.storage().reference(withPath: name)
-        
-        storageRef.downloadURL { (url, error) in
-            if error != nil {
-                print("Este usuario no tiene una imagen de perfil")
-                return
-            }
-            self.imageURL = url!
-        }
     }
     
     var body: some View {
@@ -71,8 +59,8 @@ struct AdminMenuView: View {
                     Button() {
                         shouldShowImagePicker.toggle()
                     } label: {
-                        if let displayImage = self.upload_image {
-                            Image(uiImage: displayImage)
+                        if self.uploaded_image != nil {
+                            Image(uiImage: uploaded_image!)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 128, height: 128)
@@ -80,7 +68,7 @@ struct AdminMenuView: View {
                                 .padding(.horizontal, 20)
                         } else {
                                 //No imagen
-                                if(user.image == "placeholder") {
+                                if user.image == nil {
                                     ZStack{
                                         Image(systemName: "person.circle")
                                             .font(.system(size: 100))
@@ -97,7 +85,7 @@ struct AdminMenuView: View {
                                 //Imagen previamente subida
                                 else{
                                     ZStack{
-                                        KFImage(URL(string: user.image))
+                                        KFImage(URL(string: user.image!))
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 128, height: 128)
@@ -222,9 +210,9 @@ struct AdminMenuView: View {
                     //Guardar
                     Button(action: {
                         
-                        if let thisImage = self.upload_image {
+                        if self.uploaded_image != nil {
                             Task {
-                                await storage.uploadImage(image: thisImage, name: "Fotos_perfil/" + user.id + "admin_profile_picture") { url in
+                                await storage.uploadImage(image: self.uploaded_image!, name: "Fotos_perfil/" + self.user.id! + "admin_profile_picture") { url in
                                     
                                     imageURL = url
                                     
@@ -237,7 +225,7 @@ struct AdminMenuView: View {
                                         self.alertTitle = "Confirme su contraseña"
                                         self.alertMessage = "Por favor, confirme correctamente su contraseña."
                                         self.showingAlert = true
-                                    } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                                    } else if (password.isWeakPassword()){
                                         self.alertTitle = "Contraseña Invalida"
                                         self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
                                         self.showingAlert = true
@@ -262,7 +250,7 @@ struct AdminMenuView: View {
                                 self.alertTitle = "Confirme su contraseña"
                                 self.alertMessage = "Por favor, confirme correctamente su contraseña."
                                 self.showingAlert = true
-                            } else if (authViewModel.isWeak(password) && !password.isEmpty){
+                            } else if (password.isWeakPassword()){
                                 self.alertTitle = "Contraseña Invalida"
                                 self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
                                 self.showingAlert = true
@@ -298,7 +286,7 @@ struct AdminMenuView: View {
         .background(Color(.init(white: 0, alpha: 0.05))
             .ignoresSafeArea())
         .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
-            ImagePicker(image: $upload_image)
+            ImagePicker(image: $uploaded_image)
         }
         .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
             TextField("Contraseña", text: $authPassword)
@@ -306,13 +294,12 @@ struct AdminMenuView: View {
             
             Button("Okay", action: {
                 Task {
-                    await self.authViewModel.autenticar(email: email, password: authPassword)
-                    print(self.authViewModel.validar)
+                    let result: AuthActionResult = await authVM.reauthenticateAuthUser(email: user.email, password: authPassword)
                     
-                    if(self.authViewModel.validar != true){
-                        dismiss()
-                    }else{
-                        self.authViewModel.validar.toggle()
+                    if result.success {
+                        // Exito
+                    } else {
+                        dismiss() // Notificar en pantalla al usuario si la revalidación no es exitosa.
                     }
                 }
             })
@@ -323,28 +310,34 @@ struct AdminMenuView: View {
         } message: {
             Text(alertMessage)
         }
-        .onAppear{
-            loadImageFromFirebase(name: "Fotos_perfil/" + user.id + "admin_profile_picture.jpg")
-            emailConfirm = email
-        }
         .onDisappear{
-            if(uploadData) {
+            if (uploadData) {
                 self.name = name
                 self.email = email
                 
-                authViewModel.updateUser(name: name, isAdmin: user.isAdmin, image: imageURL?.absoluteString ?? "placeholder", email: email)
-                authViewModel.updateAuthEmail(email: email)
-                if(password != ""){
-                    authViewModel.updateAuthPassword(password: password)
+                let _user: User = User(name: name, email: email, isAdmin: user.isAdmin, image: imageURL?.absoluteString)
+                userVM.editUser(userId: user.id!, user: _user) { error in
+                    if error != nil {
+                        // Error
+                    } else {
+                        Task {
+                            await authVM.updateCurrentAuthUser(value: email, userProperty: .email)
+                        }
+                    }
+                }
+                
+                if !password.isEmpty {
+                    Task {
+                        let result: AuthActionResult = await authVM.updateCurrentAuthUser(value: password, userProperty: .password)
+                        
+                        if result.success {
+                            // Exito
+                        } else {
+                            // Error
+                        }
+                    }
                 }
             }
         }
     }
 }
-
-struct AdminMenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        AdminMenuView(authViewModel: AuthViewModel() ,user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
-    }
-}
-

@@ -11,7 +11,7 @@ import SwiftUI
 class NavigationPathWrapper: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
     
-    func push<V: Hashable>(data: V) -> Void {
+    func push<V: Hashable>(_ data: V) -> Void {
             self.path.append(data)
     }
     

@@ -8,30 +8,53 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var authViewModel = AuthViewModel()
-
-    func initialFetch() {
-        authViewModel.fetchCurrentUser()
-    }
+    @StateObject var authVM: AuthViewModel = AuthViewModel()
+    @StateObject var currentUser: UserWrapper = UserWrapper()
+    @StateObject var navPath = NavigationPathWrapper() // Contiene una instancia de NavigationPath, es proveida como variable de ambiente.
+    var userVM: UserViewModel = UserViewModel()
 
     var body: some View {
-        VStack {
-            if let user = authViewModel.user {
-                AdminView(authViewModel: authViewModel, user: user)
-
-            } else {
-                AuthView(authViewModel: authViewModel)  // Si no hay usuario, muestra la vista de inicio de sesión
+        NavigationStack(path: $navPath.path) {
+            AuthView()
+                .navigationDestination(for: NavigationDestination<AdminView>.self) { destination in
+                    destination.content
+                }
+                .navigationDestination(for: NavigationDestination<LoginView>.self) { destination in
+                    destination.content
+                }
+                .navigationDestination(for: NavigationDestination<PatientView>.self) { destination in
+                    destination.content
+                }
+                .navigationDestination(for: NavigationDestination<SingleCommunicator>.self) { destination in
+                    destination.content
+                }
+                .navigationDestination(for: NavigationDestination<DoubleCommunicator>.self) { destination in
+                    destination.content
+                }
+                .navigationDestination(for: NavigationDestination<PictogramEditor>.self) { destination in
+                    destination.content
+                }
+        }
+        .environmentObject(authVM)
+        .environmentObject(currentUser)
+        .environmentObject(navPath)
+        .onAppear {
+            if authVM.loggedInAuthUserId() != nil {
+                userVM.getUser(userId: authVM.loggedInAuthUserId()!) { error, user in
+                    if error != nil || user == nil {
+                        // Error al obtener usuario
+                    } else {
+                        currentUser.setUser(user: user!)
+                        navPath.push(NavigationDestination<AdminView>(content: AdminView()))
+                    }
+                }
             }
         }
-        .onAppear(perform: initialFetch)
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
-
-
