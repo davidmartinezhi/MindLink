@@ -6,13 +6,23 @@
 //
 
 import Foundation
+import SwiftUI
 
+/*
 enum ViewType {
-    case singleCommunicator, doubleCommunicator, basePictogramEditor, userPictogramEditor, album 
+    case singleCommunicator, doubleCommunicator, basePictogramEditor, userPictogramEditor, login, adminDash, patient
 }
+ */
 
-struct NavigationDestination: Hashable {
-    var viewType: ViewType
-    var patient: Patient? = nil 
+struct NavigationDestination<Content:View>: Hashable {
+    let id: UUID = UUID()
+    let content: Content
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func==(lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
-

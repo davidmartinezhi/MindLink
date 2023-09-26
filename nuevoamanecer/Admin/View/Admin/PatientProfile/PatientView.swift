@@ -9,12 +9,14 @@ import SwiftUI
 import Kingfisher
 
 struct PatientView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var currentUser: UserWrapper
+    @EnvironmentObject var navPath: NavigationPathWrapper
     
     //ViewModels
     @ObservedObject var patients : PatientsViewModel
     @ObservedObject var notes : NotesViewModel
-    @StateObject var users = AuthViewModel()
-    
+    @StateObject var auth = AuthViewModel()
     
     //patient
     let patient: Patient
@@ -36,9 +38,7 @@ struct PatientView: View {
     @State private var showCommunicatorMenu: Bool = false
     
     @State private var selection: String? = nil
-    
-    @EnvironmentObject var pathWrapper: NavigationPathWrapper
-    
+        
     //obtiene edad del paciente
     private func getAge(patient: Patient) -> Int {
         let birthday: Date = patient.birthDate // tu fecha de nacimiento aquí
@@ -183,7 +183,7 @@ struct PatientView: View {
                         HStack{
                             Spacer()
                             // validar que el usuario sea admin para mostrar
-                            if (users.user?.isAdmin == true) {
+                            if currentUser.isAdmin! {
                                 Button(action: {
                                     // Handle settings action here
                                     showEditPatientView.toggle()
@@ -209,9 +209,9 @@ struct PatientView: View {
                             
                             Menu {
                                 // validar que el usuario sea admin para mostrar
-                                if (users.user?.isAdmin == true) {
+                                if currentUser.isAdmin! {
                                     Button {
-                                        pathWrapper.push(data: NavigationDestination(viewType: .userPictogramEditor, patient: patient))
+                                        navPath.push(NavigationDestination<PictogramEditor>(content: PictogramEditor(patient: patient)))
                                     } label: {
                                         Text("Editar comunicador de \(patient.firstName)")
                                         Image(systemName: "pencil")
@@ -219,7 +219,7 @@ struct PatientView: View {
                                 }
                                 
                                 Button {
-                                    pathWrapper.push(data: NavigationDestination(viewType: .doubleCommunicator, patient: patient))
+                                    navPath.push(NavigationDestination<DoubleCommunicator>(content: DoubleCommunicator(patient: patient)))
                                 } label: {
                                     Text("Acceder a comunicador de \(patient.firstName)")
                                     Image(systemName: "message.fill")
@@ -386,7 +386,7 @@ struct PatientView: View {
                                         .padding([.top, .bottom], 5)
                                         .swipeActions(edge: .trailing) {
                                             // validar que el usuario sea admin para mostrar
-                                            if (users.user?.isAdmin == true) {
+                                            if currentUser.isAdmin! {
                                                 Button {
                                                     //selectedNote = note
                                                     selectedNoteIndex = index

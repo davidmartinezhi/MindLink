@@ -13,7 +13,10 @@ struct LoginView: View {
         case secure
     }
     
-    @ObservedObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var currentUser: UserWrapper
+    @EnvironmentObject var navPath: NavigationPathWrapper
+
     @State var email = ""
     @State var password = ""
     @State private var contraseñaIncorrecta: Bool = false
@@ -21,7 +24,9 @@ struct LoginView: View {
     @State private var showAlert: Bool = false
     @State private var showPassword: Bool = false
     @FocusState private var inFocus: Field?
-
+    
+    var userVM: UserViewModel = UserViewModel()
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -71,11 +76,22 @@ struct LoginView: View {
                     }
                 }
                 Button(action: {
-                    Task {
-                        authViewModel.loginUser(email: email, password: password)
+                    Task { // Hacer login
+                        let result: AuthActionResult = await authVM.loginAuthUser(email: email, password: password)
                         
-                        if(authViewModel.errorLogin != false) {
-                            showAlert.toggle()
+                        if result.success && result.userId != nil {
+                            userVM.getUser(userId: result.userId!) { error, user in
+                                if error != nil || user == nil {
+                                    // No fue posible obtener la información del usuario que inicio sesión
+                                    showAlert = true
+                                } else {
+                                    currentUser.setUser(user: user!)
+                                    navPath.push(NavigationDestination<AdminView>(content: AdminView()))
+                                }
+                            }
+                        } else {
+                            // No fue posbile iniciar sesión correctamente
+                            showAlert = true
                         }
                     }
                 }) {
@@ -90,7 +106,9 @@ struct LoginView: View {
                 .disabled(email.isEmpty || password.isEmpty)
                 .padding(.horizontal)
                 .alert("Verifique su correo y contraseña", isPresented: $showAlert){
-                    Button(action: {authViewModel.errorLogin.toggle()}) {Text("Ok") }
+                    Button(action: {showAlert = false}){
+                        Text("Ok")
+                    }
                 }
                 message: {
                     Text("Puede que su correo o contraseña sean erroneos")
@@ -106,14 +124,3 @@ struct LoginView: View {
         .accentColor(.blue) // Cambia el color del título y los enlaces de navegación a azul para un aspecto más profesional
     }
 }
-
-
-
-
-
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView(authViewModel: AuthViewModel())
-    }
-}
-

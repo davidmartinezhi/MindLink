@@ -14,16 +14,15 @@ struct RegisterView: View {
     }
     
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var currentUser: UserWrapper
     
-    var user: User
     @State var email = ""
     @State var password = ""
     @State var authPassword = ""
     @State var name = ""
     @State var isAdmin = false
     @State var confirmpassword = ""
-    @State var adminEmail: String
     
     @State private var mostrarAlerta = false
     @State private var mostrarAlerta1 = false
@@ -33,13 +32,7 @@ struct RegisterView: View {
     @State private var showConfirmPassword: Bool = false
     @FocusState private var inFocus: Field?
     @FocusState private var inFocusConfirm: Field?
-    
-    init(authViewModel: AuthViewModel, user: User) {
-        self.authViewModel = authViewModel
-        self.user = user
-        _adminEmail = State(initialValue: user.email)
-    }
-    
+        
     var body: some View {
         VStack {
             Text("Registrarse")
@@ -148,11 +141,11 @@ struct RegisterView: View {
             Button(action: {
                 if(password != confirmpassword){
                     mostrarAlerta = true
-                } else if (authViewModel.isWeak(password)){
+                } else if (password.isWeakPassword()){
                     mostrarAlerta1 = true
                 } else {
                     Task {
-                        authViewModel.createNewAccount(email: email, password: password, name: name, isAdmin: isAdmin, adminEmail: adminEmail, adminPassword: authPassword)
+                        _ = await authVM.createNewAuthAccount(email: email, password: password)
                     }
                     dismiss()
                 }
@@ -178,11 +171,7 @@ struct RegisterView: View {
                 Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial")
             }
             
-            if let messageError = authViewModel.errorMessage {
-                Text(messageError)
-                    .foregroundColor(.red)
-                    .padding(.top, 20)
-            }
+            // Añadir mensaje
         }
         .padding()
         .padding(.horizontal, 70)
@@ -192,13 +181,12 @@ struct RegisterView: View {
             
             Button("Okay", action: {
                 Task {
-                    await self.authViewModel.autenticar(email: adminEmail, password: authPassword)
-                    print(self.authViewModel.validar)
+                    let result: AuthActionResult = await authVM.loginAuthUser(email: currentUser.email!, password: authPassword)
                     
-                    if(self.authViewModel.validar != true){
+                    if result.success {
+                        // Exito
+                    } else {
                         dismiss()
-                    }else{
-                        self.authViewModel.validar.toggle()
                     }
                 }
             })
@@ -206,12 +194,3 @@ struct RegisterView: View {
         })
     }
 }
-
-
-struct RegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegisterView(authViewModel: AuthViewModel() ,user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
-    }
-}
-
-

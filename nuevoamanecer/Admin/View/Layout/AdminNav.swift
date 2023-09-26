@@ -9,7 +9,8 @@ import SwiftUI
 import Kingfisher
 
 struct AdminNav: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var currentUser: UserWrapper
     
     @Binding var showAdminView: Bool
     @Binding var showRegisterView: Bool
@@ -20,8 +21,9 @@ struct AdminNav: View {
     
     @State private var showLogoutAlert = false
     
-    var user: User
-    
+    @EnvironmentObject var pathWrapper: NavigationPathWrapper
+    @EnvironmentObject var currentUserWrapper: UserWrapper
+        
     var body: some View {
         ZStack {
             HStack {
@@ -36,7 +38,7 @@ struct AdminNav: View {
                 
                 ZStack{
                     //No imagen
-                    if(user.image == "placeholder") {
+                    if currentUser.image == nil {
                         ZStack{
                             Image(systemName: "person.circle")
                                 .font(.system(size: 60))
@@ -47,9 +49,8 @@ struct AdminNav: View {
                     }
                     //Imagen previamente subida
                     else{
-                        
                         ZStack{
-                            KFImage(URL(string: user.image))
+                            KFImage(URL(string: currentUser.image!))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 50, height: 50)
@@ -69,7 +70,7 @@ struct AdminNav: View {
                         }
                         
                         // solo usuarios administradores pueden crear otro usuario
-                        if (user.isAdmin == true) {
+                        if (currentUser.isAdmin! == true) {
                             // boton para ir a la vista de registro
                             Button(action: { showRegisterView = true }) {
                                 HStack {
@@ -102,7 +103,14 @@ struct AdminNav: View {
                     title: Text("Cerrar Sesión"),
                     message: Text("¿Estás seguro que quieres cerrar la sesión?"),
                     primaryButton: .destructive(Text("Cerrar sesión"), action: {
-                        authViewModel.logout()
+                        // logout
+                        let result: AuthActionResult = authVM.logout()
+                        
+                        if result.success {
+                            pathWrapper.returnToRoot()
+                        } else {
+                            // Error al cerrar sesión.
+                        }
                     }),
                     secondaryButton: .cancel()
                 )
@@ -123,11 +131,3 @@ struct AdminNav: View {
          */
     }
 }
-
-
-struct AdminNav_Previews: PreviewProvider {
-    static var previews: some View {
-        AdminNav(authViewModel: AuthViewModel(), showAdminView: .constant(false), showRegisterView: .constant(false), user: User(id: "", name: "", email: "", isAdmin: false, image: ""))
-    }
-}
-
