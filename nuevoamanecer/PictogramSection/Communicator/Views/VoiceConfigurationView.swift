@@ -15,6 +15,9 @@ struct VoiceConfigurationView: View {
     var speedList = ["Lenta", "Normal", "Rápida"]
     @Binding var voiceGender : String
     var voiceList = ["Masculina", "Femenina"]
+    @Binding var voiceAge : String
+    var voiceAgeList = ["Adulta", "Infantil"]
+    
     
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
@@ -70,13 +73,39 @@ struct VoiceConfigurationView: View {
             }
             
             HStack {
+                Text("Edad de voz")
+                    .font(.title2)
+                Menu {
+                    Picker("Edad", selection: $voiceAge) {
+                        ForEach(voiceAgeList, id: \.self) { age in
+                            Text(age)
+                        }
+                    }
+                } label: {
+                    Text(voiceAge)
+                        .font(.title2)
+                    Image(systemName: "chevron.down")
+                }
+                .padding()
+                .background(Color.secondary.opacity(0.2))
+                .cornerRadius(8)
+                .foregroundColor(.primary)
+            }
+            
+            HStack {
                 ButtonWithImageView(text: "Probar", systemNameImage: "speaker.wave.2", background: .gray) {
+                    
                     let utterance = AVSpeechUtterance(string: "Nuevo Amanecer")
                     
-                    utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
-                    
-                    utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
-                    
+                    if (voiceAge == "Infantil") {
+                        utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+                        utterance.rate = 0.5
+                        utterance.pitchMultiplier = 1.5
+                    } else {
+                        utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                        
+                        utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
+                    }
                     synthesizer.speak(utterance)
                 }
                 
@@ -90,6 +119,6 @@ struct VoiceConfigurationView: View {
 
 struct VoiceConfigurationView_Previews: PreviewProvider {
     static var previews: some View {
-        VoiceConfigurationView(talkingSpeed: .constant("Normal"), voiceGender: .constant("Masculina"))
+        VoiceConfigurationView(talkingSpeed: .constant("Normal"), voiceGender: .constant("Masculina"), voiceAge: .constant("Adulta"))
     }
 }

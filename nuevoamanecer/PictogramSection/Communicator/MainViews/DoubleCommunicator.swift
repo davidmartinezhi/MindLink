@@ -15,6 +15,7 @@ struct DoubleCommunicator: View {
     
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
+    @State var voiceAge: String = "Adulta"
     
     @State var appLock: AppLock = AppLock()
         
@@ -22,11 +23,11 @@ struct DoubleCommunicator: View {
         GeometryReader { geo in
             ZStack {
                 // Communicator 1 (base)
-                Communicator(patient: nil, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: nil, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, voiceAge: $voiceAge, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 1 : 0)
                 
                 // Communicator 2 (del usuario)
-                Communicator(patient: patient, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: patient, title: patient.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, voiceAge: $voiceAge, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 0 : 1)
             }
         }

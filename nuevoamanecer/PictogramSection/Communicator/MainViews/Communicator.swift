@@ -23,6 +23,7 @@ struct Communicator: View {
     @State var isConfiguring = false
     @Binding var voiceGender: String
     @Binding var talkingSpeed: String
+    @Binding var voiceAge: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     var showSwitchView: Bool
@@ -30,7 +31,7 @@ struct Communicator: View {
     
     @EnvironmentObject var appLock: AppLock
     
-    init(patient: Patient?, title: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
+    init(patient: Patient?, title: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, voiceAge: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
         self.patient = patient
         self.title = title 
         let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id)/pictograms" : "basePictograms"
@@ -40,6 +41,7 @@ struct Communicator: View {
         self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
         self._voiceGender = voiceGender
         self._talkingSpeed = talkingSpeed
+        self._voiceAge = voiceAge
         self.showSwitchView = showSwitchView
         self._onLeftOfSwitch = onLeftOfSwitch
     }
@@ -79,7 +81,7 @@ struct Communicator: View {
                     .opacity(appLock.isLocked ? 0 : 1)
                     .font(.headline)
                     .sheet(isPresented: $isConfiguring) {
-                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender, voiceAge: $voiceAge)
                     }
                     
                     LockView()
@@ -140,9 +142,15 @@ struct Communicator: View {
                     //text to speech
                     let utterance = AVSpeechUtterance(string: pictoModel.name)
                     
-                    utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
-                    
-                    utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
+                    if (voiceAge == "Infantil") {
+                        utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+                        utterance.rate = 0.5
+                        utterance.pitchMultiplier = 1.5
+                    } else {
+                        utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                        
+                        utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
+                    }
                     
                     synthesizer.speak(utterance)
 

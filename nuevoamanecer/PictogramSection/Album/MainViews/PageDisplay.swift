@@ -17,6 +17,7 @@ struct PageDisplay: View {
     @State var soundOn: Bool = true
     @State var voiceGender: String = "Femenina"
     @State var talkingSpeed: String = "Normal"
+    @State var voiceAge: String = "Adulta"
     
     @EnvironmentObject var appLock: AppLock
     
@@ -39,7 +40,7 @@ struct PageDisplay: View {
                     }
                     .font(.headline)
                     .sheet(isPresented: $isConfiguringVoice) {
-                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender, voiceAge: $voiceAge)
                     }
                     
                     LockView()
