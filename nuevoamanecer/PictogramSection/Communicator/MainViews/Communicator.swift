@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct Communicator: View {
-    let patient: Patient?
+    @State var patient: Patient?
     let title: String? 
     
     @StateObject var pictoVM: PictogramViewModel
@@ -21,9 +21,9 @@ struct Communicator: View {
     @State var userHasChosenCat: Bool = false
     
     @State var isConfiguring = false
-    @Binding var voiceGender: String
-    @Binding var talkingSpeed: String
-    @Binding var voiceAge: String
+    var voiceGender: String
+    var talkingSpeed: String
+    var voiceAge: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     var showSwitchView: Bool
@@ -39,9 +39,9 @@ struct Communicator: View {
 
         self._pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
-        self._voiceGender = voiceGender
-        self._talkingSpeed = talkingSpeed
-        self._voiceAge = voiceAge
+        self._voiceGender = patient!.voice.voiceGender
+        self._talkingSpeed = patient!.voice.talkingSpeed
+        self._voiceAge = patient!.voice.voiceAge
         self.showSwitchView = showSwitchView
         self._onLeftOfSwitch = onLeftOfSwitch
     }
@@ -81,7 +81,7 @@ struct Communicator: View {
                     .opacity(appLock.isLocked ? 0 : 1)
                     .font(.headline)
                     .sheet(isPresented: $isConfiguring) {
-                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender, voiceAge: $voiceAge)
+                        VoiceConfigurationView(talkingSpeed: patient?.talkingSpeed, voiceGender: patient?.voiceGender, voiceAge: patient?.voiceAge)
                     }
                     
                     LockView()

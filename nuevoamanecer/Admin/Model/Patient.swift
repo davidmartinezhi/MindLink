@@ -18,8 +18,15 @@ struct Patient: Hashable, Codable, Identifiable {
     let image: String
     let notes: [String]
     let identificador: String
+    let voice : VoiceConfiguration
     
     func buildPatientTitle() -> String {
         return firstName + " " + lastName.prefix(upTo: lastName.firstIndex(of: " ") ?? lastName.endIndex)
     }
+}
+
+struct VoiceConfiguration : Codable , Hashable {
+    var talkingSpeed : String = "Normal"
+    var voiceGender : String = "Femenina"
+    var voiceAge : String = "Adulta"
 }

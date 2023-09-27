@@ -100,8 +100,11 @@ class PatientsViewModel: ObservableObject{
             let image = data["image"] as? String ?? ""
             let notes = data["notes"] as? [String] ?? []
             let identificador = data["id"] as? String ?? ""
+            let talkingSpeed = data["talkingSpeed"] as? String ?? "Normal"
+            let voiceGender = data["voiceGender"] as? String ?? "Femenina"
+            let voiceAge = data["voiceAge"] as? String ?? "Adulta"
             
-            let patient = Patient(id: patientId, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador)
+            let patient = Patient(id: patientId, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador, talkingSpeed: talkingSpeed, voiceGender: voiceGender, voiceAge: voiceAge)
             
             return patient
         }
