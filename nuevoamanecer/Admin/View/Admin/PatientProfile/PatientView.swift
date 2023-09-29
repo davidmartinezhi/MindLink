@@ -372,7 +372,7 @@ struct PatientView: View {
 
                         
                         //checamos si hay notas
-                        if(notes.notesList.count == 0){
+                        if(filteredNotes.count == 0){
                             
                             List{
                                 HStack{
@@ -415,7 +415,7 @@ struct PatientView: View {
                     VStack {
 
                         //Checamos que existan pacientes
-                        if(notes.notesList.count == 0){
+                        if(filteredNotes.count == 0){
                             List{
                                 HStack{
                                     Spacer()
