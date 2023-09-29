@@ -137,7 +137,7 @@ struct EditNoteView_Previews: PreviewProvider {
         @State(initialValue: "") var previewSearch: String  // Nueva propiedad
 
         var body: some View {
-            EditNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tags: []), search: $previewSearch)
+            EditNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tag: ""), search: $previewSearch)
         }
     }
 }

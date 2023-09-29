@@ -26,7 +26,7 @@ class NotesViewModel: ObservableObject{
         let docRef = db.collection("Note").document()
         
         
-        docRef.setData(["id": note.id, "patientId": note.patientId, "order": (notesList.count * -1) - 1, "title": note.title, "text": note.text, "date": note.date, "tags":note.tags]) { err in
+        docRef.setData(["id": note.id, "patientId": note.patientId, "order": (notesList.count * -1) - 1, "title": note.title, "text": note.text, "date": note.date, "tag":note.tag]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
@@ -61,10 +61,10 @@ class NotesViewModel: ObservableObject{
                 let text = data["text"] as? String ?? ""
                 let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
                 //let id = data["id"] as? String ?? UUID().uuidString
-                let tags = data["tags"] as? [String] ?? []
+                let tag = data["tag"] as? String ?? ""
                 let id = document.documentID
                 
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tags: tags)
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tag: tag)
                 notes.append(note)
             }
             
@@ -97,9 +97,9 @@ class NotesViewModel: ObservableObject{
                 let title = data["title"] as? String ?? ""
                 let text = data["text"] as? String ?? ""
                 let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
-                let tags = data["tags"] as? [String] ?? []
+                let tag = data["tag"] as? String ?? ""
                 
-                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tags: tags)
+                let note = Note(id: id, patientId: patientId, order: order, title: title, text: text, date: date, tag: tag)
                 notes.append(note)
             }
 
@@ -122,7 +122,7 @@ class NotesViewModel: ObservableObject{
             "order": note.order,
             "title": note.title,
             "text": note.text,
-            "tags": note.tags
+            "tag": note.tag
         ]) { err in
             if let err = err {
                 completion(err.localizedDescription)

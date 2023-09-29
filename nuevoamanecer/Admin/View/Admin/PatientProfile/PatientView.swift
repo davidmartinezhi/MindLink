@@ -22,7 +22,11 @@ struct PatientView: View {
     let patient: Patient
     @State var search: String = ""
     @State private var filteredNotes: [Note] = []
-
+    
+    //tags
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    @State private var selectedTag: String = ""
+    @State private var tagSelected: Bool = false
     
     //showViews
     @State var showAddNoteView = false
@@ -81,6 +85,16 @@ struct PatientView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private func filterNotesByTag() {
+        if !selectedTag.isEmpty {
+            filteredNotes = notes.notesList.filter { note in
+                note.tag == selectedTag
+            }
+        } else {
+            filteredNotes = notes.notesList  // Restablecer a todas las notas si no se selecciona ninguna etiqueta
         }
     }
     
@@ -299,6 +313,62 @@ struct PatientView: View {
                         SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
                             .onChange(of: search, perform: performSearchByText)
                             .padding(.bottom, 10)
+                        
+                        ZStack {
+                            Button(action: {}) { // Picker disguised as a button
+                            }
+                            .padding(.vertical, 15)
+                            .background(Color.white)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.bottom, 10)
+                            .frame(minWidth: geometry.size.width / 6)
+                            .overlay(
+                                Picker("", selection: $selectedTag) {
+                                    if !tagSelected {
+                                        Text("Filtrar Etiquetas")
+                                            .foregroundColor(.white)
+                                    }
+                                    ForEach(tags, id: \.self) {
+                                        Text($0)
+                                    }
+                                }
+                                .onChange(of: selectedTag, perform: { value in
+                                    filterNotesByTag()
+                                    tagSelected = selectedTag != "" && selectedTag != "Etiquetas"
+                                })
+                                .pickerStyle(MenuPickerStyle())
+                                .frame(width: geometry.size.width / 6)
+                            )
+
+                            if tagSelected {
+                                Button(action: {
+                                    selectedTag = ""
+                                    tagSelected = false
+                                }) {
+                                    HStack {
+                                        Text(selectedTag)
+                                            .foregroundColor(.white)
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.white)
+                                    }
+                                }
+                                .frame(minWidth: geometry.size.width / 6)
+                                .padding(.vertical, 15)
+                                .background(
+                                    selectedTag == "Información Personal" ? Color.black :
+                                    selectedTag == "Contacto" ? Color.red :
+                                    selectedTag == "Historial Médico" ? Color.blue :
+                                    selectedTag == "Diagnóstico" ? Color.purple :
+                                    selectedTag == "Tratamiento" ? Color.pink :
+                                    selectedTag == "Soporte Familiar" ? Color.brown :
+                                    selectedTag == "Concentimientos" ? Color.green :
+                                    selectedTag == "Contacto" ? Color.orange : Color.yellow
+                                )
+                                .cornerRadius(10)
+                            }
+                        }
+                        .frame(minWidth: geometry.size.width / 6)
 
                         
                         //checamos si hay notas

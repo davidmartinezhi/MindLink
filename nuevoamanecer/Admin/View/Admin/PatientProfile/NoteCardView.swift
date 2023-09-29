@@ -59,6 +59,6 @@ extension DateFormatter {
 
 struct NoteCardView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteCardView(note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tags: []))
+        NoteCardView(note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tag: ""))
     }
 }
