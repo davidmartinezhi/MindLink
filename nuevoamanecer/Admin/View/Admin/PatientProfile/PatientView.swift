@@ -356,14 +356,14 @@ struct PatientView: View {
                                 .frame(minWidth: geometry.size.width / 6)
                                 .padding(.vertical, 15)
                                 .background(
-                                    selectedTag == "Información Personal" ? Color.black :
+                                    selectedTag == "Información Personal" ? Color.orange :
                                     selectedTag == "Contacto" ? Color.red :
-                                    selectedTag == "Historial Médico" ? Color.blue :
+                                    selectedTag == "Historial Médico" ? Color.pink :
                                     selectedTag == "Diagnóstico" ? Color.purple :
-                                    selectedTag == "Tratamiento" ? Color.pink :
-                                    selectedTag == "Soporte Familiar" ? Color.brown :
+                                    selectedTag == "Tratamiento" ? Color.yellow :
+                                    selectedTag == "Soporte Familiar" ? Color.cyan :
                                     selectedTag == "Concentimientos" ? Color.green :
-                                    selectedTag == "Contacto" ? Color.orange : Color.yellow
+                                    selectedTag == "Contacto" ? Color.teal : Color.black
                                 )
                                 .cornerRadius(10)
                             }

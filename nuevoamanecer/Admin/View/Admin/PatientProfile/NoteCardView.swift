@@ -43,6 +43,30 @@ struct NoteCardView: View {
             .background(Color.white.opacity(0.1))
             .cornerRadius(10)
             //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+            
+            HStack{
+                VStack(alignment: .leading){
+                    Text(note.tag)
+                        .cornerRadius(10)
+                        .frame(width: 200)
+                        .foregroundColor(.white)
+                        .background(
+                            note.tag == "Información Personal" ? Color.orange :
+                            note.tag == "Contacto" ? Color.red :
+                            note.tag == "Historial Médico" ? Color.pink :
+                            note.tag == "Diagnóstico" ? Color.purple :
+                            note.tag == "Tratamiento" ? Color.yellow :
+                            note.tag == "Soporte Familiar" ? Color.cyan :
+                            note.tag == "Concentimientos" ? Color.green :
+                            note.tag == "Contacto" ? Color.teal :
+                            note.tag == "Otro" ? Color.black :  Color.clear
+                        )
+                        .padding(10)
+                        
+                }
+                .cornerRadius(10)
+                Spacer()
+            }
         }
     }
 }
