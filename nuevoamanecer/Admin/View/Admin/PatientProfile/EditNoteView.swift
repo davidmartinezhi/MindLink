@@ -15,7 +15,6 @@ struct EditNoteView: View {
     @Binding var search: String
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
-    @State private var noteTag: String = ""
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
@@ -29,7 +28,7 @@ struct EditNoteView: View {
     func initializeData(note: Note) -> Void{
         noteTitle = note.title
         noteContent = note.text
-        noteTag = note.tag
+        selectedTag = note.tag
     }
     
     var body: some View {

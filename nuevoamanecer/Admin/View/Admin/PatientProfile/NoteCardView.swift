@@ -29,6 +29,8 @@ struct NoteCardView: View {
                         .foregroundColor(Color.black)
                         .padding(.bottom, 2)
                         .fixedSize(horizontal: false, vertical: true)
+                    
+
                     Text(note.text)
                         .font(.system(size: 18, weight: .regular))
                         .foregroundColor(Color.black)
@@ -45,11 +47,12 @@ struct NoteCardView: View {
             //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
             
             HStack {
+                Spacer()
                   VStack(alignment: .leading) {
                       Text(note.tag)
                           .frame(width: 180)
                           .foregroundColor(.white)
-                          .padding(10)
+                          .padding(5)
                   }
                   .background(
                       RoundedRectangle(cornerRadius: 10)
@@ -65,8 +68,9 @@ struct NoteCardView: View {
                               note.tag == "Otro" ? Color.black :  Color.clear
                           )
                   )
+                  .frame(height: 30)
                   .cornerRadius(10)  // Applying cornerRadius to VStack
-                  Spacer()
+                  
               }
             .padding()
         }
