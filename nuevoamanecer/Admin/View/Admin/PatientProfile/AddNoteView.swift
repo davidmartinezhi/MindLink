@@ -21,6 +21,10 @@ struct AddNoteView: View {
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
+    //tags
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    @State private var selectedTag: String = ""
+    
     @State var isSaving : Bool = false
     
     var body: some View {
@@ -28,6 +32,16 @@ struct AddNoteView: View {
             Form {
                 Section(header: Text("Título")) {
                     TextField("Introduce el título de la nota", text: $noteTitle)
+                }
+                
+                Section(header: Text("Etiqueta")) {
+                    Picker("Seleccionar Etiqueta", selection: $selectedTag) {
+                        Text("Ninguna").tag("")
+                        ForEach(tags, id: \.self) { tag in
+                            Text(tag).tag(tag)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
                 }
                 
                 Section(header: Text("Contenido")) {
@@ -75,7 +89,7 @@ struct AddNoteView: View {
                     }
                     else {
                         isSaving = true
-                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date(), tags: [])
+                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date(), tag: selectedTag)
                         
                         notes.addData(patient: patient, note: newNote) { response in
                             if response == "OK" {

@@ -18,12 +18,17 @@ struct EditNoteView: View {
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
+    
+    //tags
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    @State private var selectedTag: String = ""
 
     
     
     func initializeData(note: Note) -> Void{
         noteTitle = note.title
         noteContent = note.text
+        selectedTag = note.tag
     }
     
     var body: some View {
@@ -32,6 +37,16 @@ struct EditNoteView: View {
             Form {
                 Section(header: Text("Título")) {
                     TextField("Título de la nota", text: $noteTitle)
+                }
+                
+                Section(header: Text("Etiqueta")) {
+                    Picker("Seleccionar Etiqueta", selection: $selectedTag) {
+                        Text("Ninguna").tag("")
+                        ForEach(tags, id: \.self) { tag in
+                            Text(tag).tag(tag)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
                 }
                 
                 Section(header: Text("Contenido")) {
@@ -81,6 +96,7 @@ struct EditNoteView: View {
                         //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
                         self.note.title = removeTrailingWhitespace(from: noteTitle)
                         self.note.text = removeTrailingWhitespace(from: noteContent)
+                        self.note.tag = selectedTag
                         
                         self.notes.updateData(note: note){ error in
                             if error != "OK" {
@@ -137,7 +153,7 @@ struct EditNoteView_Previews: PreviewProvider {
         @State(initialValue: "") var previewSearch: String  // Nueva propiedad
 
         var body: some View {
-            EditNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tags: []), search: $previewSearch)
+            EditNoteView(notes: NotesViewModel(), filteredNotes: $previewFilteredNotes, note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tag: ""), search: $previewSearch)
         }
     }
 }

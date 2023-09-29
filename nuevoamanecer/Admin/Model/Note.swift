@@ -15,7 +15,7 @@ struct Note: Hashable, Codable, Identifiable, Equatable {
     var title: String
     var text: String
     var date: Date
-    var tags: [String]
+    var tag: String
     
     static func == (lhs: Note, rhs: Note) -> Bool {
             return lhs.id == rhs.id

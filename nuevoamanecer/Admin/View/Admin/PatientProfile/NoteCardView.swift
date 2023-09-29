@@ -29,6 +29,8 @@ struct NoteCardView: View {
                         .foregroundColor(Color.black)
                         .padding(.bottom, 2)
                         .fixedSize(horizontal: false, vertical: true)
+                    
+
                     Text(note.text)
                         .font(.system(size: 18, weight: .regular))
                         .foregroundColor(Color.black)
@@ -43,6 +45,34 @@ struct NoteCardView: View {
             .background(Color.white.opacity(0.1))
             .cornerRadius(10)
             //.shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
+            
+            HStack {
+                Spacer()
+                  VStack(alignment: .leading) {
+                      Text(note.tag)
+                          .frame(width: 180)
+                          .foregroundColor(.white)
+                          .padding(5)
+                  }
+                  .background(
+                      RoundedRectangle(cornerRadius: 10)
+                          .fill(
+                              note.tag == "Información Personal" ? Color.orange :
+                              note.tag == "Contacto" ? Color.red :
+                              note.tag == "Historial Médico" ? Color.pink :
+                              note.tag == "Diagnóstico" ? Color.purple :
+                              note.tag == "Tratamiento" ? Color.yellow :
+                              note.tag == "Soporte Familiar" ? Color.cyan :
+                              note.tag == "Concentimientos" ? Color.green :
+                              note.tag == "Contacto" ? Color.teal :
+                              note.tag == "Otro" ? Color.black :  Color.clear
+                          )
+                  )
+                  .frame(height: 30)
+                  .cornerRadius(10)  // Applying cornerRadius to VStack
+                  
+              }
+            .padding()
         }
     }
 }
@@ -59,6 +89,6 @@ extension DateFormatter {
 
 struct NoteCardView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteCardView(note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tags: []))
+        NoteCardView(note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tag: ""))
     }
 }
