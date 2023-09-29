@@ -15,7 +15,7 @@ struct EditPatientView: View {
     // Objeto observado que contiene el modelo de vista de pacientes
     @ObservedObject var patients: PatientsViewModel
     // Estado que contiene la información del paciente que se está editando
-    @State var patient: Patient
+    @Binding var patient: Patient
     // Variable de entorno para cerrar la vista
     @Environment(\.dismiss) var dismiss
 
@@ -336,17 +336,19 @@ struct EditPatientView: View {
         }
         .onDisappear{
             if(uploadPatient){
+                let backupPatient = patient
                 //Si se presiono el boton de eliminar imagen y despues guardar, se borra la imagen de la base de datos
                 if(deletedImage) {
                     storage.deleteFile(name: "Fotos_perfil/" + patient.identificador + "profile_picture")
                     imageURL = URL(string: "placeholder")
                 }
                 let patient = Patient(id: patient.id ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String](), identificador: patient.identificador)
-                
+                self.patient = patient
                 //call method for update
                 patients.updateData(patient: patient){ error in
                     if error != "OK" {
                         print(error)
+                        self.patient = backupPatient
                     }else{
                         Task {
                             if let patientsList = await patients.getData(){
@@ -360,15 +362,6 @@ struct EditPatientView: View {
                 }
             }
         }
-    }
-}
-
-
-
-
-struct EditPatientView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditPatientView(patients: PatientsViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
     }
 }
 
