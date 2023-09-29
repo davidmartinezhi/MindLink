@@ -24,6 +24,10 @@ struct Patient: Hashable, Codable, Identifiable {
     func buildPatientTitle() -> String {
         return firstName + " " + lastName.prefix(upTo: lastName.firstIndex(of: " ") ?? lastName.endIndex)
     }
+    
+    static func ==(lhs: Patient, rhs: Patient) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 struct VoiceConfiguration : Codable , Hashable {
