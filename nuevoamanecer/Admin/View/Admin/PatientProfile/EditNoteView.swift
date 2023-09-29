@@ -15,15 +15,21 @@ struct EditNoteView: View {
     @Binding var search: String
     @State private var noteTitle: String = ""
     @State private var noteContent: String = ""
+    @State private var noteTag: String = ""
     @State private var showingAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
+    
+    //tags
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    @State private var selectedTag: String = ""
 
     
     
     func initializeData(note: Note) -> Void{
         noteTitle = note.title
         noteContent = note.text
+        noteTag = note.tag
     }
     
     var body: some View {
@@ -32,6 +38,16 @@ struct EditNoteView: View {
             Form {
                 Section(header: Text("Título")) {
                     TextField("Título de la nota", text: $noteTitle)
+                }
+                
+                Section(header: Text("Etiqueta")) {
+                    Picker("Seleccionar Etiqueta", selection: $selectedTag) {
+                        Text("Ninguna").tag("")
+                        ForEach(tags, id: \.self) { tag in
+                            Text(tag).tag(tag)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
                 }
                 
                 Section(header: Text("Contenido")) {
@@ -81,6 +97,7 @@ struct EditNoteView: View {
                         //let newNote = Note(id: note.id, patientId: note.patientId, order: note.order, title: noteTitle, text: noteContent)
                         self.note.title = removeTrailingWhitespace(from: noteTitle)
                         self.note.text = removeTrailingWhitespace(from: noteContent)
+                        self.note.tag = selectedTag
                         
                         self.notes.updateData(note: note){ error in
                             if error != "OK" {
