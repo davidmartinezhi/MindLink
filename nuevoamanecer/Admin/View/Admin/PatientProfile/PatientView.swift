@@ -19,7 +19,7 @@ struct PatientView: View {
     @StateObject var auth = AuthViewModel()
     
     //patient
-    let patient: Patient
+    @State var patient: Patient
     @State var search: String = ""
     @State private var filteredNotes: [Note] = []
     
@@ -38,10 +38,16 @@ struct PatientView: View {
     @State private var selectedNoteIndex: Int?
     @State var selectedNoteToEdit: Note?
     //= Note(id: "", patientId: "", order: 0, title: "", text: "")
-        
+    
     @State private var showCommunicatorMenu: Bool = false
     
     @State private var selection: String? = nil
+    
+    init(patients: PatientsViewModel, notes: NotesViewModel, patient: Patient) {
+        self.patients = patients
+        self.notes = notes
+        self._patient = State(initialValue: patient)
+    }
         
     //obtiene edad del paciente
     private func getAge(patient: Patient) -> Int {
@@ -543,7 +549,7 @@ struct PatientView: View {
                 EditNoteView(notes: notes, filteredNotes: $filteredNotes, note: note, search: $search)
             }
             .sheet(isPresented: $showEditPatientView){
-                EditPatientView(patients: patients, patient: patient)
+                EditPatientView(patients: patients, patient: $patient)
             }
             .sheet(isPresented: $showCommunicatorMenu){
                 CommunicatorMenuView(patient:patient)
