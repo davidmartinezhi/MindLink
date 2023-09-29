@@ -14,7 +14,7 @@ struct AddPatientView: View {
     @ObservedObject var patients: PatientsViewModel
     
     // Variables para los selectores de nivel cognitivo y estilo de comunicación
-    let patientId = UUID().uuidString
+    // let patientId = UUID().uuidString
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     

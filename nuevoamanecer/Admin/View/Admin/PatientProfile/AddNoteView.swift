@@ -75,7 +75,7 @@ struct AddNoteView: View {
                     }
                     else {
                         isSaving = true
-                        let newNote = Note(id: UUID().uuidString, patientId: patient.id, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date(), tags: [])
+                        let newNote = Note(id: UUID().uuidString, patientId: patient.id!, order: (patient.notes.count * -1) - 1, title: removeTrailingWhitespace(from: noteTitle) , text: removeTrailingWhitespace(from: noteContent) , date: Date(), tags: [])
                         
                         notes.addData(patient: patient, note: newNote) { response in
                             if response == "OK" {
@@ -86,7 +86,7 @@ struct AddNoteView: View {
                                 search = ""
                                 
                                 Task{
-                                    if let notesList = await notes.getDataById(patientId: patient.id){
+                                    if let notesList = await notes.getDataById(patientId: patient.id!){
                                         DispatchQueue.main.async{
                                             self.notes.notesList = notesList.sorted { $0.order < $1.order }
                                             self.filteredNotes = self.notes.notesList

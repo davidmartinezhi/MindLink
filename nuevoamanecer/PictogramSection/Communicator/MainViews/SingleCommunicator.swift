@@ -18,7 +18,7 @@ struct SingleCommunicator: View {
     @State var appLock: AppLock = AppLock()
     
     var body: some View {
-        Communicator(patient: patient, title: patient?.buildPatientTitle(), voiceGender: $voiceGender, talkingSpeed: $talkingSpeed, voiceAge: $voiceAge, showSwitchView: false, onLeftOfSwitch: $onLeftOfSwitch)
+        Communicator(patient: patient, title: patient?.buildPatientTitle(), showSwitchView: false, onLeftOfSwitch: $onLeftOfSwitch)
             .environmentObject(self.appLock)
     }
 }

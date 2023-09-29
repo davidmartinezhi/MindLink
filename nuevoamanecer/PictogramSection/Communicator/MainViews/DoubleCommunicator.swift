@@ -23,11 +23,11 @@ struct DoubleCommunicator: View {
         GeometryReader { geo in
             ZStack {
                 // Communicator 1 (base)
-                Communicator(patient: patient, title: patient.buildPatientTitle(), voiceGender: patient.voice.voiceGender, talkingSpeed: patient.voice.talkingSpeed, voiceAge: patient.voice.voiceAge, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: nil, title: patient.buildPatientTitle(), showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 1 : 0)
                 
                 // Communicator 2 (del usuario)
-                Communicator(patient: patient, title: patient.buildPatientTitle(), voiceGender: patient.voice.voiceGender, talkingSpeed: patient.voice.talkingSpeed, voiceAge: patient.voice.voiceAge, showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
+                Communicator(patient: patient, title: patient.buildPatientTitle(), showSwitchView: true, onLeftOfSwitch: $showingCommunicator1)
                 .zIndex(showingCommunicator1 ? 0 : 1)
             }
         }

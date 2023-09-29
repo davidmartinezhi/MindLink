@@ -53,7 +53,7 @@ struct PatientView: View {
     //Retrieve Notes of patient
     private func getPatientNotes(patientId: String){
         Task{
-            if let notesList = await notes.getDataById(patientId: patient.id){
+            if let notesList = await notes.getDataById(patientId: patient.id!){
                 DispatchQueue.main.async{
                     self.notes.notesList = notesList.sorted { $0.order < $1.order }
                     self.filteredNotes = self.notes.notesList
@@ -480,15 +480,9 @@ struct PatientView: View {
             }
         }
         .onAppear{
-            self.getPatientNotes(patientId: patient.id)
+            self.getPatientNotes(patientId: patient.id!)
         }
         
         Spacer()
-    }
-}
-
-struct PatientView_Previews: PreviewProvider {
-    static var previews: some View {
-        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: "", talkingSpeed: "", voiceGender: "", voiceAge: ""))
     }
 }

@@ -56,7 +56,7 @@ struct EditPatientView: View {
         group = patient.group
         communicationStyleSelector = patient.communicationStyle
         congnitiveLevelSelector = patient.cognitiveLevel
-        identificador = patient.id
+        identificador = patient.id!
     }
 
     

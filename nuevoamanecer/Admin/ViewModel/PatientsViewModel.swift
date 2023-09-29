@@ -27,14 +27,16 @@ class PatientsViewModel: ObservableObject{
     //Creación de paciente
     func addData(patient : Patient, completion: @escaping (String) -> Void){
         
-        db.collection("Patient").addDocument(data: ["id": patient.id ,"firstName": patient.firstName, "lastName": patient.lastName, "birthDate": patient.birthDate, "group": patient.group, "communicationStyle": patient.communicationStyle, "cognitiveLevel": patient.cognitiveLevel, "image": patient.image, "notes": [String]()]){ err in
-            
-            if let err = err {
-                completion(err.localizedDescription)
+        do {
+            try db.collection("Patient").addDocument(from: patient) { err in
+                if let err = err {
+                    completion(err.localizedDescription)
+                } else {
+                    completion("OK")
+                }
             }
-            else{
-                completion("OK")
-            }
+        } catch let error {
+            completion(error.localizedDescription)
         }
     }
     
@@ -48,23 +50,11 @@ class PatientsViewModel: ObservableObject{
             
             //recorro documentso de la colección
             for document in querySnapshot.documents{
-                let data = document.data()
-                
-                let firstName = data["firstName"] as? String ?? ""
-                let lastName = data["lastName"] as? String ?? ""
-                let birthDate = (data["birthDate"] as? Timestamp)?.dateValue() ?? Date()
-                let group = data["group"] as? String ?? "No asignado"
-                let communicationStyle = data["communicationStyle"] as? String ?? "No asignado"
-                let cognitiveLevel = data["cognitiveLevel"] as? String ?? "No asignado"
-                let image = data["image"] as? String ?? ""
-                let notes = data["notes"] as? [String] ?? []
-                //let id = data["id"] as? String ?? UUID().uuidString
-                let id = document.documentID
-                let identificador = data["id"] as? String ?? ""
-                
-                let patient = Patient(id: id, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador)
-                
-                patients.append(patient)
+                do {
+                    patients.append(try document.data(as: Patient.self))
+                } catch {
+                    return nil
+                }
             }
             
             patients.sort { $0.firstName.lowercased() < $1.firstName.lowercased() }
@@ -74,9 +64,8 @@ class PatientsViewModel: ObservableObject{
         }
         catch{
             print("Error al traer los datos")
+            return nil
         }
-        
-        return nil
     }
     
     
@@ -86,27 +75,12 @@ class PatientsViewModel: ObservableObject{
             // Obtén el documento del paciente por ID
             let documentSnapshot = try await db.collection("Patient").document(patientId).getDocument()
             
-            guard let data = documentSnapshot.data() else {
+            do {
+                return try documentSnapshot.data(as: Patient.self)
+            } catch {
                 print("No se encontró el documento.")
                 return nil
             }
-            
-            let firstName = data["firstName"] as? String ?? ""
-            let lastName = data["lastName"] as? String ?? ""
-            let birthDate = data["birthDate"] as? Date ?? Date()
-            let group = data["group"] as? String ?? "No asignado"
-            let communicationStyle = data["communicationStyle"] as? String ?? "No asignado"
-            let cognitiveLevel = data["cognitiveLevel"] as? String ?? "No asignado"
-            let image = data["image"] as? String ?? ""
-            let notes = data["notes"] as? [String] ?? []
-            let identificador = data["id"] as? String ?? ""
-            let talkingSpeed = data["talkingSpeed"] as? String ?? "Normal"
-            let voiceGender = data["voiceGender"] as? String ?? "Femenina"
-            let voiceAge = data["voiceAge"] as? String ?? "Adulta"
-            
-            let patient = Patient(id: patientId, firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyle, cognitiveLevel: cognitiveLevel, image: image, notes: notes, identificador: identificador, talkingSpeed: talkingSpeed, voiceGender: voiceGender, voiceAge: voiceAge)
-            
-            return patient
         }
         catch {
             print("Error al traer los datos: \(error)")
@@ -117,30 +91,35 @@ class PatientsViewModel: ObservableObject{
     
     // Edición de paciente
     func updateData(patient: Patient, completion: @escaping (String) -> Void) {
-        db.collection("Patient").document(patient.id).updateData([
-            "firstName": patient.firstName,
-            "lastName": patient.lastName,
-            "birthDate": patient.birthDate,
-            "group": patient.group,
-            "communicationStyle": patient.communicationStyle,
-            "cognitiveLevel": patient.cognitiveLevel,
-            "image": patient.image,
-            "notes": patient.notes
-        ]) { err in
+        do {
+            try db.collection("Patient").document(patient.id!).setData(from: patient) { err in
+                if let err = err {
+                    completion(err.localizedDescription)
+                } else {
+                    completion("OK")
+                }
+            }
+        } catch let error {
+            completion(error.localizedDescription)
+        }
+    }
+    
+    func updateConfiguration(idPatient: String, voiceConfig: VoiceConfiguration, completion: @escaping (String?) -> Void) {
+        db.collection("Patient").document(idPatient).setData(["voiceConfig": voiceConfig]) { err in
             if let err = err {
                 completion(err.localizedDescription)
             } else {
-                completion("OK")
+                completion(nil)
             }
         }
     }
     
     func deleteData(patient: Patient, completion: @escaping (String) -> Void) async {
         do {
-            let patientRef = db.collection("Patient").document(patient.id)
+            let patientRef = db.collection("Patient").document(patient.id!)
             
             // First delete all notes associated with the patient
-            let notesRef = db.collection("Note").whereField("patientId", isEqualTo: patient.id)
+            let notesRef = db.collection("Note").whereField("patientId", isEqualTo: patient.id!)
             let notesSnapshot = try await notesRef.getDocuments()
 
             for document in notesSnapshot.documents {

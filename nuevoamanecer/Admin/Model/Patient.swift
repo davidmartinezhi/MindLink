@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
 struct Patient: Hashable, Codable, Identifiable {
-    var id: String
+    @DocumentID var id: String?
     let firstName: String
     let lastName: String
     let birthDate: Date
@@ -18,7 +19,7 @@ struct Patient: Hashable, Codable, Identifiable {
     let image: String
     let notes: [String]
     let identificador: String
-    let voice : VoiceConfiguration
+    var voiceConfig : VoiceConfiguration = VoiceConfiguration()
     
     func buildPatientTitle() -> String {
         return firstName + " " + lastName.prefix(upTo: lastName.firstIndex(of: " ") ?? lastName.endIndex)

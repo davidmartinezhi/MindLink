@@ -10,16 +10,20 @@ import AVFoundation
 
 struct VoiceConfigurationView: View {
     @Environment(\.dismiss) var dismiss
+    var patientVM : PatientsViewModel = PatientsViewModel()
+    var idPatient : String?
+    @State var voiceConfig : VoiceConfiguration
     
-    @Binding var talkingSpeed : String
     var speedList = ["Lenta", "Normal", "Rápida"]
-    @Binding var voiceGender : String
     var voiceList = ["Masculina", "Femenina"]
-    @Binding var voiceAge : String
     var voiceAgeList = ["Adulta", "Infantil"]
     
-    
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
+    
+    init(idPatient: String?, voiceConfig: VoiceConfiguration?) {
+        self.idPatient = idPatient
+        self._voiceConfig = State(initialValue: voiceConfig ?? VoiceConfiguration())
+    }
     
     var body: some View {
         VStack {
@@ -33,13 +37,13 @@ struct VoiceConfigurationView: View {
                 Text("Género de voz")
                     .font(.title2)
                 Menu {
-                    Picker("Género", selection: $voiceGender) {
+                    Picker("Género", selection: $voiceConfig.voiceGender) {
                         ForEach(voiceList, id: \.self) { voice in
                             Text(voice)
                         }
                     }
                 } label: {
-                    Text(voiceGender)
+                    Text(voiceConfig.voiceGender)
                         .font(.title2)
                     Image(systemName: "chevron.down")
                 }
@@ -56,13 +60,13 @@ struct VoiceConfigurationView: View {
                 Text("Velocidad de Pronunciación")
                     .font(.title2)
                 Menu {
-                    Picker("Velocidad", selection: $talkingSpeed) {
+                    Picker("Velocidad", selection: $voiceConfig.talkingSpeed) {
                         ForEach(speedList, id: \.self) { speed in
                             Text(speed)
                         }
                     }
                 } label: {
-                    Text(talkingSpeed)
+                    Text(voiceConfig.talkingSpeed)
                         .font(.title2)
                     Image(systemName: "chevron.down")
                 }
@@ -76,13 +80,13 @@ struct VoiceConfigurationView: View {
                 Text("Edad de voz")
                     .font(.title2)
                 Menu {
-                    Picker("Edad", selection: $voiceAge) {
+                    Picker("Edad", selection: $voiceConfig.voiceAge) {
                         ForEach(voiceAgeList, id: \.self) { age in
                             Text(age)
                         }
                     }
                 } label: {
-                    Text(voiceAge)
+                    Text(voiceConfig.voiceAge)
                         .font(.title2)
                     Image(systemName: "chevron.down")
                 }
@@ -97,28 +101,31 @@ struct VoiceConfigurationView: View {
                     
                     let utterance = AVSpeechUtterance(string: "Nuevo Amanecer")
                     
-                    if (voiceAge == "Infantil") {
+                    if (voiceConfig.voiceAge == "Infantil") {
                         utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
                         utterance.rate = 0.5
                         utterance.pitchMultiplier = 1.5
                     } else {
-                        utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                        utterance.voice = voiceConfig.voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
                         
-                        utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
+                        utterance.rate = voiceConfig.talkingSpeed == "Normal" ? 0.5 : voiceConfig.talkingSpeed == "Lenta" ? 0.3 : 0.7
                     }
                     synthesizer.speak(utterance)
                 }
                 
                 ButtonView(text: "Regresar", color: .blue) {
+                    if (idPatient != nil) {
+                        patientVM.updateConfiguration(idPatient: idPatient!, voiceConfig: voiceConfig) { err in
+                            if err != nil {
+                                // error
+                            } else {
+                                dismiss()
+                            }
+                        }
+                    }
                     dismiss()
                 }
             }
         }
-    }
-}
-
-struct VoiceConfigurationView_Previews: PreviewProvider {
-    static var previews: some View {
-        VoiceConfigurationView(talkingSpeed: .constant("Normal"), voiceGender: .constant("Masculina"), voiceAge: .constant("Adulta"))
     }
 }
