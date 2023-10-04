@@ -34,6 +34,9 @@ struct ContentView: View {
                 .navigationDestination(for: NavigationDestination<PictogramEditor>.self) { destination in
                     destination.content
                 }
+                .navigationDestination(for: NavigationDestination<UserManagement>.self) { destination in
+                    destination.content
+                }
         }
         .environmentObject(authVM)
         .environmentObject(currentUser)

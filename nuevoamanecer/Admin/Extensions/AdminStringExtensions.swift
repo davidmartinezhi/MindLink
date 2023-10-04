@@ -32,4 +32,12 @@ extension String {
         
         return self.count > 8 && containsSynbol && containsUpercase && containsNumber
     }
+    
+    func splitAtWhitespaces() -> [String] {
+        return self.split(separator: " ").map(String.init)
+    }
+    
+    func isValidEmail() -> Bool {
+        return self.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    }
 }

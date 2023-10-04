@@ -11,6 +11,7 @@ import Kingfisher
 struct AdminNav: View {
     @EnvironmentObject var authVM: AuthViewModel
     @EnvironmentObject var currentUser: UserWrapper
+    @EnvironmentObject var navPath: NavigationPathWrapper
     
     @Binding var showAdminView: Bool
     @Binding var showRegisterView: Bool
@@ -79,6 +80,18 @@ struct AdminNav: View {
                                 }
                             }
                         }
+                        
+                        // solo usuarios administradores pueden crear otro usuario
+                        if (currentUser.isAdmin! == true) {
+                            // boton para ir a la vista de registro
+                            Button(action: { navPath.push(NavigationDestination(content: UserManagement())) }) {
+                                HStack {
+                                    Text("Administración de Usuarios")
+                                        .font(.system(size: 16))
+                                }
+                            }
+                        }
+                        
                         // boton para cerrar sesion
                         Button(action: {
                             self.showLogoutAlert.toggle()

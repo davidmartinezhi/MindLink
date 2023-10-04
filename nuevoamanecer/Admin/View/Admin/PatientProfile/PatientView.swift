@@ -121,16 +121,7 @@ struct PatientView: View {
                 HStack {
                     VStack{
                         if(patient.image == "placeholder") {
-                            Text(patient.firstName.prefix(1) + patient.lastName.prefix(1))
-                                .textCase(.uppercase)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .frame(width: 100, height: 100)
-                                .background(Color(.systemGray3))
-                                .foregroundColor(.white)
-                                .clipShape(Circle())
-                                .padding(.trailing)
-
+                            ImagePlaceholderView(firstName: patient.firstName, lastName: patient.lastName)
                         } else {
                             KFImage(URL(string: patient.image))
                                 .resizable()
