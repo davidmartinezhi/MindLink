@@ -316,7 +316,7 @@ struct AdminMenuView: View {
                 self.email = email
                 
                 let _user: User = User(name: name, email: email, isAdmin: user.isAdmin, image: imageURL?.absoluteString)
-                userVM.editUser(userId: user.id!, user: _user) { error in
+                userVM.editUser(userId: user.id!, newUserValue: _user) { error in
                     if error != nil {
                         // Error
                     } else {

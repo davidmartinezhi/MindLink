@@ -18,6 +18,10 @@
 		BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */; };
 		BC3B46B82ABE712F0034BDA9 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */; };
 		BC3B46BA2ABF9E000034BDA9 /* AdminStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3B46B92ABF9E000034BDA9 /* AdminStringExtensions.swift */; };
+		BC4DFE292AC346B10082C631 /* UserManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE282AC346B10082C631 /* UserManagement.swift */; };
+		BC4DFE2B2AC347420082C631 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE2A2AC347420082C631 /* UserView.swift */; };
+		BC4DFE2D2AC3C4530082C631 /* DualTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE2C2AC3C4530082C631 /* DualTextFieldView.swift */; };
+		BC4DFE312AC3C78B0082C631 /* DualChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE302AC3C78B0082C631 /* DualChoiceView.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
 		BC884A762AAACC7000E83553 /* AdminArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
@@ -60,6 +64,8 @@
 		BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */; };
 		BCB1B70F2A42BB6A00C01B15 /* PageBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70E2A42BB6A00C01B15 /* PageBoardView.swift */; };
 		BCB1B7112A42BBD100C01B15 /* PictogramPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7102A42BBD100C01B15 /* PictogramPickerView.swift */; };
+		BCB518BD2ACCCACF003FDFE4 /* ImagePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */; };
+		BCB518BF2ACCDF09003FDFE4 /* ChangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */; };
 		BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */; };
 		BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */; };
 		BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */; };
@@ -67,6 +73,7 @@
 		BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */; };
 		BCDB34C42A4933070011562C /* PictogramScaleModifierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */; };
 		BCEA4D6D2AA02717000C1517 /* PictogramGridArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCEA4D6C2AA02717000C1517 /* PictogramGridArrowView.swift */; };
+		BCF62E142AC712F600697CFC /* EditPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF62E132AC712F600697CFC /* EditPanelView.swift */; };
 		C2207EFC2A184E3000F31578 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C2207EFB2A184E3000F31578 /* Kingfisher */; };
 		C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFD2A1C04A500F31578 /* AddPatientView.swift */; };
 		C2207F002A1F1AF400F31578 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2207EFF2A1F1AF300F31578 /* Note.swift */; };
@@ -114,6 +121,10 @@
 		BC2AF1DE2A6B9993002A822C /* PageOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageOptionsView.swift; sourceTree = "<group>"; };
 		BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		BC3B46B92ABF9E000034BDA9 /* AdminStringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminStringExtensions.swift; sourceTree = "<group>"; };
+		BC4DFE282AC346B10082C631 /* UserManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagement.swift; sourceTree = "<group>"; };
+		BC4DFE2A2AC347420082C631 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		BC4DFE2C2AC3C4530082C631 /* DualTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DualTextFieldView.swift; sourceTree = "<group>"; };
+		BC4DFE302AC3C78B0082C631 /* DualChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DualChoiceView.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
 		BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminArrayExtensions.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -156,6 +167,8 @@
 		BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageEdit.swift; sourceTree = "<group>"; };
 		BCB1B70E2A42BB6A00C01B15 /* PageBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageBoardView.swift; sourceTree = "<group>"; };
 		BCB1B7102A42BBD100C01B15 /* PictogramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramPickerView.swift; sourceTree = "<group>"; };
+		BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePlaceholderView.swift; sourceTree = "<group>"; };
+		BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeIndicatorView.swift; sourceTree = "<group>"; };
 		BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithImageView.swift; sourceTree = "<group>"; };
 		BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPictogramHolderView.swift; sourceTree = "<group>"; };
 		BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPictogramHolderView.swift; sourceTree = "<group>"; };
@@ -163,6 +176,7 @@
 		BCD0B78B2A45878E00E83CA6 /* DoublePictogramPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoublePictogramPickerView.swift; sourceTree = "<group>"; };
 		BCDB34C32A4933070011562C /* PictogramScaleModifierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramScaleModifierView.swift; sourceTree = "<group>"; };
 		BCEA4D6C2AA02717000C1517 /* PictogramGridArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramGridArrowView.swift; sourceTree = "<group>"; };
+		BCF62E132AC712F600697CFC /* EditPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPanelView.swift; sourceTree = "<group>"; };
 		C2207EFD2A1C04A500F31578 /* AddPatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPatientView.swift; sourceTree = "<group>"; };
 		C2207EFF2A1F1AF300F31578 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
@@ -230,6 +244,52 @@
 				BC1207712ABFF70E0098A527 /* UserWrapper.swift */,
 			);
 			path = MiscStructures;
+			sourceTree = "<group>";
+		};
+		BC4DFE232AC346190082C631 /* UserManagement */ = {
+			isa = PBXGroup;
+			children = (
+				BC4DFE272AC3465A0082C631 /* GenericViews */,
+				BC4DFE252AC346420082C631 /* Views */,
+				BC4DFE242AC346210082C631 /* ViewModels */,
+				BC4DFE262AC346490082C631 /* MainViews */,
+			);
+			path = UserManagement;
+			sourceTree = "<group>";
+		};
+		BC4DFE242AC346210082C631 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BC4DFE252AC346420082C631 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BC4DFE2A2AC347420082C631 /* UserView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BC4DFE262AC346490082C631 /* MainViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC4DFE282AC346B10082C631 /* UserManagement.swift */,
+			);
+			path = MainViews;
+			sourceTree = "<group>";
+		};
+		BC4DFE272AC3465A0082C631 /* GenericViews */ = {
+			isa = PBXGroup;
+			children = (
+				BC4DFE2C2AC3C4530082C631 /* DualTextFieldView.swift */,
+				BC4DFE302AC3C78B0082C631 /* DualChoiceView.swift */,
+				BCF62E132AC712F600697CFC /* EditPanelView.swift */,
+				BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */,
+			);
+			path = GenericViews;
 			sourceTree = "<group>";
 		};
 		BC884A742AAACC5F00E83553 /* Extensions */ = {
@@ -449,6 +509,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		BCB518BB2ACCCAAC003FDFE4 /* GenericViews */ = {
+			isa = PBXGroup;
+			children = (
+				BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */,
+			);
+			path = GenericViews;
+			sourceTree = "<group>";
+		};
 		C22A9A692A94356C0087AF1F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +561,8 @@
 		C22ECD462A37B7A300DF8A06 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				BCB518BB2ACCCAAC003FDFE4 /* GenericViews */,
+				BC4DFE232AC346190082C631 /* UserManagement */,
 				BC884A742AAACC5F00E83553 /* Extensions */,
 				BC1132502A9546550080F294 /* MiscStructures */,
 				C22A9A692A94356C0087AF1F /* Helpers */,
@@ -589,7 +659,6 @@
 				C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */,
 				C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */,
 				C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */,
-				BC3B46B72ABE712F0034BDA9 /* UserViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -716,14 +785,17 @@
 				BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */,
+				BC4DFE2D2AC3C4530082C631 /* DualTextFieldView.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
 				BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */,
 				BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */,
+				BCB518BD2ACCCACF003FDFE4 /* ImagePlaceholderView.swift in Sources */,
 				BCD0B78C2A45878E00E83CA6 /* DoublePictogramPickerView.swift in Sources */,
 				A9594A112A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift in Sources */,
 				C235FDAD2A18106E005412A7 /* AdminView.swift in Sources */,
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
 				BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */,
+				BCB518BF2ACCDF09003FDFE4 /* ChangeIndicatorView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,
@@ -732,9 +804,11 @@
 				BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */,
 				C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */,
 				BC8F7E452A37FFBD008E97B2 /* CategoryPickerView.swift in Sources */,
+				BC4DFE312AC3C78B0082C631 /* DualChoiceView.swift in Sources */,
 				BC8F7E372A37FFBD008E97B2 /* PictogramViewModel.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
+				BCF62E142AC712F600697CFC /* EditPanelView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
 				BC8F7E402A37FFBD008E97B2 /* PictogramModel.swift in Sources */,
 				C29428082A15B85500E814C9 /* ContentView.swift in Sources */,
@@ -765,11 +839,13 @@
 				C2BEDB632A157B12005398F9 /* LoginView.swift in Sources */,
 				BC8F7E3A2A37FFBD008E97B2 /* TextFieldView.swift in Sources */,
 				BC014F102A91801F0002140A /* AppLock.swift in Sources */,
+				BC4DFE292AC346B10082C631 /* UserManagement.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
 				BC3B46B82ABE712F0034BDA9 /* UserViewModel.swift in Sources */,
 				BC8F7E312A37FFBD008E97B2 /* LockView.swift in Sources */,
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift in Sources */,
 				BC8F7E4B2A37FFBD008E97B2 /* Album.swift in Sources */,
+				BC4DFE2B2AC347420082C631 /* UserView.swift in Sources */,
 				BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */,
 				BC8F7E352A37FFBD008E97B2 /* DoubleCommunicator.swift in Sources */,
 				C2207F0E2A268C5A00F31578 /* EditNoteView.swift in Sources */,

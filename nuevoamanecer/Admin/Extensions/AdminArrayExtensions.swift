@@ -18,4 +18,8 @@ extension Array {
             self.append(removedItem)
         }
     }
+    
+    func getElementSafely(index: Index) -> Self.Element? {
+        return self.indices.contains(index) ? self[index] : nil
+    }
 }

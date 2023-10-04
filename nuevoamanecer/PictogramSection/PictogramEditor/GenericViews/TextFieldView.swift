@@ -9,16 +9,18 @@ import SwiftUI
 import Combine
 
 struct TextFieldView: View {
-    var fieldWidth: Double
+    var fieldWidth: CGFloat
+    var fieldHeight: CGFloat? = nil
+    var fontSize: CGFloat = 20
     var placeHolder: String
-    var background: Color = Color(red: 0.9, green: 0.9, blue: 0.9)
+    var background: Color = Color(red: 0.7, green: 0.7, blue: 0.7)
     @Binding var inputText: String
     var maxCharLength: Int? = nil
     
     var body: some View {
         HStack(spacing: 0) {
             let textField: some View = TextField(placeHolder, text: $inputText)
-                .font(.system(size: 20))
+                .font(.system(size: fontSize))
                 .padding()
             
             if maxCharLength != nil {
@@ -42,7 +44,7 @@ struct TextFieldView: View {
                 .padding()
             }
         }
-        .frame(width: fieldWidth)
+        .frame(width: fieldWidth, height: fieldHeight)
         .background(background)
         .cornerRadius(10)
     }

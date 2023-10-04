@@ -52,10 +52,10 @@ class UserViewModel {
         
         do {
             docRef = try userCollection.addDocument(from: user) { error in
-                if error != nil && docRef?.documentID != nil {
+                if error != nil {
                     completition(error, nil)
                 } else {
-                    completition(nil, docRef!.documentID)
+                    completition(nil, docRef?.documentID)
                 }
             }
         } catch let error {
@@ -73,9 +73,9 @@ class UserViewModel {
         }
     }
     
-    func editUser(userId: String, user: User, completition: @escaping (Error?)->Void) -> Void {
+    func editUser(userId: String, newUserValue: User, completition: @escaping (Error?)->Void) -> Void {
         do {
-            try userCollection.document(userId).setData(from: user) { error in
+            try userCollection.document(userId).setData(from: newUserValue) { error in
                 if error != nil {
                     completition(error)
                 } else {
