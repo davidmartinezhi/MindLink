@@ -51,6 +51,30 @@ class AuthViewModel: ObservableObject {
         }
     }
     
+    //funcion que verifique que la contraseña ingresada contenga los caracteres necesarios para tener una contraseña fuerte
+        func isWeak (_ password: String)-> Bool{
+            let passwordLenght = password.count
+            var containsSynbol = false
+            var containsNumber = false
+            var containsUpercase = false
+            for character in password {
+                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(character)){
+                    containsUpercase = true
+                }
+                if ("1234567890".contains(character)){
+                    containsNumber = true
+                }
+                if ("!?#$%&/()=;:_-.,°".contains(character)){
+                    containsSynbol = true
+                }
+            }
+            if (passwordLenght > 8 && containsSynbol  && containsUpercase && containsNumber){
+                return false
+            } else {
+                return true
+            }
+        }
+    
     // Crea un nuevo usuario, y si la creación es exitosa, inicia su sesión.
     func createNewAuthAccount(email: String, password: String) async -> AuthActionResult {
         do {

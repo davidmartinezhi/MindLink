@@ -10,6 +10,13 @@ import Kingfisher
 import FirebaseStorage
 
 struct AdminMenuView: View {
+    struct AlertItem: Identifiable {
+        var id = UUID()
+        var title: Text
+        var message: Text?
+        var dismissButton: Alert.Button?
+    }
+    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authVM: AuthViewModel
     var userVM: UserViewModel = UserViewModel()
@@ -20,12 +27,9 @@ struct AdminMenuView: View {
     @State private var password = ""
     @State var authPassword = ""
     @State private var confirmpassword = ""
-    @State private var showingAlert = false
-    @State private var showAuthAlert = true
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
     
-    @State private var showLogoutAlert = false
+    @State private var showAuthAlert = true
+    @State private var alertItem: AlertItem?
     
     @State private var uploaded_image: UIImage?
     @State private var shouldShowImagePicker: Bool = false
@@ -218,24 +222,17 @@ struct AdminMenuView: View {
                                     
                                     //Checar que datos son validos
                                     if (name.isEmpty || email.isEmpty) {
-                                        self.alertTitle = "Faltan campos"
-                                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
-                                        self.showingAlert = true
+                                        self.alertItem = AlertItem(title: Text("Faltan campos"), message: Text("Por favor, rellena todos los campos antes de guardar la información."), dismissButton: .cancel(Text("OK")))
                                     } else if (password != confirmpassword) {
-                                        self.alertTitle = "Confirme su contraseña"
-                                        self.alertMessage = "Por favor, confirme correctamente su contraseña."
-                                        self.showingAlert = true
-                                    } else if (password.isWeakPassword()){
-                                        self.alertTitle = "Contraseña Invalida"
-                                        self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
-                                        self.showingAlert = true
+                                        self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
+                                    } else if (authVM.isWeak(password)){
+                                        self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
                                     } else if (email != emailConfirm) {
                                         if (email == emailValidation) {
                                             uploadData.toggle()
                                             dismiss()
                                         } else {
-                                            self.alertTitle = "Correo electronico no coincide"
-                                            self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                            self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                                         }
                                     }
                                 }
@@ -243,24 +240,17 @@ struct AdminMenuView: View {
                         } else {
                             //Checar que datos son validos
                             if (name.isEmpty || email.isEmpty) {
-                                self.alertTitle = "Faltan campos"
-                                self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
-                                self.showingAlert = true
+                                self.alertItem = AlertItem(title: Text("Faltan campos"), message: Text("Por favor, rellena todos los campos antes de guardar la información."), dismissButton: .cancel(Text("OK")))
                             } else if (password != confirmpassword) {
-                                self.alertTitle = "Confirme su contraseña"
-                                self.alertMessage = "Por favor, confirme correctamente su contraseña."
-                                self.showingAlert = true
-                            } else if (password.isWeakPassword()){
-                                self.alertTitle = "Contraseña Invalida"
-                                self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
-                                self.showingAlert = true
+                                self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
+                            } else if (authVM.isWeak(password)){
+                                self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
                             } else if (email != emailConfirm) {
                                 if (email == emailValidation) {
                                     uploadData.toggle()
                                     dismiss()
                                 } else {
-                                    self.alertTitle = "Correo electronico no coincide"
-                                    self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                    self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                                 }
                             }
                         }
@@ -305,10 +295,8 @@ struct AdminMenuView: View {
             })
             Button("Cancel", role: .cancel, action: { dismiss() })
         })
-        .alert(alertTitle, isPresented: $showingAlert){
-            Button("OK"){}
-        } message: {
-            Text(alertMessage)
+        .alert(item: $alertItem ) { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
         .onDisappear{
             if (uploadData) {
@@ -316,7 +304,7 @@ struct AdminMenuView: View {
                 self.email = email
                 
                 let _user: User = User(name: name, email: email, isAdmin: user.isAdmin, image: imageURL?.absoluteString)
-                userVM.editUser(userId: user.id!, user: _user) { error in
+                userVM.editUser(userId: user.id!, newUserValue: _user) { error in
                     if error != nil {
                         // Error
                     } else {
