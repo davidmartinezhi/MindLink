@@ -53,7 +53,7 @@ struct PatientView: View {
     //Retrieve Notes of patient
     private func getPatientNotes(patientId: String){
         Task{
-            if let notesList = await notes.getDataById(patientId: patient.id!){
+            if let notesList = await notes.getDataById(patientId: patient.id){
                 DispatchQueue.main.async{
                     self.notes.notesList = notesList.sorted { $0.order < $1.order }
                     self.filteredNotes = self.notes.notesList
@@ -480,7 +480,7 @@ struct PatientView: View {
             }
         }
         .onAppear{
-            self.getPatientNotes(patientId: patient.id!)
+            self.getPatientNotes(patientId: patient.id)
         }
         
         Spacer()

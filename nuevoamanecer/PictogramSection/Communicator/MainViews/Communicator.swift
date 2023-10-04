@@ -31,8 +31,8 @@ struct Communicator: View {
     init(patient: Patient?, title: String?, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
         self.patient = patient
         self.title = title 
-        let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id!)/pictograms" : "basePictograms"
-        let catCollectionPath: String = patient != nil ? "User/\(patient!.id!)/categories" : "baseCategories"
+        let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id)/pictograms" : "basePictograms"
+        let catCollectionPath: String = patient != nil ? "User/\(patient!.id)/categories" : "baseCategories"
 
         self._pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
@@ -135,7 +135,7 @@ struct Communicator: View {
                 Button(action: {
                     //text to speech
                     let utterance = AVSpeechUtterance(string: pictoModel.name)
-                    let _voiceConfig = (patient == nil) ? VoiceConfiguration() : patient!.voiceConfig
+                    let _voiceConfig = (patient == nil) ? VoiceConfiguration.defaultVoiceConfiguration() : patient!.voiceConfig
                     
                     if (_voiceConfig.voiceAge == "Infantil") {
                         utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")

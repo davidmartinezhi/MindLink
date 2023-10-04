@@ -22,7 +22,7 @@ struct VoiceConfigurationView: View {
     
     init(idPatient: String?, voiceConfig: VoiceConfiguration?) {
         self.idPatient = idPatient
-        self._voiceConfig = State(initialValue: voiceConfig ?? VoiceConfiguration())
+        self._voiceConfig = State(initialValue: voiceConfig ?? VoiceConfiguration.defaultVoiceConfiguration())
     }
     
     var body: some View {

@@ -109,8 +109,3 @@ struct PatientCardView: View {
         .padding(.vertical, 5)
     }
 }
-struct PatientCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        PatientCardView(patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
-    }
-}

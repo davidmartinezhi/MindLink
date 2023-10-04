@@ -14,7 +14,7 @@ struct AddPatientView: View {
     @ObservedObject var patients: PatientsViewModel
     
     // Variables para los selectores de nivel cognitivo y estilo de comunicación
-    // let patientId = UUID().uuidString
+    let patientId = UUID().uuidString
     var cognitiveLevels = ["Alto", "Medio", "Bajo"]
     @State private var congnitiveLevelSelector = ""
     
@@ -319,7 +319,7 @@ struct AddPatientView: View {
         }
         .onDisappear {
             if(uploadPatient) {
-                let patient = Patient(id: patientId ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String](), identificador: patientId)
+                let patient = Patient(id: patientId ,firstName: firstName, lastName: lastName, birthDate: birthDate, group: group, communicationStyle: communicationStyleSelector, cognitiveLevel: congnitiveLevelSelector, image: imageURL?.absoluteString ?? "placeholder", notes: [String](), identificador: patientId, voiceConfig: VoiceConfiguration.defaultVoiceConfiguration())
                 
                patients.addData(patient: patient){ error in
                    if error != "OK" {

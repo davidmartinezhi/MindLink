@@ -40,7 +40,7 @@ struct PageDisplay: View {
                     }
                     .font(.headline)
                     .sheet(isPresented: $isConfiguringVoice) {
-                        VoiceConfigurationView(idPatient: patientId, voiceConfig: VoiceConfiguration())
+                        VoiceConfigurationView(idPatient: patientId, voiceConfig: VoiceConfiguration.defaultVoiceConfiguration())
                     }
                     
                     LockView()

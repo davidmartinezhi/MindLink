@@ -148,7 +148,7 @@ class NotesViewModel: ObservableObject{
     
     // Actualización de documento de paciente
     private func updatePatientDocument(patient: Patient, note: Note, completion: @escaping (String) -> Void) {
-        let patientRef = db.collection("Patient").document(patient.id!)
+        let patientRef = db.collection("Patient").document(patient.id)
         var patientNotes = patient.notes
         patientNotes.append(note.id)
             

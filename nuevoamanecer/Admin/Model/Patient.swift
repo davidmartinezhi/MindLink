@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestoreSwift
 
 struct Patient: Hashable, Codable, Identifiable {
-    @DocumentID var id: String?
+    var id: String
     let firstName: String
     let lastName: String
     let birthDate: Date
@@ -19,8 +19,8 @@ struct Patient: Hashable, Codable, Identifiable {
     let image: String
     let notes: [String]
     let identificador: String
-    var voiceConfig : VoiceConfiguration = VoiceConfiguration()
-    
+    var voiceConfig : VoiceConfiguration
+        
     func buildPatientTitle() -> String {
         return firstName + " " + lastName.prefix(upTo: lastName.firstIndex(of: " ") ?? lastName.endIndex)
     }
@@ -31,7 +31,11 @@ struct Patient: Hashable, Codable, Identifiable {
 }
 
 struct VoiceConfiguration : Codable , Hashable {
-    var talkingSpeed : String = "Normal"
-    var voiceGender : String = "Femenina"
-    var voiceAge : String = "Adulta"
+    var talkingSpeed : String
+    var voiceGender : String
+    var voiceAge : String 
+    
+    static func defaultVoiceConfiguration() -> VoiceConfiguration {
+        return VoiceConfiguration(talkingSpeed: "Normal", voiceGender: "Femenina", voiceAge: "Adulta")
+    }
 }
