@@ -31,7 +31,7 @@
 		BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E082A37FFBD008E97B2 /* SingleCommunicator.swift */; };
 		BC8F7E342A37FFBD008E97B2 /* Communicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E092A37FFBD008E97B2 /* Communicator.swift */; };
 		BC8F7E352A37FFBD008E97B2 /* DoubleCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E0A2A37FFBD008E97B2 /* DoubleCommunicator.swift */; };
-		BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E0C2A37FFBD008E97B2 /* VoiceConfigurationView.swift */; };
+		BC8F7E362A37FFBD008E97B2 /* VoiceSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E0C2A37FFBD008E97B2 /* VoiceSettingView.swift */; };
 		BC8F7E372A37FFBD008E97B2 /* PictogramViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E0F2A37FFBD008E97B2 /* PictogramViewModel.swift */; };
 		BC8F7E382A37FFBD008E97B2 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E102A37FFBD008E97B2 /* CategoryViewModel.swift */; };
 		BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E122A37FFBD008E97B2 /* ColorPickerView.swift */; };
@@ -136,7 +136,7 @@
 		BC8F7E082A37FFBD008E97B2 /* SingleCommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleCommunicator.swift; sourceTree = "<group>"; };
 		BC8F7E092A37FFBD008E97B2 /* Communicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Communicator.swift; sourceTree = "<group>"; };
 		BC8F7E0A2A37FFBD008E97B2 /* DoubleCommunicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleCommunicator.swift; sourceTree = "<group>"; };
-		BC8F7E0C2A37FFBD008E97B2 /* VoiceConfigurationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceConfigurationView.swift; sourceTree = "<group>"; };
+		BC8F7E0C2A37FFBD008E97B2 /* VoiceSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceSettingView.swift; sourceTree = "<group>"; };
 		BC8F7E0F2A37FFBD008E97B2 /* PictogramViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictogramViewModel.swift; sourceTree = "<group>"; };
 		BC8F7E102A37FFBD008E97B2 /* CategoryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		BC8F7E122A37FFBD008E97B2 /* ColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerView.swift; sourceTree = "<group>"; };
@@ -357,7 +357,7 @@
 		BC8F7E0B2A37FFBD008E97B2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BC8F7E0C2A37FFBD008E97B2 /* VoiceConfigurationView.swift */,
+				BC8F7E0C2A37FFBD008E97B2 /* VoiceSettingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -788,7 +788,7 @@
 				BC93FD9C2A9B160700853E68 /* PictogramSearchBarView.swift in Sources */,
 				C2BEDB652A157B22005398F9 /* RegisterView.swift in Sources */,
 				BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */,
-				BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */,
+				BC8F7E362A37FFBD008E97B2 /* VoiceSettingView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */,
 				BCAF20E32ACF06CA006DB43F /* VoiceSettingViewModel.swift in Sources */,

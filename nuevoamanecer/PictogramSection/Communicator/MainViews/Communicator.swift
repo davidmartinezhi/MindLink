@@ -21,8 +21,6 @@ struct Communicator: View {
     @State var userHasChosenCat: Bool = false
     
     @State var isConfiguring = false
-    @Binding var voiceGender: String
-    @Binding var talkingSpeed: String
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     var showSwitchView: Bool
@@ -30,7 +28,9 @@ struct Communicator: View {
     
     @EnvironmentObject var appLock: AppLock
     
-    init(patient: Patient?, title: String?, voiceGender: Binding<String>, talkingSpeed: Binding<String>, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>){
+    @Binding var voiceSetting: VoiceSetting
+    
+    init(patient: Patient?, title: String?, showSwitchView: Bool = false, onLeftOfSwitch: Binding<Bool>, voiceSetting: Binding<VoiceSetting>){
         self.patient = patient
         self.title = title 
         let pictoCollectionPath: String = patient != nil ? "User/\(patient!.id)/pictograms" : "basePictograms"
@@ -38,10 +38,10 @@ struct Communicator: View {
 
         self._pictoVM = StateObject(wrappedValue: PictogramViewModel(collectionPath: pictoCollectionPath))
         self._catVM = StateObject(wrappedValue: CategoryViewModel(collectionPath: catCollectionPath))
-        self._voiceGender = voiceGender
-        self._talkingSpeed = talkingSpeed
         self.showSwitchView = showSwitchView
         self._onLeftOfSwitch = onLeftOfSwitch
+        
+        self._voiceSetting = voiceSetting
     }
     
     var body: some View {
@@ -79,7 +79,7 @@ struct Communicator: View {
                     .opacity(appLock.isLocked ? 0 : 1)
                     .font(.headline)
                     .sheet(isPresented: $isConfiguring) {
-                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                        VoiceSettingView(voiceSetting: $voiceSetting)
                     }
                     
                     LockView()
@@ -139,13 +139,18 @@ struct Communicator: View {
                 Button(action: {
                     //text to speech
                     let utterance = AVSpeechUtterance(string: pictoModel.name)
-                    
-                    utterance.voice = voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
-                    
-                    utterance.rate = talkingSpeed == "Normal" ? 0.5 : talkingSpeed == "Lenta" ? 0.3 : 0.7
-                    
-                    synthesizer.speak(utterance)
 
+                    if (voiceSetting.voiceAge == "Infantil") {
+                        utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+                        utterance.rate = 0.5
+                        utterance.pitchMultiplier = 1.5
+                    } else {
+                        utterance.voice = voiceSetting.voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                        
+                        utterance.rate = voiceSetting.talkingSpeed == "Normal" ? 0.5 : voiceSetting.talkingSpeed == "Lenta" ? 0.3 : 0.7
+                    }
+
+                    synthesizer.speak(utterance)
                 }, label: {
                     PictogramView(pictoModel: pictoModel,
                                   catModel: catVM.getCat(catId: pictoModel.categoryId)!,
@@ -158,5 +163,6 @@ struct Communicator: View {
             )
         }
         return pictoButtons
+    
     }
 }

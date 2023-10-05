@@ -15,7 +15,7 @@ struct VoiceSetting: Identifiable, Codable {
     var voiceAge: String
     var patientId: String? 
     
-    static func defaultVoiceSetting() -> VoiceSetting {
-        return VoiceSetting(talkingSpeed: "Normal", voiceGender: "Femenina", voiceAge: "Adulta")
+    static func defaultVoiceSetting(patientId: String? = nil) -> VoiceSetting {
+        return VoiceSetting(talkingSpeed: "Normal", voiceGender: "Femenina", voiceAge: "Adulta", patientId: patientId)
     }
 }
