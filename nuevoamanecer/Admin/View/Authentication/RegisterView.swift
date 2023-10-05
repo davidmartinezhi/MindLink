@@ -172,7 +172,7 @@ struct RegisterView: View {
                     }
                 }) {
                     HStack {
-                        Text("Registrarse")
+                        Text("Registrar")
                             .font(.headline)
                         
                         Spacer()

@@ -289,23 +289,24 @@ struct PatientView: View {
                          
                         
                         //Add note button
-                        HStack{
-                            Button(action: {
-                                showAddNoteView.toggle()
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("Agregar Nota")
+                        if currentUser.isAdmin! {
+                            HStack{
+                                Button(action: {
+                                    showAddNoteView.toggle()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "plus.circle.fill")
+                                        Text("Agregar Nota")
+                                    }
+                                    .frame(width: geometry.size.width / 6)
                                 }
-                                .frame(width: geometry.size.width / 6)
                             }
+                            .padding(.vertical, 15)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.bottom, 10)
                         }
-                        .padding(.vertical, 15)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.bottom, 10)
-                        
                         
                         SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
                             .onChange(of: search, perform: performSearchByText)
