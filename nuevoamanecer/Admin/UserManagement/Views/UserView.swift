@@ -20,6 +20,8 @@ struct InvalidInputView: View {
 }
 
 struct UserView: View {
+    @EnvironmentObject var currentUser: UserWrapper
+    
     @State var user: User
     var userSnapshot: User
     var isBeingEdited: Bool
@@ -45,16 +47,23 @@ struct UserView: View {
         VStack {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
-                    KFImage(URL(string: user.image ?? ""))
-                        .placeholder{
-                            let nameComponents: [String] = user.name.splitAtWhitespaces()
-                            ImagePlaceholderView(firstName: nameComponents.getElementSafely(index: 0) ?? "",
-                                                 lastName: nameComponents.getElementSafely(index: 1) ?? "")
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .clipShape(Circle())
+                    VStack {
+                        KFImage(URL(string: user.image ?? ""))
+                            .placeholder{
+                                let nameComponents: [String] = user.name.splitAtWhitespaces()
+                                ImagePlaceholderView(firstName: nameComponents.getElementSafely(index: 0) ?? "",
+                                                     lastName: nameComponents.getElementSafely(index: 1) ?? "")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                        
+                        Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
+                            .font(.system(size: 15))
+                            .foregroundColor(.gray)
+                            .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
+                    }
                                          
                     VStack(alignment: .leading, spacing: 15) {
                         HStack(alignment: .center, spacing: 10) {
@@ -82,12 +91,17 @@ struct UserView: View {
                 Spacer()
                 
                 let runAtCancel: ()->Void = {
-                    makeUserOperation(user, .toggleMyEditState)
+                    if isNewUser {
+                        makeUserOperation(user, .cancelMyCreation)
+                    } else {
+                        makeUserOperation(user, .toggleMyEditState)
+                    }
                     self.user = self.userSnapshot
                 }
                 
                 EditPanelView(isBeingEdited: isBeingEdited,
                               isNewUser: isNewUser,
+                              disableDelete: currentUser.id == user.id || isNewUser,
                               disableSave: user == userSnapshot || !user.isValidUser(),
                               runAtEdit: {makeUserOperation(user, .toggleMyEditState)},
                               runAtDelete: {makeUserOperation(user, .removeMe)},
@@ -101,5 +115,8 @@ struct UserView: View {
             Divider()
         }
         .background(isBeingEdited ? backgroundColorWhenEditing : .white)
+        .onChange(of: isBeingEdited) { newValue in
+            user = userSnapshot
+        }
     }
 }
