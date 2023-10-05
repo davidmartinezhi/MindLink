@@ -8,10 +8,12 @@ import FirebaseFirestore
 struct AuthActionResult {
     let userId: String? 
     let success: Bool
+    let errorMessage: String?
     
-    init(userId: String? = nil, success: Bool){
+    init(userId: String? = nil, success: Bool, errorMessage: String? = nil){
         self.userId = userId
         self.success = success
+        self.errorMessage = errorMessage
     }
 }
 
@@ -108,4 +110,10 @@ class AuthViewModel: ObservableObject {
             return AuthActionResult(success: false)
         }
     }
+    
+    /*
+    private func handleAuthError(_ error: Error) -> String {
+        
+    }
+     */ 
 }

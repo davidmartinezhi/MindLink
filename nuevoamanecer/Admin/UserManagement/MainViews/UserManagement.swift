@@ -7,14 +7,9 @@
 
 import SwiftUI
 
-enum UserOperation {
-    case addMe, removeMe, saveMe, toggleMyEditState, cancelMyCreation
-}
-
 struct UserManagement: View {
     // Variables de entorno
     @EnvironmentObject var authVM: AuthViewModel
-    @EnvironmentObject var currentUser: UserWrapper
     @EnvironmentObject var navPath: NavigationPathWrapper
     
     // Variables de la vista
@@ -24,6 +19,13 @@ struct UserManagement: View {
     var userVM: UserViewModel = UserViewModel()
     
     @State var searchText: String = ""
+    @State var pickedUserFilter: UserFilter = .todos
+    
+    @State var isDeletingUser: Bool = false
+    @State var userBeingDeleted: String? = nil // user's id.
+    
+    @State var showErrorMessage: Bool = false
+    @State var errorMessage: String = ""
     
     var body: some View {
         let leadingPadding: CGFloat = 100
@@ -44,6 +46,27 @@ struct UserManagement: View {
                 .padding(.leading, leadingPadding)
                 .padding(.trailing, trailingPadding)
                 
+                HStack {
+                    Text("Filtrado")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color.gray)
+                        .padding(.trailing)
+                    
+                    Divider()
+                    
+                    Picker("Filtro", selection: $pickedUserFilter) {
+                        ForEach(UserFilter.allCases) { filter in
+                            Text(filter.rawValue)
+                        }
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.leading, leadingPadding)
+                .padding(.trailing, trailingPadding)
+                .padding(.vertical, 10)
+                .frame(height: 70)
+                
                 Divider()
                 
                 ScrollView  {
@@ -56,12 +79,17 @@ struct UserManagement: View {
                             }
                         }
                         
-                        let userArray: [User] = searchText.isEmpty ? users.values.sorted{$0.name < $1.name} : users.values.sorted{$0.name < $1.name}.filter {($0.name + $0.email).cleanForSearch().contains(searchText.cleanForSearch())}
-                        
+                        let userArray: [User] = arrangeUsers(users: Array(users.values), searchText: searchText, filter: pickedUserFilter)
                         ForEach(userArray) { user in
                             UserView(user: user, isBeingEdited: user.id! == userBeingEdited) { userData, userOperation in
                                 self.makeUserOperation(userData: userData, userOperation: userOperation)
                             }
+                        }
+                        
+                        if userArray.isEmpty {
+                            Text("Sin resultados")
+                                .font(.system(size: 20, weight: .bold))
+                                .padding(.vertical, 200)
                         }
                     }
                 }
@@ -76,6 +104,16 @@ struct UserManagement: View {
                 }
             }
         }
+        .customConfirmAlert(title: "Eliminar Usuario", message: "El usuario será eliminado para siempre", isPresented: $isDeletingUser) {
+            self.userVM.removeUser(userId: userBeingDeleted!) { error in
+                if error != nil {
+                    // Error al eliminar usuario.
+                } else {
+                    self.users.removeValue(forKey: userBeingDeleted!)
+                }
+            }
+        }
+        .customAlert(title: "Error", message: errorMessage, isPresented: $showErrorMessage)
     }
     
     func makeUserOperation(userData: User, userOperation: UserOperation) -> Void {
@@ -94,26 +132,35 @@ struct UserManagement: View {
     }
     
     private func addUser(_ user: User) -> Void {
-        self.userVM.addUser(user: user) { error, id in
-            if error != nil || id == nil {
-                // Error al añadir usuario.
+        Task {
+            let authResult: AuthActionResult = await authVM.createNewAuthAccount(email: user.email, password: "123")
+            
+            if authResult.success {
+                self.userVM.addUser(user: user) { error, id in
+                    if error != nil || id == nil {
+                        // Error al añadir usuario.
+                        errorMessage = "Error en la creación del usuario"
+                        showErrorMessage = true
+                    } else {
+                        var moddedUser: User = user
+                        moddedUser.id = id!
+                        self.users[id!] = moddedUser
+                        self.userBeingEdited = nil
+                        self.creatingUser = false
+                    }
+                }
             } else {
-                var moddedUser: User = user
-                moddedUser.id = id!
-                self.users[id!] = moddedUser
-                self.userBeingEdited = nil
-                self.creatingUser = false
+                // Error al añadir al nuevo usuario a Auth.
+                errorMessage = "Error en la creación del usuario"
+                showErrorMessage = true
             }
         }
     }
     
     private func removeUser(_ user: User) -> Void {
-        self.userVM.removeUser(userId: user.id!) { error in
-            if error != nil {
-                // Error al eliminar usuario.
-            } else {
-                self.users.removeValue(forKey: user.id!)
-            }
+        if user.id != nil {
+            userBeingDeleted = user.id!
+            isDeletingUser = true
         }
     }
     
@@ -130,7 +177,9 @@ struct UserManagement: View {
     
     private func toggleUserEditState(_ user: User) -> Void {
         if user.id != nil {
-            self.users[user.id!] = user
+            if self.userBeingEdited != nil {
+                
+            }
             self.userBeingEdited = self.userBeingEdited == user.id! ? nil : user.id!
         }
     }
@@ -138,4 +187,35 @@ struct UserManagement: View {
     private func cancelUserCreation() -> Void {
         self.creatingUser = false
     }
+}
+
+
+func arrangeUsers(users: [User], searchText: String, filter: UserFilter) -> [User] {
+    let usersWithSortAndFilter: [User] = users.sorted{$0.name < $1.name}.filter { user in
+        switch filter {
+        case .todos:
+            return true
+        case .admin:
+            return user.isAdmin == true
+        case .noAdmin:
+            return user.isAdmin == false 
+        }
+    }
+    
+    let cleanedSearchText: String = searchText.cleanForSearch()
+    
+    return searchText.isEmpty ? usersWithSortAndFilter : usersWithSortAndFilter.filter {
+        ($0.name + $0.email).cleanForSearch().contains(cleanedSearchText)
+    }
+}
+
+enum UserOperation {
+    case addMe, removeMe, saveMe, toggleMyEditState, cancelMyCreation
+}
+
+enum UserFilter: String, CaseIterable, Identifiable {
+    case todos = "Todos"
+    case admin = "Administradores"
+    case noAdmin = "No Administradores"
+    var id: Self { self }
 }
