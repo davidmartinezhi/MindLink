@@ -59,6 +59,8 @@
 		BC93FD9C2A9B160700853E68 /* PictogramSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */; };
 		BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93FD9E2A9B19D300853E68 /* PictogramStringExtensions.swift */; };
 		BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */; };
+		BCAF20E12ACF05D4006DB43F /* VoiceSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAF20E02ACF05D4006DB43F /* VoiceSetting.swift */; };
+		BCAF20E32ACF06CA006DB43F /* VoiceSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAF20E22ACF06CA006DB43F /* VoiceSettingViewModel.swift */; };
 		BCB1B7092A42BA6E00C01B15 /* PageThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */; };
 		BCB1B70B2A42BA7600C01B15 /* PageDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */; };
 		BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */; };
@@ -162,6 +164,8 @@
 		BC93FD9B2A9B160700853E68 /* PictogramSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramSearchBarView.swift; sourceTree = "<group>"; };
 		BC93FD9E2A9B19D300853E68 /* PictogramStringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramStringExtensions.swift; sourceTree = "<group>"; };
 		BC9FFBD32A95AF45008B6B2B /* MarkedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedScrollView.swift; sourceTree = "<group>"; };
+		BCAF20E02ACF05D4006DB43F /* VoiceSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSetting.swift; sourceTree = "<group>"; };
+		BCAF20E22ACF06CA006DB43F /* VoiceSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceSettingViewModel.swift; sourceTree = "<group>"; };
 		BCB1B7082A42BA6E00C01B15 /* PageThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageThumbnail.swift; sourceTree = "<group>"; };
 		BCB1B70A2A42BA7600C01B15 /* PageDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDisplay.swift; sourceTree = "<group>"; };
 		BCB1B70C2A42BB3100C01B15 /* PageEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageEdit.swift; sourceTree = "<group>"; };
@@ -637,6 +641,7 @@
 				C235FDB22A1810EB005412A7 /* Patient.swift */,
 				C2BEDB662A157B72005398F9 /* User.swift */,
 				C2207EFF2A1F1AF300F31578 /* Note.swift */,
+				BCAF20E02ACF05D4006DB43F /* VoiceSetting.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -659,6 +664,7 @@
 				C2BEDB6C2A15867D005398F9 /* AuthViewModel.swift */,
 				C235FDB02A1810C3005412A7 /* PatientsViewModel.swift */,
 				C2207F012A1F1B7E00F31578 /* NotesViewModel.swift */,
+				BCAF20E22ACF06CA006DB43F /* VoiceSettingViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -785,6 +791,7 @@
 				BC8F7E362A37FFBD008E97B2 /* VoiceConfigurationView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
 				BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */,
+				BCAF20E32ACF06CA006DB43F /* VoiceSettingViewModel.swift in Sources */,
 				BC4DFE2D2AC3C4530082C631 /* DualTextFieldView.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
 				BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */,
@@ -808,6 +815,7 @@
 				BC8F7E372A37FFBD008E97B2 /* PictogramViewModel.swift in Sources */,
 				C2A8CAB62A0D9F540026DB96 /* nuevoamanecerApp.swift in Sources */,
 				C2207EFE2A1C04A500F31578 /* AddPatientView.swift in Sources */,
+				BCAF20E12ACF05D4006DB43F /* VoiceSetting.swift in Sources */,
 				BCF62E142AC712F600697CFC /* EditPanelView.swift in Sources */,
 				C2207F062A2162E600F31578 /* EditPatientView.swift in Sources */,
 				BC8F7E402A37FFBD008E97B2 /* PictogramModel.swift in Sources */,
