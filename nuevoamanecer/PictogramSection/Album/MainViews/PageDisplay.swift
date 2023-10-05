@@ -20,6 +20,8 @@ struct PageDisplay: View {
     
     @EnvironmentObject var appLock: AppLock
     
+    @State var voiceSetting = VoiceSetting.defaultVoiceSetting()
+    
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -39,7 +41,7 @@ struct PageDisplay: View {
                     }
                     .font(.headline)
                     .sheet(isPresented: $isConfiguringVoice) {
-                        VoiceConfigurationView(talkingSpeed: $talkingSpeed, voiceGender: $voiceGender)
+                        VoiceSettingView(voiceSetting: $voiceSetting)
                     }
                     
                     LockView()
