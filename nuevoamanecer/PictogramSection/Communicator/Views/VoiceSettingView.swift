@@ -18,8 +18,14 @@ struct VoiceSettingView: View {
     let synthesizer: AVSpeechSynthesizer = AVSpeechSynthesizer()
     
     @Binding var voiceSetting: VoiceSetting
+    @State var voiceSettingCapture: VoiceSetting
     
     var voiceSettingVM: VoiceSettingViewModel = VoiceSettingViewModel()
+    
+    init(voiceSetting: Binding<VoiceSetting>){
+        self._voiceSetting = voiceSetting
+        self._voiceSettingCapture = State(initialValue: voiceSetting.wrappedValue)
+    }
     
     var body: some View {
         VStack {
@@ -119,7 +125,7 @@ struct VoiceSettingView: View {
             }
         }
         .onDisappear {
-            if voiceSetting.patientId != nil {
+            if voiceSetting.patientId != nil && voiceSetting != voiceSettingCapture {
                 if voiceSetting.id != nil {
                     voiceSettingVM.editVoiceSetting(voiceSettingId: voiceSetting.id!, voiceSetting: voiceSetting) { error in
                         if error != nil {
