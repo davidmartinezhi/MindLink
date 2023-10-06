@@ -302,7 +302,7 @@ struct PatientView: View {
                                     Text("Filtrar Etiquetas").tag("")
                                         .foregroundColor(.white)
                                 }else{
-                                    Text("Remover etiqueta").tag("")
+                                    Text("Eliminar filtro").tag("")
                                 }
                                 
                                 
@@ -323,7 +323,7 @@ struct PatientView: View {
                             )
                             .onChange(of: selectedTag, perform: { value in
                                 filterNotesByTag()
-                                tagSelected = selectedTag != "" && selectedTag != "Remover etiqueta"
+                                tagSelected = selectedTag != "" && selectedTag != "Eliminar filtro"
                             })
                             .pickerStyle(MenuPickerStyle())
                             .frame(width: geometry.size.width / 6)
