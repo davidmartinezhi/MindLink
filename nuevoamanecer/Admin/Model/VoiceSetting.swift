@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct VoiceSetting: Identifiable, Codable {
+struct VoiceSetting: Identifiable, Codable, Equatable {
     @DocumentID var id: String?
     var talkingSpeed: String
     var voiceGender: String
