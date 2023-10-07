@@ -102,9 +102,11 @@ struct AddPictogramButton: View {
     
     var body: some View {
         VStack {
+            Spacer()
             Image(systemName: "plus")
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .frame(width: 70, height: 70)
+            Spacer()
             Text("Nuevo Pictograma")
         }
         .foregroundColor(.blue)

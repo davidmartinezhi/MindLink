@@ -380,13 +380,29 @@ struct PatientView: View {
                             List(filteredNotes, id: \.id) { note in
                                 
                                 Button(action:{selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })}){
-                                    
-                                    
-                                    Text(note.title)
-                                        .font(.system(size: 18, weight: .light))
-                                        .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
-                                        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
-                                        //.frame(width: geometry.size.width / 5, alignment: .leading)
+                                    HStack{
+                                            
+                                        Text(note.title)
+                                            .font(.system(size: 18, weight: .light))
+                                            .foregroundColor(selectedNoteIndex == notes.notesList.firstIndex(where: { $0.id == note.id }) ? Color.blue : Color.black)
+                                            .frame(minWidth: 100, maxWidth: .infinity, minHeight: 50, maxHeight: .infinity, alignment: .leading)
+                                            //.frame(width: geometry.size.width / 5, alignment: .leading)
+                                        
+                                        Circle()
+                                            .frame(minHeight: 5, maxHeight: 7)
+                                            .foregroundColor(
+                                                note.tag == "Información Personal" ? Color.orange :
+                                                    note.tag == "Contacto" ? Color.red :
+                                                    note.tag == "Historial Médico" ? Color.pink :
+                                                    note.tag == "Diagnóstico" ? Color.purple :
+                                                    note.tag == "Tratamiento" ? Color.yellow :
+                                                    note.tag == "Soporte Familiar" ? Color.cyan :
+                                                    note.tag == "Concentimientos" ? Color.green :
+                                                    note.tag == "Contacto" ? Color.teal :
+                                                    note.tag == "Otro" ? Color.black : Color.clear
+                                            )
+                                    }
+
                     
                                 }
                             }
@@ -435,6 +451,17 @@ struct PatientView: View {
                             }
                             .listStyle(.inset)
                         }else{
+                            /*
+                            HStack{
+                                Spacer() // Espacio superior
+                                Text("Deja presionada una nota para reordenar y deslizala hacía la izquierda para editar o eliminar")
+                                    .foregroundColor(Color.white)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Spacer() // Espacio inferior
+                            }
+                            .background(Color(.systemGray2))
+                            .frame(minHeight: 30)
+                             */
                             
                             ScrollViewReader { proxy in
                                 List {

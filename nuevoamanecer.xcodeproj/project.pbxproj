@@ -552,12 +552,12 @@
 		C22ECD3F2A33C3F300DF8A06 /* PatientProfile */ = {
 			isa = PBXGroup;
 			children = (
+				C235FDAE2A181080005412A7 /* PatientView.swift */,
 				C2207F032A206B4900F31578 /* AddNoteView.swift */,
 				C2207F0D2A268C5A00F31578 /* EditNoteView.swift */,
 				C2CF66902A302A7F005A7338 /* NoteCardView.swift */,
 				C2207F052A2162E600F31578 /* EditPatientView.swift */,
 				C2207F072A252D2800F31578 /* DeletePatientView.swift */,
-				C235FDAE2A181080005412A7 /* PatientView.swift */,
 			);
 			path = PatientProfile;
 			sourceTree = "<group>";

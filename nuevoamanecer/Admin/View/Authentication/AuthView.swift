@@ -25,7 +25,7 @@ struct AuthView: View {
                             .frame(height:300)
                             .padding([.leading, .trailing, .top])
                         
-                        Text("Creando conexiones para facilitar la comunicación entre terapeutas y pacientes")
+                        Text("Creando conexiones para facilitar la comunicación terapeuta-paciente.")
                             .font(.title)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 80)
@@ -55,7 +55,7 @@ struct AuthView: View {
                             navPath.push(NavigationDestination<LoginView>(content: LoginView()))
                         } label: {
                             Text("Empezar")
-                                .font(.headline)
+                                .font(.title)
                                 .foregroundColor(.white)
                                 .padding()
                                 .frame(maxWidth: 600)
