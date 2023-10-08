@@ -8,33 +8,20 @@
 import SwiftUI
 import Kingfisher
 
-struct InvalidInputView: View {
-    let show: Bool
-    let text: String
-    
-    var body: some View {
-        Text(text)
-            .foregroundColor(.gray)
-            .opacity(show ? 1 : 0)
-    }
-}
-
 struct UserView: View {
     @EnvironmentObject var currentUser: UserWrapper
     
     @State var user: User
     var userSnapshot: User
     var isBeingEdited: Bool
-    var backgroundColorWhenEditing: Color
     var makeUserOperation: (User, UserOperation) -> Void
     
     var isNewUser: Bool
-    
-    init(user: User, isBeingEdited: Bool, backgroundColorWhenEditing: Color = Color(red: 0.95, green: 0.95, blue: 0.95), makeUserOperation: @escaping (User, UserOperation) -> Void){
+        
+    init(user: User, isBeingEdited: Bool, makeUserOperation: @escaping (User, UserOperation) -> Void){
         self._user = State(initialValue: user)
         self.userSnapshot = user
         self.isBeingEdited = isBeingEdited
-        self.backgroundColorWhenEditing = backgroundColorWhenEditing
         self.makeUserOperation = makeUserOperation
         
         self.isNewUser = user.id == nil
@@ -74,7 +61,8 @@ struct UserView: View {
                         }
                         
                         HStack(alignment: .center, spacing: 10) {
-                            DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isBeingEdited, fontSize: 15)
+                            DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isNewUser && isBeingEdited, fontSize: 15)
+                                .autocapitalization(.none)
                             ChangeIndicatorView(showIndicator: user.email != userSnapshot.email && !isNewUser)
                             InvalidInputView(show: !user.hasValidEmail(), text: "Correo Inválido")
                         }
@@ -89,7 +77,7 @@ struct UserView: View {
                 }
                 
                 Spacer()
-                
+                                
                 let runAtCancel: ()->Void = {
                     if isNewUser {
                         makeUserOperation(user, .cancelMyCreation)
@@ -99,24 +87,37 @@ struct UserView: View {
                     self.user = self.userSnapshot
                 }
                 
-                EditPanelView(isBeingEdited: isBeingEdited,
-                              isNewUser: isNewUser,
-                              disableDelete: currentUser.id == user.id || isNewUser,
-                              disableSave: user == userSnapshot || !user.isValidUser(),
-                              runAtEdit: {makeUserOperation(user, .toggleMyEditState)},
-                              runAtDelete: {makeUserOperation(user, .removeMe)},
-                              runAtSave: isNewUser ? {makeUserOperation(user, .addMe)} : {makeUserOperation(user, .saveMe)},
-                              runAtCancel: runAtCancel)
+                if user.id != currentUser.id {
+                    EditPanelView(isBeingEdited: isBeingEdited,
+                                  isNewUser: isNewUser,
+                                  disableSave: user == userSnapshot || !user.isValidUser(),
+                                  runAtEdit: {makeUserOperation(user, .toggleMyEditState)},
+                                  runAtDelete: {makeUserOperation(user, .removeMe)},
+                                  runAtSave: isNewUser ? {makeUserOperation(user, .addMe)} : {makeUserOperation(user, .saveMe)},
+                                  runAtCancel: runAtCancel)
+                }
+                
             }
             .padding(.leading, leadingPadding)
             .padding(.trailing, trailingPadding)
-            .frame(height: 180)
+            .padding(.vertical, 20)
             
             Divider()
         }
-        .background(isBeingEdited ? backgroundColorWhenEditing : .white)
+        .background(isBeingEdited ? (isNewUser ? Color(red: 0.95, green: 0.95, blue: 1) : Color(red: 0.95, green: 0.95, blue: 0.95)) : .white)
         .onChange(of: isBeingEdited) { newValue in
             user = userSnapshot
         }
+    }    
+}
+
+struct InvalidInputView: View {
+    let show: Bool
+    let text: String
+    
+    var body: some View {
+        Text(text)
+            .foregroundColor(.gray)
+            .opacity(show ? 1 : 0)
     }
 }

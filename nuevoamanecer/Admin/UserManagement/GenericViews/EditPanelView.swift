@@ -10,8 +10,7 @@ import SwiftUI
 struct EditPanelView: View {
     var isBeingEdited: Bool
     var isNewUser: Bool
-    var disableDelete: Bool
-    var disableSave: Bool 
+    var disableSave: Bool
     var runAtEdit: ()->Void
     var runAtDelete: ()->Void
     var runAtSave: ()->Void
@@ -46,7 +45,6 @@ struct EditPanelView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: iconWidth)
             }
-            .disabled(disableDelete)
         }
     }
     

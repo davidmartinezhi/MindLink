@@ -7,12 +7,7 @@
 
 import SwiftUI
 
-struct LoginView: View {
-    enum Field : Hashable {
-        case plain
-        case secure
-    }
-    
+struct LoginView: View {    
     @EnvironmentObject var authVM: AuthViewModel
     @EnvironmentObject var currentUser: UserWrapper
     @EnvironmentObject var navPath: NavigationPathWrapper
@@ -44,37 +39,8 @@ struct LoginView: View {
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none) // para evitar errores de correo electrónico en mayúsculas
 
-                ZStack (alignment: .trailing) {
-                    if showPassword {
-                        TextField("Contraseña", text: $password)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .padding(.bottom, 20)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.asciiCapable)
-                        .autocorrectionDisabled(true)
-                        .focused($inFocus, equals: .plain)
-                    } else {
-                        SecureField("Contraseña", text: $password)
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .padding(.bottom, 20)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.asciiCapable)
-                        .autocorrectionDisabled(true)
-                        .focused($inFocus, equals: .secure)
-                    }
-                    Button() {
-                        showPassword.toggle()
-                        inFocus = showPassword ? .plain : .secure
-                    } label: {
-                        Image(systemName: showPassword ? "eye" : "eye.slash")
-                        .padding(.bottom)
-                        .padding(.trailing)
-                    }
-                }
+                PasswordInputTextFieldView(password: $password)
+                
                 Button(action: {
                     Task { // Hacer login
                         let result: AuthActionResult = await authVM.loginAuthUser(email: email, password: password)

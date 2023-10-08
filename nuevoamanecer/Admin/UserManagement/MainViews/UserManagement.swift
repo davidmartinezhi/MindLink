@@ -10,7 +10,6 @@ import SwiftUI
 struct UserManagement: View {
     // Variables de entorno
     @EnvironmentObject var authVM: AuthViewModel
-    @EnvironmentObject var navPath: NavigationPathWrapper
     
     // Variables de la vista
     @State var users: [String:User] = [:]
@@ -27,71 +26,77 @@ struct UserManagement: View {
     @State var showErrorMessage: Bool = false
     @State var errorMessage: String = ""
     
+    @State var executeWithPasswordConfirmation: ((String) -> Void)? = nil
+    
     var body: some View {
         let leadingPadding: CGFloat = 100
         let trailingPadding: CGFloat = 150
         
         GeometryReader { geo in
-            VStack {
-                HStack(alignment: .center) {
-                    SearchBarView(searchText: $searchText, placeholder: "Buscar usuario", searchBarWidth: 300)
-                    
-                    Spacer()
-                    
-                    ButtonWithImageView(text: "Nuevo Usuario", systemNameImage: "plus", isDisabled: creatingUser) {
-                        creatingUser = true
-                        userBeingEdited = nil
+            ZStack {
+                VStack {
+                    HStack(alignment: .center) {
+                        SearchBarView(searchText: $searchText, placeholder: "Buscar usuario", searchBarWidth: 300)
+                        
+                        Spacer()
+                        
+                        ButtonWithImageView(text: "Nuevo Usuario", systemNameImage: "plus", isDisabled: creatingUser) {
+                            creatingUser = true
+                            userBeingEdited = nil
+                        }
                     }
-                }
-                .padding(.leading, leadingPadding)
-                .padding(.trailing, trailingPadding)
-                
-                HStack {
-                    Text("Filtrado")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(Color.gray)
-                        .padding(.trailing)
+                    .padding(.leading, leadingPadding)
+                    .padding(.trailing, trailingPadding)
+                    
+                    HStack {
+                        Text("Filtrado")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(Color.gray)
+                            .padding(.trailing)
+                        
+                        Divider()
+                        
+                        Picker("Filtro", selection: $pickedUserFilter) {
+                            ForEach(UserFilter.allCases) { filter in
+                                Text(filter.rawValue)
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.leading, leadingPadding)
+                    .padding(.trailing, trailingPadding)
+                    .padding(.vertical, 10)
+                    .frame(height: 70)
                     
                     Divider()
                     
-                    Picker("Filtro", selection: $pickedUserFilter) {
-                        ForEach(UserFilter.allCases) { filter in
-                            Text(filter.rawValue)
-                        }
-                    }
-                    
-                    Spacer()
-                }
-                .padding(.leading, leadingPadding)
-                .padding(.trailing, trailingPadding)
-                .padding(.vertical, 10)
-                .frame(height: 70)
-                
-                Divider()
-                
-                ScrollView  {
-                    LazyVStack(spacing: 0) {
-                        if creatingUser {
-                            let creatingUserBlue: Color = Color(red: 37, green: 139, blue: 247)
+                    ScrollView  {
+                        LazyVStack(spacing: 0) {
+                            if creatingUser {                                
+                                UserView(user: User.newEmptyUser(), isBeingEdited: true) { userData, userOperation in
+                                    self.makeUserOperation(userData: userData, userOperation: userOperation)
+                                }
+                            }
                             
-                            UserView(user: User.newEmptyUser(), isBeingEdited: true, backgroundColorWhenEditing: creatingUserBlue) { userData, userOperation in
-                                self.makeUserOperation(userData: userData, userOperation: userOperation)
+                            let userArray: [User] = arrangeUsers(users: Array(users.values), searchText: searchText, filter: pickedUserFilter)
+                            ForEach(userArray) { user in
+                                UserView(user: user, isBeingEdited: user.id! == userBeingEdited) { userData, userOperation in
+                                    self.makeUserOperation(userData: userData, userOperation: userOperation)
+                                }
                             }
-                        }
-                        
-                        let userArray: [User] = arrangeUsers(users: Array(users.values), searchText: searchText, filter: pickedUserFilter)
-                        ForEach(userArray) { user in
-                            UserView(user: user, isBeingEdited: user.id! == userBeingEdited) { userData, userOperation in
-                                self.makeUserOperation(userData: userData, userOperation: userOperation)
+                            
+                            if userArray.isEmpty {
+                                Text("Sin resultados")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .padding(.vertical, 200)
                             }
-                        }
-                        
-                        if userArray.isEmpty {
-                            Text("Sin resultados")
-                                .font(.system(size: 20, weight: .bold))
-                                .padding(.vertical, 200)
                         }
                     }
+                }
+                
+                if executeWithPasswordConfirmation != nil {
+                    PasswordInputWindowView(action: $executeWithPasswordConfirmation)
                 }
             }
         }
@@ -132,27 +137,28 @@ struct UserManagement: View {
     }
     
     private func addUser(_ user: User) -> Void {
-        Task {
-            let authResult: AuthActionResult = await authVM.createNewAuthAccount(email: user.email, password: "123")
-            
-            if authResult.success {
-                self.userVM.addUser(user: user) { error, id in
-                    if error != nil || id == nil {
-                        // Error al añadir usuario.
-                        errorMessage = "Error en la creación del usuario"
-                        showErrorMessage = true
-                    } else {
-                        var moddedUser: User = user
-                        moddedUser.id = id!
-                        self.users[id!] = moddedUser
-                        self.userBeingEdited = nil
-                        self.creatingUser = false
+        executeWithPasswordConfirmation = { currUserPassword in 
+            Task {
+                let userCreationResult: AuthActionResult = await authVM.createNewAuthAccount(email: user.email, password: "12345678", currUserPassword: currUserPassword)
+                
+                if userCreationResult.success {
+                    self.userVM.addUserWithCustomId(user: user, userId: userCreationResult.userId!) { error in
+                        if error != nil{
+                            // Error al añadir usuario.
+                            errorMessage = "Error en la creación del usuario"
+                            showErrorMessage = true
+                        } else {
+                            var userWithId: User = user
+                            userWithId.id = userCreationResult.userId!
+                            self.users[userCreationResult.userId!] = userWithId
+                            self.userBeingEdited = nil
+                            self.creatingUser = false
+                        }
                     }
+                } else {
+                    // Error al añadir al nuevo usuario a Auth.
+                    showError(errorMessage: userCreationResult.errorMessage!)
                 }
-            } else {
-                // Error al añadir al nuevo usuario a Auth.
-                errorMessage = "Error en la creación del usuario"
-                showErrorMessage = true
             }
         }
     }
@@ -167,14 +173,14 @@ struct UserManagement: View {
     private func saveUser(_ user: User) -> Void {
         self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
             if error != nil {
-                // Error al editar usuario
+                showError(errorMessage: "Error al guardar los cambios")
             } else {
                 self.users[user.id!] = user
                 self.userBeingEdited = nil
             }
         }
     }
-    
+
     private func toggleUserEditState(_ user: User) -> Void {
         if user.id != nil {
             if self.userBeingEdited != nil {
@@ -186,6 +192,11 @@ struct UserManagement: View {
     
     private func cancelUserCreation() -> Void {
         self.creatingUser = false
+    }
+    
+    private func showError(errorMessage: String) -> Void {
+        self.errorMessage = errorMessage
+        self.showErrorMessage = true
     }
 }
 

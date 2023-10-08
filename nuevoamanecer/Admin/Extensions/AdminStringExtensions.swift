@@ -40,4 +40,8 @@ extension String {
     func isValidEmail() -> Bool {
         return self.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     }
+    
+    func isValidPassword() -> Bool {
+        return self.count > 0 // Verificar 
+    }
 }

@@ -145,7 +145,7 @@ struct RegisterView: View {
                     mostrarAlerta1 = true
                 } else {
                     Task {
-                        _ = await authVM.createNewAuthAccount(email: email, password: password)
+                        _ = await authVM.createNewAuthAccount(email: email, password: password, currUserPassword: authPassword)
                     }
                     dismiss()
                 }
