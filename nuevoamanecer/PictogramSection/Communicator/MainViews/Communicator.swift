@@ -90,7 +90,7 @@ struct Communicator: View {
                 .padding(.horizontal, 70)
                 
                 HStack(spacing: 20) {
-                    Text("Categorias")
+                    Text("Categorías")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color.gray)
                     

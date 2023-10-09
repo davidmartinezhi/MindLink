@@ -24,7 +24,7 @@ struct PatientView: View {
     @State private var filteredNotes: [Note] = []
     
     //tags
-    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Consentimientos","Otro"]
     @State private var selectedTag: String = ""
     @State private var tagSelected: Bool = false
     
@@ -317,7 +317,7 @@ struct PatientView: View {
                                 selectedTag == "Diagnóstico" ? Color.purple :
                                 selectedTag == "Tratamiento" ? Color.yellow :
                                 selectedTag == "Soporte Familiar" ? Color.cyan :
-                                selectedTag == "Concentimientos" ? Color.green :
+                                selectedTag == "Consentimientos" ? Color.green :
                                 selectedTag == "Contacto" ? Color.teal :
                                 selectedTag == "Otro" ? Color.black : Color.blue
                             )
@@ -354,7 +354,7 @@ struct PatientView: View {
                             selectedTag == "Diagnóstico" ? Color.purple :
                             selectedTag == "Tratamiento" ? Color.yellow :
                             selectedTag == "Soporte Familiar" ? Color.cyan :
-                            selectedTag == "Concentimientos" ? Color.green :
+                            selectedTag == "Consentimientos" ? Color.green :
                             selectedTag == "Contacto" ? Color.teal :
                             selectedTag == "Otro" ? Color.black : Color.clear
                         )
@@ -397,7 +397,7 @@ struct PatientView: View {
                                                     note.tag == "Diagnóstico" ? Color.purple :
                                                     note.tag == "Tratamiento" ? Color.yellow :
                                                     note.tag == "Soporte Familiar" ? Color.cyan :
-                                                    note.tag == "Concentimientos" ? Color.green :
+                                                    note.tag == "Consentimientos" ? Color.green :
                                                     note.tag == "Contacto" ? Color.teal :
                                                     note.tag == "Otro" ? Color.black : Color.clear
                                             )
@@ -433,7 +433,7 @@ struct PatientView: View {
                                             .multilineTextAlignment(.center)
                                             .padding()
                                             .fixedSize(horizontal: false, vertical: true)
-                                        Text("Deja presionada una nota para mover su order y deslizala hacía la izquierda para editarla o eliminarla")
+                                        Text("Deja presionada una nota para mover su orden y deslízala hacía la izquierda para editarla o eliminarla")
                                             .font(.headline)
                                             .foregroundColor(Color.gray)
                                             .multilineTextAlignment(.center)

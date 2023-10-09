@@ -111,7 +111,7 @@ struct LoginView: View {
                     }
                 }
                 message: {
-                    Text("Puede que su correo o contraseña sean erroneos")
+                    Text("Puede que su correo o contraseña sean erróneos.")
                 }
             }
             .frame(maxWidth: min(500, geometry.size.width), alignment: .center)

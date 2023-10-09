@@ -70,13 +70,13 @@ struct UserView: View {
                             DualTextFieldView(text: $user.name, placeholder: "Nombre", editing: isBeingEdited, fontSize: 20)
                                 .bold()
                             ChangeIndicatorView(showIndicator: user.name != userSnapshot.name && !isNewUser)
-                            InvalidInputView(show: !user.hasValidName(), text: "Nombre Inválido")
+                            InvalidInputView(show: !user.hasValidName(), text: "Nombre inválido")
                         }
                         
                         HStack(alignment: .center, spacing: 10) {
                             DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isBeingEdited, fontSize: 15)
                             ChangeIndicatorView(showIndicator: user.email != userSnapshot.email && !isNewUser)
-                            InvalidInputView(show: !user.hasValidEmail(), text: "Correo Inválido")
+                            InvalidInputView(show: !user.hasValidEmail(), text: "Correo inválido")
                         }
                         
                         HStack(spacing: 10) {

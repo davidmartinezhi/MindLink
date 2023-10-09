@@ -63,7 +63,7 @@ struct NoteCardView: View {
                               note.tag == "Diagnóstico" ? Color.purple :
                               note.tag == "Tratamiento" ? Color.yellow :
                               note.tag == "Soporte Familiar" ? Color.cyan :
-                              note.tag == "Concentimientos" ? Color.green :
+                              note.tag == "Consentimientos" ? Color.green :
                               note.tag == "Contacto" ? Color.teal :
                               note.tag == "Otro" ? Color.black :  Color.clear
                           )
