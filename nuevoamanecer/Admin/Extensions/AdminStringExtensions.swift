@@ -44,4 +44,12 @@ extension String {
     func isValidPassword() -> Bool {
         return self.count > 0 // Verificar 
     }
+    
+    func trimAtEnds() -> String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    func removeWhitespaces() -> String {
+        return self.replacingOccurrences(of: "\\s", with: "", options: .regularExpression, range: nil)
+    }
 }

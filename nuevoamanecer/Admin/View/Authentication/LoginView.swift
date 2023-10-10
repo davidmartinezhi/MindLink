@@ -49,6 +49,7 @@ struct LoginView: View {
                             userVM.getUser(userId: result.userId!) { error, user in
                                 if error != nil || user == nil {
                                     // No fue posible obtener la información del usuario que inicio sesión
+                                    _ = authVM.logout()
                                     showAlert = true
                                 } else {
                                     currentUser.setUser(user: user!)

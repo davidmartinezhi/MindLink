@@ -13,12 +13,13 @@ struct UserManagement: View {
     
     // Variables de la vista
     @State var users: [String:User] = [:]
+    // @State var userSnapshots: [String:User] = [:]
     @State var userBeingEdited: String? = nil // user's id.
     @State var creatingUser: Bool = false
     var userVM: UserViewModel = UserViewModel()
     
     @State var searchText: String = ""
-    @State var pickedUserFilter: UserFilter = .todos
+    @State var pickedUserType: UserType = .baseUserOrAdminUser
     
     @State var isDeletingUser: Bool = false
     @State var userBeingDeleted: String? = nil // user's id.
@@ -27,6 +28,8 @@ struct UserManagement: View {
     @State var errorMessage: String = ""
     
     @State var executeWithPasswordConfirmation: ((String) -> Void)? = nil
+    
+    let imageHanlder: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
     
     var body: some View {
         let leadingPadding: CGFloat = 100
@@ -56,8 +59,8 @@ struct UserManagement: View {
                         
                         Divider()
                         
-                        Picker("Filtro", selection: $pickedUserFilter) {
-                            ForEach(UserFilter.allCases) { filter in
+                        Picker("Filtro", selection: $pickedUserType) {
+                            ForEach(UserType.allCases) { filter in
                                 Text(filter.rawValue)
                             }
                         }
@@ -74,15 +77,15 @@ struct UserManagement: View {
                     ScrollView  {
                         LazyVStack(spacing: 0) {
                             if creatingUser {                                
-                                UserView(user: User.newEmptyUser(), isBeingEdited: true) { userData, userOperation in
-                                    self.makeUserOperation(userData: userData, userOperation: userOperation)
+                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { userData, userPickedImage, userOperation in
+                                    self.makeUserOperation(userData: userData, userPickedImage: userPickedImage, userOperation: userOperation)
                                 }
                             }
                             
-                            let userArray: [User] = arrangeUsers(users: Array(users.values), searchText: searchText, filter: pickedUserFilter)
+                            let userArray: [User] = filterUsers(users: sortUsersByName(users: Array(users.values)), searchText: searchText, userType: pickedUserType)
                             ForEach(userArray) { user in
-                                UserView(user: user, isBeingEdited: user.id! == userBeingEdited) { userData, userOperation in
-                                    self.makeUserOperation(userData: userData, userOperation: userOperation)
+                                UserView(user: user, userBeingEdited: $userBeingEdited) { userData, userPickedImage, userOperation in
+                                    self.makeUserOperation(userData: userData, userPickedImage: userPickedImage, userOperation: userOperation)
                                 }
                             }
                             
@@ -105,7 +108,7 @@ struct UserManagement: View {
                 if error != nil || fetchedUsers == nil {
                     // Error al obtener usuarios
                 } else {
-                    users = Dictionary(uniqueKeysWithValues: fetchedUsers!.map {($0.id!, $0)})
+                    users = userArrayToDict(users: fetchedUsers!)
                 }
             }
         }
@@ -121,36 +124,42 @@ struct UserManagement: View {
         .customAlert(title: "Error", message: errorMessage, isPresented: $showErrorMessage)
     }
     
-    func makeUserOperation(userData: User, userOperation: UserOperation) -> Void {
+    func makeUserOperation(userData: User, userPickedImage: UIImage?, userOperation: UserOperation) -> Void {
         switch userOperation {
         case .addMe:
-            self.addUser(userData)
+            self.addUser(userData, userPickedImage: userPickedImage)
         case .removeMe:
             self.removeUser(userData)
         case .saveMe:
-            self.saveUser(userData)
-        case .toggleMyEditState:
-            self.toggleUserEditState(userData)
+            self.saveUser(userData, userPickedImage: userPickedImage)
         case .cancelMyCreation:
-            self.cancelUserCreation()
+            self.creatingUser = false
         }
     }
     
-    private func addUser(_ user: User) -> Void {
+    private func addUser(_ user: User, userPickedImage: UIImage?) -> Void {
         executeWithPasswordConfirmation = { currUserPassword in 
             Task {
-                let userCreationResult: AuthActionResult = await authVM.createNewAuthAccount(email: user.email, password: "12345678", currUserPassword: currUserPassword)
+                var moddedUser: User = user
+                if userPickedImage != nil {
+                    if let imageUrl: URL = await imageHanlder.uploadImage(image: userPickedImage!, name: buildUserImageName(user: user)) {
+                        moddedUser.image = imageUrl.absoluteString
+                    } else {
+                        showError(errorMessage: "Error al guardar la imagén seleccionada")
+                        return
+                    }
+                }
+                
+                let userCreationResult: AuthActionResult = await authVM.createNewAuthAccount(email: moddedUser.email, password: "12345678", currUserPassword: currUserPassword)
                 
                 if userCreationResult.success {
-                    self.userVM.addUserWithCustomId(user: user, userId: userCreationResult.userId!) { error in
+                    self.userVM.addUserWithCustomId(user: moddedUser, userId: userCreationResult.userId!) { error in
                         if error != nil{
                             // Error al añadir usuario.
-                            errorMessage = "Error en la creación del usuario"
-                            showErrorMessage = true
+                            showError(errorMessage: "Error en la creación del usuario")
                         } else {
-                            var userWithId: User = user
-                            userWithId.id = userCreationResult.userId!
-                            self.users[userCreationResult.userId!] = userWithId
+                            moddedUser.id = userCreationResult.userId!
+                            self.users[userCreationResult.userId!] = moddedUser
                             self.userBeingEdited = nil
                             self.creatingUser = false
                         }
@@ -170,63 +179,46 @@ struct UserManagement: View {
         }
     }
     
-    private func saveUser(_ user: User) -> Void {
-        self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
-            if error != nil {
-                showError(errorMessage: "Error al guardar los cambios")
-            } else {
-                self.users[user.id!] = user
-                self.userBeingEdited = nil
+    private func saveUser(_ user: User, userPickedImage: UIImage?) -> Void {
+        Task {
+            var moddedUser: User = user
+            if userPickedImage != nil {
+                if let imageUrl: URL = await imageHanlder.uploadImage(image: userPickedImage!, name: buildUserImageName(user: user)) {
+                    moddedUser.image = imageUrl.absoluteString
+                } else {
+                    showError(errorMessage: "Error al guardar la imagén seleccionada")
+                    return
+                }
+            }
+            
+            self.userVM.editUser(userId: moddedUser.id!, newUserValue: moddedUser) { error in
+                if error != nil {
+                    showError(errorMessage: "Error al guardar los cambios")
+                } else {
+                    self.users[moddedUser.id!] = moddedUser
+                    self.userBeingEdited = nil
+                }
             }
         }
     }
-
-    private func toggleUserEditState(_ user: User) -> Void {
-        if user.id != nil {
-            if self.userBeingEdited != nil {
-                
-            }
-            self.userBeingEdited = self.userBeingEdited == user.id! ? nil : user.id!
-        }
-    }
-    
-    private func cancelUserCreation() -> Void {
-        self.creatingUser = false
-    }
-    
+        
     private func showError(errorMessage: String) -> Void {
         self.errorMessage = errorMessage
         self.showErrorMessage = true
     }
 }
 
-
-func arrangeUsers(users: [User], searchText: String, filter: UserFilter) -> [User] {
-    let usersWithSortAndFilter: [User] = users.sorted{$0.name < $1.name}.filter { user in
-        switch filter {
-        case .todos:
-            return true
-        case .admin:
-            return user.isAdmin == true
-        case .noAdmin:
-            return user.isAdmin == false 
-        }
-    }
-    
-    let cleanedSearchText: String = searchText.cleanForSearch()
-    
-    return searchText.isEmpty ? usersWithSortAndFilter : usersWithSortAndFilter.filter {
-        ($0.name + $0.email).cleanForSearch().contains(cleanedSearchText)
-    }
+func buildUserImageName(user: User) -> String {
+    return "User_\(user.name.removeWhitespaces())_\(UUID().uuidString)"
 }
 
 enum UserOperation {
-    case addMe, removeMe, saveMe, toggleMyEditState, cancelMyCreation
+    case addMe, removeMe, saveMe, cancelMyCreation
 }
 
-enum UserFilter: String, CaseIterable, Identifiable {
-    case todos = "Todos"
-    case admin = "Administradores"
-    case noAdmin = "No Administradores"
+enum UserType: String, CaseIterable, Identifiable {
+    case baseUserOrAdminUser = "Todos"
+    case baseUser = "No Administradores"
+    case adminUser = "Administradores"
     var id: Self { self }
 }

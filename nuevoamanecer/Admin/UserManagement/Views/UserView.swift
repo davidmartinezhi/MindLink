@@ -6,25 +6,26 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct UserView: View {
     @EnvironmentObject var currentUser: UserWrapper
     
     @State var user: User
     var userSnapshot: User
-    var isBeingEdited: Bool
-    var makeUserOperation: (User, UserOperation) -> Void
+    @Binding var userBeingEdited: String?
+    var makeUserOperation: (User, UIImage?, UserOperation) -> Void
     
-    var isNewUser: Bool
-        
-    init(user: User, isBeingEdited: Bool, makeUserOperation: @escaping (User, UserOperation) -> Void){
+    var isBeingEdited: Bool { userBeingEdited == user.id}
+    var isNewUser: Bool {user.id == nil}
+    
+    @State var showImagePicker: Bool = false
+    @State var pickedImage: UIImage? = nil 
+
+    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, UserOperation) -> Void){
         self._user = State(initialValue: user)
         self.userSnapshot = user
-        self.isBeingEdited = isBeingEdited
+        self._userBeingEdited = userBeingEdited
         self.makeUserOperation = makeUserOperation
-        
-        self.isNewUser = user.id == nil
     }
     
     var body: some View {
@@ -35,17 +36,16 @@ struct UserView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
                     VStack {
-                        KFImage(URL(string: user.image ?? ""))
-                            .placeholder{
-                                let nameComponents: [String] = user.name.splitAtWhitespaces()
-                                ImagePlaceholderView(firstName: nameComponents.getElementSafely(index: 0) ?? "",
-                                                     lastName: nameComponents.getElementSafely(index: 1) ?? "")
-                            }
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
-                        
+                        if pickedImage != nil {
+                            Image(uiImage: pickedImage!)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                        } else {
+                            UserImageView(user: user, isBeingEdited: isBeingEdited, showImagePicker: $showImagePicker)
+                        }
+ 
                         Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
                             .font(.system(size: 15))
                             .foregroundColor(.gray)
@@ -54,14 +54,14 @@ struct UserView: View {
                                          
                     VStack(alignment: .leading, spacing: 15) {
                         HStack(alignment: .center, spacing: 10) {
-                            DualTextFieldView(text: $user.name, placeholder: "Nombre", editing: isBeingEdited, fontSize: 20)
+                            DualTextFieldView(text: $user.name, placeholder: "Nombre", editing: isNewUser || isBeingEdited, fontSize: 20)
                                 .bold()
                             ChangeIndicatorView(showIndicator: user.name != userSnapshot.name && !isNewUser)
                             InvalidInputView(show: !user.hasValidName(), text: "Nombre Inválido")
                         }
                         
                         HStack(alignment: .center, spacing: 10) {
-                            DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isNewUser && isBeingEdited, fontSize: 15)
+                            DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isNewUser, fontSize: 15)
                                 .autocapitalization(.none)
                             ChangeIndicatorView(showIndicator: user.email != userSnapshot.email && !isNewUser)
                             InvalidInputView(show: !user.hasValidEmail(), text: "Correo Inválido")
@@ -70,7 +70,7 @@ struct UserView: View {
                         HStack(spacing: 10) {
                             Text("Admin: ")
                                 .font(.system(size: 15))
-                            DualChoiceView(choice: $user.isAdmin, labels: ("Sí", "No"), isBeingEdited: isBeingEdited, isDisabled: !isBeingEdited)
+                            DualChoiceView(choice: $user.isAdmin, labels: ("Sí", "No"), isBeingEdited: isNewUser || isBeingEdited, isDisabled: !isBeingEdited)
                             ChangeIndicatorView(showIndicator: user.isAdmin != userSnapshot.isAdmin && !isNewUser)
                         }
                     }
@@ -80,9 +80,9 @@ struct UserView: View {
                                 
                 let runAtCancel: ()->Void = {
                     if isNewUser {
-                        makeUserOperation(user, .cancelMyCreation)
+                        makeUserOperation(user, nil, .cancelMyCreation)
                     } else {
-                        makeUserOperation(user, .toggleMyEditState)
+                        userBeingEdited = nil 
                     }
                     self.user = self.userSnapshot
                 }
@@ -90,11 +90,11 @@ struct UserView: View {
                 if user.id != currentUser.id {
                     EditPanelView(isBeingEdited: isBeingEdited,
                                   isNewUser: isNewUser,
-                                  disableSave: user == userSnapshot || !user.isValidUser(),
-                                  runAtEdit: {makeUserOperation(user, .toggleMyEditState)},
-                                  runAtDelete: {makeUserOperation(user, .removeMe)},
-                                  runAtSave: isNewUser ? {makeUserOperation(user, .addMe)} : {makeUserOperation(user, .saveMe)},
-                                  runAtCancel: runAtCancel)
+                                  disableSave: !user.isValidUser() && (user == userSnapshot || pickedImage != nil),
+                                  runAtEdit: {self.userBeingEdited = user.id},
+                                  runAtDelete: {makeUserOperation(user, nil, .removeMe)},
+                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedImage, .addMe)} : {makeUserOperation(user, pickedImage, .saveMe)},
+                                  runAtCancel: {runAtCancel()})
                 }
                 
             }
@@ -104,11 +104,16 @@ struct UserView: View {
             
             Divider()
         }
-        .background(isBeingEdited ? (isNewUser ? Color(red: 0.95, green: 0.95, blue: 1) : Color(red: 0.95, green: 0.95, blue: 0.95)) : .white)
-        .onChange(of: isBeingEdited) { newValue in
-            user = userSnapshot
+        .background(isBeingEdited ? (isNewUser ? Color(red: 0.5, green: 0.5, blue: 1) : Color(red: 0.95, green: 0.95, blue: 0.95)) : .white)
+        .onChange(of: userBeingEdited) { _ in
+            if  user.id != userBeingEdited && userBeingEdited != nil {
+                user = userSnapshot
+            }
         }
-    }    
+        .fullScreenCover(isPresented: $showImagePicker) {
+            ImagePicker(image: $pickedImage)
+        }
+    }
 }
 
 struct InvalidInputView: View {

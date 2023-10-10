@@ -133,7 +133,7 @@ class AuthViewModel: ObservableObject {
     // Termina la sesión del usuario actual.
     func logout() -> AuthActionResult {
         do {
-            try Auth.auth().signOut()
+            try self.auth.signOut()
             return AuthActionResult(success: true)
         } catch let error as NSError {
             return AuthActionResult(success: false, errorMessage: handleAuthError(error))
