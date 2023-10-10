@@ -140,6 +140,7 @@ struct PatientView: View {
                     VStack{
                         if(patient.image == "placeholder") {
                             ImagePlaceholderView(firstName: patient.firstName, lastName: patient.lastName)
+                                .padding(.trailing)
                         } else {
                             KFImage(URL(string: patient.image))
                                 .resizable()
