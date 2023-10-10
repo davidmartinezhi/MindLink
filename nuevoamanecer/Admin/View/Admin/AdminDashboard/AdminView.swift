@@ -299,7 +299,6 @@ struct AdminView: View {
                 .padding(.vertical, 10)
                 //.padding(.vertical)
                 
-                
                 // Filtrado
                 HStack{
                     
@@ -312,159 +311,84 @@ struct AdminView: View {
                     
                     HStack {
                         // Nivel cognitivo
+                        //==================================================================================================
                         ZStack {
                             Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
                                 if !cognitiveLevelFilterSelected {
-                                    Text("Nivel Cognitivo")
-                                        .foregroundColor(Color.black)
+                                    Text("Nivel Cognitivo").tag("")
+                                        .foregroundColor(.white)
+                                }else{
+                                    Text("Eliminar filtro").tag("")
                                 }
+                                
+                                
                                 ForEach(cognitiveLevels, id: \.self) {
-                                    Text($0)
+                                    Text("Nivel Cognitivo " + $0)
                                 }
                             }
                             .onChange(of: selectedCognitiveLevel, perform: { value in
                                 performSearchByCognitiveLevel()
-                                cognitiveLevelFilterSelected = selectedCognitiveLevel != "" && selectedCognitiveLevel != "Nivel Cognitivo"
+                                cognitiveLevelFilterSelected = selectedCognitiveLevel != "" && selectedCognitiveLevel != "Eliminar filtro"
                             })
-                            .disabled(cognitiveLevelFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
-                            .pickerStyle(.menu)
-                            .frame(width: 157, height: 40)
-                            .cornerRadius(10)
+                            .pickerStyle(MenuPickerStyle())
+                            .frame(width: 210, height: 40)
 
-                            // Botón para restablecer el filtro de nivel cognitivo
                             if cognitiveLevelFilterSelected {
                                 Button(action: {
                                     selectedCognitiveLevel = ""
                                     cognitiveLevelFilterSelected = false
                                 }) {
-                                    HStack{
-                                        Text("Cognición " + selectedCognitiveLevel.prefix(selectedCognitiveLevel.count - 1) + "a")
-                                            .foregroundColor(.blue)
-                                        Image(systemName: "xmark.circle")
-                                            .foregroundColor(.red)
+                                    HStack {
                                     }
                                 }
-                                .frame(width: 157, height: 40)
-                                .background(Color.white)
+                                .background(.white)
                                 .cornerRadius(10)
                             }
                         }
-                        .padding(.leading)
+                        .frame(width: 210, height: 40)
+                        .padding(.top, 10)
+                        .padding(.bottom, 10)
 
                         // Comunicación
+                        //============================================================
                         ZStack {
                             Picker("Comunicación", selection: $selectedCommunicationStyle) {
                                 if !communicationStyleFilterSelected {
-                                    Text("Comunicación")
-                                        .foregroundColor(Color.black)
+                                    Text("Tipo de Comunicación").tag("")
+                                        .foregroundColor(.white)
+                                }else{
+                                    Text("Eliminar filtro").tag("")
                                 }
+                                
+                                
                                 ForEach(communicationStyles, id: \.self) {
-                                    Text($0)
+                                    Text("Comunicación " + $0)
                                 }
                             }
                             .onChange(of: selectedCommunicationStyle, perform: { value in
                                 performSearchByCommunicationStyle()
-                                communicationStyleFilterSelected = selectedCommunicationStyle != "" && selectedCommunicationStyle != "Comunicación"
+                                communicationStyleFilterSelected = selectedCommunicationStyle != "" && selectedCommunicationStyle != "Eliminar filtro"
                             })
-                            .disabled(communicationStyleFilterSelected) // Deshabilita el Picker si el filtro está seleccionado
-                            .pickerStyle(.menu)
-                            .frame(width: 150, height: 40)
-                            .cornerRadius(10)
+                            .pickerStyle(MenuPickerStyle())
+                            .frame(width: 240, height: 40)
 
-                            // Botón para restablecer el filtro de comunicación
                             if communicationStyleFilterSelected {
                                 Button(action: {
                                     selectedCommunicationStyle = ""
                                     communicationStyleFilterSelected = false
                                 }) {
-                                    HStack{
-                                        Text("Comunicación " + selectedCommunicationStyle)
-                                            .foregroundColor(.blue)
-                                        Image(systemName: "xmark.circle")
-                                            .foregroundColor(.red)
+                                    HStack {
                                     }
-
                                 }
-                                .frame(width: 220, height: 40)
-                                .background(Color.white)
+                                .background(.white)
                                 .cornerRadius(10)
                             }
                         }
-                        .padding(.trailing)
+                        .frame(width: 240, height: 40)
+                        .padding(.top, 10)
+                        .padding(.bottom, 10)
                     }
-
-                    /*
-                    //Nivel cognitivo
-                    Picker("Nivel Cognitivo", selection: $selectedCognitiveLevel) {
-                        if(!cognitiveLevelFilterSelected){
-                            Text("Nivel Cognitivo")
-                                .foregroundColor(Color.black)
-                        }
-                        ForEach(cognitiveLevels, id: \.self) {
-                            Text($0)
-                        }
-                        
-                    }
-                    .onChange(of: selectedCognitiveLevel, perform: { value in
-                        performSearchByCognitiveLevel()
-                        if selectedCognitiveLevel != "" && selectedCognitiveLevel != "Nivel Cognitivo" {
-                            cognitiveLevelFilterSelected = true
-                        }else {
-                            //reseteamos valores cognitive level
-                            cognitiveLevelFilterSelected = false
-                        }
-                    })
-                    .frame(width: 157, height: 40)
-                    .pickerStyle(.menu)
-                    .padding(.leading)
-                    .cornerRadius(10)
                     
-                    //Comunicación
-                    Picker("Comunicación", selection: $selectedCommunicationStyle) {
-                        if(!communicationStyleFilterSelected){
-                            Text("Comunicación")
-
-                        }
-                        ForEach(communicationStyles, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .onChange(of: selectedCommunicationStyle, perform: { value in
-                        performSearchByCommunicationStyle()
-                        if selectedCommunicationStyle != "" && selectedCommunicationStyle != "Comunicación" {
-                            communicationStyleFilterSelected = true
-                        }else {
-                            //reseteamos valores cognitive level
-                            communicationStyleFilterSelected = false
-                        }
-                    })
-                    .frame(width: 150, height: 40)
-                    .pickerStyle(.menu)
-                    .padding(.trailing)
-                    .cornerRadius(10)
-    
-                    
-                    if(communicationStyleFilterSelected || cognitiveLevelFilterSelected){
-                        //reset filters
-                        Button(action: {
-                            resetFilters = true
-                        }) {
-                            Text("Resetear")
-                        }
-                        .font(.system(size: 16, weight: .bold))
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .onChange(of: resetFilters, perform: { value in
-                            if value {
-                                resetSearchFilters()
-                            }
-                        })
-                    }
-                     
-                     */
                     Spacer()
                 }
                 .frame(maxHeight: 50)
@@ -579,4 +503,3 @@ struct AdminView: View {
         .navigationBarBackButtonHidden(true)
     }
 }
-    

@@ -98,7 +98,7 @@ struct RegisterView: View {
             
             ZStack (alignment: .trailing) {
                 if showConfirmPassword {
-                    TextField("Confrimar Contraseña", text: $confirmpassword)
+                    TextField("Confirmar Contraseña", text: $confirmpassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
@@ -110,7 +110,7 @@ struct RegisterView: View {
                     .frame(maxWidth: 600)
                     .focused($inFocusConfirm, equals: .plain)
                 } else {
-                    SecureField("Confrimar Contraseña", text: $confirmpassword)
+                    SecureField("Confirmar Contraseña", text: $confirmpassword)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -163,12 +163,12 @@ struct RegisterView: View {
                 Button("OK"){}
             }
             message: {
-                Text("Verifique sucontraseña")
+                Text("Verifique su contraseña")
             }
-            .alert("Contraseña Invalida",isPresented: $mostrarAlerta1){
+            .alert("Contraseña inválida",isPresented: $mostrarAlerta1){
                 Button("OK"){}
             } message: {
-                Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial")
+                Text("La contraseña debe de contener 8 caracteres, con mínimo un número, una mayúscula y un carácter especial.")
             }
             
             // Añadir mensaje
@@ -179,7 +179,7 @@ struct RegisterView: View {
             TextField("Contraseña", text: $authPassword)
                 .autocorrectionDisabled(true)
             
-            Button("Okay", action: {
+            Button("Ok", action: {
                 Task {
                     let result: AuthActionResult = await authVM.loginAuthUser(email: currentUser.email!, password: authPassword)
                     

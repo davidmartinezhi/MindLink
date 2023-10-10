@@ -20,7 +20,7 @@ struct EditNoteView: View {
     @State private var alertMessage = ""
     
     //tags
-    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Concentimientos","Otro"]
+    let tags: [String] = ["Información Personal","Contacto","Historial Médico","Diagnóstico","Tratamiento","Soporte Familiar","Consentimientos","Otro"]
     @State private var selectedTag: String = ""
 
     
@@ -83,13 +83,13 @@ struct EditNoteView: View {
                         self.showingAlert = true
                     }
                     else if !isValidInputNoWhiteSpaces(input: noteTitle) || !isValidInputNoWhiteSpaces(input: noteContent){
-                        self.alertTitle = "Texto no valido"
-                        self.alertMessage = "El titulo y el contenido no pueden contener solamente espacios en blanco"
+                        self.alertTitle = "Texto no válido"
+                        self.alertMessage = "El título y el contenido no pueden contener solamente espacios en blanco"
                         self.showingAlert = true
                     }
                     else if hasLeadingWhitespace(input: noteTitle) || hasLeadingWhitespace(input: noteContent){
-                        self.alertTitle = "Texto no valido"
-                        self.alertMessage = "El titulo y el contenido no pueden iniciar con campos en blanco"
+                        self.alertTitle = "Texto no válido"
+                        self.alertMessage = "El título y el contenido no pueden iniciar con campos en blanco"
                         self.showingAlert = true
                     }
                     else {

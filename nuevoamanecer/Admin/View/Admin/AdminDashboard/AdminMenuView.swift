@@ -123,11 +123,17 @@ struct AdminMenuView: View {
                         if (email == emailConfirm) {
                             TextField("Email", text: $email)
                                 .textContentType(.emailAddress)
+                                .autocorrectionDisabled(true)
+                                .autocapitalization(.none)
                         } else {
                             TextField("Email", text: $email)
                                 .textContentType(.emailAddress)
+                                .autocorrectionDisabled(true)
+                                .autocapitalization(.none)
                             TextField("Confirmar Email", text: $emailValidation)
                                 .textContentType(.emailAddress)
+                                .autocorrectionDisabled(true)
+                                .autocapitalization(.none)
                             Spacer()
                         }
 
@@ -158,14 +164,14 @@ struct AdminMenuView: View {
                         if (password != ""){
                             ZStack (alignment: .trailing) {
                                 if showConfirmPassword {
-                                    TextField("Confrimar contraseña", text: $confirmpassword)
+                                    TextField("Confirmar contraseña", text: $confirmpassword)
                                         .textInputAutocapitalization(.never)
                                         .keyboardType(.asciiCapable)
                                         .autocorrectionDisabled(true)
                                         .textContentType(.password)
                                         .focused($inFocusConfirm, equals: .plain)
                                 } else {
-                                    SecureField("Confrimar contraseña", text: $confirmpassword)
+                                    SecureField("Confirmar contraseña", text: $confirmpassword)
                                         .textInputAutocapitalization(.never)
                                         .keyboardType(.asciiCapable)
                                         .autocorrectionDisabled(true)
@@ -219,23 +225,23 @@ struct AdminMenuView: View {
                                     //Checar que datos son validos
                                     if (name.isEmpty || email.isEmpty) {
                                         self.alertTitle = "Faltan campos"
-                                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                                        self.alertMessage = "Por favor, rellena todos los campos antes de guardar."
                                         self.showingAlert = true
                                     } else if (password != confirmpassword) {
                                         self.alertTitle = "Confirme su contraseña"
                                         self.alertMessage = "Por favor, confirme correctamente su contraseña."
                                         self.showingAlert = true
                                     } else if (password.isWeakPassword()){
-                                        self.alertTitle = "Contraseña Invalida"
-                                        self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                        self.alertTitle = "Contraseña inválida"
+                                        self.alertMessage = "La contraseña debe de contener 8 caracteres, con mínimo un número, una mayúscula y un carácter especial."
                                         self.showingAlert = true
                                     } else if (email != emailConfirm) {
                                         if (email == emailValidation) {
                                             uploadData.toggle()
                                             dismiss()
                                         } else {
-                                            self.alertTitle = "Correo electronico no coincide"
-                                            self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                            self.alertTitle = "Correo electrónico no coincide"
+                                            self.alertMessage = "Los dos correos electrónicos ingresados no coinciden."
                                         }
                                     }
                                 }
@@ -244,23 +250,23 @@ struct AdminMenuView: View {
                             //Checar que datos son validos
                             if (name.isEmpty || email.isEmpty) {
                                 self.alertTitle = "Faltan campos"
-                                self.alertMessage = "Por favor, rellena todos los campos antes de guardar la nota."
+                                self.alertMessage = "Por favor, rellena todos los campos antes de guardar."
                                 self.showingAlert = true
                             } else if (password != confirmpassword) {
                                 self.alertTitle = "Confirme su contraseña"
                                 self.alertMessage = "Por favor, confirme correctamente su contraseña."
                                 self.showingAlert = true
                             } else if (password.isWeakPassword()){
-                                self.alertTitle = "Contraseña Invalida"
-                                self.alertMessage = "La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."
+                                self.alertTitle = "Contraseña inválida"
+                                self.alertMessage = "La contraseña debe de contener 8 caracteres, con mínimo un número, una mayúscula y un carácter especial."
                                 self.showingAlert = true
                             } else if (email != emailConfirm) {
                                 if (email == emailValidation) {
                                     uploadData.toggle()
                                     dismiss()
                                 } else {
-                                    self.alertTitle = "Correo electronico no coincide"
-                                    self.alertMessage = "Los dos correos electronicos ingresados no coinciden"
+                                    self.alertTitle = "Correo electrónico no coincide"
+                                    self.alertMessage = "Los dos correos electrónicos ingresados no coinciden"
                                 }
                             }
                         }
@@ -292,7 +298,7 @@ struct AdminMenuView: View {
             TextField("Contraseña", text: $authPassword)
                 .autocorrectionDisabled(true)
             
-            Button("Okay", action: {
+            Button("Ok", action: {
                 Task {
                     let result: AuthActionResult = await authVM.reauthenticateAuthUser(email: user.email, password: authPassword)
                     

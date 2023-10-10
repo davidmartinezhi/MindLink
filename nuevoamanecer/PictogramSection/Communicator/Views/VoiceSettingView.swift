@@ -59,7 +59,7 @@ struct VoiceSettingView: View {
                 .frame(height: 20)
             
             HStack {
-                Text("Velocidad de Pronunciación")
+                Text("Velocidad de pronunciación")
                     .font(.title2)
                 Menu {
                     Picker("Velocidad", selection: $voiceSetting.talkingSpeed) {

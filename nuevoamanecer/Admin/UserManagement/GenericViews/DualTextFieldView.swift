@@ -18,6 +18,7 @@ struct DualTextFieldView: View {
         if editing {
             TextFieldView(fieldWidth: 350, fieldHeight: width, fontSize: fontSize, placeHolder: placeholder, background: Color(red: 0.8, green: 0.8, blue: 0.8), inputText: $text)
                 .autocorrectionDisabled(true)
+                .autocapitalization(.none)
         } else {
             Text(text)
                 .font(.system(size: fontSize))
