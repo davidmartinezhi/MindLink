@@ -12,6 +12,7 @@
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
 		BC014F102A91801F0002140A /* AppLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC014F0F2A91801F0002140A /* AppLock.swift */; };
+		BC0479172AD4E76E00FD18C8 /* UserImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0479162AD4E76E00FD18C8 /* UserImageView.swift */; };
 		BC1132522A95466C0080F294 /* NavigationPathWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */; };
 		BC1132542A954E380080F294 /* NavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132532A954E380080F294 /* NavigationDestination.swift */; };
 		BC1207722ABFF70E0098A527 /* UserWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1207712ABFF70E0098A527 /* UserWrapper.swift */; };
@@ -23,6 +24,10 @@
 		BC4DFE2D2AC3C4530082C631 /* DualTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE2C2AC3C4530082C631 /* DualTextFieldView.swift */; };
 		BC4DFE312AC3C78B0082C631 /* DualChoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4DFE302AC3C78B0082C631 /* DualChoiceView.swift */; };
 		BC553CAE2A3A7120002A2EA2 /* CustomConfirmAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */; };
+		BC58AB672AD27A3E0037ACDE /* PasswordInputTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC58AB662AD27A3E0037ACDE /* PasswordInputTextFieldView.swift */; };
+		BC58AB692AD28DCE0037ACDE /* PasswordInputWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */; };
+		BC58AB6F2AD395120037ACDE /* UserMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC58AB6E2AD395120037ACDE /* UserMethods.swift */; };
+		BC62E17C2AD604AC0049EAC2 /* UserManagementExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC62E17B2AD604AC0049EAC2 /* UserManagementExtensions.swift */; };
 		BC884A762AAACC7000E83553 /* AdminArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
@@ -117,6 +122,7 @@
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker_BACKUP.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage_BACKUP.swift; sourceTree = "<group>"; };
 		BC014F0F2A91801F0002140A /* AppLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLock.swift; sourceTree = "<group>"; };
+		BC0479162AD4E76E00FD18C8 /* UserImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageView.swift; sourceTree = "<group>"; };
 		BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPathWrapper.swift; sourceTree = "<group>"; };
 		BC1132532A954E380080F294 /* NavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestination.swift; sourceTree = "<group>"; };
 		BC1207712ABFF70E0098A527 /* UserWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWrapper.swift; sourceTree = "<group>"; };
@@ -128,6 +134,10 @@
 		BC4DFE2C2AC3C4530082C631 /* DualTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DualTextFieldView.swift; sourceTree = "<group>"; };
 		BC4DFE302AC3C78B0082C631 /* DualChoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DualChoiceView.swift; sourceTree = "<group>"; };
 		BC553CAD2A3A7120002A2EA2 /* CustomConfirmAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfirmAlert.swift; sourceTree = "<group>"; };
+		BC58AB662AD27A3E0037ACDE /* PasswordInputTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputTextFieldView.swift; sourceTree = "<group>"; };
+		BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInputWindowView.swift; sourceTree = "<group>"; };
+		BC58AB6E2AD395120037ACDE /* UserMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMethods.swift; sourceTree = "<group>"; };
+		BC62E17B2AD604AC0049EAC2 /* UserManagementExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementExtensions.swift; sourceTree = "<group>"; };
 		BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminArrayExtensions.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -253,6 +263,8 @@
 		BC4DFE232AC346190082C631 /* UserManagement */ = {
 			isa = PBXGroup;
 			children = (
+				BC62E17A2AD604910049EAC2 /* Extensions */,
+				BC58AB6D2AD395000037ACDE /* MiscMethods */,
 				BC4DFE272AC3465A0082C631 /* GenericViews */,
 				BC4DFE252AC346420082C631 /* Views */,
 				BC4DFE242AC346210082C631 /* ViewModels */,
@@ -273,6 +285,8 @@
 			isa = PBXGroup;
 			children = (
 				BC4DFE2A2AC347420082C631 /* UserView.swift */,
+				BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */,
+				BC0479162AD4E76E00FD18C8 /* UserImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -294,6 +308,22 @@
 				BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */,
 			);
 			path = GenericViews;
+			sourceTree = "<group>";
+		};
+		BC58AB6D2AD395000037ACDE /* MiscMethods */ = {
+			isa = PBXGroup;
+			children = (
+				BC58AB6E2AD395120037ACDE /* UserMethods.swift */,
+			);
+			path = MiscMethods;
+			sourceTree = "<group>";
+		};
+		BC62E17A2AD604910049EAC2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BC62E17B2AD604AC0049EAC2 /* UserManagementExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		BC884A742AAACC5F00E83553 /* Extensions */ = {
@@ -517,6 +547,7 @@
 			isa = PBXGroup;
 			children = (
 				BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */,
+				BC58AB662AD27A3E0037ACDE /* PasswordInputTextFieldView.swift */,
 			);
 			path = GenericViews;
 			sourceTree = "<group>";
@@ -790,9 +821,11 @@
 				BCB1B70D2A42BB3100C01B15 /* PageEdit.swift in Sources */,
 				BC8F7E362A37FFBD008E97B2 /* VoiceSettingView.swift in Sources */,
 				C2207F022A1F1B7F00F31578 /* NotesViewModel.swift in Sources */,
+				BC58AB672AD27A3E0037ACDE /* PasswordInputTextFieldView.swift in Sources */,
 				BC8FE0A12A736A8100BE7ABC /* BoardCache.swift in Sources */,
 				BCAF20E32ACF06CA006DB43F /* VoiceSettingViewModel.swift in Sources */,
 				BC4DFE2D2AC3C4530082C631 /* DualTextFieldView.swift in Sources */,
+				BC62E17C2AD604AC0049EAC2 /* UserManagementExtensions.swift in Sources */,
 				C2CF66912A302A7F005A7338 /* NoteCardView.swift in Sources */,
 				BC2AF1DF2A6B9993002A822C /* PageOptionsView.swift in Sources */,
 				BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */,
@@ -828,6 +861,7 @@
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
 				C2CF668F2A302982005A7338 /* PatientCardView.swift in Sources */,
 				BC8F7E432A37FFBD008E97B2 /* SortedArray.swift in Sources */,
+				BC0479172AD4E76E00FD18C8 /* UserImageView.swift in Sources */,
 				BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */,
 				BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */,
 				BC8F7E482A37FFBD008E97B2 /* PictogramEditorWindowView.swift in Sources */,
@@ -850,6 +884,7 @@
 				BC4DFE292AC346B10082C631 /* UserManagement.swift in Sources */,
 				C2BEDB6D2A15867D005398F9 /* AuthViewModel.swift in Sources */,
 				BC3B46B82ABE712F0034BDA9 /* UserViewModel.swift in Sources */,
+				BC58AB692AD28DCE0037ACDE /* PasswordInputWindowView.swift in Sources */,
 				BC8F7E312A37FFBD008E97B2 /* LockView.swift in Sources */,
 				A9594A0F2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift in Sources */,
 				BC8F7E4B2A37FFBD008E97B2 /* Album.swift in Sources */,
@@ -866,6 +901,7 @@
 				C2CF66872A2E8AAE005A7338 /* AdminNav.swift in Sources */,
 				BC8F7E462A37FFBD008E97B2 /* DropDownCategoryPicker.swift in Sources */,
 				BCEA4D6D2AA02717000C1517 /* PictogramGridArrowView.swift in Sources */,
+				BC58AB6F2AD395120037ACDE /* UserMethods.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

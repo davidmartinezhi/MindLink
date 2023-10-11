@@ -30,6 +30,16 @@ struct User: Identifiable, Codable, Hashable, Equatable  {
         return email.isValidEmail()
     }
     
+    func toDict() -> [String:Any] {
+        var userDict: [String:Any] = ["name": name, "email": email, "isAdmin": isAdmin]
+        
+        if image != nil {
+            userDict["image"] = image!
+        }
+        
+        return userDict
+    }
+    
     static func newEmptyUser() -> User {
         return User(name: "", email: "", isAdmin: false)
     }

@@ -40,4 +40,16 @@ extension String {
     func isValidEmail() -> Bool {
         return self.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     }
+    
+    func isValidPassword() -> Bool {
+        return self.count > 6 // Verificar 
+    }
+    
+    func trimAtEnds() -> String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    func removeWhitespaces() -> String {
+        return self.replacingOccurrences(of: "\\s", with: "", options: .regularExpression, range: nil)
+    }
 }

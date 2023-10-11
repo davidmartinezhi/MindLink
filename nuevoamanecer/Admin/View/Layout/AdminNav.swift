@@ -39,14 +39,10 @@ struct AdminNav: View {
                 
                 ZStack{
                     //No imagen
+                    let userNames: [String] = currentUser.name!.splitAtWhitespaces()
                     if currentUser.image == nil {
-                        ZStack{
-                            Image(systemName: "person.circle")
-                                .font(.system(size: 60))
-                            //.foregroundColor(Color(.label))
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.horizontal, 20)
+                        ImagePlaceholderView(firstName: userNames.getElementSafely(index: 0) ?? "",
+                                             lastName: userNames.getElementSafely(index: 0) ?? "")
                     }
                     //Imagen previamente subida
                     else{

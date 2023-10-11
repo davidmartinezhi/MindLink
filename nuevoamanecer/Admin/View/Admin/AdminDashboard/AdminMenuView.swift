@@ -327,14 +327,14 @@ struct AdminMenuView: View {
                         // Error
                     } else {
                         Task {
-                            await authVM.updateCurrentAuthUser(value: email, userProperty: .email)
+                            await authVM.updateCurrentAuthUser(value: email, userProperty: .email, currUserPassword: authPassword)
                         }
                     }
                 }
                 
                 if !password.isEmpty {
                     Task {
-                        let result: AuthActionResult = await authVM.updateCurrentAuthUser(value: password, userProperty: .password)
+                        let result: AuthActionResult = await authVM.updateCurrentAuthUser(value: password, userProperty: .password, currUserPassword: authPassword)
                         
                         if result.success {
                             // Exito

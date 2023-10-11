@@ -10,16 +10,17 @@ import SwiftUI
 struct ImagePlaceholderView: View {
     var firstName: String
     var lastName: String
+    var radius: CGFloat = 100
+    var fontSize: CGFloat = 28
     
     var body: some View {
         Text(firstName.prefix(1) + lastName.prefix(1))
             .textCase(.uppercase)
-            .font(.title)
+            .font(.system(size: fontSize))
             .fontWeight(.bold)
-            .frame(width: 100, height: 100)
+            .frame(width: radius, height: radius)
             .background(Color(.systemGray3))
             .foregroundColor(.white)
             .clipShape(Circle())
-            .padding(.trailing)
     }
 }

@@ -11,11 +11,12 @@ struct ChangeIndicatorView: View {
     var showIndicator: Bool
     
     var body: some View {
-        Image(systemName: "largecircle.fill.circle")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 10)
-            .foregroundColor(.blue)
-            .opacity(showIndicator ? 1 : 0)
+        if showIndicator {
+            Image(systemName: "largecircle.fill.circle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 10)
+                .foregroundColor(.blue)
+        }
     }
 }

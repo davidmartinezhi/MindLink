@@ -63,6 +63,16 @@ class UserViewModel {
         }
     }
     
+    func addUserWithCustomId(user: User, userId: String, completition: @escaping (Error?)->Void) -> Void {
+        userCollection.document(userId).setData(user.toDict()) {error in
+            if error != nil {
+                completition(error)
+            } else {
+                completition(nil)
+            }
+        }
+    }
+    
     func removeUser(userId: String, completittion: @escaping (Error?)->Void) -> Void {
         userCollection.document(userId).delete { error in
             if error != nil {
