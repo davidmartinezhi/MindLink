@@ -34,7 +34,7 @@ struct PasswordInputTextFieldView: View {
                 inFocus = showPassword ? .plain : .secure
             } label: {
                 Image(systemName: showPassword ? "eye" : "eye.slash")
-                .padding(.bottom)
+                .padding(.vertical)
                 .padding(.trailing)
             }
         }

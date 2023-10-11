@@ -11,17 +11,18 @@ struct UserView: View {
     @EnvironmentObject var currentUser: UserWrapper
     
     @State var user: User
-    var userSnapshot: User
+    @State var userPassword: String = ""
     @Binding var userBeingEdited: String?
-    var makeUserOperation: (User, UIImage?, UserOperation) -> Void
-    
-    var isBeingEdited: Bool { userBeingEdited == user.id}
-    var isNewUser: Bool {user.id == nil}
-    
+    var userSnapshot: User
+    var makeUserOperation: (User, UIImage?, String?, UserOperation) -> Void
+        
     @State var showImagePicker: Bool = false
-    @State var pickedImage: UIImage? = nil 
+    @State var pickedImage: UIImage? = nil
+    
+    var isNewUser: Bool {self.user.id == nil}
+    var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
 
-    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, UserOperation) -> Void){
+    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, String?, UserOperation) -> Void){
         self._user = State(initialValue: user)
         self.userSnapshot = user
         self._userBeingEdited = userBeingEdited
@@ -43,7 +44,7 @@ struct UserView: View {
                                 .frame(width: 100, height: 100)
                                 .clipShape(Circle())
                         } else {
-                            UserImageView(user: user, isBeingEdited: isBeingEdited, showImagePicker: $showImagePicker)
+                            UserImageView(user: user, isBeingEdited: isBeingEdited || isNewUser, showImagePicker: $showImagePicker)
                         }
  
                         Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
@@ -57,14 +58,20 @@ struct UserView: View {
                             DualTextFieldView(text: $user.name, placeholder: "Nombre", editing: isNewUser || isBeingEdited, fontSize: 20)
                                 .bold()
                             ChangeIndicatorView(showIndicator: user.name != userSnapshot.name && !isNewUser)
-                            InvalidInputView(show: !user.hasValidName(), text: "Nombre inválido")
+                            InvalidInputView(show: !user.name.isEmpty && !user.hasValidName(), text: "Nombre inválido")
                         }
                         
                         HStack(alignment: .center, spacing: 10) {
                             DualTextFieldView(text: $user.email, placeholder: "Correo", editing: isNewUser, fontSize: 15)
-                                .autocapitalization(.none)
                             ChangeIndicatorView(showIndicator: user.email != userSnapshot.email && !isNewUser)
-                            InvalidInputView(show: !user.hasValidEmail(), text: "Correo inválido")
+                            InvalidInputView(show: !user.email.isEmpty && !user.hasValidEmail(), text: "Correo inválido")
+                        }
+                        
+                        if isNewUser {
+                            HStack(alignment: .center, spacing: 10) {
+                                DualTextFieldView(text: $userPassword, placeholder: "Contraseña", editing: isNewUser, fontSize: 15)
+                                InvalidInputView(show: !userPassword.isEmpty && !userPassword.isValidPassword(), text: "Contraseña inválida")
+                            }
                         }
                         
                         HStack(spacing: 10) {
@@ -77,26 +84,27 @@ struct UserView: View {
                 }
                 
                 Spacer()
-                                
-                let runAtCancel: ()->Void = {
+                
+                let runAtCancel: () -> Void = {
                     if isNewUser {
-                        makeUserOperation(user, nil, .cancelMyCreation)
+                        makeUserOperation(user, nil, nil, .cancelMyCreation)
                     } else {
-                        userBeingEdited = nil 
+                        userBeingEdited = nil
                     }
                     self.user = self.userSnapshot
                 }
-                
+                                                
                 if user.id != currentUser.id {
-                    EditPanelView(isBeingEdited: isBeingEdited,
+                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedImage == nil) || (isNewUser && !userPassword.isValidPassword())
+                    
+                    EditPanelView(isBeingEdited: isBeingEdited || isNewUser,
                                   isNewUser: isNewUser,
-                                  disableSave: !user.isValidUser() && (user == userSnapshot || pickedImage != nil),
-                                  runAtEdit: {self.userBeingEdited = user.id},
-                                  runAtDelete: {makeUserOperation(user, nil, .removeMe)},
-                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedImage, .addMe)} : {makeUserOperation(user, pickedImage, .saveMe)},
-                                  runAtCancel: {runAtCancel()})
+                                  disableSave: disableSave,
+                                  runAtEdit: {self.userBeingEdited = self.user.id},
+                                  runAtDelete: {makeUserOperation(user, nil, nil, .removeMe)},
+                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedImage, userPassword, .addMe)} : {makeUserOperation(user, pickedImage, nil, .saveMe)},
+                                  runAtCancel: runAtCancel)
                 }
-                
             }
             .padding(.leading, leadingPadding)
             .padding(.trailing, trailingPadding)
@@ -104,13 +112,13 @@ struct UserView: View {
             
             Divider()
         }
-        .background(isBeingEdited ? (isNewUser ? Color(red: 0.5, green: 0.5, blue: 1) : Color(red: 0.95, green: 0.95, blue: 0.95)) : .white)
+        .background(isBeingEdited || isNewUser ? Color(red: 0.95, green: 0.95, blue: 0.95) : .white)
         .onChange(of: userBeingEdited) { _ in
             if  user.id != userBeingEdited && userBeingEdited != nil {
                 user = userSnapshot
             }
         }
-        .fullScreenCover(isPresented: $showImagePicker) {
+        .fullScreenCover(isPresented: $showImagePicker){
             ImagePicker(image: $pickedImage)
         }
     }

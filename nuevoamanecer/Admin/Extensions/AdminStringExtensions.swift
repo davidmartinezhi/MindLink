@@ -42,7 +42,7 @@ extension String {
     }
     
     func isValidPassword() -> Bool {
-        return self.count > 0 // Verificar 
+        return self.count > 6 // Verificar 
     }
     
     func trimAtEnds() -> String {
