@@ -390,7 +390,7 @@ struct PatientView: View {
                                             //.frame(width: geometry.size.width / 5, alignment: .leading)
                                         
                                         Circle()
-                                            .frame(minHeight: 5, maxHeight: 7)
+                                            .frame(minHeight: 7, maxHeight: 10)
                                             .foregroundColor(
                                                 note.tag == "Información Personal" ? Color.orange :
                                                     note.tag == "Contacto" ? Color.red :
