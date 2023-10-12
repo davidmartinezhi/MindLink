@@ -75,7 +75,7 @@ struct UserManagement: View {
                     Divider()
                     
                     ScrollView  {
-                        LazyVStack(spacing: 0) {
+                        VStack(spacing: 0) {
                             if creatingUser {                                
                                 UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation in
                                     self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation)
@@ -87,6 +87,7 @@ struct UserManagement: View {
                                 UserView(user: user, userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation in
                                     self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation)
                                 }
+                                .id(user.id!)
                             }
                             
                             if userArray.isEmpty && (!searchText.isEmpty || pickedUserType != .baseUserOrAdminUser) {

@@ -23,19 +23,19 @@ struct PasswordInputWindowView: View {
             
             
             VStack(spacing: 20) {
-                let currentUserName: String = currentUser.name != nil ? "(\(currentUser.name!)" : ""
+                let currentUserName: String = currentUser.name != nil ? " (\(currentUser.name!))" : ""
                 Text("Ingrese su contraseña" + currentUserName)
                     .bold()
                 
                 PasswordInputTextFieldView(password: $password)
                 
                 HStack (spacing: 10) {
-                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
-                        action!(password)
+                    ButtonView(text: "Cancelar", color: .gray) {
                         action = nil
                     }
                     
-                    ButtonView(text: "Cancelar", color: .gray) {
+                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
+                        action!(password)
                         action = nil
                     }
                 }

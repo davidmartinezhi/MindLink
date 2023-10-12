@@ -23,11 +23,16 @@ struct User: Identifiable, Codable, Hashable, Equatable  {
     }
     
     func hasValidName() -> Bool {
-        return name.count > 2
+        return self.name.count < 21 && self.name.count > 3 && self.name.contains(/^[A-Za-z]+(?: [A-Za-z]+)*$/)
+        // Contiene por lo menos 4 caracteres.
+        // Contiene no más de 20 caracters.
+        // No termina o inicia con espacios.
+        // Contiene solamente caracteres alfabéticos.
+        // Entre caracteres alfabéticos hay no más de un espacio. 
     }
     
     func hasValidEmail() -> Bool {
-        return email.isValidEmail()
+        return self.email.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     }
     
     func toDict() -> [String:Any] {

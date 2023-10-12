@@ -36,13 +36,13 @@ extension String {
     func splitAtWhitespaces() -> [String] {
         return self.split(separator: " ").map(String.init)
     }
-    
-    func isValidEmail() -> Bool {
-        return self.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    }
-    
+            
     func isValidPassword() -> Bool {
-        return self.count > 6 // Verificar 
+        return self.contains(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/) 
+        // Contiene por lo menos 6 caracteres.
+        // Contiene por lo menos una mayúscula.
+        // Contiene por lo menos una minúscula.
+        // Contiene por lo menos un número. 
     }
     
     func trimAtEnds() -> String {
