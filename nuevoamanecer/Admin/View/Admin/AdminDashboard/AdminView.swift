@@ -264,29 +264,46 @@ struct AdminView: View {
                     
                     HStack{
                         
-                        Menu {
-                            
-                            if currentUser.isAdmin! {
+                        if currentUser.isAdmin! {
+                            Menu {
+                                
+                                if currentUser.isAdmin! {
+                                    Button {
+                                        navPath.push(NavigationDestination<PictogramEditor>(content: PictogramEditor(patient: nil)))
+                                    } label: {
+                                        Text("Editar comunicador base")
+                                        Image(systemName: "pencil")
+                                    }
+                                }
+                                
                                 Button {
-                                    navPath.push(NavigationDestination<PictogramEditor>(content: PictogramEditor(patient: nil)))
+                                    navPath.push(NavigationDestination<SingleCommunicator>(content: SingleCommunicator(patient: nil)))
                                 } label: {
-                                    Text("Editar comunicador base")
-                                    Image(systemName: "pencil")
-                            }
-                            }
-                            
-                            Button {
-                                navPath.push(NavigationDestination<SingleCommunicator>(content: SingleCommunicator(patient: nil)))
+                                    Text("Acceder a comunicador base")
+                                    Image(systemName: "message.fill")
+                                }
                             } label: {
-                                Text("Acceder a comunicador base")
-                                Image(systemName: "message.fill")
+                                HStack {
+                                    Image(systemName: "ellipsis.circle.fill")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Comunicador base")
+                                }
+                                .padding(10)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                             }
-                        } label: {
-                            HStack {
-                                Image(systemName: "ellipsis.circle.fill")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("Comunicador base")
+                        }else{
+                            Button(action: {
+                                navPath.push(NavigationDestination<SingleCommunicator>(content: SingleCommunicator(patient: nil)))
+                            }) {
+                                HStack {
+                                    Image(systemName: "message.fill")
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                    Text("Comunicador base")
+                                }
                             }
                             .padding(10)
                             .background(Color.blue)
