@@ -80,17 +80,6 @@ struct AdminNav: View {
                         // solo usuarios administradores pueden crear otro usuario
                         if (currentUser.isAdmin! == true) {
                             // boton para ir a la vista de registro
-                            Button(action: { showRegisterView = true }) {
-                                HStack {
-                                    Text("Registrar Usuario")
-                                        .font(.system(size: 16))
-                                }
-                            }
-                        }
-                        
-                        // solo usuarios administradores pueden crear otro usuario
-                        if (currentUser.isAdmin! == true) {
-                            // boton para ir a la vista de registro
                             Button(action: { navPath.push(NavigationDestination(content: UserManagement())) }) {
                                 HStack {
                                     Text("Administración de Usuarios")
