@@ -59,17 +59,15 @@ struct VoiceSettingView: View {
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
-                    }
-                    
-                    
-                    Picker("Velocidad de pronunciación", selection: $voiceSetting.talkingSpeed) {
-                        ForEach(speedList, id: \.self) { speed in
-                            Text(speed)
+                        
+                        
+                        Picker("Velocidad de pronunciación", selection: $voiceSetting.talkingSpeed) {
+                            ForEach(speedList, id: \.self) { speed in
+                                Text(speed)
+                            }
                         }
+                        .pickerStyle(MenuPickerStyle())
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    
-
                 }
                 
                 HStack{
