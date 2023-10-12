@@ -37,6 +37,12 @@ struct UserView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
                     VStack {
+                        
+                        Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
+                            .font(.system(size: 15))
+                            .foregroundColor(.gray)
+                            .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
+                        
                         if pickedImage != nil {
                             Image(uiImage: pickedImage!)
                                 .resizable()
@@ -46,11 +52,6 @@ struct UserView: View {
                         } else {
                             UserImageView(user: user, isBeingEdited: isBeingEdited || isNewUser, showImagePicker: $showImagePicker)
                         }
- 
-                        Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
-                            .font(.system(size: 15))
-                            .foregroundColor(.gray)
-                            .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
                     }
                                          
                     VStack(alignment: .leading, spacing: 15) {
@@ -75,7 +76,7 @@ struct UserView: View {
                         }
                         
                         HStack(spacing: 10) {
-                            Text("Admin: ")
+                            Text("Administrador: ")
                                 .font(.system(size: 15))
                             DualChoiceView(choice: $user.isAdmin, labels: ("Sí", "No"), isBeingEdited: isNewUser || isBeingEdited, isDisabled: !isBeingEdited)
                             ChangeIndicatorView(showIndicator: user.isAdmin != userSnapshot.isAdmin && !isNewUser)
