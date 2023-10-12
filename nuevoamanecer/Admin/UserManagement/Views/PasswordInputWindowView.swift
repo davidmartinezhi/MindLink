@@ -30,12 +30,11 @@ struct PasswordInputWindowView: View {
                 PasswordInputTextFieldView(password: $password)
                 
                 HStack (spacing: 10) {
-                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
-                        action!(password)
+                    ButtonView(text: "Cancelar", color: .gray) {
                         action = nil
                     }
-                    
-                    ButtonView(text: "Cancelar", color: .gray) {
+                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
+                        action!(password)
                         action = nil
                     }
                 }
