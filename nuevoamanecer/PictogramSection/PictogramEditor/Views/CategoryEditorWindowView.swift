@@ -90,13 +90,72 @@ struct CategoryEditorWindowView: View {
                 }
                 
                 HStack {
-                    Spacer()
+                        //Cancel
+                        Button(action: {
+                            dismiss()
+                        }){
+                            HStack {
+                                Text("Cancelar")
+                                    .font(.headline)
+                                
+                                Spacer()
+                                Image(systemName: "xmark.circle.fill")
+                            }
+                        }
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(10)
+                        .foregroundColor(.white)
+                        
+                        let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture) || catsWithSimilarColor.count > 0
+                        //Save
+                        Button(action: {
+                            DBActionInProgress = true
+                            if isNewCat {
+                                catVM.addCat(catModel: catModel){ error, docId in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        searchText = ""
+                                        pickedCategoryId = docId ?? ""
+                                        dismiss()
+                                    }
+                                }
+                            } else {
+                                catVM.editCat(catId: catModel.id!, catModel: catModel){ error in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        dismiss()
+                                    }
+                                }
+                            }
+
+                        }) {
+                            HStack {
+                                Text("Guardar")
+                                    .font(.headline)
+                                
+                                Spacer()
+                                Image(systemName: "arrow.right.circle.fill")
+                            }
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .disabled(addButtonIsDisabled)
+                        .allowsHitTesting(!DBActionInProgress)
+
+                    
+                    /*
                     
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
                         dismiss()
                     }
                                         
-                    let addButtonIsDisabled: Bool = !catModel.isValidCateogry() || catModel.isEqualTo(catModelCapture) || catsWithSimilarColor.count > 0
+
+                   
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: addButtonIsDisabled){
                         DBActionInProgress = true
                         if isNewCat {
@@ -122,6 +181,7 @@ struct CategoryEditorWindowView: View {
                     .allowsHitTesting(!DBActionInProgress)
                                         
                     Spacer()
+                     */
                 }
             }
             .padding(.horizontal, 50)
