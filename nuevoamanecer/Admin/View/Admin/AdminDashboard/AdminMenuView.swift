@@ -290,8 +290,7 @@ struct AdminMenuView: View {
         .alert(item: $alertItem ) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
-        .onAppear{
-            .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
+        .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
             TextField("Contraseña", text: $authPassword)
                 .autocorrectionDisabled(true)
             
@@ -308,7 +307,6 @@ struct AdminMenuView: View {
             })
             Button("Cancel", role: .cancel, action: { dismiss() })
             })
-        }
         .onDisappear{
             if (uploadData) {
                 self.name = name
