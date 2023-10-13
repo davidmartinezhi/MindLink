@@ -167,7 +167,7 @@ struct RegisterView: View {
                         self.alertItem = AlertItem(title: Text("Contraseña invalida"), message: Text("verifique que su contraseña tenga minimo 8 caracteres, un caracter en mayuscula, un caracter especial y un número."), dismissButton: .cancel(Text("OK")))
                     } else {
                         Task {
-                            _ = await authVM.createNewAuthAccount(email: email, password: password)
+                             _ = await authVM.createNewAuthAccount(email: email, password: password, currUserPassword: authPassword)
                         }
                         dismiss()
                     }

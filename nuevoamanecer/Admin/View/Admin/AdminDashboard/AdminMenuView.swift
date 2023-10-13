@@ -291,6 +291,25 @@ struct AdminMenuView: View {
         .alert(item: $alertItem ) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
+        .onAppear{
+            .alert("Escribe tu contraseña", isPresented: $showAuthAlert, actions: {
+            TextField("Contraseña", text: $authPassword)
+                .autocorrectionDisabled(true)
+            
+            Button("Okay", action: {
+                Task {
+                    let result: AuthActionResult = await authVM.loginAuthUser(email: currentUser.email!, password: authPassword)
+                    
+                    if result.success {
+                        // Exito
+                    } else {
+                        dismiss()
+                    }
+                }
+            })
+            Button("Cancel", role: .cancel, action: { dismiss() })
+            })
+        }
         .onDisappear{
             if (uploadData) {
                 self.name = name
