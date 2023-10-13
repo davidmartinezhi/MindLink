@@ -101,13 +101,78 @@ struct PictogramEditorWindowView: View {
                 }
                 
                 HStack {
+                    
+                    Button(action: {
+                        dismiss()
+                    }){
+                        HStack {
+                            Text("Cancelar")
+                                .font(.headline)
+                            
+                            Spacer()
+                            Image(systemName: "xmark.circle.fill")
+                        }
+                    }
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
+                    .foregroundColor(.white)
+                    
+                    // Save
+                    let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && !pictoModel.isEqualTo(pictoModelCapture) && (temporaryUIImage != nil || !pictoModel.imageUrl.isEmpty))
+                   
+                    Button(action: {
+                        DBActionInProgress = true
+                        Task {
+                            if temporaryUIImage != nil {
+                                let imageName: String = buildImageName(catName: catVM.getCat(catId: pictoModel.categoryId)!.name, pictoName: pictoModel.name)
+                                if let downloadUrl: URL = await imageHandler.uploadImage(image: temporaryUIImage!, name: imageName){
+                                    self.pictoModel.imageUrl = downloadUrl.absoluteString
+                                } else {
+                                    // Error al subir imagen.
+                                }
+                            }
+                            
+                            if isNewPicto {
+                                pictoVM.addPicto(pictoModel: self.pictoModel) {error in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        dismiss()
+                                    }
+                                }
+                            } else {
+                                pictoVM.editPicto(pictoId: self.pictoModel.id!, pictoModel: self.pictoModel) {error in
+                                    if error != nil {
+                                        showErrorMessage = true
+                                    } else {
+                                        dismiss()
+                                    }
+                                }
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Text("Guardar")
+                                .font(.headline)
+                            
+                            Spacer()
+                            Image(systemName: "arrow.right.circle.fill")
+                        }
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .disabled(saveButtonIsDisabled)
+                    .allowsHitTesting(!DBActionInProgress)
+                    /*
                     //Cancel
                     ButtonWithImageView(text: "Cancelar", systemNameImage: "xmark.circle.fill", background: .gray) {
                         dismiss()
                     }
                     
-                    // Save
-                    let saveButtonIsDisabled: Bool = !(pictoModel.isValidPictogram() && !pictoModel.isEqualTo(pictoModelCapture) && (temporaryUIImage != nil || !pictoModel.imageUrl.isEmpty))
+
                     ButtonWithImageView(text: "Guardar", systemNameImage: "arrow.right.circle.fill", isDisabled: saveButtonIsDisabled) {
                         DBActionInProgress = true
                         Task {
@@ -140,6 +205,7 @@ struct PictogramEditorWindowView: View {
                         }
                     }
                     .allowsHitTesting(!DBActionInProgress)
+                     */
                 }
             }
             .padding(.horizontal, 70)
