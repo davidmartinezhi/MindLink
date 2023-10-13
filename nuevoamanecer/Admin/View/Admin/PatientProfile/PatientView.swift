@@ -112,18 +112,22 @@ struct PatientView: View {
         
         let searchingWithFilters = notes.notesList
         
+        // Convierte la búsqueda a una forma que ignora los diacríticos
+        let keyFolding = key.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+        
         // Si hay un filtro de búsqueda, regresa las notas filtradas
         filteredNotes = searchingWithFilters.filter { note in
-            // Convierte el título y el contenido de la nota a minúsculas
-            let titleLowercased = note.title.lowercased()
-            let textLowercased = note.text.lowercased()
+            // Convierte el título y el contenido de la nota a una forma que ignora los diacríticos
+            let titleFolding = note.title.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+            let textFolding = note.text.folding(options: .diacriticInsensitive, locale: .current).lowercased()
             
             // Convierte la búsqueda a minúsculas
-            let keyLowercased = key.lowercased()
+            let keyFolding = key.folding(options: .diacriticInsensitive, locale: .current).lowercased()
 
             // Busca la cadena de búsqueda en el título y el contenido
-            let titleMatch = titleLowercased.hasPrefix(keyLowercased)
-            let textMatch = textLowercased.contains(keyLowercased)
+            let titleMatch = titleFolding.hasPrefix(keyFolding)
+            let textMatch = textFolding.contains(keyFolding)
+            
 
             return titleMatch || textMatch
         }
