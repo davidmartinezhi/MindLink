@@ -34,7 +34,7 @@ struct PasswordInputWindowView: View {
                         action = nil
                     }
                     
-                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
+                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !User.isValidUserPassword(password: password) || action == nil) {
                         action!(password)
                         action = nil
                     }

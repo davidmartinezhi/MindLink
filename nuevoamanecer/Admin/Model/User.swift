@@ -49,6 +49,14 @@ struct User: Identifiable, Codable, Hashable, Equatable  {
         return User(name: "", email: "", isAdmin: false)
     }
     
+    static func isValidUserPassword(password: String) -> Bool {
+        return password.contains(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/)
+        // Contiene por lo menos 6 caracteres.
+        // Contiene por lo menos una mayúscula.
+        // Contiene por lo menos una minúscula.
+        // Contiene por lo menos un número.
+    }
+    
     static func ==(lhs: User, rhs: User) -> Bool {
         var result: Bool = true
         result = result && lhs.id == rhs.id

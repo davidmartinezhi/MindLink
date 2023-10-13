@@ -16,8 +16,7 @@ struct UserView: View {
     var userSnapshot: User
     var makeUserOperation: (User, UIImage?, String?, UserOperation) -> Void
         
-    @State var showImagePicker: Bool = false
-    @State var pickedImage: UIImage? = nil
+    @State var pickedUserImage: UIImage? = nil
     
     var isNewUser: Bool {self.user.id == nil}
     var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
@@ -37,15 +36,7 @@ struct UserView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
                     VStack {
-                        if pickedImage != nil {
-                            Image(uiImage: pickedImage!)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                        } else {
-                            UserImageView(user: user, isBeingEdited: isBeingEdited || isNewUser, showImagePicker: $showImagePicker)
-                        }
+                        UserImageEditView(user: $user, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
  
                         Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
                             .font(.system(size: 15))
@@ -70,7 +61,7 @@ struct UserView: View {
                         if isNewUser {
                             HStack(alignment: .center, spacing: 10) {
                                 DualTextFieldView(text: $userPassword, placeholder: "Contraseña", editing: isNewUser, fontSize: 15)
-                                InvalidInputView(show: !userPassword.isEmpty && !userPassword.isValidPassword(), text: "Contraseña inválida")
+                                InvalidInputView(show: !userPassword.isEmpty && !User.isValidUserPassword(password: userPassword), text: "Contraseña inválida")
                             }
                         }
                         
@@ -91,18 +82,19 @@ struct UserView: View {
                     } else {
                         userBeingEdited = nil
                     }
+                    self.pickedUserImage = nil 
                     self.user = self.userSnapshot
                 }
                                                 
                 if user.id != currentUser.id {
-                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedImage == nil) || (isNewUser && !userPassword.isValidPassword())
+                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !User.isValidUserPassword(password: userPassword))
                     
                     EditPanelView(isBeingEdited: isBeingEdited || isNewUser,
                                   isNewUser: isNewUser,
                                   disableSave: disableSave,
                                   runAtEdit: {self.userBeingEdited = self.user.id},
                                   runAtDelete: {makeUserOperation(user, nil, nil, .removeMe)},
-                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedImage, userPassword, .addMe)} : {makeUserOperation(user, pickedImage, nil, .saveMe)},
+                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedUserImage, userPassword, .addMe)} : {makeUserOperation(user, pickedUserImage, nil, .saveMe)},
                                   runAtCancel: runAtCancel)
                 }
             }
@@ -117,9 +109,6 @@ struct UserView: View {
             if  user.id != userBeingEdited && userBeingEdited != nil {
                 user = userSnapshot
             }
-        }
-        .fullScreenCover(isPresented: $showImagePicker){
-            ImagePicker(image: $pickedImage)
         }
     }
 }

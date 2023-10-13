@@ -10,6 +10,7 @@ import SwiftUI
 struct ButtonView: View {
     var text: String
     var textSize: CGFloat = 15
+    var padding: CGFloat = 10 
     var color: Color
     var isDisabled: Bool = false 
     var buttonAction: () -> Void
