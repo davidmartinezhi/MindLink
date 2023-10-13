@@ -12,6 +12,12 @@ struct RegisterView: View {
         case plain
         case secure
     }
+    struct AlertItem: Identifiable {
+        var id = UUID()
+        var title: Text
+        var message: Text?
+        var dismissButton: Alert.Button?
+    }
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authVM: AuthViewModel
@@ -24,8 +30,7 @@ struct RegisterView: View {
     @State var isAdmin = false
     @State var confirmpassword = ""
     
-    @State private var mostrarAlerta = false
-    @State private var mostrarAlerta1 = false
+    @State private var alertItem: AlertItem?
     @State private var showAuthAlert = true
     
     @State private var showPassword: Bool = false
@@ -70,7 +75,6 @@ struct RegisterView: View {
                     .textInputAutocapitalization(.never)
                     .keyboardType(.asciiCapable)
                     .autocorrectionDisabled(true)
-                    .textContentType(.newPassword)
                     .frame(maxWidth: 600)
                     .focused($inFocus, equals: .plain)
                 } else {
@@ -82,7 +86,6 @@ struct RegisterView: View {
                     .textInputAutocapitalization(.never)
                     .keyboardType(.asciiCapable)
                     .autocorrectionDisabled(true)
-                    .textContentType(.newPassword)
                     .frame(maxWidth: 600)
                     .focused($inFocus, equals: .secure)
                 }
@@ -106,7 +109,6 @@ struct RegisterView: View {
                     .textInputAutocapitalization(.never)
                     .keyboardType(.asciiCapable)
                     .autocorrectionDisabled(true)
-                    .textContentType(.newPassword)
                     .frame(maxWidth: 600)
                     .focused($inFocusConfirm, equals: .plain)
                 } else {
@@ -118,7 +120,6 @@ struct RegisterView: View {
                         .textInputAutocapitalization(.never)
                         .keyboardType(.asciiCapable)
                         .autocorrectionDisabled(true)
-                        .textContentType(.password)
                         .frame(maxWidth: 600)
                         .focused($inFocusConfirm, equals: .secure)
                 }
@@ -137,40 +138,57 @@ struct RegisterView: View {
                 Text("¿Es administrador?")
             }
             .padding(.bottom, 20)
-
-            Button(action: {
-                if(password != confirmpassword){
-                    mostrarAlerta = true
-                } else if (password.isWeakPassword()){
-                    mostrarAlerta1 = true
-                } else {
-                    Task {
-                        _ = await authVM.createNewAuthAccount(email: email, password: password, currUserPassword: authPassword)
-                    }
-                    dismiss()
-                }
-            }) {
-                Text("Registrarse")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(email.isEmpty || password.isEmpty || name.isEmpty ?  .gray : .blue )
-                    .cornerRadius(10)
-            }
-            .frame(maxWidth: 600)
-            .disabled(email.isEmpty || password.isEmpty || name.isEmpty)
-            .alert("Error", isPresented: $mostrarAlerta){
-                Button("OK"){}
-            }
-            message: {
-                Text("Verifique su contraseña")
-            }
-            .alert("Contraseña inválida",isPresented: $mostrarAlerta1){
-                Button("OK"){}
-            } message: {
-                Text("La contraseña debe de contener 8 caracteres, con mínimo un número, una mayúscula y un carácter especial.")
-            }
             
+            HStack {
+                //Cancelar
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Text("Cancelar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "xmark.circle.fill")
+                    }
+                }
+                .padding()
+                .background(Color.gray)
+                .cornerRadius(10)
+                .foregroundColor(.white)
+                
+                //Registrar
+                Button(action: {
+                    if(password != confirmpassword){
+                        self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña."), dismissButton: .cancel(Text("OK")))
+                    } else if (!email.isValidEmail()){
+                        self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
+                    } else if (!password.isWeakPassword()){
+                        self.alertItem = AlertItem(title: Text("Contraseña invalida"), message: Text("verifique que su contraseña tenga minimo 8 caracteres, un caracter en mayuscula, un caracter especial y un número."), dismissButton: .cancel(Text("OK")))
+                    } else {
+                        Task {
+                             _ = await authVM.createNewAuthAccount(email: email, password: password, currUserPassword: authPassword)
+                        }
+                        dismiss()
+                    }
+                }) {
+                    HStack {
+                        Text("Registrar")
+                            .font(.headline)
+                        
+                        Spacer()
+                        Image(systemName: "arrow.right.circle.fill")
+                    }
+                }
+                .padding()
+                .background(email.isEmpty || password.isEmpty || name.isEmpty ?  .gray : .blue )
+                .cornerRadius(10)
+                .foregroundColor(.white)
+                
+            }
+            .alert(item: $alertItem ) { alertItem in
+                Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+            }
             // Añadir mensaje
         }
         .padding()
@@ -179,7 +197,7 @@ struct RegisterView: View {
             TextField("Contraseña", text: $authPassword)
                 .autocorrectionDisabled(true)
             
-            Button("Ok", action: {
+            Button("Okay", action: {
                 Task {
                     let result: AuthActionResult = await authVM.loginAuthUser(email: currentUser.email!, password: authPassword)
                     
