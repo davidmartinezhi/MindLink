@@ -26,25 +26,44 @@ struct EditPanelView: View {
     
     var isNotBeingEditedPanel: some View {
         HStack(spacing: 40){
-            let iconWidth: CGFloat = 25
+            //let iconWidth: CGFloat = 25
 
             Button {
                 runAtEdit()
             } label: {
-                Image(systemName: "pencil")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: iconWidth)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)  // Cuadrado con bordes redondeados
+                        .stroke(lineWidth: 2)  // Borde del cuadrado
+                        .frame(width: 40, height: 40)  // Dimensiones del cuadrado
+                        .background(.blue)
+                        .foregroundColor(.blue)
+                    Image(systemName: "pencil")  // Icono de basura
+                        .resizable()  // Hacer que el icono sea redimensionable
+                        .scaledToFit()  // Escalar el icono para que encaje dentro del cuadrado
+                        .frame(width: 25, height: 25)  // Dimensiones del icono
+                        .foregroundColor(.white)
+                }
             }
+            .cornerRadius(10)
+            
             
             Button {
                 runAtDelete()
             } label: {
-                Image(systemName: "trash")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: iconWidth)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)  // Cuadrado con bordes redondeados
+                        .stroke(lineWidth: 2)  // Borde del cuadrado
+                        .frame(width: 40, height: 40)  // Dimensiones del cuadrado
+                        .background(.red)
+                        .foregroundColor(.red)
+                    Image(systemName: "trash")  // Icono de basura
+                        .resizable()  // Hacer que el icono sea redimensionable
+                        .scaledToFit()  // Escalar el icono para que encaje dentro del cuadrado
+                        .frame(width: 25, height: 25)  // Dimensiones del icono
+                        .foregroundColor(.white)
+                }
             }
+            .cornerRadius(10)
         }
     }
     

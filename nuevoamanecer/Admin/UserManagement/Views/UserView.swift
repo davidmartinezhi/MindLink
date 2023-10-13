@@ -36,12 +36,12 @@ struct UserView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
                     VStack {
-                        UserImageEditView(user: $user, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
- 
                         Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
                             .font(.system(size: 15))
                             .foregroundColor(.gray)
                             .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
+                        
+                        UserImageEditView(user: $user, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
                     }
                                          
                     VStack(alignment: .leading, spacing: 15) {
@@ -66,7 +66,7 @@ struct UserView: View {
                         }
                         
                         HStack(spacing: 10) {
-                            Text("Admin: ")
+                            Text("Administrador: ")
                                 .font(.system(size: 15))
                             DualChoiceView(choice: $user.isAdmin, labels: ("Sí", "No"), isBeingEdited: isNewUser || isBeingEdited, isDisabled: !isBeingEdited)
                             ChangeIndicatorView(showIndicator: user.isAdmin != userSnapshot.isAdmin && !isNewUser)

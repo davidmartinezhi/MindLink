@@ -217,45 +217,65 @@ struct PatientView: View {
                             
                             Spacer()
                             
-                            Menu {
-                                // validar que el usuario sea admin para mostrar
-                                if currentUser.isAdmin! {
-                                    Button {
-                                        navPath.push(NavigationDestination<PictogramEditor>(content: PictogramEditor(patient: patient)))
-                                    } label: {
-                                        Text("Editar comunicador de \(patient.firstName)")
-                                        Image(systemName: "pencil")
+                            if currentUser.isAdmin!{
+                                Menu {
+                                    // validar que el usuario sea admin para mostrar
+                                    if currentUser.isAdmin! {
+                                        Button {
+                                            navPath.push(NavigationDestination<PictogramEditor>(content: PictogramEditor(patient: patient)))
+                                        } label: {
+                                            Text("Editar comunicador de \(patient.firstName)")
+                                            Image(systemName: "pencil")
+                                        }
                                     }
+                                    
+                                    Button {
+                                        navPath.push(NavigationDestination<DoubleCommunicator>(content: DoubleCommunicator(patient: patient)))
+                                    } label: {
+                                        Text("Acceder a comunicador de \(patient.firstName)")
+                                        Image(systemName: "message.fill")
+                                    }
+                                    
+                                    /*
+                                    Button {
+                                        pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
+                                    } label: {
+                                        Text("Acceder a album de \(patient.firstName)")
+                                        Image(systemName: "message.fill")
+                                    }
+                                     */
+                                    
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "ellipsis.circle.fill")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        Text("Comunicador de \(patient.firstName)")
+                                            .font(.headline)
+                                    }
+                                    .padding(10)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
                                 }
-                                
-                                Button {
+                            }else{
+                                Button(action: {
+                                    // Handle settings action here
                                     navPath.push(NavigationDestination<DoubleCommunicator>(content: DoubleCommunicator(patient: patient)))
-                                } label: {
-                                    Text("Acceder a comunicador de \(patient.firstName)")
-                                    Image(systemName: "message.fill")
-                                }
-                                
-                                /*
-                                Button {
-                                    pathWrapper.push(data: NavigationDestination(viewType: .album, userId: patient.id))
-                                } label: {
-                                    Text("Acceder a album de \(patient.firstName)")
-                                    Image(systemName: "message.fill")
-                                }
-                                 */
-                                
-                            } label: {
-                                HStack {
-                                    Image(systemName: "ellipsis.circle.fill")
-                                        .resizable()
-                                        .frame(width: 20, height: 20)
-                                    Text("Comunicador de \(patient.firstName)")
-                                        .font(.headline)
-                                }
-                                .padding(10)
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                                }) {
+                                    HStack{
+                                        Image(systemName: "message.fill")
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        Text("Comunicador de \(patient.firstName)")
+                                    }
+                                    .padding(10)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                    //.padding(10)
+                                    //.frame(width: 157, height: 40)
+                            }
                             }
                         }
                     }
@@ -274,22 +294,22 @@ struct PatientView: View {
                     VStack {
                         
                         //Add note button
-                        HStack{
-                            Button(action: {
-                                showAddNoteView.toggle()
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("Agregar Nota")
+                                HStack{
+                                    Button(action: {
+                                        showAddNoteView.toggle()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "plus.circle.fill")
+                                            Text("Agregar Nota")
+                                        }
+                                        .frame(width: geometry.size.width / 6)
+                                    }
                                 }
-                                .frame(width: geometry.size.width / 6)
-                            }
-                        }
-                        .padding(.vertical, 15)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding(.top, 15)
+                                .padding(.vertical, 15)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                                .padding(.bottom, 10)
                         
                         
                         SearchBarView(searchText: $search, placeholder: "Buscar nota", searchBarWidth: geometry.size.width / 6)
@@ -390,7 +410,7 @@ struct PatientView: View {
                                             //.frame(width: geometry.size.width / 5, alignment: .leading)
                                         
                                         Circle()
-                                            .frame(minHeight: 5, maxHeight: 7)
+                                            .frame(minHeight: 7, maxHeight: 10)
                                             .foregroundColor(
                                                 note.tag == "Información Personal" ? Color.orange :
                                                     note.tag == "Contacto" ? Color.red :

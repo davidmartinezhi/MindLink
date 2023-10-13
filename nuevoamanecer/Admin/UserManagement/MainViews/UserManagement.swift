@@ -43,7 +43,7 @@ struct UserManagement: View {
                         
                         Spacer()
                         
-                        ButtonWithImageView(text: "Nuevo Usuario", systemNameImage: "plus", isDisabled: creatingUser) {
+                        ButtonWithImageView(text: "Nuevo Usuario", systemNameImage: "plus.circle.fill", imagePosition: .left, isDisabled: creatingUser) {
                             creatingUser = true
                             userBeingEdited = nil
                         }

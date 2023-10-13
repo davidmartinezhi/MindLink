@@ -40,9 +40,20 @@ struct AdminNav: View {
                 ZStack{
                     //No imagen
                     let userNames: [String] = currentUser.name!.splitAtWhitespaces()
+                    let firstName: String =  userNames.getElementSafely(index: 0) ?? " "
+                    let lastName: String = userNames.getElementSafely(index: 0) ?? " "
+                    
                     if currentUser.image == nil {
-                        ImagePlaceholderView(firstName: userNames.getElementSafely(index: 0) ?? "",
-                                             lastName: userNames.getElementSafely(index: 0) ?? "")
+                        //ImagePlaceholderView(firstName: userNames.getElementSafely(index: 0) ?? "",lastName: userNames.getElementSafely(index: 0) ?? "", radius: 100, fontSize: 20)
+                        Text(firstName.prefix(1) + lastName.prefix(1))
+                            .textCase(.uppercase)
+                            .font(.system(size: 20))
+                            .fontWeight(.bold)
+                            .frame(width: 50, height: 50)
+                            .background(Color(.systemGray3))
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                        
                     }
                     //Imagen previamente subida
                     else{
@@ -63,17 +74,6 @@ struct AdminNav: View {
                             HStack {
                                 Text("Mi perfil")
                                     .font(.system(size: 16))
-                            }
-                        }
-                        
-                        // solo usuarios administradores pueden crear otro usuario
-                        if (currentUser.isAdmin! == true) {
-                            // boton para ir a la vista de registro
-                            Button(action: { showRegisterView = true }) {
-                                HStack {
-                                    Text("Registrar Usuario")
-                                        .font(.system(size: 16))
-                                }
                             }
                         }
                         
