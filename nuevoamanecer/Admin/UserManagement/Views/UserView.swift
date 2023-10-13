@@ -61,7 +61,7 @@ struct UserView: View {
                         if isNewUser {
                             HStack(alignment: .center, spacing: 10) {
                                 DualTextFieldView(text: $userPassword, placeholder: "Contraseña", editing: isNewUser, fontSize: 15)
-                                InvalidInputView(show: !userPassword.isEmpty && !User.isValidUserPassword(password: userPassword), text: "Contraseña inválida")
+                                InvalidInputView(show: !userPassword.isEmpty && !userPassword.isValidPassword(), text: "Contraseña inválida")
                             }
                         }
                         
@@ -87,7 +87,7 @@ struct UserView: View {
                 }
                                                 
                 if user.id != currentUser.id {
-                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !User.isValidUserPassword(password: userPassword))
+                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !userPassword.isValidPassword())
                     
                     EditPanelView(isBeingEdited: isBeingEdited || isNewUser,
                                   isNewUser: isNewUser,

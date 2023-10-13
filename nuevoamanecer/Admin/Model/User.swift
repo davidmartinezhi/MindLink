@@ -32,7 +32,7 @@ struct User: Identifiable, Codable, Hashable, Equatable  {
     }
     
     func hasValidEmail() -> Bool {
-        return self.email.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        return self.email.isValidEmail()
     }
     
     func toDict() -> [String:Any] {
@@ -47,14 +47,6 @@ struct User: Identifiable, Codable, Hashable, Equatable  {
     
     static func newEmptyUser() -> User {
         return User(name: "", email: "", isAdmin: false)
-    }
-    
-    static func isValidUserPassword(password: String) -> Bool {
-        return password.contains(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/)
-        // Contiene por lo menos 6 caracteres.
-        // Contiene por lo menos una mayúscula.
-        // Contiene por lo menos una minúscula.
-        // Contiene por lo menos un número.
     }
     
     static func ==(lhs: User, rhs: User) -> Bool {
