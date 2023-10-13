@@ -77,6 +77,9 @@ struct AdminView: View {
     //Busqueda por nombre o apellido
     private func performSearchByName(keyword: String){
         
+        // Convierte la palabra clave a una forma que ignora los diacríticos
+        let keyword = keyword.folding(options: .diacriticInsensitive, locale: .current)
+        
         var searchingWithFilters = patients.patientsList
         
         if(communicationStyleFilterSelected){
@@ -92,7 +95,7 @@ struct AdminView: View {
         }
         
         filteredPatients = searchingWithFilters.filter{ patient in
-            let firstAndLastName = patient.firstName + " " + patient.lastName
+            let firstAndLastName = (patient.firstName + " " + patient.lastName).folding(options: .diacriticInsensitive, locale: .current)
             let firstAndLastNameComponent = firstAndLastName.lowercased()
             let firstNameComponents = patient.firstName.lowercased().split(separator: " ")
             let lastNameComponents = patient.lastName.lowercased().split(separator: " ")
@@ -117,7 +120,8 @@ struct AdminView: View {
                 }
             }
 
-            return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased())
+            return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(keyword.lowercased()) || firstAndLastNameComponent.hasPrefix(keyword.lowercased()) || patient.group.folding(options: .diacriticInsensitive, locale: .current).hasPrefix(keyword) || firstAndLastName.hasPrefix(keyword)
+
         }
     }
 
