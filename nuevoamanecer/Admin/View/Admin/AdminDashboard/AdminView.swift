@@ -127,6 +127,7 @@ struct AdminView: View {
 
     //Busqueda por estilo de comunicación
     private func performSearchByCommunicationStyle(){
+        let search = search.folding(options: .diacriticInsensitive, locale: .current)
         
         var searchingWithFilters = patients.patientsList
         
@@ -164,7 +165,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased())
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased()) || patient.group.folding(options: .diacriticInsensitive, locale: .current).hasPrefix(search) || firstAndLastNameComponent.folding(options: .diacriticInsensitive, locale: .current).hasPrefix(search)
             }
         }
         
@@ -182,6 +183,8 @@ struct AdminView: View {
 
     //Busqueda por nivel cognitivo
     private func performSearchByCognitiveLevel(){
+        
+        let search = search.folding(options: .diacriticInsensitive, locale: .current)
         
         var searchingWithFilters = patients.patientsList
 
@@ -219,7 +222,7 @@ struct AdminView: View {
                     }
                 }
 
-                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased())
+                return firstNameMatch || lastNameMatch || patient.group.lowercased().hasPrefix(search.lowercased()) || firstAndLastNameComponent.hasPrefix(search.lowercased()) || patient.group.folding(options: .diacriticInsensitive, locale: .current).hasPrefix(search) || firstAndLastNameComponent.folding(options: .diacriticInsensitive, locale: .current).hasPrefix(search)
             }
         }
         
