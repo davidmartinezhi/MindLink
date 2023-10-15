@@ -103,26 +103,25 @@ struct PictogramPickerView: View {
          }
     }
     
-    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
-        var pictoButtons: [Button<PictogramView>] = []
+    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [PictogramView] {
+        var pictoButtons: [PictogramView] = []
         
         for pictoModel in pictoModels {
             pictoButtons.append(
-                Button(action: {
-                    if pickedPictos[pictoModel.id!] == nil {
-                        pickedPictos[pictoModel.id!] = PictogramInPage(pictoId: pictoModel.id!, isBasePicto: onLeftOfSwitch)
-                    } else {
-                        pickedPictos.removeValue(forKey: pictoModel.id!)
-                    }
-                }, label: {
-                    PictogramView(pictoModel: pictoModel,
-                                  catModel: catVM.getCat(catId: pictoModel.categoryId)!,
-                                  displayName: true,
-                                  displayCatColor: false,
-                                  overlayImage: pickedPictos[pictoModel.id!] != nil ? Image(systemName: "checkmark.circle") : nil,
-                                  overlayImageColor: .blue,
-                                  overlyImageOpacity: 0.8)
-                })
+                PictogramView(pictoModel: pictoModel,
+                              catModel: catVM.getCat(catId: pictoModel.categoryId)!,
+                              displayName: true,
+                              displayCatColor: false,
+                              overlayImage: pickedPictos[pictoModel.id!] != nil ? Image(systemName: "checkmark.circle") : nil,
+                              overlayImageColor: .blue,
+                              overlyImageOpacity: 0.8,
+                              clickAction: {
+                                  if self.pickedPictos[pictoModel.id!] == nil {
+                                      self.pickedPictos[pictoModel.id!] = PictogramInPage(pictoId: pictoModel.id!, isBasePicto: self.onLeftOfSwitch)
+                                  } else {
+                                      self.pickedPictos.removeValue(forKey: pictoModel.id!)
+                                  }
+                              })
             )
         }
         return pictoButtons

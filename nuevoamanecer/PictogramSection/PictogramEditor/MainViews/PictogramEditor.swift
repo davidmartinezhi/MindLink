@@ -146,24 +146,23 @@ struct PictogramEditor: View {
     }
     
     // Función que construye los botones de los pictogramas
-    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
-        var pictoButtons: [Button<PictogramView>] = []
+    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [PictogramView] {
+        var pictoButtons: [PictogramView] = []
         
         for pictoModel in pictoModels {
             pictoButtons.append(
-                Button(action: {
-                    pictoBeingEdited = pictoModel
-                    isEditingPicto = true
-                }, label: {
-                    PictogramView(pictoModel: pictoModel,
-                                  catModel: catVM.getCat(catId: pictoModel.categoryId)!,
-                                  displayName: true,
-                                  displayCatColor: false,
-                                  overlayImage: Image(systemName: "pencil"),
-                                  overlayImageWidth: 0.2,
-                                  overlayImageColor: .gray,
-                                  overlyImageOpacity: 0.2)
-                })
+                PictogramView(pictoModel: pictoModel,
+                              catModel: catVM.getCat(catId: pictoModel.categoryId)!,
+                              displayName: true,
+                              displayCatColor: false,
+                              overlayImage: Image(systemName: "pencil"),
+                              overlayImageWidth: 0.2,
+                              overlayImageColor: .gray,
+                              overlyImageOpacity: 0.2,
+                              clickAction: {
+                                  self.pictoBeingEdited = pictoModel
+                                  self.isEditingPicto = true
+                              })
             )
         }
         return pictoButtons

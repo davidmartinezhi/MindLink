@@ -131,35 +131,34 @@ struct Communicator: View {
         .navigationBarBackButtonHidden(appLock.isLocked)
     }
     
-    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [Button<PictogramView>] {
-        var pictoButtons: [Button<PictogramView>] = []
+    private func buildPictoViewButtons(_ pictoModels: [PictogramModel]) -> [PictogramView] {
+        var pictoButtons: [PictogramView] = []
         
         for pictoModel in pictoModels {
             pictoButtons.append(
-                Button(action: {
-                    //text to speech
-                    let utterance = AVSpeechUtterance(string: pictoModel.name)
+                PictogramView(pictoModel: pictoModel,
+                              catModel: catVM.getCat(catId: pictoModel.categoryId)!,
+                              displayName: true,
+                              displayCatColor: false,
+                              overlayImage: Image(systemName: "speaker.wave.3.fill"),
+                              overlayImageColor: .gray,
+                              overlyImageOpacity: 0.2,
+                              clickAction: {
+                                  //text to speech
+                                  let utterance = AVSpeechUtterance(string: pictoModel.name)
 
-                    if (voiceSetting.voiceAge == "Infantil") {
-                        utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
-                        utterance.rate = 0.5
-                        utterance.pitchMultiplier = 1.5
-                    } else {
-                        utterance.voice = voiceSetting.voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
-                        
-                        utterance.rate = voiceSetting.talkingSpeed == "Normal" ? 0.5 : voiceSetting.talkingSpeed == "Lenta" ? 0.3 : 0.7
-                    }
+                                  if (self.voiceSetting.voiceAge == "Infantil") {
+                                      utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+                                      utterance.rate = 0.5
+                                      utterance.pitchMultiplier = 1.5
+                                  } else {
+                                      utterance.voice = self.voiceSetting.voiceGender == "Masculina" ? AVSpeechSynthesisVoice(identifier: "com.apple.eloquence.es-MX.Reed") : AVSpeechSynthesisVoice(language: "es-MX")
+                                      
+                                      utterance.rate = self.voiceSetting.talkingSpeed == "Normal" ? 0.5 : self.voiceSetting.talkingSpeed == "Lenta" ? 0.3 : 0.7
+                                  }
 
-                    synthesizer.speak(utterance)
-                }, label: {
-                    PictogramView(pictoModel: pictoModel,
-                                  catModel: catVM.getCat(catId: pictoModel.categoryId)!,
-                                  displayName: true,
-                                  displayCatColor: false,
-                                  overlayImage: Image(systemName: "speaker.wave.3.fill"),
-                                  overlayImageColor: .gray,
-                                  overlyImageOpacity: 0.2)
-                })
+                                  self.synthesizer.speak(utterance)
+                              })
             )
         }
         return pictoButtons

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PictogramGridView: View {
-    let pictograms: [Button<PictogramView>]
+    let pictograms: [PictogramView]
     let pictoWidth: CGFloat
     let pictoHeight: CGFloat
     var handlePictogramAddition: (() -> Void)? = nil
