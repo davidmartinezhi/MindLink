@@ -126,6 +126,10 @@ struct CategoryColor: Codable {
         return true
     }
     
+    func isBright() -> Bool {
+        return ColorMaker.colorLuminance(catColor: self) >= 0.6
+    }
+    
     static func normalizeColorValue(_ colorValue: Double) -> Double {
         return colorValue > 1 ? 1 : (colorValue < 0 ? 0 : colorValue)
     }
