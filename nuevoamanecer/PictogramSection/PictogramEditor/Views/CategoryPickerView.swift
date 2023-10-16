@@ -31,9 +31,6 @@ struct CategoryPickerView: View {
                                     .opacity(catIsSelected ? 1 : 0)
                             }
                             .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .onAppear {
-                                print(catModel.color.isBright())
-                            }
                     }
                     .onTapGesture {
                         pickedCategoryId = catModel.id!

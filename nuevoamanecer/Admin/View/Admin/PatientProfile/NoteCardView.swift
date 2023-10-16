@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct NoteCardView: View {
-    
     var note: Note
-    
     
     var body: some View {
         VStack{
@@ -85,10 +83,4 @@ extension DateFormatter {
         formatter.timeStyle = .none
         return formatter
     }()
-}
-
-struct NoteCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        NoteCardView(note: Note(id: "", patientId: "", order: 0, title: "", text: "", date: Date(), tag: ""))
-    }
 }
