@@ -12,7 +12,7 @@
 		A9594A132A28438B0063C0D7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A9594A122A28438B0063C0D7 /* FirebaseStorage */; };
 		A9CEFE7A2A2A9B1900BD6E58 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = A9CEFE792A2A9B1900BD6E58 /* SDWebImageSwiftUI */; };
 		BC014F102A91801F0002140A /* AppLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC014F0F2A91801F0002140A /* AppLock.swift */; };
-		BC0479172AD4E76E00FD18C8 /* UserImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0479162AD4E76E00FD18C8 /* UserImageView.swift */; };
+		BC0479172AD4E76E00FD18C8 /* UserImageEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0479162AD4E76E00FD18C8 /* UserImageEditView.swift */; };
 		BC1132522A95466C0080F294 /* NavigationPathWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */; };
 		BC1132542A954E380080F294 /* NavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1132532A954E380080F294 /* NavigationDestination.swift */; };
 		BC1207722ABFF70E0098A527 /* UserWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1207712ABFF70E0098A527 /* UserWrapper.swift */; };
@@ -122,7 +122,7 @@
 		A9594A0E2A2842BF0063C0D7 /* ImagePicker_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker_BACKUP.swift; sourceTree = "<group>"; };
 		A9594A102A2842DC0063C0D7 /* FirebaseStorage_BACKUP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage_BACKUP.swift; sourceTree = "<group>"; };
 		BC014F0F2A91801F0002140A /* AppLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLock.swift; sourceTree = "<group>"; };
-		BC0479162AD4E76E00FD18C8 /* UserImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageView.swift; sourceTree = "<group>"; };
+		BC0479162AD4E76E00FD18C8 /* UserImageEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageEditView.swift; sourceTree = "<group>"; };
 		BC1132512A95466C0080F294 /* NavigationPathWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPathWrapper.swift; sourceTree = "<group>"; };
 		BC1132532A954E380080F294 /* NavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationDestination.swift; sourceTree = "<group>"; };
 		BC1207712ABFF70E0098A527 /* UserWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWrapper.swift; sourceTree = "<group>"; };
@@ -286,7 +286,7 @@
 			children = (
 				BC4DFE2A2AC347420082C631 /* UserView.swift */,
 				BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */,
-				BC0479162AD4E76E00FD18C8 /* UserImageView.swift */,
+				BC0479162AD4E76E00FD18C8 /* UserImageEditView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -861,7 +861,7 @@
 				C235FDB12A1810C3005412A7 /* PatientsViewModel.swift in Sources */,
 				C2CF668F2A302982005A7338 /* PatientCardView.swift in Sources */,
 				BC8F7E432A37FFBD008E97B2 /* SortedArray.swift in Sources */,
-				BC0479172AD4E76E00FD18C8 /* UserImageView.swift in Sources */,
+				BC0479172AD4E76E00FD18C8 /* UserImageEditView.swift in Sources */,
 				BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */,
 				BC9FFBD42A95AF45008B6B2B /* MarkedScrollView.swift in Sources */,
 				BC8F7E482A37FFBD008E97B2 /* PictogramEditorWindowView.swift in Sources */,

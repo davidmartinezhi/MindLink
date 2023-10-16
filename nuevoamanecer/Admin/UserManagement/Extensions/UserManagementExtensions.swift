@@ -9,59 +9,38 @@ import Foundation
 import SwiftUI
 
 extension UserManagement {
-    func saveUser(userToSave: User, userPickedImage: UIImage?) -> Void {
-        Task {
-            var moddedUser: User = userToSave
-            if userPickedImage != nil {
-                if let imageUrl: URL = await self.imageHandler.uploadImage(image: userPickedImage!, name: buildUserImageName(user: moddedUser)) {
-                    moddedUser.image = imageUrl.absoluteString
-                } else {
-                    self.showError(errorMessage: "Error al guardar la imagén seleccionada")
-                    return
+    func addUser(userToAdd: User, userPickedImage: UIImage?, withPassword: String) -> Void {
+        executeWithPasswordConfirmation = { currUserPassword in
+            let addUserToFirestore: (User)->Void = { user in
+                self.userVM.addUserWithCustomId(user: user, userId: user.id!) { error in
+                    if error != nil{
+                        // Error al añadir usuario.
+                        self.showError(errorMessage: "La creación del usuario no fue exitosa")
+                    } else {
+                        self.users[user.id!] = user
+                        self.userBeingEdited = nil
+                        self.creatingUser = false
+                    }
                 }
             }
             
-            self.userVM.editUser(userId: moddedUser.id!, newUserValue: moddedUser) { error in
-                if error != nil {
-                    self.showError(errorMessage: "Error al guardar los cambios")
-                } else {
-                    self.users[moddedUser.id!] = moddedUser
-                    self.userBeingEdited = nil
-                }
-            }
-        }
-    }
-    
-    func addUser(userToAdd: User, userPickedImage: UIImage?, withPassword: String) -> Void {
-        executeWithPasswordConfirmation = { currUserPassword in
             Task {
-                var moddedUser: User = userToAdd
                 if userPickedImage != nil {
-                    if let imageUrl: URL = await imageHandler.uploadImage(image: userPickedImage!, name: buildUserImageName(user: moddedUser)) {
-                        moddedUser.image = imageUrl.absoluteString
-                    } else {
-                        showError(errorMessage: "Error al guardar la imagén seleccionada")
-                        return
-                    }
-                }
-                
-                let userCreationResult: AuthActionResult = await self.authVM.createNewAuthAccount(email: moddedUser.email, password: withPassword, currUserPassword: currUserPassword)
-                
-                if userCreationResult.success {
-                    self.userVM.addUserWithCustomId(user: moddedUser, userId: userCreationResult.userId!) { error in
-                        if error != nil{
-                            // Error al añadir usuario.
-                            self.showError(errorMessage: "Error en la creación del usuario")
+                    if let userWithImage: User = await self.addImageToUser(user: userToAdd, image: userPickedImage!) {
+                        if let userWithAuthId: User = await self.addUserToAuth(user: userWithImage, withPassword: withPassword, currUserPassword: currUserPassword) {
+                            addUserToFirestore(userWithAuthId)
                         } else {
-                            moddedUser.id = userCreationResult.userId!
-                            self.users[userCreationResult.userId!] = moddedUser
-                            self.userBeingEdited = nil
-                            self.creatingUser = false
+                            self.showError(errorMessage: "La creación del usuario no fue exitosa")
                         }
+                    } else {
+                        self.showError(errorMessage: "No fue posible cargar la imagén del usuario")
                     }
                 } else {
-                    // Error al añadir al nuevo usuario a Auth.
-                    self.showError(errorMessage: userCreationResult.errorMessage!)
+                    if let userWithAuthId: User = await self.addUserToAuth(user: userToAdd, withPassword: withPassword, currUserPassword: currUserPassword) {
+                        addUserToFirestore(userWithAuthId)
+                    } else {
+                        self.showError(errorMessage: "La creación del usuario no fue exitosa")
+                    }
                 }
             }
         }
@@ -74,28 +53,99 @@ extension UserManagement {
         }
     }
     
-    func removeUserAndItsImage(userToRemove: User) -> Void {
-        let removeUserFromFirestore: ()->Void = {
-            self.userVM.removeUser(userId: userToRemove.id!) { error in
+    func editUser(userToEdit: User, userPickedImage: UIImage?) -> Void {
+        let editUserFromFirestore: (User)->Void = { user in
+            self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
+                if error != nil {
+                    self.showError(errorMessage: "Error al guardar los cambios")
+                    return
+                } else {
+                    // runAtSuccess()
+                    self.userBeingEdited = nil
+                    self.users.removeValue(forKey: user.id!)
+                    self.users[user.id!] = user
+                }
+            }
+        }
+        
+        Task {
+            if userPickedImage != nil {
+                if let userWithImage: User = await self.replaceUserImage(user: userToEdit, image: userPickedImage!){
+                    editUserFromFirestore(userWithImage)
+                } else {
+                    self.showError(errorMessage: "Error al guardar al nueva imagén del usuario")
+                }
+            } else {
+                editUserFromFirestore(userToEdit)
+            }
+        }
+    }
+        
+    func _removeUser(userToRemove: User) -> Void {
+        let removeUserFromFirestore: (User)->Void = { user in
+            self.userVM.removeUser(userId: user.id!) { error in
                 if error != nil {
                     // Error al eliminar usuario.
                     self.showError(errorMessage: "Imposible eliminar al usuario")
                 } else {
-                    self.users.removeValue(forKey: userToRemove.id!)
+                    self.users.removeValue(forKey: user.id!)
                 }
             }
         }
         
         if userToRemove.image != nil {
             Task {
-                if await self.imageHandler.deleteImage(donwloadUrl: userToRemove.image!) {
-                    removeUserFromFirestore()
+                if let userWithoutImage: User = await self.removeImageFromUser(user: userToRemove) {
+                    removeUserFromFirestore(userWithoutImage)
                 } else {
                     self.showError(errorMessage: "Imposible eliminar al usuario")
                 }
             }
         } else {
-            removeUserFromFirestore()
+            removeUserFromFirestore(userToRemove)
         }
+    }
+    
+    // Image operations:
+    private func addImageToUser(user: User, image: UIImage) async -> User? {
+        var userWithImage: User = user
+        if let imageUrl: URL = await self.imageHandler.uploadImage(image: image, name: buildUserImageName(user: userWithImage)) {
+            userWithImage.image = imageUrl.absoluteString
+            return userWithImage
+        }
+        return nil
+    }
+    
+    private func removeImageFromUser(user: User) async -> User? {
+        var userWithoutImage: User = user
+        if await self.imageHandler.deleteImage(donwloadUrl: user.image!) {
+            userWithoutImage.image = nil
+            return userWithoutImage
+        }
+        return nil
+    }
+    
+    private func replaceUserImage(user: User, image: UIImage) async -> User? {
+        if user.image != nil {
+            if let userWithoutImage: User = await self.removeImageFromUser(user: user) {
+                return await self.addImageToUser(user: userWithoutImage, image: image)
+            }
+            return nil
+        } else {
+            return await self.addImageToUser(user: user, image: image)
+        }
+    }
+    
+    // Auth operations:
+    private func addUserToAuth(user: User, withPassword: String, currUserPassword: String) async -> User? {
+        var userWithAuthId: User = user
+        
+        let userCreationResult: AuthActionResult = await self.authVM.createNewAuthAccount(email: user.email, password: withPassword, currUserPassword: currUserPassword)
+        
+        if userCreationResult.success  {
+            userWithAuthId.id = userCreationResult.userId!
+            return userWithAuthId
+        }
+        return nil
     }
 }

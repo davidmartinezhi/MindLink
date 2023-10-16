@@ -75,17 +75,17 @@ struct UserManagement: View {
                     Divider()
                     
                     ScrollView  {
-                        LazyVStack(spacing: 0) {
-                            if creatingUser {                                
-                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation in
-                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation)
+                        VStack(spacing: 0) {
+                            if creatingUser {
+                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation, runAtSuccess in
+                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation, runAtSuccess: runAtSuccess)
                                 }
                             }
                             
                             let userArray: [User] = filterUsers(users: sortUsersByName(users: Array(users.values)), searchText: searchText, userType: pickedUserType)
                             ForEach(userArray) { user in
-                                UserView(user: user, userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation in
-                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation)
+                                UserView(user: user, userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation, runAtSuccess in
+                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation, runAtSuccess: runAtSuccess)
                                 }
                             }
                             
@@ -113,19 +113,19 @@ struct UserManagement: View {
             }
         }
         .customConfirmAlert(title: "Eliminar usuario", message: "El usuario será eliminado para siempre", isPresented: $isDeletingUser) {
-            self.removeUserAndItsImage(userToRemove: userBeingRemoved!)
+            self._removeUser(userToRemove: userBeingRemoved!)
         }
         .customAlert(title: "Error", message: errorMessage, isPresented: $showErrorMessage)
     }
     
-    func makeUserOperation(withUser user: User, userPickedImage: UIImage?, userPassword: String?, userOperation: UserOperation) -> Void {
+    func makeUserOperation(withUser user: User, userPickedImage: UIImage?, userPassword: String?, userOperation: UserOperation, runAtSuccess: (()->Void)?) -> Void {
         switch userOperation {
         case .addMe:
             self.addUser(userToAdd: user, userPickedImage: userPickedImage, withPassword: userPassword!)
         case .removeMe:
             self.removeUser(userToRemove: user)
-        case .saveMe:
-            self.saveUser(userToSave: user, userPickedImage: userPickedImage)
+        case .editMe:
+            self.editUser(userToEdit: user, userPickedImage: userPickedImage)
         case .cancelMyCreation:
             self.creatingUser = false
         }
@@ -142,7 +142,7 @@ func buildUserImageName(user: User) -> String {
 }
 
 enum UserOperation {
-    case addMe, removeMe, saveMe, cancelMyCreation
+    case addMe, removeMe, editMe, cancelMyCreation
 }
 
 enum UserType: String, CaseIterable, Identifiable {

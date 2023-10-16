@@ -23,7 +23,7 @@ struct PasswordInputWindowView: View {
             
             
             VStack(spacing: 20) {
-                let currentUserName: String = currentUser.name != nil ? "(\(currentUser.name!)" : ""
+                let currentUserName: String = currentUser.name != nil ? " (\(currentUser.name!))" : ""
                 Text("Ingrese su contraseña" + currentUserName)
                     .bold()
                 
@@ -33,7 +33,8 @@ struct PasswordInputWindowView: View {
                     ButtonView(text: "Cancelar", color: .gray) {
                         action = nil
                     }
-                    ButtonView(text: "Confirmar", color: .blue, isDisabled: !password.isValidPassword() || action == nil) {
+                    
+                    ButtonView(text: "Confirmar", color: .blue, isDisabled: action == nil || password.count < 3) {
                         action!(password)
                         action = nil
                     }
