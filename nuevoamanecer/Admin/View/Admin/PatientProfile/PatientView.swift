@@ -29,10 +29,10 @@ struct PatientView: View {
     @State private var tagSelected: Bool = false
     
     //showViews
-    @State var showAddNoteView = false
-    @State var showEditPatientView = false
-    @State private var showDeleteNoteAlert = false
-    @State var showEditNoteView = false
+    @State var showAddNoteView: Bool = false
+    @State var showEditPatientView: Bool = false
+    @State private var showDeleteNoteAlert: Bool = false
+    @State var showEditNoteView: Bool = false
     
     //Note Selection
     @State private var selectedNoteIndex: Int?
@@ -128,7 +128,6 @@ struct PatientView: View {
             let titleMatch = titleFolding.hasPrefix(keyFolding)
             let textMatch = textFolding.contains(keyFolding)
             
-
             return titleMatch || textMatch
         }
         
@@ -141,7 +140,7 @@ struct PatientView: View {
             VStack {
                 //user header
                 HStack {
-                    VStack{
+                    VStack {
                         if(patient.image == "placeholder") {
                             ImagePlaceholderView(firstName: patient.firstName, lastName: patient.lastName)
                                 .padding(.trailing)
@@ -167,9 +166,7 @@ struct PatientView: View {
                                 .font(.headline)
                                 .foregroundColor(Color.gray)
                                 .padding(.vertical, 1)
-                            
                         }
-                        
                         
                         Text("Grupo: " + patient.group)
                             .font(.subheadline)
@@ -188,9 +185,8 @@ struct PatientView: View {
                             //.foregroundColor(Color.gray)
                             .padding(.vertical, 2)
                     }
+                    
                     Spacer()
-                    
-                    
                     
                     VStack{
                         
@@ -385,7 +381,7 @@ struct PatientView: View {
                         )
                         
                         //checamos si hay notas
-                        if(filteredNotes.count == 0){
+                        if (filteredNotes.count == 0){
                             
                             List{
                                 HStack{
@@ -401,7 +397,6 @@ struct PatientView: View {
                             .listStyle(.sidebar)
                             
                         }else{
-
                             List(filteredNotes, id: \.id) { note in
                                 
                                 Button(action:{selectedNoteIndex = notes.notesList.firstIndex(where: { $0.id == note.id })}){
@@ -582,7 +577,7 @@ struct PatientView: View {
                 AddNoteView(notes: notes, filteredNotes: $filteredNotes, search: $search, patient: patient)
             }
             .sheet(item: $selectedNoteToEdit){ note in
-                EditNoteView(notes: notes, filteredNotes: $filteredNotes, note: note, search: $search)
+                EditNoteView(notes: notes, filteredNotes: $filteredNotes, note: note)
             }
             .sheet(isPresented: $showEditPatientView){
                 EditPatientView(patients: patients, patient: $patient)
@@ -591,16 +586,10 @@ struct PatientView: View {
                 CommunicatorMenuView(patient:patient)
             }
         }
-        .onAppear{
+        .onAppear {
             self.getPatientNotes(patientId: patient.id)
         }
         
         Spacer()
-    }
-}
-
-struct PatientView_Previews: PreviewProvider {
-    static var previews: some View {
-        PatientView(patients: PatientsViewModel(), notes: NotesViewModel(), patient: Patient(id:"",firstName: "",lastName: "",birthDate: Date.now, group: "", communicationStyle: "", cognitiveLevel: "", image: "", notes:[String](), identificador: ""))
     }
 }
