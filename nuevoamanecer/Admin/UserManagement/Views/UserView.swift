@@ -14,15 +14,14 @@ struct UserView: View {
     @State var userPassword: String = ""
     @Binding var userBeingEdited: String?
     var userSnapshot: User
-    var makeUserOperation: (User, UIImage?, String?, UserOperation) -> Void
+    var makeUserOperation: (User, UIImage?, String?, UserOperation, (()->Void)?) -> Void
         
-    @State var showImagePicker: Bool = false
-    @State var pickedImage: UIImage? = nil
+    @State var pickedUserImage: UIImage? = nil
     
     var isNewUser: Bool {self.user.id == nil}
     var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
 
-    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, String?, UserOperation) -> Void){
+    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, String?, UserOperation, (()->Void)?) -> Void){
         self._user = State(initialValue: user)
         self.userSnapshot = user
         self._userBeingEdited = userBeingEdited
@@ -37,21 +36,12 @@ struct UserView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 35) {
                     VStack {
-                        
                         Text(isNewUser ? "Usuario Nuevo" : (currentUser.id == user.id ? "Usuario Actual" : ""))
                             .font(.system(size: 15))
                             .foregroundColor(.gray)
                             .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
                         
-                        if pickedImage != nil {
-                            Image(uiImage: pickedImage!)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                        } else {
-                            UserImageView(user: user, isBeingEdited: isBeingEdited || isNewUser, showImagePicker: $showImagePicker)
-                        }
+                        UserImageEditView(user: $user, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
                     }
                                          
                     VStack(alignment: .leading, spacing: 15) {
@@ -86,24 +76,26 @@ struct UserView: View {
                 
                 Spacer()
                 
-                let runAtCancel: () -> Void = {
+                let runAtCancel: ()->Void = {
                     if isNewUser {
-                        makeUserOperation(user, nil, nil, .cancelMyCreation)
+                        makeUserOperation(user, nil, nil, .cancelMyCreation, nil)
                     } else {
                         userBeingEdited = nil
                     }
+                    
+                    self.pickedUserImage = nil
                     self.user = self.userSnapshot
                 }
                                                 
                 if user.id != currentUser.id {
-                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedImage == nil) || (isNewUser && !userPassword.isValidPassword())
-                    
+                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !userPassword.isValidPassword())
+    
                     EditPanelView(isBeingEdited: isBeingEdited || isNewUser,
                                   isNewUser: isNewUser,
                                   disableSave: disableSave,
                                   runAtEdit: {self.userBeingEdited = self.user.id},
-                                  runAtDelete: {makeUserOperation(user, nil, nil, .removeMe)},
-                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedImage, userPassword, .addMe)} : {makeUserOperation(user, pickedImage, nil, .saveMe)},
+                                  runAtDelete: {makeUserOperation(user, nil, nil, .removeMe, nil)},
+                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedUserImage, userPassword, .addMe, nil)} : {makeUserOperation(user, pickedUserImage, nil, .editMe, nil)},
                                   runAtCancel: runAtCancel)
                 }
             }
@@ -118,9 +110,6 @@ struct UserView: View {
             if  user.id != userBeingEdited && userBeingEdited != nil {
                 user = userSnapshot
             }
-        }
-        .fullScreenCover(isPresented: $showImagePicker){
-            ImagePicker(image: $pickedImage)
         }
     }
 }
