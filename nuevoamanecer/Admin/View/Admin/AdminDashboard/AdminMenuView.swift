@@ -16,7 +16,7 @@ struct AdminMenuView: View {
         var message: Text?
         var dismissButton: Alert.Button?
     }
-
+    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authVM: AuthViewModel
     var userVM: UserViewModel = UserViewModel()
@@ -28,7 +28,7 @@ struct AdminMenuView: View {
     @State private var password = ""
     @State var authPassword = ""
     @State private var confirmpassword = ""
-
+    
     @State private var showAuthAlert = false
     @State private var alertItem: AlertItem?
     
@@ -39,7 +39,8 @@ struct AdminMenuView: View {
     @State private var uploadData: Bool = false
     @State private var imageURL = URL(string: "")
     @State private var storage = FirebaseAlmacenamiento()
-    
+
+    @State private var deletedImage = false
     @State private var showPassword: Bool = false
     @State private var showConfirmPassword: Bool = false
     @State private var emailConfirm: String = ""
@@ -63,35 +64,71 @@ struct AdminMenuView: View {
         VStack {
             VStack {
                 //Imagen del usuario
-                VStack{
-                    Button() {
-                        shouldShowImagePicker.toggle()
-                    } label: {
-                        if self.uploaded_image != nil {
-                            Image(uiImage: uploaded_image!)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 128, height: 128)
-                                .cornerRadius(128)
+                Section(header: Text("Foto del paciente")) {
+                    HStack{
+                        Spacer()
+                        Menu {
+                            Button(action: {
+                                shouldShowImagePicker.toggle()
+                                deletedImage = false
+                                
+                            }, label: {
+                                Text("Seleccionar Imagen")
+                            })
+                            Button(action: {
+                                if (user.image == "placeholder" || deletedImage) {
+                                    self.alertItem = AlertItem(title: Text("Error"), message: Text("Este perfil no cuenta con imagen."), dismissButton: .cancel(Text("OK")))
+                                } else {
+                                    deletedImage = true
+                                }
+                            }, label: {
+                                Text("Eliminar Imagen")
+                            })
+                        } label: {
+                            
+                            //Imagen recien cargada
+                            if let displayImage = self.uploaded_image {
+                                
+                                ZStack{
+                                    Image(uiImage: displayImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 128, height: 128)
+                                        .cornerRadius(128)
+                                        .padding(.horizontal, 20)
+                                    
+                                    Image(systemName: "photo.on.rectangle.fill")
+                                        .font(.system(size: 25))
+                                        .offset(x: 53, y: 50)
+                                    //.foregroundColor(.white)
+                                }
                                 .padding(.horizontal, 20)
-                        } else {
+                            } else {
+                                
                                 //No imagen
-                                if user.image == nil {
+                                if(user.image == "placeholder" || deletedImage) {
                                     ZStack{
-                                        Image(systemName: "person.circle")
-                                            .font(.system(size: 100))
-                                        //.foregroundColor(Color(.label))
-                                            .foregroundColor(.gray)
+                                        Text(user.name)
+                                            .textCase(.uppercase)
+                                            .font(.title)
+                                            .fontWeight(.bold)
+                                            .frame(width: 128, height: 128)
+                                            .background(Color(.systemGray3))
+                                            .foregroundColor(.white)
+                                            .clipShape(Circle())
+                                            .padding(.trailing)
                                         
-                                        Image(systemName: "plus.circle.fill")
+                                        Image(systemName: "photo.on.rectangle.fill")
                                             .font(.system(size: 25))
-                                            .offset(x: 35, y: 40)
-                                            .foregroundColor(.blue)
+                                            .offset(x: 53, y: 50)
+                                        //.foregroundColor(.white)
                                     }
                                     .padding(.horizontal, 20)
                                 }
+                                
                                 //Imagen previamente subida
                                 else{
+                                    
                                     ZStack{
                                         KFImage(URL(string: user.image!))
                                             .resizable()
@@ -100,19 +137,21 @@ struct AdminMenuView: View {
                                             .cornerRadius(128)
                                             .padding(.horizontal, 20)
                                         
-                                        Image(systemName: "pencil")
+                                        Image(systemName: "photo.on.rectangle.fill")
                                             .font(.system(size: 25))
-                                            .offset(x: 35, y: 40)
+                                            .offset(x: 53, y: 50)
                                             .foregroundColor(.blue)
                                     }
                                     .padding(.horizontal, 20)
                                 }
+                            }
                         }
+                        Spacer()
+                    }
+                    .alert(item: $alertItem ) { alertItem in
+                        Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
                     }
                 }
-                .padding(.top, 30)
-                .frame(maxHeight: 150)
-                
                 Text(name)
                     .font(.title)
                     .bold()
@@ -121,6 +160,7 @@ struct AdminMenuView: View {
                     .foregroundColor(.gray)
             }
             .frame(maxHeight: 150)
+            .padding()
             VStack{
                 Form {
                     Section(header: Text("Información")) {
