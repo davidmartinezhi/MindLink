@@ -29,7 +29,7 @@ struct AdminMenuView: View {
     @State var authPassword = ""
     @State private var confirmpassword = ""
 
-    @State private var showAuthAlert = true
+    @State private var showAuthAlert = false
     @State private var alertItem: AlertItem?
     
     @State private var showLogoutAlert = false
@@ -239,8 +239,7 @@ struct AdminMenuView: View {
                                     } else if (!password.isWeakPassword() && !password.isEmpty){
                                         self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
                                     } else if (email == emailValidation || emailValidation.isEmpty) {
-                                        uploadData.toggle()
-                                        dismiss()
+                                        showAuthAlert = true
                                     } else {
                                         self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                                     }
@@ -256,9 +255,8 @@ struct AdminMenuView: View {
                                 self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
                             } else if (!password.isWeakPassword() && !password.isEmpty){
                                 self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
-                            } else if ((email == emailValidation || emailValidation.isEmpty) {
-                                uploadData.toggle()
-                                dismiss()
+                            } else if (email == emailValidation || emailValidation.isEmpty) {
+                                showAuthAlert = true
                             } else {
                                 self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                             }
@@ -296,16 +294,17 @@ struct AdminMenuView: View {
             
             Button("Okay", action: {
                 Task {
-                    let result: AuthActionResult = await authVM.loginAuthUser(email: currentUser.email!, password: authPassword)
+                    let result: AuthActionResult = await authVM.loginAuthUser(email: user.email, password: authPassword)
                     
                     if result.success {
-                        // Exito
-                    } else {
+                        uploadData.toggle()
                         dismiss()
+                    } else {
+                        self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña es incorrecta."), dismissButton: .cancel(Text("OK")))
                     }
                 }
             })
-            Button("Cancel", role: .cancel, action: { dismiss() })
+            Button("Cancel", role: .cancel, action: {  })
             })
         .onDisappear{
             if (uploadData) {
