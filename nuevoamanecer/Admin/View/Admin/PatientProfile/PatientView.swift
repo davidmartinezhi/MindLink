@@ -309,6 +309,7 @@ struct PatientView: View {
                                 .background(Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
+                                .padding(.top, 20)
                                 .padding(.bottom, 10)
                         
                         
