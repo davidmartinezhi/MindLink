@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension UserManagement {
-    func addUser(userToAdd: User, userPickedImage: UIImage?, withPassword: String) -> Void {
+    func addUser(userToAdd: User, withImage: UIImage?, withPassword: String) -> Void {
         executeWithPasswordConfirmation = { currUserPassword in
             let addUserToFirestore: (User)->Void = { user in
                 self.userVM.addUserWithCustomId(user: user, userId: user.id!) { error in
@@ -25,8 +25,8 @@ extension UserManagement {
             }
             
             Task {
-                if userPickedImage != nil {
-                    if let userWithImage: User = await self.addImageToUser(user: userToAdd, image: userPickedImage!) {
+                if withImage != nil {
+                    if let userWithImage: User = await self.addImageToUser(user: userToAdd, image: withImage!) {
                         if let userWithAuthId: User = await self.addUserToAuth(user: userWithImage, withPassword: withPassword, currUserPassword: currUserPassword) {
                             addUserToFirestore(userWithAuthId)
                         } else {
@@ -53,14 +53,16 @@ extension UserManagement {
         }
     }
     
-    func editUser(userToEdit: User, userPickedImage: UIImage?) -> Void {
+    func editUser(userToEdit: User, withImage: UIImage?, removingImage: String?, runAtSuccessfulEdit: (()->Void)?) -> Void {
         let editUserFromFirestore: (User)->Void = { user in
             self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
                 if error != nil {
                     self.showError(errorMessage: "Error al guardar los cambios")
                     return
                 } else {
-                    // runAtSuccess()
+                    if runAtSuccessfulEdit != nil {
+                        runAtSuccessfulEdit!()
+                    }
                     self.userBeingEdited = nil
                     self.users.removeValue(forKey: user.id!)
                     self.users[user.id!] = user
@@ -69,8 +71,8 @@ extension UserManagement {
         }
         
         Task {
-            if userPickedImage != nil {
-                if let userWithImage: User = await self.replaceUserImage(user: userToEdit, image: userPickedImage!){
+            if withImage != nil {
+                if let userWithImage: User = await self.replaceUserImage(user: userToEdit, image: withImage!){
                     editUserFromFirestore(userWithImage)
                 } else {
                     self.showError(errorMessage: "Error al guardar al nueva imagén del usuario")
@@ -78,9 +80,13 @@ extension UserManagement {
             } else {
                 editUserFromFirestore(userToEdit)
             }
+            
+            if removingImage != nil {
+                _ = await self.imageHandler.deleteImage(donwloadUrl: removingImage!)
+            }
         }
     }
-        
+    
     func _removeUser(userToRemove: User) -> Void {
         let removeUserFromFirestore: (User)->Void = { user in
             self.userVM.removeUser(userId: user.id!) { error in

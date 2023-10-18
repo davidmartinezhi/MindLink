@@ -13,7 +13,6 @@ struct UserManagement: View {
     
     // Variables de la vista
     @State var users: [String:User] = [:]
-    // @State var userSnapshots: [String:User] = [:]
     @State var userBeingEdited: String? = nil // user's id.
     @State var creatingUser: Bool = false
     var userVM: UserViewModel = UserViewModel()
@@ -77,15 +76,15 @@ struct UserManagement: View {
                     ScrollView  {
                         VStack(spacing: 0) {
                             if creatingUser {
-                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation, runAtSuccess in
-                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation, runAtSuccess: runAtSuccess)
+                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                    self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
                                 }
                             }
                             
                             let userArray: [User] = filterUsers(users: sortUsersByName(users: Array(users.values)), searchText: searchText, userType: pickedUserType)
                             ForEach(userArray) { user in
-                                UserView(user: user, userBeingEdited: $userBeingEdited) { user, userPickedImage, userPassword, userOperation, runAtSuccess in
-                                    self.makeUserOperation(withUser: user, userPickedImage: userPickedImage, userPassword: userPassword, userOperation: userOperation, runAtSuccess: runAtSuccess)
+                                UserView(user: user, userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                    self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
                                 }
                             }
                             
@@ -118,14 +117,14 @@ struct UserManagement: View {
         .customAlert(title: "Error", message: errorMessage, isPresented: $showErrorMessage)
     }
     
-    func makeUserOperation(withUser user: User, userPickedImage: UIImage?, userPassword: String?, userOperation: UserOperation, runAtSuccess: (()->Void)?) -> Void {
+    func makeUserOperation(userOperation: UserOperation, userOperationData: UserOperationData) -> Void {
         switch userOperation {
         case .addMe:
-            self.addUser(userToAdd: user, userPickedImage: userPickedImage, withPassword: userPassword!)
+            self.addUser(userToAdd: userOperationData.userData, withImage: userOperationData.imageToAdd, withPassword: userOperationData.userPassword!)
         case .removeMe:
-            self.removeUser(userToRemove: user)
+            self.removeUser(userToRemove: userOperationData.userData)
         case .editMe:
-            self.editUser(userToEdit: user, userPickedImage: userPickedImage)
+            self.editUser(userToEdit: userOperationData.userData, withImage: userOperationData.imageToAdd, removingImage: userOperationData.imageToRemove, runAtSuccessfulEdit: userOperationData.runAtSuccess)
         case .cancelMyCreation:
             self.creatingUser = false
         }
