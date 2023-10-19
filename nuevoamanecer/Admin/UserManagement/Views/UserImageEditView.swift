@@ -10,32 +10,25 @@ import Kingfisher
 
 struct UserImageEditView: View {
     @Binding var user: User
-    let initialImage: String?
-    @Binding var overlayingImage: UIImage?
+    @Binding var userSnaphot: User
+    @Binding var pickedUserImage: UIImage?
     let isBeingEdited: Bool
     
     @State var showImageEditMenu: Bool = false
     @State var showImagePicker: Bool = false
-        
-    init(user: Binding<User>, initialImage: String?, overlayingImage: Binding<UIImage?>, isBeingEdited: Bool){
-        self._user = user
-        self.initialImage = initialImage
-        self._overlayingImage = overlayingImage
-        self.isBeingEdited = isBeingEdited
-    }
     
     var body: some View {
         Menu(content: {imageEditMenu}, label: {userImageDisplay})
             .fullScreenCover(isPresented: $showImagePicker){
-                ImagePicker(image: $overlayingImage)
+                ImagePicker(image: $pickedUserImage)
             }
             .allowsHitTesting(isBeingEdited)
     }
     
     var userImageDisplay: some View {
         VStack {
-            if overlayingImage != nil {
-                Image(uiImage: overlayingImage!)
+            if pickedUserImage != nil {
+                Image(uiImage: pickedUserImage!)
                     .resizable()
                     .modifier(UserImageStyle())
             } else {
@@ -60,7 +53,7 @@ struct UserImageEditView: View {
         }
         .overlay(alignment: .leading) {
             if isBeingEdited {
-                ChangeIndicatorView(showIndicator: overlayingImage != nil || user.image != initialImage)
+                ChangeIndicatorView(showIndicator: pickedUserImage != nil || user.image != userSnaphot.image)
                     .offset(x: -20)
             }
         }
@@ -68,15 +61,15 @@ struct UserImageEditView: View {
     
     var imageEditMenu: some View {
         Section {
-            if user.image != nil || overlayingImage != nil {
+            if user.image != nil || pickedUserImage != nil {
                 Button {
-                    if overlayingImage != nil {
-                        overlayingImage = nil
+                    if pickedUserImage != nil {
+                        pickedUserImage = nil
                     } else {
                         user.image = nil
                     }
                 } label: {
-                    Label(overlayingImage != nil ? "Cancelar selección" : "Eliminar imagén" , systemImage: "xmark")
+                    Label(pickedUserImage != nil ? "Cancelar selección" : "Eliminar imagén" , systemImage: "xmark")
                 }
             }
             

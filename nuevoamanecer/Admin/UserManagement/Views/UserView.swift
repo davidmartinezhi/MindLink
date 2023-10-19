@@ -10,10 +10,10 @@ import SwiftUI
 struct UserView: View {
     @EnvironmentObject var currentUser: UserWrapper
     
-    @State var user: User
+    @Binding var user: User
     @State var userPassword: String = ""
     @Binding var userBeingEdited: String?
-    var userSnapshot: User
+    @State var userSnapshot: User
     var makeUserOperation: (UserOperation, UserOperationData) -> Void
         
     @State var pickedUserImage: UIImage? = nil
@@ -21,9 +21,9 @@ struct UserView: View {
     var isNewUser: Bool {self.user.id == nil}
     var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
 
-    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (UserOperation, UserOperationData) -> Void){
-        self._user = State(initialValue: user)
-        self.userSnapshot = user
+    init(user: Binding<User>, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (UserOperation, UserOperationData) -> Void){
+        self._user = user
+        self._userSnapshot = State(initialValue: user.wrappedValue)
         self._userBeingEdited = userBeingEdited
         self.makeUserOperation = makeUserOperation
     }
@@ -41,7 +41,7 @@ struct UserView: View {
                             .foregroundColor(.gray)
                             .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
                         
-                        UserImageEditView(user: $user, initialImage: userSnapshot.image, overlayingImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
+                        UserImageEditView(user: $user, userSnaphot: $userSnapshot, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
                     }
                                          
                     VStack(alignment: .leading, spacing: 15) {
@@ -91,7 +91,12 @@ struct UserView: View {
                     if isNewUser {
                         makeUserOperation(.addMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, userPassword: userPassword))
                     } else {
-                        makeUserOperation(.editMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, imageToRemove: user.image == nil && userSnapshot.image != nil ? userSnapshot.image : nil, runAtSuccess: {pickedUserImage = nil}))
+                        let runAtSuccess: ()->Void = {
+                            pickedUserImage = nil
+                            userSnapshot = user
+                        }
+                        
+                        makeUserOperation(.editMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, imageToRemove: user.image == nil && userSnapshot.image != nil ? userSnapshot.image : nil, runAtSuccess: runAtSuccess))
                     }
                 }
                                                 

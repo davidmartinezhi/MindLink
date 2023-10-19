@@ -12,7 +12,9 @@ struct UserManagement: View {
     @EnvironmentObject var authVM: AuthViewModel
     
     // Variables de la vista
-    @State var users: [String:User] = [:]
+    @State var users: [User] = []
+    // filteredUsers: arreglo de tuplas. Cada tupla contiene un usuario y el índice del usuario en el arreglo de usuarios 'users'.
+    @State var filteredUsers: [(Int, User)] = []
     @State var userBeingEdited: String? = nil // user's id.
     @State var creatingUser: Bool = false
     var userVM: UserViewModel = UserViewModel()
@@ -39,6 +41,9 @@ struct UserManagement: View {
                 VStack {
                     HStack(alignment: .center) {
                         SearchBarView(searchText: $searchText, placeholder: "Buscar usuario", searchBarWidth: 300)
+                            .onChange(of: searchText) { _ in
+                                performUserFiltering()
+                            }
                         
                         Spacer()
                         
@@ -63,6 +68,9 @@ struct UserManagement: View {
                                 Text(filter.rawValue)
                             }
                         }
+                        .onChange(of: pickedUserType) { _ in
+                            performUserFiltering()
+                        }
                         
                         Spacer()
                     }
@@ -76,19 +84,18 @@ struct UserManagement: View {
                     ScrollView  {
                         VStack(spacing: 0) {
                             if creatingUser {
-                                UserView(user: User.newEmptyUser(), userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                NewUserView(userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                    self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
+                                }
+                            }
+                                                                                      
+                            ForEach(filteredUsers, id: \.1.id) { (index, _) in
+                                UserView(user: $users[index], userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
                                     self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
                                 }
                             }
                             
-                            let userArray: [User] = filterUsers(users: sortUsersByName(users: Array(users.values)), searchText: searchText, userType: pickedUserType)
-                            ForEach(userArray) { user in
-                                UserView(user: user, userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
-                                    self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
-                                }
-                            }
-                            
-                            if userArray.isEmpty && (!searchText.isEmpty || pickedUserType != .baseUserOrAdminUser) {
+                            if filteredUsers.isEmpty && (!searchText.isEmpty || pickedUserType != .baseUserOrAdminUser) {
                                 Text("Sin resultados")
                                     .font(.system(size: 20, weight: .bold))
                                     .padding(.vertical, 200)
@@ -107,7 +114,8 @@ struct UserManagement: View {
                 if error != nil || fetchedUsers == nil {
                     // Error al obtener usuarios
                 } else {
-                    users = userArrayToDict(users: fetchedUsers!)
+                    users = fetchedUsers!
+                    filteredUsers = sortUsersByName(userIndexes: userArrayToIndexesArray(users: users))
                 }
             }
         }
@@ -133,6 +141,10 @@ struct UserManagement: View {
     func showError(errorMessage: String) -> Void {
         self.errorMessage = errorMessage
         self.showErrorMessage = true
+    }
+    
+    func performUserFiltering() -> Void {
+        self.filteredUsers = filterUsers(userIndexes: sortUsersByName(userIndexes: userArrayToIndexesArray(users: users)), searchText: searchText, userType: pickedUserType)
     }
 }
 

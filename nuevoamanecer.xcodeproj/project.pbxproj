@@ -75,6 +75,7 @@
 		BCB518BD2ACCCACF003FDFE4 /* ImagePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */; };
 		BCB518BF2ACCDF09003FDFE4 /* ChangeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */; };
 		BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */; };
+		BCC50CE82AE09E4200367F26 /* NewUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC50CE72AE09E4200367F26 /* NewUserView.swift */; };
 		BCD0B7862A4553C000E83CA6 /* EditPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */; };
 		BCD0B7882A45557000E83CA6 /* DisplayPictogramHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */; };
 		BCD0B78A2A457BDD00E83CA6 /* PictogramPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */; };
@@ -186,6 +187,7 @@
 		BCB518BC2ACCCACF003FDFE4 /* ImagePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePlaceholderView.swift; sourceTree = "<group>"; };
 		BCB518BE2ACCDF09003FDFE4 /* ChangeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeIndicatorView.swift; sourceTree = "<group>"; };
 		BCBC2F3C2A39A23F009CFD1C /* ButtonWithImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithImageView.swift; sourceTree = "<group>"; };
+		BCC50CE72AE09E4200367F26 /* NewUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserView.swift; sourceTree = "<group>"; };
 		BCD0B7852A4553C000E83CA6 /* EditPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPictogramHolderView.swift; sourceTree = "<group>"; };
 		BCD0B7872A45557000E83CA6 /* DisplayPictogramHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPictogramHolderView.swift; sourceTree = "<group>"; };
 		BCD0B7892A457BDD00E83CA6 /* PictogramPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictogramPlaceholderView.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				BC4DFE2A2AC347420082C631 /* UserView.swift */,
 				BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */,
 				BC0479162AD4E76E00FD18C8 /* UserImageEditView.swift */,
+				BCC50CE72AE09E4200367F26 /* NewUserView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -847,6 +850,7 @@
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
 				BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */,
 				BCB518BF2ACCDF09003FDFE4 /* ChangeIndicatorView.swift in Sources */,
+				BCC50CE82AE09E4200367F26 /* NewUserView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */,
 				C2207F042A206B4900F31578 /* AddNoteView.swift in Sources */,

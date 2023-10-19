@@ -17,7 +17,8 @@ extension UserManagement {
                         // Error al añadir usuario.
                         self.showError(errorMessage: "La creación del usuario no fue exitosa")
                     } else {
-                        self.users[user.id!] = user
+                        self.users.append(user)
+                        self.performUserFiltering()
                         self.userBeingEdited = nil
                         self.creatingUser = false
                     }
@@ -54,18 +55,23 @@ extension UserManagement {
     }
     
     func editUser(userToEdit: User, withImage: UIImage?, removingImage: String?, runAtSuccessfulEdit: (()->Void)?) -> Void {
-        let editUserFromFirestore: (User)->Void = { user in
-            self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
+        let editUserFromFirestore: (User)->Void = { newUserValue in
+            self.userVM.editUser(userId: newUserValue.id!, newUserValue: newUserValue) { error in
                 if error != nil {
                     self.showError(errorMessage: "Error al guardar los cambios")
                     return
                 } else {
+                    do {
+                        try self.users.replaceItem(with: newUserValue, where: {$0.id == newUserValue.id})
+                    } catch {
+                        // No fue posible actualizar localmente el usuario.
+                    }
+                    
+                    self.userBeingEdited = nil
+                    
                     if runAtSuccessfulEdit != nil {
                         runAtSuccessfulEdit!()
                     }
-                    self.userBeingEdited = nil
-                    self.users.removeValue(forKey: user.id!)
-                    self.users[user.id!] = user
                 }
             }
         }
@@ -94,7 +100,8 @@ extension UserManagement {
                     // Error al eliminar usuario.
                     self.showError(errorMessage: "Imposible eliminar al usuario")
                 } else {
-                    self.users.removeValue(forKey: user.id!)
+                    self.users = self.users.filter {$0.id != user.id}
+                    self.performUserFiltering()
                 }
             }
         }
