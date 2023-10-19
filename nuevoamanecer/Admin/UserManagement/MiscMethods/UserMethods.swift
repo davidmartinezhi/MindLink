@@ -6,21 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
-func filterUsers(users: [User], searchText: String, userType: UserType = .baseUserOrAdminUser) -> [User] {
+func filterUsers(userIndexes: [(Int, User)], searchText: String, userType: UserType = .baseUserOrAdminUser) -> [(Int, User)] {
     if !searchText.isEmpty {
-        return filterUsersByType(users: filterUsersBySearchText(users: users, searchText: searchText), userType: userType)
+        return filterUsersByType(userIndexes: filterUsersBySearchText(userIndexes: userIndexes, searchText: searchText), userType: userType)
     } else {
-        return filterUsersByType(users: users, userType: userType)
+        return filterUsersByType(userIndexes: userIndexes, userType: userType)
     }
 }
 
-func sortUsersByName(users: [User]) -> [User] {
-    return users.sorted {$0.name.cleanForSearch() < $1.name.cleanForSearch()}
-}
-
-func filterUsersByType(users: [User], userType: UserType) -> [User] {
-    return users.filter { user in
+func filterUsersByType(userIndexes: [(Int, User)], userType: UserType) -> [(Int, User)] {
+    return userIndexes.filter { (index, user) in
         switch userType {
         case .baseUserOrAdminUser:
             return true
@@ -32,11 +29,16 @@ func filterUsersByType(users: [User], userType: UserType) -> [User] {
     }
 }
 
-func filterUsersBySearchText(users: [User], searchText: String) -> [User] {
+func filterUsersBySearchText(userIndexes: [(Int, User)], searchText: String) -> [(Int, User)] {
     let cleanedSearchText: String = searchText.cleanForSearch()
-    return users.filter {$0.name.cleanForSearch().contains(cleanedSearchText)}
+    return userIndexes.filter {(index, user) in user.name.cleanForSearch().contains(cleanedSearchText)}
 }
 
-func userArrayToDict(users: [User]) -> [String:User] {
-    return Dictionary(uniqueKeysWithValues: users.map {($0.id!, $0)})
+func sortUsersByName(userIndexes: [(Int, User)]) -> [(Int, User)] {
+    return userIndexes.sorted {$0.1.name.cleanForSearch() < $1.1.name.cleanForSearch()}
 }
+
+func userArrayToIndexesArray(users: [User]) -> [(Int, User)] {
+    return users.enumerated().map {(index, user) in (index, user)}
+}
+

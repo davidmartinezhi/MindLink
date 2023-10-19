@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension UserManagement {
-    func addUser(userToAdd: User, userPickedImage: UIImage?, withPassword: String) -> Void {
+    func addUser(userToAdd: User, withImage: UIImage?, withPassword: String) -> Void {
         executeWithPasswordConfirmation = { currUserPassword in
             let addUserToFirestore: (User)->Void = { user in
                 self.userVM.addUserWithCustomId(user: user, userId: user.id!) { error in
@@ -17,7 +17,8 @@ extension UserManagement {
                         // Error al añadir usuario.
                         self.showError(errorMessage: "La creación del usuario no fue exitosa")
                     } else {
-                        self.users[user.id!] = user
+                        self.users.append(user)
+                        self.performUserFiltering()
                         self.userBeingEdited = nil
                         self.creatingUser = false
                     }
@@ -25,8 +26,8 @@ extension UserManagement {
             }
             
             Task {
-                if userPickedImage != nil {
-                    if let userWithImage: User = await self.addImageToUser(user: userToAdd, image: userPickedImage!) {
+                if withImage != nil {
+                    if let userWithImage: User = await self.addImageToUser(user: userToAdd, image: withImage!) {
                         if let userWithAuthId: User = await self.addUserToAuth(user: userWithImage, withPassword: withPassword, currUserPassword: currUserPassword) {
                             addUserToFirestore(userWithAuthId)
                         } else {
@@ -53,24 +54,31 @@ extension UserManagement {
         }
     }
     
-    func editUser(userToEdit: User, userPickedImage: UIImage?) -> Void {
-        let editUserFromFirestore: (User)->Void = { user in
-            self.userVM.editUser(userId: user.id!, newUserValue: user) { error in
+    func editUser(userToEdit: User, withImage: UIImage?, removingImage: String?, runAtSuccessfulEdit: (()->Void)?) -> Void {
+        let editUserFromFirestore: (User)->Void = { newUserValue in
+            self.userVM.editUser(userId: newUserValue.id!, newUserValue: newUserValue) { error in
                 if error != nil {
                     self.showError(errorMessage: "Error al guardar los cambios")
                     return
                 } else {
-                    // runAtSuccess()
+                    do {
+                        try self.users.replaceItem(with: newUserValue, where: {$0.id == newUserValue.id})
+                    } catch {
+                        // No fue posible actualizar localmente el usuario.
+                    }
+                    
                     self.userBeingEdited = nil
-                    self.users.removeValue(forKey: user.id!)
-                    self.users[user.id!] = user
+                    
+                    if runAtSuccessfulEdit != nil {
+                        runAtSuccessfulEdit!()
+                    }
                 }
             }
         }
         
         Task {
-            if userPickedImage != nil {
-                if let userWithImage: User = await self.replaceUserImage(user: userToEdit, image: userPickedImage!){
+            if withImage != nil {
+                if let userWithImage: User = await self.replaceUserImage(user: userToEdit, image: withImage!){
                     editUserFromFirestore(userWithImage)
                 } else {
                     self.showError(errorMessage: "Error al guardar al nueva imagén del usuario")
@@ -78,9 +86,13 @@ extension UserManagement {
             } else {
                 editUserFromFirestore(userToEdit)
             }
+            
+            if removingImage != nil {
+                _ = await self.imageHandler.deleteImage(donwloadUrl: removingImage!)
+            }
         }
     }
-        
+    
     func _removeUser(userToRemove: User) -> Void {
         let removeUserFromFirestore: (User)->Void = { user in
             self.userVM.removeUser(userId: user.id!) { error in
@@ -88,7 +100,8 @@ extension UserManagement {
                     // Error al eliminar usuario.
                     self.showError(errorMessage: "Imposible eliminar al usuario")
                 } else {
-                    self.users.removeValue(forKey: user.id!)
+                    self.users = self.users.filter {$0.id != user.id}
+                    self.performUserFiltering()
                 }
             }
         }

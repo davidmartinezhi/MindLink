@@ -10,20 +10,20 @@ import SwiftUI
 struct UserView: View {
     @EnvironmentObject var currentUser: UserWrapper
     
-    @State var user: User
+    @Binding var user: User
     @State var userPassword: String = ""
     @Binding var userBeingEdited: String?
-    var userSnapshot: User
-    var makeUserOperation: (User, UIImage?, String?, UserOperation, (()->Void)?) -> Void
+    @State var userSnapshot: User
+    var makeUserOperation: (UserOperation, UserOperationData) -> Void
         
     @State var pickedUserImage: UIImage? = nil
     
     var isNewUser: Bool {self.user.id == nil}
     var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
 
-    init(user: User, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (User, UIImage?, String?, UserOperation, (()->Void)?) -> Void){
-        self._user = State(initialValue: user)
-        self.userSnapshot = user
+    init(user: Binding<User>, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (UserOperation, UserOperationData) -> Void){
+        self._user = user
+        self._userSnapshot = State(initialValue: user.wrappedValue)
         self._userBeingEdited = userBeingEdited
         self.makeUserOperation = makeUserOperation
     }
@@ -41,7 +41,7 @@ struct UserView: View {
                             .foregroundColor(.gray)
                             .opacity(isNewUser || currentUser.id == user.id ? 1 : 0)
                         
-                        UserImageEditView(user: $user, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
+                        UserImageEditView(user: $user, userSnaphot: $userSnapshot, pickedUserImage: $pickedUserImage, isBeingEdited: isBeingEdited || isNewUser)
                     }
                                          
                     VStack(alignment: .leading, spacing: 15) {
@@ -78,13 +78,26 @@ struct UserView: View {
                 
                 let runAtCancel: ()->Void = {
                     if isNewUser {
-                        makeUserOperation(user, nil, nil, .cancelMyCreation, nil)
+                        makeUserOperation(.cancelMyCreation, UserOperationData(userData: user))
                     } else {
                         userBeingEdited = nil
                     }
                     
                     self.pickedUserImage = nil
                     self.user = self.userSnapshot
+                }
+                
+                let runAtSave: ()->Void = {
+                    if isNewUser {
+                        makeUserOperation(.addMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, userPassword: userPassword))
+                    } else {
+                        let runAtSuccess: ()->Void = {
+                            pickedUserImage = nil
+                            userSnapshot = user
+                        }
+                        
+                        makeUserOperation(.editMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, imageToRemove: user.image == nil && userSnapshot.image != nil ? userSnapshot.image : nil, runAtSuccess: runAtSuccess))
+                    }
                 }
                                                 
                 if user.id != currentUser.id {
@@ -94,8 +107,8 @@ struct UserView: View {
                                   isNewUser: isNewUser,
                                   disableSave: disableSave,
                                   runAtEdit: {self.userBeingEdited = self.user.id},
-                                  runAtDelete: {makeUserOperation(user, nil, nil, .removeMe, nil)},
-                                  runAtSave: isNewUser ? {makeUserOperation(user, pickedUserImage, userPassword, .addMe, nil)} : {makeUserOperation(user, pickedUserImage, nil, .editMe, nil)},
+                                  runAtDelete: {makeUserOperation(.removeMe, UserOperationData(userData: user))},
+                                  runAtSave: runAtSave,
                                   runAtCancel: runAtCancel)
                 }
             }

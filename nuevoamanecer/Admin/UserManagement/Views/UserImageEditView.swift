@@ -10,12 +10,22 @@ import Kingfisher
 
 struct UserImageEditView: View {
     @Binding var user: User
+    @Binding var userSnaphot: User
     @Binding var pickedUserImage: UIImage?
     let isBeingEdited: Bool
     
+    @State var showImageEditMenu: Bool = false
     @State var showImagePicker: Bool = false
     
     var body: some View {
+        Menu(content: {imageEditMenu}, label: {userImageDisplay})
+            .fullScreenCover(isPresented: $showImagePicker){
+                ImagePicker(image: $pickedUserImage)
+            }
+            .allowsHitTesting(isBeingEdited)
+    }
+    
+    var userImageDisplay: some View {
         VStack {
             if pickedUserImage != nil {
                 Image(uiImage: pickedUserImage!)
@@ -32,48 +42,42 @@ struct UserImageEditView: View {
                     .modifier(UserImageStyle())
             }
         }
-        .onTapGesture {
+        .overlay(alignment: .bottomTrailing) {
             if isBeingEdited {
-                showImagePicker = true
-            }
-        }
-        .overlay(alignment: .bottom) {
-            if isBeingEdited {
-                editImageBar
-                    .offset(y: 10)
+                Image(systemName: "photo.on.rectangle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 30)
+                    .foregroundColor(.black)
             }
         }
         .overlay(alignment: .leading) {
             if isBeingEdited {
-                ChangeIndicatorView(showIndicator: pickedUserImage != nil)
+                ChangeIndicatorView(showIndicator: pickedUserImage != nil || user.image != userSnaphot.image)
                     .offset(x: -20)
             }
         }
-        .fullScreenCover(isPresented: $showImagePicker){
-            ImagePicker(image: $pickedUserImage)
-        }
     }
     
-    var editImageBar: some View {
-        HStack {
-            if pickedUserImage != nil {
+    var imageEditMenu: some View {
+        Section {
+            if user.image != nil || pickedUserImage != nil {
                 Button {
-                    pickedUserImage = nil
+                    if pickedUserImage != nil {
+                        pickedUserImage = nil
+                    } else {
+                        user.image = nil
+                    }
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 25)
-                        .foregroundColor(.red)
+                    Label(pickedUserImage != nil ? "Cancelar selección" : "Eliminar imagén" , systemImage: "xmark")
                 }
             }
-
-            Spacer()
             
-            Image(systemName: "photo.on.rectangle.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 30)
+            Button {
+                showImagePicker = true
+            } label: {
+                Label("Seleccionar una imagén", systemImage: "square.and.arrow.up")
+            }
         }
     }
 }
