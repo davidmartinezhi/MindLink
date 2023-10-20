@@ -63,8 +63,9 @@ struct AdminMenuView: View {
     var body: some View {
         VStack {
             VStack {
+                Form {
                 //Imagen del usuario
-                Section(header: Text("Foto del paciente")) {
+                Section(header: Text("Usuario")) {
                     HStack{
                         Spacer()
                         Menu {
@@ -107,8 +108,9 @@ struct AdminMenuView: View {
                                 
                                 //No imagen
                                 if(user.image == nil || deletedImage) {
+                                    
                                     ZStack{
-                                        Text(user.name)
+                                        Text(user.name.prefix(1) + user.name.prefix(1))
                                             .textCase(.uppercase)
                                             .font(.title)
                                             .fontWeight(.bold)
@@ -151,18 +153,21 @@ struct AdminMenuView: View {
                     .alert(item: $alertItem ) { alertItem in
                         Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
                     }
+                    VStack{
+                        HStack(alignment: .center){
+                            Spacer()
+                            Text(name)
+                                .font(.title)
+                                .bold()
+                            Spacer()
+                            
+                        }
+                        Text(user.email)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
                 }
-                Text(name)
-                    .font(.title)
-                    .bold()
-                Text(user.email)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-            .frame(maxHeight: 150)
-            .padding()
-            VStack{
-                Form {
+                    
                     Section(header: Text("Información")) {
                         TextField("Nombre", text: $name)
                             .textContentType(.username)
@@ -238,8 +243,10 @@ struct AdminMenuView: View {
                         //
                     }
                 }
+
             }
-            .frame(maxHeight: 300)
+            .frame(minHeight: 150)
+            .padding()
             VStack(alignment: .leading, spacing: 10) {
                 
                 HStack{
