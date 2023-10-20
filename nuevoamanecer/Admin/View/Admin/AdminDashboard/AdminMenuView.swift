@@ -273,15 +273,15 @@ struct AdminMenuView: View {
                                     if (name.isEmpty || email.isEmpty) {
                                         self.alertItem = AlertItem(title: Text("Faltan campos"), message: Text("Por favor, rellena todos los campos antes de guardar la información."), dismissButton: .cancel(Text("OK")))
                                     } else if (!email.isValidEmail()){
-                                        self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
+                                        self.alertItem = AlertItem(title: Text("Correo inválido"), message: Text("Verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
                                     } else if (password != confirmpassword) {
-                                        self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
+                                        self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña."), dismissButton: .cancel(Text("OK")))
                                     } else if (!PasswordValidator(password).isValidPassword() && !password.isEmpty){
-                                        self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
+                                        self.alertItem = AlertItem(title: Text("Contraseña inválida"), message: Text("La contraseña debe de contener 8 caracteres, con mínimo un numero, una mayúscula y un carácter especial."), dismissButton: .cancel(Text("OK")))
                                     } else if (email == emailValidation || emailValidation.isEmpty) {
                                         showAuthAlert = true
                                     } else {
-                                        self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
+                                        self.alertItem = AlertItem(title: Text("Correo electrónico no coincide"), message: Text("Los dos correos electrónicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                                     }
                                 }
                             }
@@ -290,15 +290,15 @@ struct AdminMenuView: View {
                             if (name.isEmpty || email.isEmpty) {
                                 self.alertItem = AlertItem(title: Text("Faltan campos"), message: Text("Por favor, rellena todos los campos antes de guardar la información."), dismissButton: .cancel(Text("OK")))
                             } else if (!email.isValidEmail()){
-                                self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
+                                self.alertItem = AlertItem(title: Text("Correo inválido"), message: Text("Verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
                             } else if (password != confirmpassword) {
                                 self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
                             } else if (!PasswordValidator(password).isValidPassword() && !password.isEmpty){
-                                self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
+                                self.alertItem = AlertItem(title: Text("Contraseña inválida"), message: Text("La contraseña debe de contener 8 caracteres, con mínimo un numero, una mayúscula y un carácter especial."), dismissButton: .cancel(Text("OK")))
                             } else if (email == emailValidation || emailValidation.isEmpty) {
                                 showAuthAlert = true
                             } else {
-                                self.alertItem = AlertItem(title: Text("Correo electronico no coincide"), message: Text("Los dos correos electronicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
+                                self.alertItem = AlertItem(title: Text("Correo electrónico no coincide"), message: Text("Los dos correos electrónicos ingresados no coinciden."), dismissButton: .cancel(Text("OK")))
                             }
                         }
                     }) {
@@ -340,7 +340,7 @@ struct AdminMenuView: View {
                         uploadData.toggle()
                         dismiss()
                     } else {
-                        self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña es incorrecta."), dismissButton: .cancel(Text("OK")))
+                        self.alertItem = AlertItem(title: Text("Contraseña inválida"), message: Text("La contraseña es incorrecta."), dismissButton: .cancel(Text("OK")))
                     }
                 }
             })
