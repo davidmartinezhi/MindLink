@@ -106,7 +106,7 @@ struct AdminMenuView: View {
                             } else {
                                 
                                 //No imagen
-                                if(user.image == "placeholder" || deletedImage) {
+                                if(user.image == nil || deletedImage) {
                                     ZStack{
                                         Text(user.name)
                                             .textCase(.uppercase)
