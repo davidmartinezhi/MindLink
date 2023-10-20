@@ -23,13 +23,4 @@ extension String {
     func isValidEmail() -> Bool {
         return self.contains(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
     }
-    
-    func isValidPassword() -> Bool {
-        return self.contains(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$/)
-        // Contiene por lo menos 8 caracteres.
-        // Contiene por lo menos una mayúscula.
-        // Contiene por lo menos una minúscula.
-        // Contiene por lo menos un número.
-        // Contiene por lo menos un carácter especial.
-    }
 }

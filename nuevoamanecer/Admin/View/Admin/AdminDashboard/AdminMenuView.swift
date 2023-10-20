@@ -276,7 +276,7 @@ struct AdminMenuView: View {
                                         self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
                                     } else if (password != confirmpassword) {
                                         self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
-                                    } else if (!password.isValidPassword() && !password.isEmpty){
+                                    } else if (!PasswordValidator(password).isValidPassword() && !password.isEmpty){
                                         self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
                                     } else if (email == emailValidation || emailValidation.isEmpty) {
                                         showAuthAlert = true
@@ -293,7 +293,7 @@ struct AdminMenuView: View {
                                 self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
                             } else if (password != confirmpassword) {
                                 self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña"), dismissButton: .cancel(Text("OK")))
-                            } else if (!password.isValidPassword() && !password.isEmpty){
+                            } else if (!PasswordValidator(password).isValidPassword() && !password.isEmpty){
                                 self.alertItem = AlertItem(title: Text("Contraseña Invalida"), message: Text("La contraseña debe de contere 8 caracteres, con minimo un numero , una mayuscula y un caracter especial."), dismissButton: .cancel(Text("OK")))
                             } else if (email == emailValidation || emailValidation.isEmpty) {
                                 showAuthAlert = true

@@ -29,6 +29,8 @@
 		BC58AB6F2AD395120037ACDE /* UserMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC58AB6E2AD395120037ACDE /* UserMethods.swift */; };
 		BC62E17C2AD604AC0049EAC2 /* UserManagementExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC62E17B2AD604AC0049EAC2 /* UserManagementExtensions.swift */; };
 		BC6490292ADEC51E00870FF1 /* UserOperationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6490282ADEC51E00870FF1 /* UserOperationData.swift */; };
+		BC6E07EB2AE2D8C0008AFF6E /* ValidationListDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6E07EA2AE2D8C0008AFF6E /* ValidationListDisplayView.swift */; };
+		BC6E07ED2AE2D906008AFF6E /* PasswordValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6E07EC2AE2D906008AFF6E /* PasswordValidator.swift */; };
 		BC884A762AAACC7000E83553 /* AdminArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */; };
 		BC8F7E2F2A37FFBD008E97B2 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */; };
 		BC8F7E302A37FFBD008E97B2 /* FirebaseStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */; };
@@ -141,6 +143,8 @@
 		BC58AB6E2AD395120037ACDE /* UserMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMethods.swift; sourceTree = "<group>"; };
 		BC62E17B2AD604AC0049EAC2 /* UserManagementExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementExtensions.swift; sourceTree = "<group>"; };
 		BC6490282ADEC51E00870FF1 /* UserOperationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOperationData.swift; sourceTree = "<group>"; };
+		BC6E07EA2AE2D8C0008AFF6E /* ValidationListDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationListDisplayView.swift; sourceTree = "<group>"; };
+		BC6E07EC2AE2D906008AFF6E /* PasswordValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordValidator.swift; sourceTree = "<group>"; };
 		BC884A752AAACC7000E83553 /* AdminArrayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminArrayExtensions.swift; sourceTree = "<group>"; };
 		BC8F7E012A37FFBD008E97B2 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		BC8F7E022A37FFBD008E97B2 /* FirebaseStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseStorage.swift; sourceTree = "<group>"; };
@@ -293,6 +297,7 @@
 				BC58AB682AD28DCE0037ACDE /* PasswordInputWindowView.swift */,
 				BC0479162AD4E76E00FD18C8 /* UserImageEditView.swift */,
 				BCC50CE72AE09E4200367F26 /* NewUserView.swift */,
+				BC6E07EA2AE2D8C0008AFF6E /* ValidationListDisplayView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -336,6 +341,7 @@
 			isa = PBXGroup;
 			children = (
 				BC6490282ADEC51E00870FF1 /* UserOperationData.swift */,
+				BC6E07EC2AE2D906008AFF6E /* PasswordValidator.swift */,
 			);
 			path = MiscStructures;
 			sourceTree = "<group>";
@@ -850,6 +856,7 @@
 				BC8F7E332A37FFBD008E97B2 /* SingleCommunicator.swift in Sources */,
 				BC93FD9F2A9B19D300853E68 /* PictogramStringExtensions.swift in Sources */,
 				BCB518BF2ACCDF09003FDFE4 /* ChangeIndicatorView.swift in Sources */,
+				BC6E07ED2AE2D906008AFF6E /* PasswordValidator.swift in Sources */,
 				BCC50CE82AE09E4200367F26 /* NewUserView.swift in Sources */,
 				C29428062A15B3C500E814C9 /* AuthenticationFirebaseDataSource.swift in Sources */,
 				BC8F7E392A37FFBD008E97B2 /* ColorPickerView.swift in Sources */,
@@ -858,6 +865,7 @@
 				C2BEDB0C2A1410AC005398F9 /* DismissView.swift in Sources */,
 				BCBC2F3D2A39A23F009CFD1C /* ButtonWithImageView.swift in Sources */,
 				C2CF668D2A2FE308005A7338 /* AdminMenuView.swift in Sources */,
+				BC6E07EB2AE2D8C0008AFF6E /* ValidationListDisplayView.swift in Sources */,
 				BC8F7E452A37FFBD008E97B2 /* CategoryPickerView.swift in Sources */,
 				BC4DFE312AC3C78B0082C631 /* DualChoiceView.swift in Sources */,
 				BC8F7E372A37FFBD008E97B2 /* PictogramViewModel.swift in Sources */,

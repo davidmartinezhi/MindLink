@@ -13,6 +13,7 @@ struct UserView: View {
     @Binding var user: User
     @State var userPassword: String = ""
     @Binding var userBeingEdited: String?
+    @Binding var actionInProgress: Bool
     @State var userSnapshot: User
     var makeUserOperation: (UserOperation, UserOperationData) -> Void
         
@@ -20,11 +21,14 @@ struct UserView: View {
     
     var isNewUser: Bool {self.user.id == nil}
     var isBeingEdited: Bool {self.user.id == self.userBeingEdited}
+    
+    @State var showingPasswordValidationList: Bool = false
 
-    init(user: Binding<User>, userBeingEdited: Binding<String?>, makeUserOperation: @escaping (UserOperation, UserOperationData) -> Void){
+    init(user: Binding<User>, userBeingEdited: Binding<String?>, actionInProgress: Binding<Bool>, makeUserOperation: @escaping (UserOperation, UserOperationData) -> Void){
         self._user = user
         self._userSnapshot = State(initialValue: user.wrappedValue)
         self._userBeingEdited = userBeingEdited
+        self._actionInProgress = actionInProgress
         self.makeUserOperation = makeUserOperation
     }
     
@@ -61,7 +65,14 @@ struct UserView: View {
                         if isNewUser {
                             HStack(alignment: .center, spacing: 10) {
                                 DualTextFieldView(text: $userPassword, placeholder: "Contraseña", editing: isNewUser, fontSize: 15)
-                                InvalidInputView(show: !userPassword.isEmpty && !userPassword.isValidPassword(), text: "Contraseña inválida")
+                                    .onChange(of: userPassword) { _ in
+                                        self.showingPasswordValidationList = true
+                                    }
+                                    .popover(isPresented: $showingPasswordValidationList, arrowEdge: .bottom) {
+                                        ValidationListDisplayView(validationList: PasswordValidator(userPassword).buildValidationList())
+                                            .padding()
+                                    }
+                                InvalidInputView(show: !userPassword.isEmpty && !PasswordValidator(userPassword).isValidPassword(), text: "Contraseña inválida")
                             }
                         }
                         
@@ -88,12 +99,15 @@ struct UserView: View {
                 }
                 
                 let runAtSave: ()->Void = {
+                    actionInProgress = true
+                    
                     if isNewUser {
-                        makeUserOperation(.addMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, userPassword: userPassword))
+                        makeUserOperation(.addMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, userPassword: userPassword, runAtSuccess: {actionInProgress = false}))
                     } else {
                         let runAtSuccess: ()->Void = {
                             pickedUserImage = nil
                             userSnapshot = user
+                            actionInProgress = false 
                         }
                         
                         makeUserOperation(.editMe, UserOperationData(userData: user, imageToAdd: pickedUserImage, imageToRemove: user.image == nil && userSnapshot.image != nil ? userSnapshot.image : nil, runAtSuccess: runAtSuccess))
@@ -101,7 +115,7 @@ struct UserView: View {
                 }
                                                 
                 if user.id != currentUser.id {
-                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !userPassword.isValidPassword())
+                    let disableSave: Bool = !user.isValidUser() || (user == userSnapshot && pickedUserImage == nil) || (isNewUser && !PasswordValidator(userPassword).isValidPassword())
     
                     EditPanelView(isBeingEdited: isBeingEdited || isNewUser,
                                   isNewUser: isNewUser,
