@@ -32,6 +32,8 @@ struct UserManagement: View {
     
     let imageHandler: FirebaseAlmacenamiento = FirebaseAlmacenamiento()
     
+    @State var actionInProgress: Bool = true
+    
     var body: some View {
         let leadingPadding: CGFloat = 100
         let trailingPadding: CGFloat = 150
@@ -84,13 +86,13 @@ struct UserManagement: View {
                     ScrollView  {
                         VStack(spacing: 0) {
                             if creatingUser {
-                                NewUserView(userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                NewUserView(userBeingEdited: $userBeingEdited, actionInProgress: $actionInProgress) { userOperation, userOperationData in
                                     self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
                                 }
                             }
                                                                                       
                             ForEach(filteredUsers, id: \.1.id) { (index, _) in
-                                UserView(user: $users[index], userBeingEdited: $userBeingEdited) { userOperation, userOperationData in
+                                UserView(user: $users[index], userBeingEdited: $userBeingEdited, actionInProgress: $actionInProgress) { userOperation, userOperationData in
                                     self.makeUserOperation(userOperation: userOperation, userOperationData: userOperationData)
                                 }
                             }
@@ -102,6 +104,11 @@ struct UserManagement: View {
                             }
                         }
                     }
+                }
+                
+                if actionInProgress {
+                    ProgressView()
+                        .progressViewStyle(.circular)
                 }
                 
                 if executeWithPasswordConfirmation != nil {
@@ -116,6 +123,7 @@ struct UserManagement: View {
                 } else {
                     users = fetchedUsers!
                     filteredUsers = sortUsersByName(userIndexes: userArrayToIndexesArray(users: users))
+                    actionInProgress = false 
                 }
             }
         }
@@ -128,7 +136,7 @@ struct UserManagement: View {
     func makeUserOperation(userOperation: UserOperation, userOperationData: UserOperationData) -> Void {
         switch userOperation {
         case .addMe:
-            self.addUser(userToAdd: userOperationData.userData, withImage: userOperationData.imageToAdd, withPassword: userOperationData.userPassword!)
+            self.addUser(userToAdd: userOperationData.userData, withImage: userOperationData.imageToAdd, withPassword: userOperationData.userPassword!, runAtSuccessfulAddition: userOperationData.runAtSuccess)
         case .removeMe:
             self.removeUser(userToRemove: userOperationData.userData)
         case .editMe:

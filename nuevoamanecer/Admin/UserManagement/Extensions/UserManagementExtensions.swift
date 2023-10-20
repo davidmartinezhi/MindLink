@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension UserManagement {
-    func addUser(userToAdd: User, withImage: UIImage?, withPassword: String) -> Void {
+    func addUser(userToAdd: User, withImage: UIImage?, withPassword: String, runAtSuccessfulAddition: (()->Void)?) -> Void {
         executeWithPasswordConfirmation = { currUserPassword in
             let addUserToFirestore: (User)->Void = { user in
                 self.userVM.addUserWithCustomId(user: user, userId: user.id!) { error in
@@ -21,6 +21,10 @@ extension UserManagement {
                         self.performUserFiltering()
                         self.userBeingEdited = nil
                         self.creatingUser = false
+                        
+                        if runAtSuccessfulAddition != nil {
+                            runAtSuccessfulAddition!()
+                        }
                     }
                 }
             }

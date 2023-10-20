@@ -163,7 +163,7 @@ struct RegisterView: View {
                         self.alertItem = AlertItem(title: Text("Confirme su contraseña"), message: Text("Por favor, verifique correctmente su contraseña."), dismissButton: .cancel(Text("OK")))
                     } else if (!email.isValidEmail()){
                         self.alertItem = AlertItem(title: Text("Correo Invalido"), message: Text("verifique que su correo sea correcto."), dismissButton: .cancel(Text("OK")))
-                    } else if (!password.isValidPassword()){
+                    } else if (!PasswordValidator(password).isValidPassword()){
                         self.alertItem = AlertItem(title: Text("Contraseña invalida"), message: Text("verifique que su contraseña tenga minimo 8 caracteres, un caracter en mayuscula, un caracter especial y un número."), dismissButton: .cancel(Text("OK")))
                     } else {
                         Task {
